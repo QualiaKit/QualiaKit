@@ -28,9 +28,7 @@ public class BertModelWrapper {
 
         let output = try model.prediction(from: input)
 
-        if let probs = output.featureValue(for: "classLabel_probs")?.dictionaryValue
-            as? [String: Double]
-        {
+        if let probs = output.featureValue(for: "classLabel_probs")?.dictionaryValue as? [String: Double] {
             let l0 = probs["LABEL_0"] ?? 0.0  // Negative
             let l1 = probs["LABEL_1"] ?? 0.0  // Neutral
             let l2 = probs["LABEL_2"] ?? 0.0  // Positive
