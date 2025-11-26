@@ -1,0 +1,98 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build:
+    name: Build
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Select Xcode version
+        run: sudo xcode-select -s /Applications/Xcode_15.2.app/Contents/Developer
+
+      - name: Show Swift version
+        run: swift --version
+
+      - name: Build for macOS
+        run: swift build -c release
+
+      - name: Build for iOS Simulator
+        run: |
+          xcodebuild build \
+            -scheme QualiaKit \
+            -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.2' \
+            -skipPackagePluginValidation
+
+  test:
+    name: Test
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Select Xcode version
+        run: sudo xcode-select -s /Applications/Xcode_15.2.app/Contents/Developer
+
+      - name: Run tests
+        run: swift test --enable-code-coverage
+
+      - name: Generate coverage report
+        run: |
+          xcrun llvm-cov export \
+            .build/debug/QualiaKitPackageTests.xctest/Contents/MacOS/QualiaKitPackageTests \
+            -instr-profile .build/debug/codecov/default.profdata \
+            -format="lcov" > coverage.lcov || true
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.lcov
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  lint:
+    name: SwiftLint
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install SwiftLint
+        run: brew install swiftlint
+
+      - name: Run SwiftLint
+        run: swiftlint lint --strict
+
+  matrix-test:
+    name: Test on ${{ matrix.platform }}
+    runs-on: macos-14
+    strategy:
+      matrix:
+        platform:
+          - "platform=macOS"
+          - "platform=iOS Simulator,name=iPhone 15,OS=17.2"
+          - "platform=iOS Simulator,name=iPhone 15,OS=16.4"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Select Xcode version
+        run: sudo xcode-select -s /Applications/Xcode_15.2.app/Contents/Developer
+
+      - name: Run tests on ${{ matrix.platform }}
+        run: |
+          xcodebuild test \
+            -scheme QualiaKit \
+            -destination '${{ matrix.platform }}' \
+            -skipPackagePluginValidation

@@ -18,6 +18,11 @@ let package = Package(
         .target(
             name: "QualiaKit",
             path: "src"
-        )
+        ),
+        .testTarget(
+            name: "QualiaKitTests",
+            dependencies: ["QualiaKit"],
+            resources: [.copy("Resources")]
+        ),
     ]
 )
