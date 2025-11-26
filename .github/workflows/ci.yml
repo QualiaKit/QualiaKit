@@ -29,7 +29,10 @@ jobs:
           xcodebuild build \
             -scheme QualiaKit \
             -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.2' \
-            -skipPackagePluginValidation
+            -skipPackagePluginValidation \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
 
   test:
     name: Test
@@ -95,4 +98,7 @@ jobs:
           xcodebuild test \
             -scheme QualiaKit \
             -destination '${{ matrix.platform }}' \
-            -skipPackagePluginValidation
+            -skipPackagePluginValidation \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
