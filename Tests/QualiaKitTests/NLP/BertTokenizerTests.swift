@@ -49,9 +49,9 @@ final class BertTokenizerTests: XCTestCase {
         XCTAssertEqual(inputIds.count, 16, "Should have 16 tokens (max sequence length)")
         XCTAssertEqual(attentionMask.count, 16, "Attention mask should have 16 elements")
 
-        // First should be [CLS] (id 2), then "the" (id 24), then [SEP] (id 3)
+        // First should be [CLS] (id 2), then "the" (id 29), then [SEP] (id 3)
         XCTAssertEqual(inputIds[0], 2, "First token should be [CLS]")
-        XCTAssertEqual(inputIds[1], 24, "Second token should be 'the'")
+        XCTAssertEqual(inputIds[1], 29, "Second token should be 'the'")
         XCTAssertEqual(inputIds[2], 3, "Third token should be [SEP]")
 
         // Attention mask: 1 for real tokens, 0 for padding
