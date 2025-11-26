@@ -3,7 +3,7 @@
 ![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20macOS-lightgrey)
 ![Language](https://img.shields.io/badge/language-Swift%205.9-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
-![CI](https://github.com/QualiaKit/QualiaKit/workflows/CI/badge.svg)
+[![CI](https://github.com/QualiaKit/QualiaKit/workflows/CI/badge.svg)](https://github.com/QualiaKit/QualiaKit/actions)
 
 **QualiaKit** is an open-source framework designed to bridge the gap between digital text and human sensory perception. By combining **Natural Language Processing (BERT)** with **Haptic Feedback**, it allows users to "feel" the semantic weight of information.
 
