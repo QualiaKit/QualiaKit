@@ -19,8 +19,6 @@ opt_in_rules:
   - discouraged_optional_boolean
   - fallthrough
   - fatal_error_message
-  - force_unwrapping
-  - implicitly_unwrapped_optional
   - multiline_parameters
   - overridden_super_call
   - private_action
@@ -75,15 +73,6 @@ cyclomatic_complexity:
 nesting:
   type_level:
     warning: 2
-
-# Force unwrapping and implicitly unwrapped optionals allowed in tests
-force_unwrapping:
-  excluded:
-    - Tests/**/*.swift
-
-implicitly_unwrapped_optional:
-  excluded:
-    - Tests/**/*.swift
 
 # Custom rules
 custom_rules:
