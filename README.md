@@ -24,7 +24,7 @@ Add QualiaKit to your project via Swift Package Manager:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/yourusername/QualiaKit.git", from: "1.0.0")
+    .package(url: "https://github.com/QualiaKit/QualiaKit.git", from: "1.0.0")
 ]
 ```
 
