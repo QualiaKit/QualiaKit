@@ -18,6 +18,10 @@ public final class HapticEngine: ObservableObject {
     }
 
     public func updateHeartbeat(shouldPlay: Bool) {
-        shouldPlay ? HapticManager.shared.startHeartbeat() : HapticManager.shared.stopHeartbeat()
+        if shouldPlay {
+            HapticManager.shared.startHeartbeat()
+        } else {
+            HapticManager.shared.stopHeartbeat()
+        }
     }
 }

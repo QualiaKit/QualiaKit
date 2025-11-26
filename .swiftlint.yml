@@ -38,8 +38,6 @@ excluded:
   - DerivedData
 
 # Customized rules
-line_length: 120
-
 file_length:
   warning: 500
   error: 1000
@@ -68,19 +66,6 @@ identifier_name:
     - y
     - z
 
-# Allow longer names for test functions
-function_name:
-  min_length:
-    warning: 2
-    error: 1
-  max_length:
-    warning: 60
-    error: 100
-
-# Force unwrapping is allowed in tests
-force_unwrapping:
-  severity: warning
-
 # Cyclomatic complexity
 cyclomatic_complexity:
   warning: 15
@@ -90,8 +75,15 @@ cyclomatic_complexity:
 nesting:
   type_level:
     warning: 2
-  statement_level:
-    warning: 5
+
+# Force unwrapping and implicitly unwrapped optionals allowed in tests
+force_unwrapping:
+  excluded:
+    - Tests/**/*.swift
+
+implicitly_unwrapped_optional:
+  excluded:
+    - Tests/**/*.swift
 
 # Custom rules
 custom_rules:
