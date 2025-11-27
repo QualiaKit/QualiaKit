@@ -1,3 +1,4 @@
+import CoreGraphics
 import Foundation
 
 /// Public mock haptic provider for testing purposes.
@@ -8,6 +9,9 @@ public final class MockHapticProvider: HapticProvider {
 
     /// All emotions that have been played, in order
     public private(set) var playedEmotions: [SenseEmotion] = []
+
+    /// All intensities that have been used, in order (corresponds to playedEmotions)
+    public private(set) var playedIntensities: [CGFloat] = []
 
     /// Whether prepare() was called
     public private(set) var prepareCalled = false
@@ -35,9 +39,10 @@ public final class MockHapticProvider: HapticProvider {
         }
     }
 
-    public func play(_ emotion: SenseEmotion) {
+    public func play(_ emotion: SenseEmotion, intensity: CGFloat) {
         queue.sync {
             playedEmotions.append(emotion)
+            playedIntensities.append(intensity)
         }
     }
 
@@ -57,6 +62,7 @@ public final class MockHapticProvider: HapticProvider {
     public func reset() {
         queue.sync {
             playedEmotions.removeAll()
+            playedIntensities.removeAll()
             prepareCalled = false
             isHeartbeatPlaying = false
         }

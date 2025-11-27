@@ -21,12 +21,12 @@ import SwiftUI
             setupHapticEngine()
         }
 
-        public func play(_ emotion: SenseEmotion) {
+        public func play(_ emotion: SenseEmotion, intensity: CGFloat = 1.0) {
             switch emotion {
             case .positive: notification.notificationOccurred(.success)
             case .negative: rigid.impactOccurred()
-            case .intense: heavy.impactOccurred(intensity: 1.0)
-            case .mysterious: soft.impactOccurred(intensity: 0.8)
+            case .intense: heavy.impactOccurred(intensity: intensity)
+            case .mysterious: soft.impactOccurred(intensity: 0.8 * intensity)
             case .neutral: light.impactOccurred()
             }
         }

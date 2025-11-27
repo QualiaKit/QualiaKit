@@ -39,12 +39,61 @@ let modelURL = Bundle.main.url(forResource: "bert_sentiment", withExtension: "ml
 
 let client = try QualiaClient(vocabURL: vocabURL, modelURL: modelURL)
 
-// Analyze text and trigger haptic feedback
+// Analyze text and trigger haptic feedback automatically
 let (emotion, score) = await client.analyzeAndFeel("This is an amazing discovery!")
 
 print("Emotion: \(emotion), Score: \(score)")
 // The device will vibrate based on the detected emotion
 ```
+
+## 🎛️ Configuration
+
+QualiaKit v2.0 supports flexible configuration for different use cases:
+
+### Quick Start (Standard Mode)
+
+```swift
+let client = try QualiaClient(vocabURL: vocabURL, modelURL: modelURL)
+let (emotion, score) = await client.analyzeAndFeel(text)
+// ✅ Haptics play automatically
+```
+
+### Silent Mode (Analysis Only)
+
+```swift
+let client = try QualiaClient(
+    vocabURL: vocabURL,
+    modelURL: modelURL,
+    config: .silent
+)
+let (emotion, score) = await client.analyze(text)
+// No haptics, just analysis
+```
+
+### Custom Configuration
+
+```swift
+let config = QualiaConfiguration(
+    autoPlayHaptics: true,
+    enableHeartbeat: false,
+    hapticIntensity: 0.7,
+    hapticDelay: 0.2
+)
+let client = try QualiaClient(vocabURL: vocabURL, modelURL: modelURL, config: config)
+```
+
+### API Methods
+
+- **`analyze(_:)`** - Pure analysis, no haptics
+- **`analyzeAndFeel(_:)`** - Analysis + automatic haptics (if config allows)
+- **`feel(_:)`** - Explicitly trigger haptics for any emotion
+
+### Configuration Presets
+
+- **`.standard`** - Default behavior with automatic haptics
+- **`.silent`** - No automatic haptics or heartbeat
+- **`.testing`** - Optimized for unit tests
+- **`.accessibility`** - Reduced haptic intensity (50%)
 
 ### Customizing Keywords
 

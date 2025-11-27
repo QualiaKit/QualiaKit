@@ -1,44 +1,158 @@
 import Foundation
 import NaturalLanguage
 
+/// Main client for QualiaKit sentiment analysis and haptic feedback
+///
+/// QualiaClient analyzes text for emotional content and optionally triggers haptic feedback.
+///
+/// ## Usage
+/// ```swift
+/// let client = try QualiaClient(
+///     vocabURL: vocabURL,
+///     modelURL: modelURL,
+///     config: .standard
+/// )
+///
+/// // Analysis with automatic haptics
+/// let (emotion, score) = await client.analyzeAndFeel("I'm so happy!")
+///
+/// // Analysis without haptics
+/// let (emotion, score) = await client.analyze("I'm so happy!")
+///
+/// // Explicit haptic triggering
+/// await client.feel(.positive)
+/// ```
 public class QualiaClient {
     private let tokenizer: BertTokenizer
     private let modelWrapper: BertModelWrapper
     private let haptics: HapticEngine
     private let languageRecognizer = NLLanguageRecognizer()
     private let appleTagger = NLTagger(tagSchemes: [.sentimentScore])
+    private let config: QualiaConfiguration
 
+    /// Keywords that trigger `.intense` emotion detection
     public var intenseKeywords: [String] = [
         "кровь", "уби", "смерт", "атак", "выстрел", "беги", "rage", "blood", "kill", "death", "run",
         "shoot", "attack",
     ]
+
+    /// Keywords that trigger `.mysterious` emotion detection
     public var mysteriousKeywords: [String] = [
         "тайна", "шепот", "лес", "внезапно", "темнота", "mystery", "shadow", "secret",
     ]
 
-    public init(vocabURL: URL, modelURL: URL) throws {
+    /// Creates a new QualiaClient instance
+    ///
+    /// - Parameters:
+    ///   - vocabURL: URL to the BERT vocabulary file
+    ///   - modelURL: URL to the sentiment analysis model
+    ///   - config: Configuration for haptic behavior. Default: `.standard`
+    /// - Throws: Error if tokenizer or model initialization fails
+    public init(
+        vocabURL: URL,
+        modelURL: URL,
+        config: QualiaConfiguration = .standard
+    ) throws {
         self.tokenizer = try BertTokenizer(vocabURL: vocabURL)
         self.modelWrapper = try BertModelWrapper(modelURL: modelURL)
         self.haptics = HapticEngine.shared
+        self.config = config
     }
 
+    /// Analyzes text for emotional content without triggering haptics
+    ///
+    /// Use this method when you want pure sentiment analysis without haptic feedback.
+    ///
+    /// - Parameter text: Text to analyze
+    /// - Returns: Tuple of detected emotion and sentiment score
+    public func analyze(_ text: String) async -> (SenseEmotion, Double) {
+        return await performAnalysis(text)
+    }
+
+    /// Analyzes text and plays haptic feedback if configured
+    ///
+    /// Performs sentiment analysis and automatically triggers haptic feedback
+    /// if `config.autoPlayHaptics` is `true`.
+    ///
+    /// - Parameter text: Text to analyze
+    /// - Returns: Tuple of detected emotion and sentiment score
     public func analyzeAndFeel(_ text: String) async -> (SenseEmotion, Double) {
+        let (emotion, score) = await performAnalysis(text)
+
+        // Play haptics if configured
+        if config.autoPlayHaptics {
+            await playHapticFeedback(for: emotion)
+        }
+
+        return (emotion, score)
+    }
+
+    /// Explicitly triggers haptic feedback for a given emotion
+    ///
+    /// Use this method when you want manual control over haptic feedback,
+    /// regardless of configuration settings.
+    ///
+    /// - Parameter emotion: The emotion to play haptic feedback for
+    @MainActor
+    public func feel(_ emotion: SenseEmotion) {
+        playHapticFeedback(for: emotion)
+    }
+
+    // MARK: - Private Methods
+
+    /// Performs sentiment analysis on text
+    ///
+    /// Common logic extracted from `analyze()` and `analyzeAndFeel()`.
+    ///
+    /// - Parameter text: Text to analyze
+    /// - Returns: Tuple of detected emotion and sentiment score
+    private func performAnalysis(_ text: String) async -> (SenseEmotion, Double) {
         let lowercased = text.lowercased()
 
+        // Check for intense keywords
         if intenseKeywords.contains(where: { lowercased.contains($0) }) {
             return (.intense, 0.0)
         }
 
+        // Check for mysterious keywords
         if mysteriousKeywords.contains(where: { lowercased.contains($0) }) {
             return (.mysterious, 0.0)
         }
 
+        // Calculate sentiment score
         let score = await calculateSentimentScore(text)
 
+        // Map score to emotion
         var emotion: SenseEmotion = .neutral
         if score > 0.2 { emotion = .positive } else if score < -0.2 { emotion = .negative }
 
         return (emotion, score)
+    }
+
+    /// Plays haptic feedback for the given emotion
+    ///
+    /// Respects configuration settings for delay and heartbeat.
+    ///
+    /// - Parameter emotion: The emotion to play haptic feedback for
+    @MainActor
+    private func playHapticFeedback(for emotion: SenseEmotion) {
+        // Apply intensity from config
+        haptics.baseIntensity = config.hapticIntensity
+
+        // Apply delay if configured
+        if config.hapticDelay > 0 {
+            Task {
+                try? await Task.sleep(nanoseconds: UInt64(config.hapticDelay * 1_000_000_000))
+                haptics.play(for: emotion)
+            }
+        } else {
+            haptics.play(for: emotion)
+        }
+
+        // Handle heartbeat for intense emotions
+        if config.enableHeartbeat {
+            haptics.updateHeartbeat(shouldPlay: emotion == .intense)
+        }
     }
 
     private func calculateSentimentScore(_ text: String) async -> Double {
@@ -70,7 +184,8 @@ public class QualiaClient {
         let tagger = NLTagger(tagSchemes: [.lemma])
         tagger.string = text
         var found = false
-        tagger.enumerateTags(in: text.startIndex..<text.endIndex, unit: .word, scheme: .lemma) { tag, _ in
+        tagger.enumerateTags(in: text.startIndex..<text.endIndex, unit: .word, scheme: .lemma) {
+            tag, _ in
             if let lemma = tag?.rawValue.lowercased(), lemma == keyword.lowercased() {
                 found = true
                 return false

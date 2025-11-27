@@ -22,16 +22,16 @@ final class HapticEngineTests: XCTestCase {
     }
 
     func testPlayEmotion() {
-        mockProvider.play(.positive)
+        mockProvider.play(.positive, intensity: 1.0)
 
         XCTAssertEqual(mockProvider.playedEmotions.count, 1, "Should have one played emotion")
         XCTAssertEqual(mockProvider.playedEmotions.first, .positive, "Should play positive emotion")
     }
 
     func testPlayMultipleEmotions() {
-        mockProvider.play(.positive)
-        mockProvider.play(.negative)
-        mockProvider.play(.intense)
+        mockProvider.play(.positive, intensity: 1.0)
+        mockProvider.play(.negative, intensity: 1.0)
+        mockProvider.play(.intense, intensity: 1.0)
 
         XCTAssertEqual(mockProvider.playedEmotions.count, 3, "Should have three played emotions")
         XCTAssertEqual(
@@ -39,10 +39,10 @@ final class HapticEngineTests: XCTestCase {
     }
 
     func testEmotionCounts() {
-        mockProvider.play(.positive)
-        mockProvider.play(.positive)
-        mockProvider.play(.negative)
-        mockProvider.play(.positive)
+        mockProvider.play(.positive, intensity: 1.0)
+        mockProvider.play(.positive, intensity: 1.0)
+        mockProvider.play(.negative, intensity: 1.0)
+        mockProvider.play(.positive, intensity: 1.0)
 
         let counts = mockProvider.emotionCounts
         XCTAssertEqual(counts[.positive], 3, "Should count 3 positive emotions")
@@ -82,8 +82,8 @@ final class HapticEngineTests: XCTestCase {
 
     func testReset() {
         mockProvider.prepare()
-        mockProvider.play(.positive)
-        mockProvider.play(.negative)
+        mockProvider.play(.positive, intensity: 1.0)
+        mockProvider.play(.negative, intensity: 1.0)
         mockProvider.startHeartbeat()
 
         mockProvider.reset()
@@ -101,7 +101,7 @@ final class HapticEngineTests: XCTestCase {
 
         DispatchQueue.concurrentPerform(iterations: 100) { index in
             let emotion: SenseEmotion = index % 2 == 0 ? .positive : .negative
-            mockProvider.play(emotion)
+            mockProvider.play(emotion, intensity: 1.0)
             expectation.fulfill()
         }
 
