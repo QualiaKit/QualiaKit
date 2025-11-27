@@ -184,8 +184,7 @@ public class QualiaClient {
         let tagger = NLTagger(tagSchemes: [.lemma])
         tagger.string = text
         var found = false
-        tagger.enumerateTags(in: text.startIndex..<text.endIndex, unit: .word, scheme: .lemma) {
-            tag, _ in
+        tagger.enumerateTags(in: text.startIndex..<text.endIndex, unit: .word, scheme: .lemma) { tag, _ in
             if let lemma = tag?.rawValue.lowercased(), lemma == keyword.lowercased() {
                 found = true
                 return false

@@ -72,7 +72,7 @@ final class QualiaClientConfigTests: XCTestCase {
     func testClientInitWithDefaultConfig() throws {
         // Skip if model doesn't exist (it won't in this test)
         // This test just verifies the signature accepts default config
-        let _ = try? QualiaClient(
+        _ = try? QualiaClient(
             vocabURL: vocabURL,
             modelURL: mockModelURL
         )
@@ -82,7 +82,7 @@ final class QualiaClientConfigTests: XCTestCase {
 
     func testClientInitWithCustomConfig() throws {
         let config = QualiaConfiguration.silent
-        let _ = try? QualiaClient(
+        _ = try? QualiaClient(
             vocabURL: vocabURL,
             modelURL: mockModelURL,
             config: config
@@ -106,7 +106,7 @@ final class QualiaClientConfigTests: XCTestCase {
 
         // This test just verifies the method signature exists
         Task {
-            let _ = await client.analyze("test")
+            _ = await client.analyze("test")
         }
         XCTAssertTrue(true, "analyze() method exists")
     }
