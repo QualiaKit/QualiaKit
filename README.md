@@ -3,11 +3,9 @@
 ![Platform](https://img.shields.io/badge/platform-iOS%2016%2B%20%7C%20macOS%2013%2B-lightgrey)
 ![Language](https://img.shields.io/badge/Swift-5.9-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
-![Zero Dependencies](https://img.shields.io/badge/dependencies-zero-green)
-![SwiftUI Ready](https://img.shields.io/badge/SwiftUI-ready-blue)
-![Pluggable AI](https://img.shields.io/badge/AI-pluggable-purple)
 
-**Feel the meaning of text.** QualiaKit triggers haptic feedback based on real-time text sentiment analysis. It provides on-device interpretation of user input to bridge digital semantics and human perception.
+**Feel the meaning of text.** QualiaKit bridges the gap between digital semantics and human perception. It analyzes the sentiment of user input in real-time and triggers corresponding haptic feedback.
+Turn flat text into a tactile experience. QualiaKit triggers haptic feedback based on real-time text sentiment analysis. It provides on-device interpretation of user input to bridge digital semantics and human perception.
 
 ---
 
