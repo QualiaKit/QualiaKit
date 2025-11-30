@@ -1,6 +1,7 @@
+import QualiaBert
 import XCTest
 
-@testable import QualiaKit
+@testable import Qualia
 
 /// Tests for QualiaConfiguration and its integration with QualiaClient
 @available(macOS 11.0, iOS 14.0, *)
@@ -70,39 +71,22 @@ final class QualiaClientConfigTests: XCTestCase {
     // MARK: - Client Configuration Tests
 
     func testClientInitWithDefaultConfig() throws {
-        // Skip if model doesn't exist (it won't in this test)
-        // This test just verifies the signature accepts default config
-        _ = try? QualiaClient(
-            vocabURL: vocabURL,
-            modelURL: mockModelURL
-        )
-        // If we got here without crashing, the default parameter works
-        XCTAssertTrue(true, "Client accepts default configuration")
+        // Test with default lightweight NLTagger provider
+        let client = QualiaClient()
+        XCTAssertNotNil(client, "Client creates with default NLTagger provider")
     }
 
     func testClientInitWithCustomConfig() throws {
         let config = QualiaConfiguration.silent
-        _ = try? QualiaClient(
-            vocabURL: vocabURL,
-            modelURL: mockModelURL,
-            config: config
-        )
-        XCTAssertTrue(true, "Client accepts custom configuration")
+        let client = QualiaClient(config: config)
+        XCTAssertNotNil(client, "Client accepts custom configuration")
     }
 
     // MARK: - API Method Tests
 
     func testAnalyzeMethodExists() throws {
         // Verify the new analyze() method exists and is callable
-        guard
-            let client = try? QualiaClient(
-                vocabURL: vocabURL,
-                modelURL: mockModelURL,
-                config: .testing
-            )
-        else {
-            throw XCTSkip("Cannot create client without model file")
-        }
+        let client = QualiaClient(config: .testing)
 
         // This test just verifies the method signature exists
         Task {
@@ -113,15 +97,7 @@ final class QualiaClientConfigTests: XCTestCase {
 
     func testFeelMethodExists() throws {
         // Verify the new feel() method exists and is callable
-        guard
-            let client = try? QualiaClient(
-                vocabURL: vocabURL,
-                modelURL: mockModelURL,
-                config: .testing
-            )
-        else {
-            throw XCTSkip("Cannot create client without model file")
-        }
+        let client = QualiaClient(config: .testing)
 
         // This test just verifies the method signature exists
         Task { @MainActor in

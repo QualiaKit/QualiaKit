@@ -1,17 +1,17 @@
 import Foundation
 import NaturalLanguage
 
-/// Main client for QualiaKit sentiment analysis and haptic feedback
+/// Main client for Qualia sentiment analysis and haptic feedback
 ///
 /// QualiaClient analyzes text for emotional content and optionally triggers haptic feedback.
 ///
 /// ## Usage
 /// ```swift
-/// let client = try QualiaClient(
-///     vocabURL: vocabURL,
-///     modelURL: modelURL,
-///     config: .standard
-/// )
+/// // Default (NLTagger):
+/// let client = QualiaClient()
+///
+/// // Custom provider:
+/// let client = QualiaClient(provider: CustomProvider())
 ///
 /// // Analysis with automatic haptics
 /// let (emotion, score) = await client.analyzeAndFeel("I'm so happy!")
@@ -23,11 +23,9 @@ import NaturalLanguage
 /// await client.feel(.positive)
 /// ```
 public class QualiaClient {
-    private let tokenizer: BertTokenizer
-    private let modelWrapper: BertModelWrapper
+    private let provider: SentimentProvider
     private let haptics: HapticEngine
     private let languageRecognizer = NLLanguageRecognizer()
-    private let appleTagger = NLTagger(tagSchemes: [.sentimentScore])
     private let config: QualiaConfiguration
 
     /// Keywords that trigger `.intense` emotion detection
@@ -41,20 +39,24 @@ public class QualiaClient {
         "тайна", "шепот", "лес", "внезапно", "темнота", "mystery", "shadow", "secret",
     ]
 
-    /// Creates a new QualiaClient instance
+    /// Creates a new QualiaClient with default NLTagger provider
+    ///
+    /// - Parameter config: Configuration for haptic behavior. Default: `.standard`
+    public init(config: QualiaConfiguration = .standard) {
+        self.provider = NLTaggerProvider()
+        self.haptics = HapticEngine.shared
+        self.config = config
+    }
+
+    /// Creates a new QualiaClient with custom sentiment provider
+    ///
+    /// Use this initializer to inject heavy-duty providers like BertProvider.
     ///
     /// - Parameters:
-    ///   - vocabURL: URL to the BERT vocabulary file
-    ///   - modelURL: URL to the sentiment analysis model
+    ///   - provider: Custom sentiment analysis provider
     ///   - config: Configuration for haptic behavior. Default: `.standard`
-    /// - Throws: Error if tokenizer or model initialization fails
-    public init(
-        vocabURL: URL,
-        modelURL: URL,
-        config: QualiaConfiguration = .standard
-    ) throws {
-        self.tokenizer = try BertTokenizer(vocabURL: vocabURL)
-        self.modelWrapper = try BertModelWrapper(modelURL: modelURL)
+    public init(provider: SentimentProvider, config: QualiaConfiguration = .standard) {
+        self.provider = provider
         self.haptics = HapticEngine.shared
         self.config = config
     }
@@ -119,7 +121,7 @@ public class QualiaClient {
             return (.mysterious, 0.0)
         }
 
-        // Calculate sentiment score
+        // Calculate sentiment score using provider
         let score = await calculateSentimentScore(text)
 
         // Map score to emotion
@@ -163,20 +165,11 @@ public class QualiaClient {
         languageRecognizer.processString(trimmed)
         let language = languageRecognizer.dominantLanguage ?? .english
 
-        if language == .russian {
-            let (ids, mask) = tokenizer.tokenize(text: trimmed)
-            do {
-                return try modelWrapper.predictSentiment(inputIds: ids, attentionMask: mask)
-            } catch {
-                print("SenseKit ML Error: \(error)")
-                return 0.0
-            }
-        } else {
-            appleTagger.string = trimmed
-            let (sentiment, _) = appleTagger.tag(
-                at: trimmed.startIndex, unit: .paragraph, scheme: .sentimentScore)
-            let rawScore = Double(sentiment?.rawValue ?? "0.0") ?? 0.0
-            return tanh(rawScore * 1.5)
+        do {
+            return try await provider.analyzeSentiment(trimmed, language: language)
+        } catch {
+            print("Qualia Sentiment Error: \(error)")
+            return 0.0
         }
     }
 
@@ -184,7 +177,8 @@ public class QualiaClient {
         let tagger = NLTagger(tagSchemes: [.lemma])
         tagger.string = text
         var found = false
-        tagger.enumerateTags(in: text.startIndex..<text.endIndex, unit: .word, scheme: .lemma) { tag, _ in
+        tagger.enumerateTags(in: text.startIndex..<text.endIndex, unit: .word, scheme: .lemma) {
+            tag, _ in
             if let lemma = tag?.rawValue.lowercased(), lemma == keyword.lowercased() {
                 found = true
                 return false

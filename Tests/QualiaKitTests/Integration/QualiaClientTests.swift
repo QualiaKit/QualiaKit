@@ -1,6 +1,7 @@
+import QualiaBert
 import XCTest
 
-@testable import QualiaKit
+@testable import Qualia
 
 final class QualiaClientIntegrationTests: XCTestCase {
 
@@ -26,7 +27,8 @@ final class QualiaClientIntegrationTests: XCTestCase {
         }
 
         let modelURL = URL(fileURLWithPath: modelPath)
-        client = try QualiaClient(vocabURL: vocabURL, modelURL: modelURL)
+        let provider = try BertProvider(vocabURL: vocabURL, modelURL: modelURL)
+        client = QualiaClient(provider: provider)
     }
 
     override func tearDownWithError() throws {
@@ -95,7 +97,7 @@ final class QualiaClientIntegrationTests: XCTestCase {
     }
 
     func testNeutralSentiment() async throws {
-        let (emotion, score) = await client.analyzeAndFeel("Сегодня среда")
+        let (_, score) = await client.analyzeAndFeel("Сегодня среда")
 
         // Neutral text should have low absolute score
         XCTAssertLessThan(abs(score), 0.5, "Neutral text should have low absolute score")
@@ -144,7 +146,7 @@ final class QualiaClientLemmaTests: XCTestCase {
         try vocabContent.write(to: tempURL, atomically: true, encoding: .utf8)
 
         // Create a dummy model URL (tests won't use it)
-        let dummyModelURL = FileManager.default.temporaryDirectory.appendingPathComponent(
+        _ = FileManager.default.temporaryDirectory.appendingPathComponent(
             "dummy.mlmodel")
 
         // This will fail to create the client, so we skip these tests for now
