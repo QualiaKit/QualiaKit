@@ -10,18 +10,33 @@ let package = Package(
         .macOS(.v13),
     ],
     products: [
+        // Qualia (Core): Lightweight, zero-dependency sentiment analysis with NLTagger
         .library(
-            name: "QualiaKit",
-            targets: ["QualiaKit"])
+            name: "Qualia",
+            targets: ["Qualia"]
+        ),
+        // QualiaBert (Add-on): High-accuracy Russian sentiment via CoreML
+        .library(
+            name: "QualiaBert",
+            targets: ["QualiaBert"]
+        ),
     ],
     targets: [
+        // Core target with haptics, NLTagger, and SwiftUI integration
         .target(
-            name: "QualiaKit",
-            path: "src"
+            name: "Qualia",
+            path: "Sources/Qualia"
         ),
+        // BERT-based sentiment provider (depends on Qualia)
+        .target(
+            name: "QualiaBert",
+            dependencies: ["Qualia"],
+            path: "Sources/QualiaBert"
+        ),
+        // Tests
         .testTarget(
             name: "QualiaKitTests",
-            dependencies: ["QualiaKit"],
+            dependencies: ["Qualia", "QualiaBert"],
             resources: [.copy("Resources")]
         ),
     ]

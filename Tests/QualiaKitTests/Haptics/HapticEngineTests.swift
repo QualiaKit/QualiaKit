@@ -1,6 +1,7 @@
 import XCTest
 
-@testable import QualiaKit
+@testable import Qualia
+import QualiaBert
 
 final class HapticEngineTests: XCTestCase {
 
