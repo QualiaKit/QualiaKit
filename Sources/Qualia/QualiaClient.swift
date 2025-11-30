@@ -109,7 +109,22 @@ public class QualiaClient {
     /// - Parameter text: Text to analyze
     /// - Returns: Tuple of detected emotion and sentiment score
     private func performAnalysis(_ text: String) async -> (SenseEmotion, Double) {
-        let lowercased = text.lowercased()
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let lowercased = trimmed.lowercased()
+
+        // WORKAROUND: Stop-words filter
+        // NLTagger returns false negative (-0.6) for grammatical words without semantic meaning
+        // These should remain neutral until user types something meaningful
+        if Self.stopWords.contains(lowercased) {
+            return (.neutral, 0.0)
+        }
+
+        // WORKAROUND: Double negation filter
+        // NLTagger incorrectly classifies phrases like "not bad" as negative
+        // Double negations should be interpreted as positive
+        if Self.positiveNegations.contains(where: { lowercased.contains($0) }) {
+            return (.positive, 0.5)
+        }
 
         // Check for intense keywords
         if intenseKeywords.contains(where: { lowercased.contains($0) }) {
@@ -130,6 +145,37 @@ public class QualiaClient {
 
         return (emotion, score)
     }
+
+    // MARK: - NLTagger Workarounds
+
+    /// Stop-words that should always return neutral sentiment
+    ///
+    /// NLTagger incorrectly assigns negative sentiment to grammatical words.
+    /// These words have no semantic emotional content and should be neutral.
+    private static let stopWords: Set<String> = [
+        // Articles
+        "a", "an", "the",
+        // Demonstratives
+        "this", "that", "these", "those",
+        // Pronouns
+        "it", "its", "i", "me", "my", "you", "your",
+        "he", "she", "we", "they",
+        // Auxiliary verbs
+        "is", "am", "are", "was", "were", "be", "been", "being",
+        "have", "has", "had", "do", "does", "did",
+        "will", "would", "should", "could", "may", "might", "can",
+        // Prepositions
+        "of", "in", "on", "at", "to", "for", "with", "from", "by", "about", "as", "into",
+    ]
+
+    /// Double negation phrases that should return positive sentiment
+    ///
+    /// NLTagger fails to understand double negation logic.
+    /// These phrases contain negative words but express positive meaning.
+    private static let positiveNegations: [String] = [
+        "not bad", "not terrible", "not awful", "not horrible",
+        "not wrong", "not poor", "not weak", "not worse",
+    ]
 
     /// Plays haptic feedback for the given emotion
     ///
