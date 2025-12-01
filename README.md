@@ -179,5 +179,3 @@ let client = QualiaClient(provider: GPTProvider())
 ## License
 
 QualiaKit is available under the MIT license. See the [LICENSE](https://www.google.com/search?q=LICENSE) file for more info.
-
-```
