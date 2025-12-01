@@ -4,41 +4,51 @@
 ![Language](https://img.shields.io/badge/Swift-5.9-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
-**Feel the meaning of text.** QualiaKit bridges the gap between digital semantics and human perception. It analyzes the sentiment of user input in real-time and triggers corresponding haptic feedback.
-Turn flat text into a tactile experience. QualiaKit triggers haptic feedback based on real-time text sentiment analysis. It provides on-device interpretation of user input to bridge digital semantics and human perception.
+**Semantic Haptic Feedback Engine for iOS.**
+
+QualiaKit bridges the gap between digital semantics and human perception. It analyzes the sentiment of user input in real-time and triggers corresponding haptic feedback, turning flat text into a tactile experience.
 
 ---
+
+### The 30-Second Hook
 
 ```swift
 TextField("Enter text", text: $userInput)
     .qualiaFeedback(trigger: $userInput)
-```
+````
 
-That's it. **One modifier.** Your users now feel emotions as they type.
+That's it. **One modifier.** Your users now feel the emotional tone of their text as they type.
 
----
+-----
 
-## Why QualiaKit?
+## Key Features
 
-Most haptic libraries require manual triggering. QualiaKit makes haptics semantic.
-Privacy First: 100% on-device analysis. No data ever leaves the user's phone.
+  * **⚡️ Zero Latency:** Optimized for real-time typing loops.
+  * **🔒 Privacy First:** 100% on-device analysis. No data ever leaves the user's phone.
+  * **🧩 Modular Architecture:**
+      * **Qualia (Core):** Uses Apple's `NLTagger`. Ultra-lightweight (0 extra size).
+      * **QualiaBert:** Optional add-on for transformer-based accuracy using CoreML.
+  * **🎛 Extensible:** Bring your own ML model or heuristic provider easily.
 
-Modular Architecture:
-Qualia (Core): Uses NLTagger. Ultra-lightweight (0 extra size).
-QualiaBert: Optional add-on for transformer-based accuracy.
-
----
+-----
 
 ## Installation
 
-### Option 1: Lightweight (Recommended)
+### Swift Package Manager
 
 ```swift
-// Package.swift
 dependencies: [
-    .package(url: "https://github.com/QualiaKit/QualiaKit.git", from: "2.0.0")
+    .package(url: "[https://github.com/QualiaKit/QualiaKit.git](https://github.com/QualiaKit/QualiaKit.git)", from: "2.0.0")
 ]
+```
 
+**Choose your target configuration:**
+
+#### Option 1: Lightweight (Recommended)
+
+Use Apple's built-in NLP. No extra models required.
+
+```swift
 targets: [
     .target(
         name: "YourApp",
@@ -49,7 +59,9 @@ targets: [
 ]
 ```
 
-### Option 2: Heavy Duty (High Accuracy)
+#### Option 2: Heavy Duty (High Accuracy)
+
+Use a BERT-based transformer model.
 
 ```swift
 targets: [
@@ -57,17 +69,19 @@ targets: [
         name: "YourApp",
         dependencies: [
             .product(name: "Qualia", package: "QualiaKit"),
-            .product(name: "QualiaBert", package: "QualiaKit")  // Add this
+            .product(name: "QualiaBert", package: "QualiaKit") // Add the extension
         ]
     )
 ]
 ```
 
----
+-----
 
-## Quick Start
+## Usage
 
-### SwiftUI (Zero Config)
+### 1\. SwiftUI (Zero Config)
+
+The easiest way to integrate. The device vibrates based on sentiment intensity automatically.
 
 ```swift
 import SwiftUI
@@ -83,9 +97,9 @@ struct ContentView: View {
 }
 ```
 
-**Done.** The device vibrates based on sentiment as the user types.
+### 2\. Programmatic API
 
-### Programmatic API
+For more control or non-UI contexts.
 
 ```swift
 import Qualia
@@ -93,83 +107,77 @@ import Qualia
 // Initialize (uses NLTagger by default)
 let client = QualiaClient()
 
-// Analyze + haptic feedback
-let (emotion, score) = await client.analyzeAndFeel("I'm so happy!")
-// emotion: .positive, score: 0.8
+// Analyze only
+let (emotion, score) = await client.analyze("I am absolutely furious!")
+print(emotion) // Output: .negative
 
-// Analysis only
-let (emotion, score) = await client.analyze("Neutral text")
-
-// Manual haptic control
-client.feel(.intense)
+// Analyze + Trigger Haptics manually
+let (emotion, score) = await client.analyzeAndFeel("This is wonderful news.")
 ```
 
-### With BERT (High Accuracy)
+### 3\. Using BERT (High Accuracy)
 
+*Note: You must provide your own CoreML model file or download a compatible one.*
 ```swift
 import Qualia
 import QualiaBert
 
-// Initialize BERT provider
+// Initialize BERT provider with your local resources
 let provider = try BertProvider(
-    vocabURL: Bundle.main.url(forResource: "vocab", withExtension: "txt")!,
-    modelURL: Bundle.main.url(forResource: "rusentiment", withExtension: "mlmodelc")!
+    vocabURL: Bundle.main.url(forResource: "bert-vocab", withExtension: "txt")!,
+    modelURL: Bundle.main.url(forResource: "sentiment-model", withExtension: "mlmodelc")!
 )
 
+// Inject the provider into the client
 let client = QualiaClient(provider: provider)
-let (emotion, score) = await client.analyzeAndFeel("Это потрясающе!")
+let (emotion, score) = await client.analyzeAndFeel("This is absolutely amazing!")
 ```
+-----
 
-## Advanced Usage
+## Advanced Customization
 
-### Custom Configuration
+### Configuration
+
+Fine-tune the haptic experience.
 
 ```swift
 let config = QualiaConfiguration(
     autoPlayHaptics: true,
-    enableHeartbeat: false,
-    hapticIntensity: 0.7,
-    hapticDelay: 0.2
+    enableHeartbeat: false, // Disables background "pulse"
+    hapticIntensity: 0.7,   // Scale vibration strength
+    hapticDelay: 0.1        // Debounce time
 )
 
 let client = QualiaClient(config: config)
 ```
 
-## Bring Your Own Model
+### Bring Your Own Model
 
-QualiaKit is **fully extensible**. Use any sentiment model:
+QualiaKit is model-agnostic. Implement `SentimentProvider` to connect any backend (e.g., OpenAI API, TFLite, Custom CoreML).
 
 ```swift
 import Qualia
 
-struct MyCustomProvider: SentimentProvider {
+struct GPTProvider: SentimentProvider {
     func analyzeSentiment(_ text: String, language: NLLanguage) async throws -> Double {
-        // Your custom ML model, API call, or heuristic
-        return customScore  // -1.0 to 1.0
+        // Call your external API or custom logic here
+        return await myCustomAnalyzer.predict(text) // Returns -1.0 to 1.0
     }
 }
 
-let client = QualiaClient(provider: MyCustomProvider())
+let client = QualiaClient(provider: GPTProvider())
 ```
 
-## Testing
-
-```bash
-swift test
-
-# With real BERT model
-export QUALIAKIT_TEST_MODEL_PATH=/path/to/model.mlmodelc
-swift test
-```
-
----
+-----
 
 ## Requirements
 
-- iOS 16.0+ / macOS 13.0+
-- Swift 5.9+
-- Xcode 15.0+
+  - iOS 16.0+ / macOS 13.0+
+  - Swift 5.9+
+  - Xcode 15.0+
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details.
+QualiaKit is available under the MIT license. See the [LICENSE](https://www.google.com/search?q=LICENSE) file for more info.
+
+```
