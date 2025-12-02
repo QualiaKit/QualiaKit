@@ -39,47 +39,7 @@ Thank you for your interest in contributing to QualiaKit! 🎉
 
 ## Development Workflow
 
-### Code Style
-
-We use SwiftLint to enforce code style. Please ensure your code passes linting before submitting a PR:
-
-```bash
-swiftlint lint
-```
-
-Key style guidelines:
-
-- **Line length**: 120 characters max
-- **Indentation**: 4 spaces (no tabs)
-- **Naming**: Use descriptive names following Swift conventions
-- **Documentation**: Public APIs must have documentation comments
-
-### Running Tests
-
-Run all tests:
-
-```bash
-swift test
-```
-
-Run specific tests:
-
-```bash
-swift test --filter BertTokenizerTests
-```
-
-Run tests with a real BERT model (optional):
-
-```bash
-export QUALIAKIT_TEST_MODEL_PATH=/path/to/your/model.mlmodel
-swift test
-```
-
-### Test Coverage
-
-We aim for >70% test coverage on core components. When adding new features, please include tests.
-
-## Pull Request Process
+### Pull Request Process
 
 1. **Create a feature branch**
 
@@ -131,36 +91,10 @@ Before submitting your PR, please ensure:
 
 - [ ] Code builds without errors
 - [ ] All tests pass
-- [ ] SwiftLint checks pass
 - [ ] New functionality includes tests
 - [ ] Public APIs are documented
 - [ ] README updated (if needed)
 - [ ] No breaking changes (or clearly marked if unavoidable)
-
-## Testing Guidelines
-
-### Unit Tests
-
-- Test one thing per test method
-- Use descriptive test names: `testFeature_Scenario_ExpectedResult`
-- Use `XCTAssert` methods appropriately
-- Clean up resources in `tearDown`
-
-### Integration Tests
-
-- Mark tests that require external resources (models) as skippable
-- Use `XCTSkip` for tests that can't run in all environments
-- Document required environment variables
-
-### Mock Providers
-
-Use `MockHapticProvider` for testing haptic functionality:
-
-```swift
-let mockProvider = MockHapticProvider()
-mockProvider.play(.positive)
-XCTAssertEqual(mockProvider.playedEmotions.count, 1)
-```
 
 ## Reporting Issues
 
