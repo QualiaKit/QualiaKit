@@ -4,6 +4,8 @@
 ![Language](https://img.shields.io/badge/Swift-5.9-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
+![QualiaKit Demo](demo.gif)
+
 **Semantic Haptic Feedback Engine for iOS.**
 
 QualiaKit bridges the gap between digital semantics and human perception. It analyzes the sentiment of user input in real-time and triggers corresponding haptic feedback, turning flat text into a tactile experience.
