@@ -4,7 +4,7 @@
 ![Language](https://img.shields.io/badge/Swift-5.9-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
-![QualiaKit Demo](demo.gif)
+![QualiaKit Demo](qualia-demo.gif)
 
 **Semantic Haptic Feedback Engine for iOS.**
 
