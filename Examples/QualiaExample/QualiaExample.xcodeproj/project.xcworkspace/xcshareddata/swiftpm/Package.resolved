@@ -1,0 +1,15 @@
+{
+  "originHash" : "84555804b4491bad653f95a703042530ddd936d61964e5ccec222f5b72f28407",
+  "pins" : [
+    {
+      "identity" : "qualiakit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/QualiaKit/QualiaKit",
+      "state" : {
+        "revision" : "901ea4fd552c556259ead77a0a52473ce402ce65",
+        "version" : "2.0.0"
+      }
+    }
+  ],
+  "version" : 3
+}
