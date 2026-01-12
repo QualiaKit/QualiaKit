@@ -28,17 +28,6 @@ public class QualiaClient {
     private let languageRecognizer = NLLanguageRecognizer()
     private let config: QualiaConfiguration
 
-    /// Keywords that trigger `.intense` emotion detection
-    public var intenseKeywords: [String] = [
-        "кровь", "уби", "смерт", "атак", "выстрел", "беги", "rage", "blood", "kill", "death", "run",
-        "shoot", "attack",
-    ]
-
-    /// Keywords that trigger `.mysterious` emotion detection
-    public var mysteriousKeywords: [String] = [
-        "тайна", "шепот", "лес", "внезапно", "темнота", "mystery", "shadow", "secret",
-    ]
-
     /// Creates a new QualiaClient with default NLTagger provider
     ///
     /// - Parameter config: Configuration for haptic behavior. Default: `.standard`
@@ -127,12 +116,12 @@ public class QualiaClient {
         }
 
         // Check for intense keywords
-        if intenseKeywords.contains(where: { lowercased.contains($0) }) {
+        if config.intenseKeywords.contains(where: { lowercased.contains($0) }) {
             return (.intense, 0.0)
         }
 
         // Check for mysterious keywords
-        if mysteriousKeywords.contains(where: { lowercased.contains($0) }) {
+        if config.mysteriousKeywords.contains(where: { lowercased.contains($0) }) {
             return (.mysterious, 0.0)
         }
 

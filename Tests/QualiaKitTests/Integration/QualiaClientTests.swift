@@ -61,16 +61,46 @@ final class QualiaClientIntegrationTests: XCTestCase {
     // MARK: - Custom Keywords Tests
 
     func testCustomIntenseKeywords() async throws {
-        client.intenseKeywords.append("опасность")
+        // Get default keywords and add a custom one
+        let defaultKeywords = QualiaConfiguration.loadKeywordsFromBundle()
+        let customIntense = defaultKeywords.intense + ["опасность"]
+        
+        // Create config with custom keywords
+        let config = QualiaConfiguration(intenseKeywords: customIntense)
+        
+        // Get model path from environment
+        guard let modelPath = ProcessInfo.processInfo.environment["QUALIAKIT_TEST_MODEL_PATH"]
+        else {
+            throw XCTSkip("Skipping integration tests - set QUALIAKIT_TEST_MODEL_PATH to run")
+        }
+        
+        let modelURL = URL(fileURLWithPath: modelPath)
+        let provider = try BertProvider(vocabURL: vocabURL, modelURL: modelURL)
+        let customClient = QualiaClient(provider: provider, config: config)
 
-        let (emotion, _) = await client.analyzeAndFeel("опасность")
+        let (emotion, _) = await customClient.analyzeAndFeel("опасность")
         XCTAssertEqual(emotion, .intense, "Should detect custom keyword")
     }
 
     func testCustomMysteriousKeywords() async throws {
-        client.mysteriousKeywords.append("загадка")
+        // Get default keywords and add a custom one
+        let defaultKeywords = QualiaConfiguration.loadKeywordsFromBundle()
+        let customMysterious = defaultKeywords.mysterious + ["загадка"]
+        
+        // Create config with custom keywords
+        let config = QualiaConfiguration(mysteriousKeywords: customMysterious)
+        
+        // Get model path from environment
+        guard let modelPath = ProcessInfo.processInfo.environment["QUALIAKIT_TEST_MODEL_PATH"]
+        else {
+            throw XCTSkip("Skipping integration tests - set QUALIAKIT_TEST_MODEL_PATH to run")
+        }
+        
+        let modelURL = URL(fileURLWithPath: modelPath)
+        let provider = try BertProvider(vocabURL: vocabURL, modelURL: modelURL)
+        let customClient = QualiaClient(provider: provider, config: config)
 
-        let (emotion, _) = await client.analyzeAndFeel("загадка")
+        let (emotion, _) = await customClient.analyzeAndFeel("загадка")
         XCTAssertEqual(emotion, .mysterious, "Should detect custom mysterious keyword")
     }
 

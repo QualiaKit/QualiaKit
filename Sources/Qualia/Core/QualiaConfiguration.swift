@@ -44,6 +44,72 @@ public struct QualiaConfiguration {
     /// Default is `0.0` (immediate playback).
     public var hapticDelay: TimeInterval
 
+    /// Keywords that trigger `.intense` emotion detection
+    ///
+    /// These keywords are checked before sentiment analysis. If any keyword is found,
+    /// the text is immediately classified as `.intense`. Defaults loaded from bundle resources.
+    public var intenseKeywords: [String]
+
+    /// Keywords that trigger `.mysterious` emotion detection
+    ///
+    /// These keywords are checked before sentiment analysis. If any keyword is found,
+    /// the text is immediately classified as `.mysterious`. Defaults loaded from bundle resources.
+    public var mysteriousKeywords: [String]
+
+    // MARK: - Keyword Loading
+
+    /// Loads keywords from the main app bundle
+    ///
+    /// Attempts to load `QualiaKeywords.plist` from the main app bundle.
+    /// If the file is missing or corrupted, returns hardcoded fallback values
+    /// to ensure the library continues to function.
+    ///
+    /// ## Adding Custom Keywords
+    /// To customize keywords, add a `QualiaKeywords.plist` file to your app's main bundle with the following structure:
+    /// ```xml
+    /// <dict>
+    ///     <key>intenseKeywords</key>
+    ///     <array>
+    ///         <string>your</string>
+    ///         <string>keywords</string>
+    ///     </array>
+    ///     <key>mysteriousKeywords</key>
+    ///     <array>
+    ///         <string>your</string>
+    ///         <string>keywords</string>
+    ///     </array>
+    /// </dict>
+    /// ```
+    ///
+    /// - Returns: Tuple containing intense and mysterious keyword arrays
+    public static func loadKeywordsFromBundle() -> (intense: [String], mysterious: [String]) {
+        // Try to find the plist in the main app bundle
+        guard let bundleURL = Bundle.main.url(forResource: "QualiaKeywords", withExtension: "plist"),
+              let data = try? Data(contentsOf: bundleURL),
+              let plist = try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any]
+        else {
+            // Fallback to hardcoded defaults if plist is missing
+            return (
+                intense: [
+                    "кровь", "уби", "смерт", "атак", "выстрел", "беги",
+                    "rage", "blood", "kill", "death", "run", "shoot", "attack",
+                ],
+                mysterious: [
+                    "тайна", "шепот", "лес", "внезапно", "темнота",
+                    "mystery", "shadow", "secret",
+                ]
+            )
+        }
+
+        // Extract arrays from plist
+        let intense = plist["intenseKeywords"] as? [String] ?? []
+        let mysterious = plist["mysteriousKeywords"] as? [String] ?? []
+
+        return (intense: intense, mysterious: mysterious)
+    }
+
+    // MARK: - Initialization
+
     /// Creates a new configuration with the specified parameters
     ///
     /// - Parameters:
@@ -51,16 +117,25 @@ public struct QualiaConfiguration {
     ///   - enableHeartbeat: Whether to enable heartbeat pattern for intense emotions. Default: `true`
     ///   - hapticIntensity: Haptic intensity multiplier (0.0 - 1.0). Default: `1.0`
     ///   - hapticDelay: Delay before playing haptics in seconds. Default: `0.0`
+    ///   - intenseKeywords: Keywords that trigger `.intense` emotion. Default: loaded from bundle
+    ///   - mysteriousKeywords: Keywords that trigger `.mysterious` emotion. Default: loaded from bundle
     public init(
         autoPlayHaptics: Bool = true,
         enableHeartbeat: Bool = true,
         hapticIntensity: CGFloat = 1.0,
-        hapticDelay: TimeInterval = 0.0
+        hapticDelay: TimeInterval = 0.0,
+        intenseKeywords: [String]? = nil,
+        mysteriousKeywords: [String]? = nil
     ) {
         self.autoPlayHaptics = autoPlayHaptics
         self.enableHeartbeat = enableHeartbeat
         self.hapticIntensity = hapticIntensity
         self.hapticDelay = hapticDelay
+        
+        // Load keywords from bundle or use provided values
+        let bundleKeywords = Self.loadKeywordsFromBundle()
+        self.intenseKeywords = intenseKeywords ?? bundleKeywords.intense
+        self.mysteriousKeywords = mysteriousKeywords ?? bundleKeywords.mysterious
     }
 
     // MARK: - Presets

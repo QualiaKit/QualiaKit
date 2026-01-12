@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<!--
+    QualiaKit Keyword Configuration Template
+    
+    Add this file to your app's main bundle to customize emotion detection keywords.
+    
+    Usage:
+    1. Copy this file to your Xcode project
+    2. Make sure it's included in your app target (check Target Membership)
+    3. Customize the keywords arrays below
+    4. Build and run - QualiaKit will automatically use your custom keywords
+    
+    If this file is not present in your app bundle, QualiaKit will use default hardcoded keywords.
+-->
+<dict>
+	<key>intenseKeywords</key>
+	<array>
+		<!-- Russian keywords -->
+		<string>кровь</string>
+		<string>уби</string>
+		<string>смерт</string>
+		<string>атак</string>
+		<string>выстрел</string>
+		<string>беги</string>
+		<!-- English keywords -->
+		<string>rage</string>
+		<string>blood</string>
+		<string>kill</string>
+		<string>death</string>
+		<string>run</string>
+		<string>shoot</string>
+		<string>attack</string>
+	</array>
+	<key>mysteriousKeywords</key>
+	<array>
+		<!-- Russian keywords -->
+		<string>тайна</string>
+		<string>шепот</string>
+		<string>лес</string>
+		<string>внезапно</string>
+		<string>темнота</string>
+		<!-- English keywords -->
+		<string>mystery</string>
+		<string>shadow</string>
+		<string>secret</string>
+	</array>
+</dict>
+</plist>
