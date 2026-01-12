@@ -12,25 +12,14 @@ QualiaKit bridges the gap between digital semantics and human perception. It ana
 
 ---
 
-### The 30-Second Hook
-
-```swift
-TextField("Enter text", text: $userInput)
-    .qualiaFeedback(trigger: $userInput)
-````
-
-That's it. **One modifier.** Your users now feel the emotional tone of their text as they type.
-
------
-
 ## Key Features
 
-  * **⚡️ Zero Latency:** Optimized for real-time typing loops.
-  * **🔒 Privacy First:** 100% on-device analysis. No data ever leaves the user's phone.
-  * **🧩 Modular Architecture:**
+  * **Zero Latency:** Optimized for real-time typing loops.
+  * **Privacy First:** 100% on-device analysis. No data ever leaves the user's phone.
+  * **Modular Architecture:**
       * **Qualia (Core):** Uses Apple's `NLTagger`. Ultra-lightweight (0 extra size).
       * **QualiaBert:** Optional add-on for transformer-based accuracy using CoreML.
-  * **🎛 Extensible:** Bring your own ML model or heuristic provider easily.
+  * **Extensible:** Bring your own ML model or heuristic provider easily.
 
 -----
 
@@ -40,7 +29,7 @@ That's it. **One modifier.** Your users now feel the emotional tone of their tex
 
 ```swift
 dependencies: [
-    .package(url: "[https://github.com/QualiaKit/QualiaKit.git](https://github.com/QualiaKit/QualiaKit.git)", from: "2.0.0")
+    .package(url: "[https://github.com/QualiaKit/QualiaKit.git](https://github.com/QualiaKit/QualiaKit.git)")
 ]
 ```
 
@@ -84,6 +73,7 @@ targets: [
 ### 1\. SwiftUI (Zero Config)
 
 The easiest way to integrate. The device vibrates based on sentiment intensity automatically.
+That's it. **One modifier.**. Your users now feel the emotional tone of their text as they type.
 
 ```swift
 import SwiftUI
