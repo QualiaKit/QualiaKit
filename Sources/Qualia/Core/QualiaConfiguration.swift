@@ -3,7 +3,7 @@ import Foundation
 
 /// Configuration for QualiaClient behavior
 ///
-/// Use this to control haptic feedback, heartbeat patterns, and other QualiaKit features.
+/// Use this to control haptic feedback intensity, delay, and keyword detection.
 ///
 /// ## Example Usage
 /// ```swift
@@ -16,7 +16,6 @@ import Foundation
 /// // Custom configuration
 /// let config = QualiaConfiguration(
 ///     autoPlayHaptics: true,
-///     enableHeartbeat: false,
 ///     hapticIntensity: 0.7
 /// )
 /// ```
@@ -26,11 +25,6 @@ public struct QualiaConfiguration {
     /// When `true`, calling `analyzeAndFeel()` will automatically trigger haptic feedback.
     /// When `false`, you must call `feel()` explicitly to trigger haptics.
     public var autoPlayHaptics: Bool
-
-    /// Enable heartbeat pattern for intense emotions
-    ///
-    /// When `true`, the heartbeat haptic pattern will play continuously when `.intense` emotion is detected.
-    public var enableHeartbeat: Bool
 
     /// Haptic intensity multiplier (0.0 - 1.0)
     ///
@@ -114,21 +108,18 @@ public struct QualiaConfiguration {
     ///
     /// - Parameters:
     ///   - autoPlayHaptics: Whether to automatically play haptics in `analyzeAndFeel()`. Default: `true`
-    ///   - enableHeartbeat: Whether to enable heartbeat pattern for intense emotions. Default: `true`
     ///   - hapticIntensity: Haptic intensity multiplier (0.0 - 1.0). Default: `1.0`
     ///   - hapticDelay: Delay before playing haptics in seconds. Default: `0.0`
     ///   - intenseKeywords: Keywords that trigger `.intense` emotion. Default: loaded from bundle
     ///   - mysteriousKeywords: Keywords that trigger `.mysterious` emotion. Default: loaded from bundle
     public init(
         autoPlayHaptics: Bool = true,
-        enableHeartbeat: Bool = true,
         hapticIntensity: CGFloat = 1.0,
         hapticDelay: TimeInterval = 0.0,
         intenseKeywords: [String]? = nil,
         mysteriousKeywords: [String]? = nil
     ) {
         self.autoPlayHaptics = autoPlayHaptics
-        self.enableHeartbeat = enableHeartbeat
         self.hapticIntensity = hapticIntensity
         self.hapticDelay = hapticDelay
         
@@ -149,13 +140,13 @@ public struct QualiaConfiguration {
     ///
     /// Use when you want full manual control over haptic feedback,
     /// or when haptics should be disabled (e.g., accessibility preferences).
-    public static let silent = QualiaConfiguration(autoPlayHaptics: false, enableHeartbeat: false)
+    public static let silent = QualiaConfiguration(autoPlayHaptics: false)
 
     /// Testing mode - analysis only
     ///
     /// Optimized for unit tests where haptic feedback is not needed.
     /// Identical to `.silent` but semantically indicates testing intent.
-    public static let testing = QualiaConfiguration(autoPlayHaptics: false, enableHeartbeat: false)
+    public static let testing = QualiaConfiguration(autoPlayHaptics: false)
 
     /// Accessibility mode - reduced haptic intensity
     ///

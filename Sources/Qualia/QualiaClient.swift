@@ -89,6 +89,20 @@ public class QualiaClient {
         playHapticFeedback(for: emotion)
     }
 
+    /// Register a custom haptic pattern for an emotion.
+    ///
+    /// Call this during app initialization, before any analysis. The pattern
+    /// will be played whenever the given emotion is triggered. If no pattern
+    /// is registered for an emotion, a built-in default pattern is used.
+    ///
+    /// - Parameters:
+    ///   - pattern: The haptic pattern to play
+    ///   - emotion: The emotion this pattern should be associated with
+    @MainActor
+    public func register(pattern: HapticPattern, for emotion: SenseEmotion) {
+        haptics.register(pattern: pattern, for: emotion)
+    }
+
     // MARK: - Private Methods
 
     /// Performs sentiment analysis on text
@@ -117,12 +131,12 @@ public class QualiaClient {
 
         // Check for intense keywords
         if config.intenseKeywords.contains(where: { lowercased.contains($0) }) {
-            return (.intense, 0.0)
+            return (.intense, 0.9)
         }
 
         // Check for mysterious keywords
         if config.mysteriousKeywords.contains(where: { lowercased.contains($0) }) {
-            return (.mysterious, 0.0)
+            return (.mysterious, 0.7)
         }
 
         // Calculate sentiment score using provider
@@ -184,11 +198,6 @@ public class QualiaClient {
             }
         } else {
             haptics.play(for: emotion)
-        }
-
-        // Handle heartbeat for intense emotions
-        if config.enableHeartbeat {
-            haptics.updateHeartbeat(shouldPlay: emotion == .intense)
         }
     }
 

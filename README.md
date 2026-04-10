@@ -104,7 +104,6 @@ You can adjust haptic behavior through `QualiaConfiguration`:
 ```swift
 let config = QualiaConfiguration(
     autoPlayHaptics: true,
-    enableHeartbeat: false, // Disables background "pulse"
     hapticIntensity: 0.7,   // Scale vibration strength
     hapticDelay: 0.1        // Debounce time
 )

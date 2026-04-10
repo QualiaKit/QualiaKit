@@ -32,19 +32,16 @@ final class QualiaClientConfigTests: XCTestCase {
         // Test standard configuration
         let standard = QualiaConfiguration.standard
         XCTAssertTrue(standard.autoPlayHaptics, "Standard should enable auto-haptics")
-        XCTAssertTrue(standard.enableHeartbeat, "Standard should enable heartbeat")
         XCTAssertEqual(standard.hapticIntensity, 1.0, "Standard should use full intensity")
         XCTAssertEqual(standard.hapticDelay, 0.0, "Standard should have no delay")
 
         // Test silent configuration
         let silent = QualiaConfiguration.silent
         XCTAssertFalse(silent.autoPlayHaptics, "Silent should disable auto-haptics")
-        XCTAssertFalse(silent.enableHeartbeat, "Silent should disable heartbeat")
 
         // Test testing configuration
         let testing = QualiaConfiguration.testing
         XCTAssertFalse(testing.autoPlayHaptics, "Testing should disable auto-haptics")
-        XCTAssertFalse(testing.enableHeartbeat, "Testing should disable heartbeat")
 
         // Test accessibility configuration
         let accessibility = QualiaConfiguration.accessibility
@@ -57,13 +54,11 @@ final class QualiaClientConfigTests: XCTestCase {
     func testCustomConfiguration() {
         let config = QualiaConfiguration(
             autoPlayHaptics: false,
-            enableHeartbeat: true,
             hapticIntensity: 0.7,
             hapticDelay: 0.5
         )
 
         XCTAssertFalse(config.autoPlayHaptics)
-        XCTAssertTrue(config.enableHeartbeat)
         XCTAssertEqual(config.hapticIntensity, 0.7)
         XCTAssertEqual(config.hapticDelay, 0.5)
     }

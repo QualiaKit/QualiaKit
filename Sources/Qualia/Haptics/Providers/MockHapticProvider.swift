@@ -7,23 +7,17 @@ public final class MockHapticProvider: HapticProvider {
 
     // MARK: - Public Properties
 
-    /// All emotions that have been played, in order
-    public private(set) var playedEmotions: [SenseEmotion] = []
+    /// All patterns that have been played, in order
+    public private(set) var playedPatterns: [HapticPattern] = []
 
-    /// All intensities that have been used, in order (corresponds to playedEmotions)
+    /// All base intensities that have been used, in order (corresponds to playedPatterns)
     public private(set) var playedIntensities: [CGFloat] = []
 
     /// Whether prepare() was called
     public private(set) var prepareCalled = false
 
-    /// Whether heartbeat is currently playing
-    public private(set) var isHeartbeatPlaying = false
-
-    /// Number of times each emotion was played
-    public var emotionCounts: [SenseEmotion: Int] {
-        Dictionary(grouping: playedEmotions, by: { $0 })
-            .mapValues { $0.count }
-    }
+    /// Whether a looping pattern is currently playing
+    public private(set) var isLooping: Bool = false
 
     // MARK: - Thread Safety
 
@@ -39,32 +33,27 @@ public final class MockHapticProvider: HapticProvider {
         }
     }
 
-    public func play(_ emotion: SenseEmotion, intensity: CGFloat) {
+    public func play(pattern: HapticPattern, baseIntensity: CGFloat) {
         queue.sync {
-            playedEmotions.append(emotion)
-            playedIntensities.append(intensity)
+            playedPatterns.append(pattern)
+            playedIntensities.append(baseIntensity)
+            isLooping = pattern.looping
         }
     }
 
-    public func startHeartbeat() {
+    public func stopLooping() {
         queue.sync {
-            isHeartbeatPlaying = true
-        }
-    }
-
-    public func stopHeartbeat() {
-        queue.sync {
-            isHeartbeatPlaying = false
+            isLooping = false
         }
     }
 
     /// Reset all recorded events (useful between tests)
     public func reset() {
         queue.sync {
-            playedEmotions.removeAll()
+            playedPatterns.removeAll()
             playedIntensities.removeAll()
             prepareCalled = false
-            isHeartbeatPlaying = false
+            isLooping = false
         }
     }
 }
