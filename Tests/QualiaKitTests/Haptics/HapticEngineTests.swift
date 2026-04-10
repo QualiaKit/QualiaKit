@@ -7,6 +7,20 @@ final class HapticEngineTests: XCTestCase {
 
     var mockProvider: MockHapticProvider!
 
+    private let tapPattern = HapticPattern(events: [
+        HapticEvent(delay: 0.0, intensity: 0.7, sharpness: 0.8)
+    ])
+
+    private let thudPattern = HapticPattern(events: [
+        HapticEvent(delay: 0.0, intensity: 0.9, sharpness: 1.0)
+    ])
+
+    private let loopingPattern = HapticPattern(
+        events: [HapticEvent(delay: 0.0, intensity: 0.6, sharpness: 1.0)],
+        looping: true,
+        loopDuration: 1.5
+    )
+
     override func setUpWithError() throws {
         mockProvider = MockHapticProvider()
     }
@@ -22,76 +36,60 @@ final class HapticEngineTests: XCTestCase {
         XCTAssertTrue(mockProvider.prepareCalled, "Prepare should be called")
     }
 
-    func testPlayEmotion() {
-        mockProvider.play(.positive, intensity: 1.0)
+    func testPlayPattern() {
+        mockProvider.play(pattern: tapPattern, baseIntensity: 1.0)
 
-        XCTAssertEqual(mockProvider.playedEmotions.count, 1, "Should have one played emotion")
-        XCTAssertEqual(mockProvider.playedEmotions.first, .positive, "Should play positive emotion")
+        XCTAssertEqual(mockProvider.playedPatterns.count, 1, "Should have one played pattern")
+        XCTAssertEqual(mockProvider.playedIntensities.first, 1.0, "Should record intensity")
     }
 
-    func testPlayMultipleEmotions() {
-        mockProvider.play(.positive, intensity: 1.0)
-        mockProvider.play(.negative, intensity: 1.0)
-        mockProvider.play(.intense, intensity: 1.0)
+    func testPlayMultiplePatterns() {
+        mockProvider.play(pattern: tapPattern, baseIntensity: 1.0)
+        mockProvider.play(pattern: thudPattern, baseIntensity: 0.5)
+        mockProvider.play(pattern: loopingPattern, baseIntensity: 0.8)
 
-        XCTAssertEqual(mockProvider.playedEmotions.count, 3, "Should have three played emotions")
-        XCTAssertEqual(
-            mockProvider.playedEmotions, [.positive, .negative, .intense], "Should maintain order")
+        XCTAssertEqual(mockProvider.playedPatterns.count, 3, "Should have three played patterns")
+        XCTAssertEqual(mockProvider.playedIntensities, [1.0, 0.5, 0.8], "Should maintain order")
     }
 
-    func testEmotionCounts() {
-        mockProvider.play(.positive, intensity: 1.0)
-        mockProvider.play(.positive, intensity: 1.0)
-        mockProvider.play(.negative, intensity: 1.0)
-        mockProvider.play(.positive, intensity: 1.0)
+    // MARK: - Looping Tests
 
-        let counts = mockProvider.emotionCounts
-        XCTAssertEqual(counts[.positive], 3, "Should count 3 positive emotions")
-        XCTAssertEqual(counts[.negative], 1, "Should count 1 negative emotion")
-        XCTAssertNil(counts[.intense], "Should not count unplayed emotions")
+    func testLoopingFlagSetByPattern() {
+        XCTAssertFalse(mockProvider.isLooping, "Should not be looping initially")
+
+        mockProvider.play(pattern: loopingPattern, baseIntensity: 1.0)
+        XCTAssertTrue(mockProvider.isLooping, "Looping pattern should set isLooping = true")
     }
 
-    // MARK: - Heartbeat Tests
+    func testNonLoopingPatternClearsLooping() {
+        mockProvider.play(pattern: loopingPattern, baseIntensity: 1.0)
+        XCTAssertTrue(mockProvider.isLooping)
 
-    func testStartHeartbeat() {
-        XCTAssertFalse(mockProvider.isHeartbeatPlaying, "Heartbeat should not be playing initially")
-
-        mockProvider.startHeartbeat()
-        XCTAssertTrue(mockProvider.isHeartbeatPlaying, "Heartbeat should be playing")
+        mockProvider.play(pattern: tapPattern, baseIntensity: 1.0)
+        XCTAssertFalse(mockProvider.isLooping, "Non-looping pattern should clear isLooping")
     }
 
-    func testStopHeartbeat() {
-        mockProvider.startHeartbeat()
-        XCTAssertTrue(mockProvider.isHeartbeatPlaying, "Heartbeat should be playing")
+    func testStopLooping() {
+        mockProvider.play(pattern: loopingPattern, baseIntensity: 1.0)
+        XCTAssertTrue(mockProvider.isLooping)
 
-        mockProvider.stopHeartbeat()
-        XCTAssertFalse(mockProvider.isHeartbeatPlaying, "Heartbeat should stop")
-    }
-
-    func testHeartbeatToggle() {
-        mockProvider.startHeartbeat()
-        XCTAssertTrue(mockProvider.isHeartbeatPlaying)
-
-        mockProvider.stopHeartbeat()
-        XCTAssertFalse(mockProvider.isHeartbeatPlaying)
-
-        mockProvider.startHeartbeat()
-        XCTAssertTrue(mockProvider.isHeartbeatPlaying)
+        mockProvider.stopLooping()
+        XCTAssertFalse(mockProvider.isLooping, "stopLooping() should clear isLooping")
     }
 
     // MARK: - Reset Tests
 
     func testReset() {
         mockProvider.prepare()
-        mockProvider.play(.positive, intensity: 1.0)
-        mockProvider.play(.negative, intensity: 1.0)
-        mockProvider.startHeartbeat()
+        mockProvider.play(pattern: tapPattern, baseIntensity: 1.0)
+        mockProvider.play(pattern: loopingPattern, baseIntensity: 1.0)
 
         mockProvider.reset()
 
-        XCTAssertEqual(mockProvider.playedEmotions.count, 0, "Should clear played emotions")
+        XCTAssertEqual(mockProvider.playedPatterns.count, 0, "Should clear played patterns")
+        XCTAssertEqual(mockProvider.playedIntensities.count, 0, "Should clear intensities")
         XCTAssertFalse(mockProvider.prepareCalled, "Should reset prepare flag")
-        XCTAssertFalse(mockProvider.isHeartbeatPlaying, "Should stop heartbeat")
+        XCTAssertFalse(mockProvider.isLooping, "Should clear looping flag")
     }
 
     // MARK: - Thread Safety Tests
@@ -100,17 +98,13 @@ final class HapticEngineTests: XCTestCase {
         let expectation = self.expectation(description: "Concurrent plays complete")
         expectation.expectedFulfillmentCount = 100
 
-        DispatchQueue.concurrentPerform(iterations: 100) { index in
-            let emotion: SenseEmotion = index % 2 == 0 ? .positive : .negative
-            mockProvider.play(emotion, intensity: 1.0)
+        DispatchQueue.concurrentPerform(iterations: 100) { _ in
+            mockProvider.play(pattern: tapPattern, baseIntensity: 1.0)
             expectation.fulfill()
         }
 
         waitForExpectations(timeout: 5.0)
 
-        XCTAssertEqual(mockProvider.playedEmotions.count, 100, "Should record all 100 plays")
-        XCTAssertEqual(
-            mockProvider.emotionCounts[.positive]! + mockProvider.emotionCounts[.negative]!, 100,
-            "Should count all emotions")
+        XCTAssertEqual(mockProvider.playedPatterns.count, 100, "Should record all 100 plays")
     }
 }

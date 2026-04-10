@@ -6,89 +6,87 @@ import SwiftUI
     import UIKit
 
     public final class IOSHapticProvider: HapticProvider {
-        private let notification = UINotificationFeedbackGenerator()
-        private let soft = UIImpactFeedbackGenerator(style: .soft)
-        private let light = UIImpactFeedbackGenerator(style: .light)
-        private let rigid = UIImpactFeedbackGenerator(style: .rigid)
-        private let heavy = UIImpactFeedbackGenerator(style: .heavy)
-
         private var hapticEngine: CHHapticEngine?
-        private var heartbeatPlayer: CHHapticAdvancedPatternPlayer?
+        private var loopingPlayer: CHHapticAdvancedPatternPlayer?
+
+        // Fallback generator for devices without CoreHaptics
+        private let impactMedium = UIImpactFeedbackGenerator(style: .medium)
+
+        public init() {}
 
         public func prepare() {
-            notification.prepare()
-            heavy.prepare()
-            setupHapticEngine()
+            impactMedium.prepare()
+            setupEngine()
         }
 
-        public func play(_ emotion: SenseEmotion, intensity: CGFloat = 1.0) {
-            switch emotion {
-            case .positive: notification.notificationOccurred(.success)
-            case .negative: rigid.impactOccurred()
-            case .intense: heavy.impactOccurred(intensity: intensity)
-            case .mysterious: soft.impactOccurred(intensity: 0.8 * intensity)
-            case .neutral: light.impactOccurred()
-            }
-        }
-
-        public func startHeartbeat() {
-            guard heartbeatPlayer == nil else { return }
-
-            do {
-                let pattern = try createHeartbeatPattern()
-                heartbeatPlayer = try hapticEngine?.makeAdvancedPlayer(with: pattern)
-                heartbeatPlayer?.loopEnabled = true
-                heartbeatPlayer?.loopEnd = 1.5
-                try heartbeatPlayer?.start(atTime: CHHapticTimeImmediate)
-            } catch {
-                print("Failed to start heartbeat: \(error.localizedDescription)")
-            }
-        }
-
-        public func stopHeartbeat() {
-            do {
-                try heartbeatPlayer?.stop(atTime: CHHapticTimeImmediate)
-            } catch {
-                print("Failed to stop heartbeat: \(error.localizedDescription)")
-            }
-            heartbeatPlayer = nil
-        }
-
-        // MARK: - Private Methods
-
-        private func setupHapticEngine() {
-            guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else {
+        public func play(pattern: HapticPattern, baseIntensity: CGFloat) {
+            guard CHHapticEngine.capabilitiesForHardware().supportsHaptics,
+                  let engine = hapticEngine else {
+                // Fallback: a single medium impact
+                impactMedium.impactOccurred(intensity: baseIntensity)
                 return
             }
 
             do {
-                hapticEngine = try CHHapticEngine()
-                try hapticEngine?.start()
+                // Stop any previous looping pattern
+                try loopingPlayer?.stop(atTime: CHHapticTimeImmediate)
+                loopingPlayer = nil
+
+                let chEvents: [CHHapticEvent] = pattern.events.map { event in
+                    let finalIntensity = event.intensity * Float(baseIntensity)
+                    return CHHapticEvent(
+                        eventType: event.isTransient ? .hapticTransient : .hapticContinuous,
+                        parameters: [
+                            CHHapticEventParameter(parameterID: .hapticIntensity, value: finalIntensity),
+                            CHHapticEventParameter(parameterID: .hapticSharpness, value: event.sharpness),
+                        ],
+                        relativeTime: event.delay,
+                        duration: event.isTransient ? 0 : (pattern.loopDuration ?? 1.0)
+                    )
+                }
+
+                let chPattern = try CHHapticPattern(events: chEvents, parameters: [])
+
+                if pattern.looping {
+                    let player = try engine.makeAdvancedPlayer(with: chPattern)
+                    player.loopEnabled = true
+                    player.loopEnd = pattern.loopDuration ?? 1.5
+                    try player.start(atTime: CHHapticTimeImmediate)
+                    loopingPlayer = player
+                } else {
+                    let player = try engine.makePlayer(with: chPattern)
+                    try player.start(atTime: CHHapticTimeImmediate)
+                }
             } catch {
-                print("Failed to initialize haptic engine: \(error.localizedDescription)")
+                print("QualiaKit: Haptic playback failed — \(error.localizedDescription)")
             }
         }
 
-        private func createHeartbeatPattern() throws -> CHHapticPattern {
-            let firstPulse = CHHapticEvent(
-                eventType: .hapticTransient,
-                parameters: [
-                    CHHapticEventParameter(parameterID: .hapticIntensity, value: 0.6),
-                    CHHapticEventParameter(parameterID: .hapticSharpness, value: 1.0),
-                ],
-                relativeTime: 0.0
-            )
+        public func stopLooping() {
+            do {
+                try loopingPlayer?.stop(atTime: CHHapticTimeImmediate)
+            } catch {
+                print("QualiaKit: Failed to stop looping pattern — \(error.localizedDescription)")
+            }
+            loopingPlayer = nil
+        }
 
-            let secondPulse = CHHapticEvent(
-                eventType: .hapticTransient,
-                parameters: [
-                    CHHapticEventParameter(parameterID: .hapticIntensity, value: 0.4),
-                    CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.8),
-                ],
-                relativeTime: 0.15
-            )
+        // MARK: - Private Methods
 
-            return try CHHapticPattern(events: [firstPulse, secondPulse], parameters: [])
+        private func setupEngine() {
+            guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
+            do {
+                hapticEngine = try CHHapticEngine()
+                hapticEngine?.resetHandler = { [weak self] in
+                    try? self?.hapticEngine?.start()
+                }
+                hapticEngine?.stoppedHandler = { reason in
+                    print("QualiaKit: Haptic engine stopped — \(reason.rawValue)")
+                }
+                try hapticEngine?.start()
+            } catch {
+                print("QualiaKit: Failed to initialize haptic engine — \(error.localizedDescription)")
+            }
         }
     }
 #endif

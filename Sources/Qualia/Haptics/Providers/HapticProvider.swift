@@ -7,16 +7,13 @@ public protocol HapticProvider {
     /// Prepares the haptic engine for playback
     func prepare()
 
-    /// Plays haptic feedback for the given emotion
+    /// Play a haptic pattern with given intensity multiplier.
     ///
     /// - Parameters:
-    ///   - emotion: The emotion to play haptic feedback for
-    ///   - intensity: Intensity multiplier (0.0 - 1.0)
-    func play(_ emotion: SenseEmotion, intensity: CGFloat)
+    ///   - pattern: The pattern to play
+    ///   - baseIntensity: Intensity multiplier applied to every event in the pattern (0.0 - 1.0)
+    func play(pattern: HapticPattern, baseIntensity: CGFloat)
 
-    /// Starts continuous heartbeat haptic pattern
-    func startHeartbeat()
-
-    /// Stops continuous heartbeat haptic pattern
-    func stopHeartbeat()
+    /// Stop any currently looping pattern.
+    func stopLooping()
 }
