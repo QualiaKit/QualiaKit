@@ -65,3 +65,8 @@ fastlane/test_output
 
 # Claude Code
 .claude/
+
+# Local checksum-pinned model audit inputs. These are intentionally not
+# redistributed until model and dataset licensing is proven.
+RuBSentimentModel.mlpackage/
+LocalArtifacts/
