@@ -7,7 +7,6 @@ public enum QualiaError: Error, Hashable, Sendable {
     case invalidSignal
     case invalidAnalyzerIdentifier
     case invalidAnalyzerVersion
-    case invalidWarningCode
     case emptyInput
     case invalidScore
     case invalidConfidence
@@ -16,16 +15,5 @@ public enum QualiaError: Error, Hashable, Sendable {
 enum QualiaDomainValidation {
     static func isBlank(_ value: String) -> Bool {
         value.isEmpty || value.allSatisfy(\.isWhitespace)
-    }
-
-    static func isValidWarningCodeSyntax(_ value: String) -> Bool {
-        !value.isEmpty && value.unicodeScalars.allSatisfy { scalar in
-            switch scalar.value {
-            case 45, 46, 48...57, 65...90, 95, 97...122:
-                return true
-            default:
-                return false
-            }
-        }
     }
 }

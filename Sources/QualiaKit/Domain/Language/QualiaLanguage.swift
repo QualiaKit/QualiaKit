@@ -1,9 +1,7 @@
 /// An opaque, already-resolved language identifier.
 ///
-/// Language identifiers use case-insensitive canonical semantics. QualiaKit
-/// lowercases valid values without trimming or Unicode normalization, so `ru`
-/// and `RU` compare and hash equally. Other language resolution occurs before
-/// construction.
+/// The value is preserved exactly. QualiaKit does not trim, case-fold, or
+/// Unicode-normalize it, and equality and hashing are case-sensitive.
 public struct QualiaLanguage: Hashable, Sendable {
     public let rawValue: String
 
@@ -11,6 +9,6 @@ public struct QualiaLanguage: Hashable, Sendable {
         guard !QualiaDomainValidation.isBlank(rawValue) else {
             throw QualiaError.invalidLanguage
         }
-        self.rawValue = rawValue.lowercased()
+        self.rawValue = rawValue
     }
 }

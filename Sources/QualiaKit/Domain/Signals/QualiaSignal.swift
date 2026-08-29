@@ -23,10 +23,6 @@ public struct QualiaSignal: Hashable, Codable, Sendable, ExpressibleByStringLite
         self.rawValue = value
     }
 
-    public static let suspense: Self = "suspense"
-    public static let threat: Self = "threat"
-    public static let impact: Self = "impact"
-
     private enum CodingKeys: String, CodingKey {
         case rawValue
     }

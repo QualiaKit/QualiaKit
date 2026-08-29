@@ -5,8 +5,11 @@ public enum QualiaDimension: Hashable, Sendable {
 
 /// Optional standard dimensions produced for one observation.
 public struct QualiaDimensions: Hashable, Sendable {
-    /// Normalized valence where `0` is negative, `0.5` is neutral, and `1` is
-    /// positive. `nil` means missing or unsupported.
+    /// Normalized valence:
+    /// - `0.0`: maximally negative
+    /// - `0.5`: neutral
+    /// - `1.0`: maximally positive
+    /// - `nil`: unsupported or not produced
     public let valence: QualiaScore?
 
     public init(valence: QualiaScore? = nil) {
