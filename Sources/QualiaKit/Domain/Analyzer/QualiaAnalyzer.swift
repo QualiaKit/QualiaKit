@@ -16,6 +16,11 @@ public struct QualiaAnalyzerIdentity: Hashable, Sendable {
         self.identifier = identifier
         self.version = version
     }
+
+    init(validatedIdentifier identifier: String, version: String) {
+        self.identifier = identifier
+        self.version = version
+    }
 }
 
 public enum QualiaExecutionMode: Hashable, Sendable {
@@ -44,4 +49,22 @@ public struct QualiaAnalyzerCapabilities: Hashable, Sendable {
         self.acceptsContext = acceptsContext
         self.execution = execution
     }
+}
+
+/// An asynchronous analyzer that maps one validated input to one observation.
+///
+/// Implementations must keep `capabilities` stable for their lifetime, preserve
+/// cancellation, and return an observation whose input ID and outputs conform
+/// to the request and advertised capabilities.
+public protocol QualiaAnalyzing: Sendable {
+    var capabilities: QualiaAnalyzerCapabilities { get }
+
+    func analyze(_ input: QualiaInput) async throws -> QualiaObservation
+}
+
+/// A typed condition that may permit an explicitly configured fallback.
+public enum QualiaFallbackCause: Hashable, Sendable {
+    case languageUndetermined
+    case unsupportedLanguage
+    case analyzerUnavailable
 }
