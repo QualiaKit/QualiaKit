@@ -10,6 +10,11 @@ let package = Package(
         .macOS(.v13),
     ],
     products: [
+        // QualiaKit 2.0: Model-agnostic domain and runtime contracts
+        .library(
+            name: "QualiaKit",
+            targets: ["QualiaKit"]
+        ),
         // Qualia (Core): Lightweight, zero-dependency sentiment analysis with NLTagger
         .library(
             name: "Qualia",
@@ -22,6 +27,11 @@ let package = Package(
         ),
     ],
     targets: [
+        // QualiaKit 2.0 domain layer. It intentionally has no framework dependencies.
+        .target(
+            name: "QualiaKit",
+            path: "Sources/QualiaKit"
+        ),
         // Core target with haptics, NLTagger, and SwiftUI integration
         .target(
             name: "Qualia",
@@ -36,7 +46,7 @@ let package = Package(
         // Tests
         .testTarget(
             name: "QualiaKitTests",
-            dependencies: ["Qualia", "QualiaBert"],
+            dependencies: ["QualiaKit", "Qualia", "QualiaBert"],
             resources: [.copy("Resources")]
         ),
     ]

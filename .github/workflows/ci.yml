@@ -24,6 +24,13 @@ jobs:
       - name: Build for macOS
         run: swift build -c release
 
+      - name: Build QualiaKit with strict concurrency
+        run: |
+          swift build \
+            --target QualiaKit \
+            -Xswiftc -strict-concurrency=complete \
+            -Xswiftc -warnings-as-errors
+
       - name: Build for iOS Simulator
         run: |
           xcodebuild build \
@@ -74,6 +81,9 @@ jobs:
           - platform: "iOS Simulator (QualiaBert)"
             destination: "platform=iOS Simulator,name=iPhone 15,OS=17.2"
             scheme: QualiaBert
+          - platform: "iOS Simulator (QualiaKit)"
+            destination: "platform=iOS Simulator,name=iPhone 15,OS=17.2"
+            scheme: QualiaKit
 
     steps:
       - name: Checkout code
