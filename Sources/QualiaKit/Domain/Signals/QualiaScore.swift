@@ -1,8 +1,9 @@
 public struct QualiaScore: Hashable, Codable, Sendable {
     /// A finite normalized value in the closed range `0...1`.
     public let value: Float
-    /// Optional finite analyzer-specific confidence in the closed range `0...1`.
-    /// The value is not necessarily calibrated or comparable across analyzers.
+    /// Analyzer-specific confidence that is not assumed to be calibrated or
+    /// directly comparable across analyzer implementations. When present, it
+    /// is finite and in the closed range `0...1`.
     public let confidence: Float?
 
     public init(value: Float, confidence: Float? = nil) throws {

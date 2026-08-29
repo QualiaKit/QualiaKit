@@ -6,6 +6,7 @@ final class DomainModelTests: XCTestCase {
     func testMissingSignalDiffersFromZero() throws {
         let inputID = try QualiaInputID(rawValue: "fragment-1")
         let language = try QualiaLanguage(rawValue: "ru")
+        let suspense = try QualiaSignal(rawValue: "suspense")
         let analyzer = try QualiaAnalyzerIdentity(
             identifier: "com.example.fixture-analyzer",
             version: "1"
@@ -18,13 +19,13 @@ final class DomainModelTests: XCTestCase {
         )
         let zero = QualiaObservation(
             inputID: inputID,
-            signals: [.suspense: try QualiaScore(value: 0)],
+            signals: [suspense: try QualiaScore(value: 0)],
             language: language,
             analyzer: analyzer
         )
 
-        XCTAssertNil(missing.signals[.suspense])
-        XCTAssertEqual(zero.signals[.suspense]?.value, 0)
+        XCTAssertNil(missing.signals[suspense])
+        XCTAssertEqual(zero.signals[suspense]?.value, 0)
     }
 
     func testScoresAcceptClosedBoundsAndRejectInvalidValues() throws {
@@ -65,7 +66,7 @@ final class DomainModelTests: XCTestCase {
         XCTAssertEqual(positive.valence?.value, 1)
     }
 
-    func testIdentifiersFollowTheirDocumentedCanonicalizationRules() throws {
+    func testIdentifiersFollowTheirDocumentedIdentityRules() throws {
         assertQualiaError(.invalidInputID) {
             try QualiaInputID(rawValue: " \n\t")
         }
@@ -86,12 +87,12 @@ final class DomainModelTests: XCTestCase {
 
         XCTAssertEqual(inputID.rawValue, "  Event-A  ")
         XCTAssertEqual(namespaced.rawValue, "  com.Example.Signal  ")
-        XCTAssertEqual(language.rawValue, "ru-latn")
+        XCTAssertEqual(language.rawValue, "RU-latn")
         XCTAssertNotEqual(upper, lower)
         XCTAssertEqual(Set([upper, lower]).count, 2)
-        XCTAssertEqual(upperLanguage, lowerLanguage)
-        XCTAssertEqual(upperLanguage.rawValue, "ru")
-        XCTAssertEqual(Set([upperLanguage, lowerLanguage]).count, 1)
+        XCTAssertNotEqual(upperLanguage, lowerLanguage)
+        XCTAssertEqual(upperLanguage.rawValue, "RU")
+        XCTAssertEqual(Set([upperLanguage, lowerLanguage]).count, 2)
     }
 
     func testInputRejectsEmptyAndWhitespaceOnlyTextWithoutChangingValidText() throws {
@@ -126,42 +127,25 @@ final class DomainModelTests: XCTestCase {
         XCTAssertEqual(identity.version, "  V1  ")
     }
 
-    func testWarningRepresentsCallerVisibleDegradationAndValidatesSyntaxOnly() throws {
-        assertQualiaError(.invalidWarningCode) {
-            try QualiaWarning(code: "")
-        }
-        assertQualiaError(.invalidWarningCode) {
-            try QualiaWarning(code: "context truncated")
-        }
-
-        let degradation = try QualiaWarning(code: "com.example.context-truncated")
-        let provenanceUnknown = try QualiaWarning(code: "user-secret-password")
-
-        XCTAssertEqual(degradation.code, "com.example.context-truncated")
-        XCTAssertEqual(provenanceUnknown.code, "user-secret-password")
-    }
-
     func testCapabilitiesUseTheApprovedMinimalShape() throws {
         let russian = try QualiaLanguage(rawValue: "ru")
+        let customSignal = try QualiaSignal(rawValue: "com.example.signal")
         let capabilities = QualiaAnalyzerCapabilities(
             languages: [russian],
             dimensions: [.valence],
-            signals: [.suspense, .threat, .impact],
+            signals: [customSignal],
             acceptsContext: false,
             execution: .onDevice
         )
 
         XCTAssertEqual(capabilities.languages, [russian])
         XCTAssertEqual(capabilities.dimensions, [.valence])
-        XCTAssertEqual(capabilities.signals, [.suspense, .threat, .impact])
-        XCTAssertEqual(QualiaSignal.suspense.rawValue, "suspense")
-        XCTAssertEqual(QualiaSignal.threat.rawValue, "threat")
-        XCTAssertEqual(QualiaSignal.impact.rawValue, "impact")
+        XCTAssertEqual(capabilities.signals, [customSignal])
         XCTAssertFalse(capabilities.acceptsContext)
         XCTAssertEqual(capabilities.execution, .onDevice)
     }
 
-    func testObservationCarriesDomainValuesProvenanceAndWarnings() throws {
+    func testObservationCarriesOnlyDomainValuesAndProvenance() throws {
         let inputID = try QualiaInputID(rawValue: "fragment-1")
         let language = try QualiaLanguage(rawValue: "ru")
         let analyzer = try QualiaAnalyzerIdentity(
@@ -169,24 +153,22 @@ final class DomainModelTests: XCTestCase {
             version: "1"
         )
         let valence = try QualiaScore(value: 0.25, confidence: 0.8)
+        let suspenseSignal = try QualiaSignal(rawValue: "suspense")
         let suspense = try QualiaScore(value: 0.9)
-        let warning = try QualiaWarning(code: "com.example.degraded-output")
 
         let observation = QualiaObservation(
             inputID: inputID,
             dimensions: .init(valence: valence),
-            signals: [.suspense: suspense],
+            signals: [suspenseSignal: suspense],
             language: language,
-            analyzer: analyzer,
-            warnings: [warning]
+            analyzer: analyzer
         )
 
         XCTAssertEqual(observation.inputID, inputID)
         XCTAssertEqual(observation.dimensions.valence, valence)
-        XCTAssertEqual(observation.signals[.suspense], suspense)
+        XCTAssertEqual(observation.signals[suspenseSignal], suspense)
         XCTAssertEqual(observation.language, language)
         XCTAssertEqual(observation.analyzer, analyzer)
-        XCTAssertEqual(observation.warnings, [warning])
     }
 
     func testApprovedCodableValuesRoundTripAndDecodedValuesRemainValidated() throws {
@@ -226,7 +208,6 @@ final class DomainModelTests: XCTestCase {
         assertSendable(QualiaAnalyzerIdentity.self)
         assertSendable(QualiaAnalyzerCapabilities.self)
         assertSendable(QualiaExecutionMode.self)
-        assertSendable(QualiaWarning.self)
         assertSendable(QualiaObservation.self)
         assertSendable(QualiaError.self)
     }
