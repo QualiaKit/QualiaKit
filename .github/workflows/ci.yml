@@ -69,6 +69,40 @@ jobs:
           fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
 
+  model-contract:
+    name: Model contract evidence
+    runs-on: macos-26
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install pinned Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14.0"
+
+      - name: Select pinned Xcode
+        run: sudo xcode-select -s /Applications/Xcode_26.6.app/Contents/Developer
+
+      - name: Show pinned toolchain
+        run: |
+          python3 --version
+          swift --version
+          xcodebuild -version
+          xcrun coremlcompiler version
+
+      - name: Run asset-free schema and comparator tests
+        run: |
+          python3 Tools/ModelContract/reference_inference.py --schema-self-test
+          python3 Tools/ModelContract/reference_inference.py --comparator-self-test
+
+      - name: Run asset-free Swift contract tests
+        run: swift test --filter CurrentModelContractTests
+
+      - name: Verify checksum-bound protected-run evidence
+        run: python3 Tools/ModelContract/reference_inference.py --verify-committed-evidence
+
   matrix-build:
     name: Build on ${{ matrix.platform }}
     runs-on: macos-14

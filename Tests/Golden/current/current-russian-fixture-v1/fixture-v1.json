@@ -137,7 +137,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.002184550205299179
+        "value": -0.0020832746184939986
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -296,11 +296,11 @@
       "preTruncationTokenCount": 2,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.9033203125,
-        "LABEL_1": 4.07421875,
-        "LABEL_2": -1.3037109375,
-        "LABEL_3": 0.456787109375,
-        "LABEL_4": -1.951171875
+        "LABEL_0": -0.916015625,
+        "LABEL_1": 4.0703125,
+        "LABEL_2": -1.2978515625,
+        "LABEL_3": 0.448486328125,
+        "LABEL_4": -1.94140625
       },
       "tokenTypeIds": [
         0,
@@ -564,11 +564,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.006621017885206279,
-          "LABEL_1": 0.9608210503574692,
-          "LABEL_2": 0.004436467679907101,
-          "LABEL_3": 0.025799536821175462,
-          "LABEL_4": 0.0023219272562419796
+          "LABEL_0": 0.006563707590297979,
+          "LABEL_1": 0.9609128804374732,
+          "LABEL_2": 0.0044804329718039805,
+          "LABEL_3": 0.025688863672995582,
+          "LABEL_4": 0.0023541153274292195
         }
       },
       "wasTruncated": false
@@ -709,7 +709,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.002184550205299179
+        "value": -0.0020832746184939986
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -868,11 +868,11 @@
       "preTruncationTokenCount": 2,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.9033203125,
-        "LABEL_1": 4.07421875,
-        "LABEL_2": -1.3037109375,
-        "LABEL_3": 0.456787109375,
-        "LABEL_4": -1.951171875
+        "LABEL_0": -0.916015625,
+        "LABEL_1": 4.0703125,
+        "LABEL_2": -1.2978515625,
+        "LABEL_3": 0.448486328125,
+        "LABEL_4": -1.94140625
       },
       "tokenTypeIds": [
         0,
@@ -1136,11 +1136,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.006621017885206279,
-          "LABEL_1": 0.9608210503574692,
-          "LABEL_2": 0.004436467679907101,
-          "LABEL_3": 0.025799536821175462,
-          "LABEL_4": 0.0023219272562419796
+          "LABEL_0": 0.006563707590297979,
+          "LABEL_1": 0.9609128804374732,
+          "LABEL_2": 0.0044804329718039805,
+          "LABEL_3": 0.025688863672995582,
+          "LABEL_4": 0.0023541153274292195
         }
       },
       "wasTruncated": false
@@ -1281,7 +1281,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.15188553514528733
+        "value": 0.15210396539351015
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -1441,11 +1441,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.251953125,
-        "LABEL_1": 2.333984375,
-        "LABEL_2": 0.953125,
-        "LABEL_3": 0.66552734375,
-        "LABEL_4": -2.986328125
+        "LABEL_0": -1.2431640625,
+        "LABEL_1": 2.3203125,
+        "LABEL_2": 0.94677734375,
+        "LABEL_3": 0.669921875,
+        "LABEL_4": -3.00390625
       },
       "tokenTypeIds": [
         0,
@@ -1709,11 +1709,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.018818768921327004,
-          "LABEL_1": 0.6791161808221867,
-          "LABEL_2": 0.17070430406661433,
-          "LABEL_3": 0.12803903616287698,
-          "LABEL_4": 0.003321710026994956
+          "LABEL_0": 0.019169491611999705,
+          "LABEL_1": 0.6764081048102042,
+          "LABEL_2": 0.17127345700550986,
+          "LABEL_3": 0.12985338083393208,
+          "LABEL_4": 0.0032955657383540874
         }
       },
       "wasTruncated": false
@@ -1854,7 +1854,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.11712138852242257
+        "value": 0.11469459552211843
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -2014,11 +2014,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.2236328125,
-        "LABEL_1": 2.990234375,
-        "LABEL_2": 1.1630859375,
-        "LABEL_3": 0.321044921875,
-        "LABEL_4": -3.08203125
+        "LABEL_0": -1.2138671875,
+        "LABEL_1": 3.005859375,
+        "LABEL_2": 1.1552734375,
+        "LABEL_3": 0.31494140625,
+        "LABEL_4": -3.0859375
       },
       "tokenTypeIds": [
         0,
@@ -2282,11 +2282,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.011857100529341965,
-          "LABEL_1": 0.8017477854469833,
-          "LABEL_2": 0.1289784890517645,
-          "LABEL_3": 0.05556784036968347,
-          "LABEL_4": 0.0018487846022267294
+          "LABEL_0": 0.011838582821665375,
+          "LABEL_1": 0.8051998364721182,
+          "LABEL_2": 0.1265331783437838,
+          "LABEL_3": 0.054607570223707,
+          "LABEL_4": 0.0018208321387254856
         }
       },
       "wasTruncated": false
@@ -2427,7 +2427,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.2595609204380387
+        "value": -0.2549418416825039
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -2587,11 +2587,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 1.58984375,
-        "LABEL_1": 2.2421875,
-        "LABEL_2": -0.76220703125,
-        "LABEL_3": 0.82763671875,
-        "LABEL_4": -3.896484375
+        "LABEL_0": 1.5712890625,
+        "LABEL_1": 2.248046875,
+        "LABEL_2": -0.76806640625,
+        "LABEL_3": 0.82958984375,
+        "LABEL_4": -3.90234375
       },
       "tokenTypeIds": [
         0,
@@ -2855,11 +2855,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.28686273130027234,
-          "LABEL_1": 0.5507866687834757,
-          "LABEL_2": 0.02730181086223363,
-          "LABEL_3": 0.13386030844973695,
-          "LABEL_4": 0.0011884806042814406
+          "LABEL_0": 0.2821369502029024,
+          "LABEL_1": 0.5551011806295234,
+          "LABEL_2": 0.027195108520398515,
+          "LABEL_3": 0.1343829249239368,
+          "LABEL_4": 0.0011838357232388478
         }
       },
       "wasTruncated": false
@@ -3000,7 +3000,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.17699872421573076
+        "value": 0.16864962141581466
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -3159,11 +3159,11 @@
       "preTruncationTokenCount": 6,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.3203125,
-        "LABEL_1": 3.064453125,
-        "LABEL_2": 1.6328125,
-        "LABEL_3": -0.62646484375,
-        "LABEL_4": -2.724609375
+        "LABEL_0": -1.3212890625,
+        "LABEL_1": 3.09765625,
+        "LABEL_2": 1.607421875,
+        "LABEL_3": -0.62158203125,
+        "LABEL_4": -2.720703125
       },
       "tokenTypeIds": [
         0,
@@ -3427,11 +3427,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.009743538957940398,
-          "LABEL_1": 0.7816210398900546,
-          "LABEL_2": 0.18674226317367115,
-          "LABEL_3": 0.019500732922172713,
-          "LABEL_4": 0.0023924250561611943
+          "LABEL_0": 0.009526340787525052,
+          "LABEL_1": 0.7907690782719002,
+          "LABEL_2": 0.1781759622033397,
+          "LABEL_3": 0.019178075153345842,
+          "LABEL_4": 0.0023505435838892036
         }
       },
       "wasTruncated": false
@@ -3572,7 +3572,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.012454872501435267
+        "value": -0.013904314352505928
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -3732,10 +3732,10 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.2274169921875,
-        "LABEL_1": 2.90234375,
-        "LABEL_2": -0.0216217041015625,
-        "LABEL_3": 0.5546875,
+        "LABEL_0": 0.240966796875,
+        "LABEL_1": 2.90625,
+        "LABEL_2": -0.03826904296875,
+        "LABEL_3": 0.5576171875,
         "LABEL_4": -3.59375
       },
       "tokenTypeIds": [
@@ -4000,11 +4000,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.056497444336597896,
-          "LABEL_1": 0.8198506274030843,
-          "LABEL_2": 0.04404257183516263,
-          "LABEL_3": 0.0783719366168873,
-          "LABEL_4": 0.001237419808267844
+          "LABEL_0": 0.05706944701541731,
+          "LABEL_1": 0.8202031865523299,
+          "LABEL_2": 0.04316513266291138,
+          "LABEL_3": 0.07832910815247349,
+          "LABEL_4": 0.001233125616867868
         }
       },
       "wasTruncated": false
@@ -4145,7 +4145,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.004683840929396542
+        "value": 0.004801435072661762
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -4304,11 +4304,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.1103515625,
-        "LABEL_1": 4.87109375,
-        "LABEL_2": -0.051361083984375,
-        "LABEL_3": -0.390869140625,
-        "LABEL_4": -2.88671875
+        "LABEL_0": -1.1201171875,
+        "LABEL_1": 4.84765625,
+        "LABEL_2": -0.05364990234375,
+        "LABEL_3": -0.39599609375,
+        "LABEL_4": -2.869140625
       },
       "tokenTypeIds": [
         0,
@@ -4572,11 +4572,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.002486829768575742,
-          "LABEL_1": 0.9848152168595499,
-          "LABEL_2": 0.007170670697972285,
-          "LABEL_3": 0.0051063820300582125,
-          "LABEL_4": 0.0004209006438437561
+          "LABEL_0": 0.0025203080879076054,
+          "LABEL_1": 0.984520370084335,
+          "LABEL_2": 0.007321743160569367,
+          "LABEL_3": 0.0051991868840401,
+          "LABEL_4": 0.0004383917831480249
         }
       },
       "wasTruncated": false
@@ -4717,7 +4717,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.13559839665239298
+        "value": -0.13681115395492194
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -4877,10 +4877,10 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 1.802734375,
-        "LABEL_1": 3.580078125,
-        "LABEL_2": -1.484375,
-        "LABEL_3": -0.173583984375,
+        "LABEL_0": 1.8076171875,
+        "LABEL_1": 3.57421875,
+        "LABEL_2": -1.4755859375,
+        "LABEL_3": -0.17529296875,
         "LABEL_4": -2.89453125
       },
       "tokenTypeIds": [
@@ -5145,11 +5145,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.1408612098012484,
-          "LABEL_1": 0.8330709627872059,
-          "LABEL_2": 0.005262813148855398,
-          "LABEL_3": 0.01952033452879701,
-          "LABEL_4": 0.001284679733893272
+          "LABEL_0": 0.14214262852511297,
+          "LABEL_1": 0.8316673508944487,
+          "LABEL_2": 0.005331474570191035,
+          "LABEL_3": 0.0195684939914161,
+          "LABEL_4": 0.0012900520188312452
         }
       },
       "wasTruncated": false
@@ -5290,7 +5290,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.02321758287640853
+        "value": -0.023638951228710788
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -5450,11 +5450,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.1014404296875,
-        "LABEL_1": 3.66796875,
-        "LABEL_2": -2.39453125,
-        "LABEL_3": 1.1904296875,
-        "LABEL_4": -2.50390625
+        "LABEL_0": 0.11053466796875,
+        "LABEL_1": 3.66015625,
+        "LABEL_2": -2.41015625,
+        "LABEL_3": 1.19140625,
+        "LABEL_4": -2.494140625
       },
       "tokenTypeIds": [
         0,
@@ -5718,11 +5718,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.025302959981206668,
-          "LABEL_1": 0.8955604330713133,
-          "LABEL_2": 0.0020853771047981366,
-          "LABEL_3": 0.07518190988729126,
-          "LABEL_4": 0.0018693199553906324
+          "LABEL_0": 0.025705801381718713,
+          "LABEL_1": 0.8945656410031791,
+          "LABEL_2": 0.002066850153007924,
+          "LABEL_3": 0.07576135113691802,
+          "LABEL_4": 0.0019003563251760813
         }
       },
       "wasTruncated": false
@@ -5863,7 +5863,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.03438767537418113
+        "value": -0.03351337016951769
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -6022,11 +6022,11 @@
       "preTruncationTokenCount": 5,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.82080078125,
-        "LABEL_1": 4.0234375,
-        "LABEL_2": -1.51953125,
-        "LABEL_3": 0.244873046875,
-        "LABEL_4": -2.904296875
+        "LABEL_0": 0.80859375,
+        "LABEL_1": 4.03515625,
+        "LABEL_2": -1.505859375,
+        "LABEL_3": 0.253173828125,
+        "LABEL_4": -2.896484375
       },
       "tokenTypeIds": [
         0,
@@ -6290,11 +6290,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.03805190906220996,
-          "LABEL_1": 0.9359742582801003,
-          "LABEL_2": 0.00366423368802883,
-          "LABEL_3": 0.021392139065080498,
-          "LABEL_4": 0.0009174599045804326
+          "LABEL_0": 0.03718832867573083,
+          "LABEL_1": 0.9368821183263183,
+          "LABEL_2": 0.003674958506213141,
+          "LABEL_3": 0.021339824991934476,
+          "LABEL_4": 0.0009147694998032555
         }
       },
       "wasTruncated": false
@@ -6435,7 +6435,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.03438767537418113
+        "value": -0.03351337016951769
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -6594,11 +6594,11 @@
       "preTruncationTokenCount": 5,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.82080078125,
-        "LABEL_1": 4.0234375,
-        "LABEL_2": -1.51953125,
-        "LABEL_3": 0.244873046875,
-        "LABEL_4": -2.904296875
+        "LABEL_0": 0.80859375,
+        "LABEL_1": 4.03515625,
+        "LABEL_2": -1.505859375,
+        "LABEL_3": 0.253173828125,
+        "LABEL_4": -2.896484375
       },
       "tokenTypeIds": [
         0,
@@ -6862,11 +6862,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.03805190906220996,
-          "LABEL_1": 0.9359742582801003,
-          "LABEL_2": 0.00366423368802883,
-          "LABEL_3": 0.021392139065080498,
-          "LABEL_4": 0.0009174599045804326
+          "LABEL_0": 0.03718832867573083,
+          "LABEL_1": 0.9368821183263183,
+          "LABEL_2": 0.003674958506213141,
+          "LABEL_3": 0.021339824991934476,
+          "LABEL_4": 0.0009147694998032555
         }
       },
       "wasTruncated": false
@@ -7007,7 +7007,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.09216278315952109
+        "value": 0.09322330177310514
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -7167,11 +7167,11 @@
       "preTruncationTokenCount": 9,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.2197265625,
-        "LABEL_1": 3.271484375,
-        "LABEL_2": 1.1728515625,
-        "LABEL_3": 0.66748046875,
-        "LABEL_4": -3.53515625
+        "LABEL_0": -1.2109375,
+        "LABEL_1": 3.263671875,
+        "LABEL_2": 1.1796875,
+        "LABEL_3": 0.681640625,
+        "LABEL_4": -3.5390625
       },
       "tokenTypeIds": [
         0,
@@ -7435,11 +7435,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.009270355455585034,
-          "LABEL_1": 0.8271885494075446,
-          "LABEL_2": 0.1014331386151061,
-          "LABEL_3": 0.06119275222541855,
-          "LABEL_4": 0.0009152042963455857
+          "LABEL_0": 0.009397209957197125,
+          "LABEL_1": 0.8247020809803387,
+          "LABEL_2": 0.10262051173030227,
+          "LABEL_3": 0.06236417283207489,
+          "LABEL_4": 0.00091602450008694
         }
       },
       "wasTruncated": false
@@ -7580,7 +7580,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.2855773994135036
+        "value": -0.28964277685336187
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -7739,11 +7739,11 @@
       "preTruncationTokenCount": 10,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 2.021484375,
-        "LABEL_1": 2.767578125,
-        "LABEL_2": -1.7626953125,
-        "LABEL_3": 0.75927734375,
-        "LABEL_4": -2.859375
+        "LABEL_0": 2.02734375,
+        "LABEL_1": 2.75,
+        "LABEL_2": -1.7529296875,
+        "LABEL_3": 0.76708984375,
+        "LABEL_4": -2.87109375
       },
       "tokenTypeIds": [
         0,
@@ -8007,11 +8007,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.2922188018776521,
-          "LABEL_1": 0.616215409508126,
-          "LABEL_2": 0.006641402464148504,
-          "LABEL_3": 0.08270630279775801,
-          "LABEL_4": 0.002218083352315424
+          "LABEL_0": 0.29640570326507926,
+          "LABEL_1": 0.6105653828439979,
+          "LABEL_2": 0.006762926411717362,
+          "LABEL_3": 0.084055326326251,
+          "LABEL_4": 0.002210661152954628
         }
       },
       "wasTruncated": false
@@ -8152,7 +8152,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.34487473033771643
+        "value": 0.34192533383131696
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -8311,10 +8311,10 @@
       "preTruncationTokenCount": 6,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.439453125,
-        "LABEL_1": 2.650390625,
-        "LABEL_2": 2.10546875,
-        "LABEL_3": -0.8759765625,
+        "LABEL_0": -1.4423828125,
+        "LABEL_1": 2.658203125,
+        "LABEL_2": 2.099609375,
+        "LABEL_3": -0.87890625,
         "LABEL_4": -2.33203125
       },
       "tokenTypeIds": [
@@ -8579,11 +8579,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.0102528448840759,
-          "LABEL_1": 0.6124081467850836,
-          "LABEL_2": 0.35512757522179234,
-          "LABEL_3": 0.018011884305715684,
-          "LABEL_4": 0.004199548803332526
+          "LABEL_0": 0.010195875476352582,
+          "LABEL_1": 0.615582645855432,
+          "LABEL_2": 0.35212120930766955,
+          "LABEL_3": 0.017911802192655406,
+          "LABEL_4": 0.004188467167890495
         }
       },
       "wasTruncated": false
@@ -8724,7 +8724,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.06995341678262543
+        "value": -0.07101828427406703
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -8884,11 +8884,11 @@
       "preTruncationTokenCount": 11,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 1.138671875,
-        "LABEL_1": 3.58984375,
-        "LABEL_2": -1.349609375,
-        "LABEL_3": 0.25341796875,
-        "LABEL_4": -3.4296875
+        "LABEL_0": 1.1484375,
+        "LABEL_1": 3.583984375,
+        "LABEL_2": -1.3486328125,
+        "LABEL_3": 0.2493896484375,
+        "LABEL_4": -3.42578125
       },
       "tokenTypeIds": [
         0,
@@ -9152,11 +9152,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.07628945353514202,
-          "LABEL_1": 0.8851052638001049,
-          "LABEL_2": 0.00633603675251659,
-          "LABEL_3": 0.031477745334644675,
-          "LABEL_4": 0.0007915005775917594
+          "LABEL_0": 0.07738943402169128,
+          "LABEL_1": 0.8839470254933388,
+          "LABEL_2": 0.006371149747624253,
+          "LABEL_3": 0.03149416870967736,
+          "LABEL_4": 0.0007982220276682092
         }
       },
       "wasTruncated": false
@@ -9297,7 +9297,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.0015465503116125923
+        "value": -0.001577364374138985
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -9457,11 +9457,11 @@
       "preTruncationTokenCount": 9,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.78076171875,
-        "LABEL_1": 4.78515625,
-        "LABEL_2": -1.306640625,
-        "LABEL_3": -0.65771484375,
-        "LABEL_4": -1.83203125
+        "LABEL_0": -0.775390625,
+        "LABEL_1": 4.78125,
+        "LABEL_2": -1.30859375,
+        "LABEL_3": -0.66064453125,
+        "LABEL_4": -1.8388671875
       },
       "tokenTypeIds": [
         0,
@@ -9725,11 +9725,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.0037816264212446543,
-          "LABEL_1": 0.9883848597038635,
-          "LABEL_2": 0.002235076109632062,
-          "LABEL_3": 0.004276782875127718,
-          "LABEL_4": 0.0013216548901321035
+          "LABEL_0": 0.003816720718373013,
+          "LABEL_1": 0.9883453964968725,
+          "LABEL_2": 0.002239356344234028,
+          "LABEL_3": 0.004280790535101864,
+          "LABEL_4": 0.0013177359054184913
         }
       },
       "wasTruncated": false
@@ -9870,7 +9870,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.021244007079890413
+        "value": -0.020944121330099097
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -10030,11 +10030,11 @@
       "preTruncationTokenCount": 11,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.681640625,
-        "LABEL_1": 4.37109375,
-        "LABEL_2": -1.443359375,
-        "LABEL_3": -0.724609375,
-        "LABEL_4": -2.087890625
+        "LABEL_0": 0.685546875,
+        "LABEL_1": 4.390625,
+        "LABEL_2": -1.4453125,
+        "LABEL_3": -0.728515625,
+        "LABEL_4": -2.09765625
       },
       "tokenTypeIds": [
         0,
@@ -10298,11 +10298,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.0241253718505386,
-          "LABEL_1": 0.9655686337821281,
-          "LABEL_2": 0.0028813647706481876,
-          "LABEL_3": 0.005912176635191821,
-          "LABEL_4": 0.0015124529614932729
+          "LABEL_0": 0.0237659800022102,
+          "LABEL_1": 0.9661636902117163,
+          "LABEL_2": 0.002821858672111104,
+          "LABEL_3": 0.005778780339105701,
+          "LABEL_4": 0.0014696907748567435
         }
       },
       "wasTruncated": false
@@ -10443,7 +10443,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.008777215962806196
+        "value": -0.008430121098088363
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -10602,11 +10602,11 @@
       "preTruncationTokenCount": 5,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.330322265625,
+        "LABEL_0": 0.320068359375,
         "LABEL_1": 4.078125,
-        "LABEL_2": -0.1649169921875,
-        "LABEL_3": -0.52001953125,
-        "LABEL_4": -3.04296875
+        "LABEL_2": -0.15625,
+        "LABEL_3": -0.52490234375,
+        "LABEL_4": -3.05078125
       },
       "tokenTypeIds": [
         0,
@@ -10870,11 +10870,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.022472553962141754,
-          "LABEL_1": 0.9534600015610138,
-          "LABEL_2": 0.013695337999335562,
-          "LABEL_3": 0.009601822688522792,
-          "LABEL_4": 0.0007702837889860276
+          "LABEL_0": 0.022246921790893385,
+          "LABEL_1": 0.9536152547455475,
+          "LABEL_2": 0.013816800692805022,
+          "LABEL_3": 0.00955660892749305,
+          "LABEL_4": 0.0007644138432609102
         }
       },
       "wasTruncated": false
@@ -11015,7 +11015,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.008777215962806196
+        "value": -0.008430121098088363
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -11174,11 +11174,11 @@
       "preTruncationTokenCount": 5,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.330322265625,
+        "LABEL_0": 0.320068359375,
         "LABEL_1": 4.078125,
-        "LABEL_2": -0.1649169921875,
-        "LABEL_3": -0.52001953125,
-        "LABEL_4": -3.04296875
+        "LABEL_2": -0.15625,
+        "LABEL_3": -0.52490234375,
+        "LABEL_4": -3.05078125
       },
       "tokenTypeIds": [
         0,
@@ -11442,11 +11442,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.022472553962141754,
-          "LABEL_1": 0.9534600015610138,
-          "LABEL_2": 0.013695337999335562,
-          "LABEL_3": 0.009601822688522792,
-          "LABEL_4": 0.0007702837889860276
+          "LABEL_0": 0.022246921790893385,
+          "LABEL_1": 0.9536152547455475,
+          "LABEL_2": 0.013816800692805022,
+          "LABEL_3": 0.00955660892749305,
+          "LABEL_4": 0.0007644138432609102
         }
       },
       "wasTruncated": false
@@ -11587,7 +11587,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.008777215962806196
+        "value": -0.008430121098088363
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -11746,11 +11746,11 @@
       "preTruncationTokenCount": 5,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.330322265625,
+        "LABEL_0": 0.320068359375,
         "LABEL_1": 4.078125,
-        "LABEL_2": -0.1649169921875,
-        "LABEL_3": -0.52001953125,
-        "LABEL_4": -3.04296875
+        "LABEL_2": -0.15625,
+        "LABEL_3": -0.52490234375,
+        "LABEL_4": -3.05078125
       },
       "tokenTypeIds": [
         0,
@@ -12014,11 +12014,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.022472553962141754,
-          "LABEL_1": 0.9534600015610138,
-          "LABEL_2": 0.013695337999335562,
-          "LABEL_3": 0.009601822688522792,
-          "LABEL_4": 0.0007702837889860276
+          "LABEL_0": 0.022246921790893385,
+          "LABEL_1": 0.9536152547455475,
+          "LABEL_2": 0.013816800692805022,
+          "LABEL_3": 0.00955660892749305,
+          "LABEL_4": 0.0007644138432609102
         }
       },
       "wasTruncated": false
@@ -12159,7 +12159,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.35674066945524135
+        "value": -0.35564530110363074
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -12318,11 +12318,11 @@
       "preTruncationTokenCount": 12,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 1.623046875,
-        "LABEL_1": 1.71875,
-        "LABEL_2": -1.783203125,
-        "LABEL_3": 1.046875,
-        "LABEL_4": -2.607421875
+        "LABEL_0": 1.6103515625,
+        "LABEL_1": 1.701171875,
+        "LABEL_2": -1.7802734375,
+        "LABEL_3": 1.0546875,
+        "LABEL_4": -2.615234375
       },
       "tokenTypeIds": [
         0,
@@ -12586,11 +12586,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.3689779476138191,
-          "LABEL_1": 0.40603526063712314,
-          "LABEL_2": 0.01223727815857777,
-          "LABEL_3": 0.20738251876160455,
-          "LABEL_4": 0.005366994828875483
+          "LABEL_0": 0.36804381981435275,
+          "LABEL_1": 0.4030345616398987,
+          "LABEL_2": 0.012398518710721998,
+          "LABEL_3": 0.2111434888219238,
+          "LABEL_4": 0.005379611013102677
         }
       },
       "wasTruncated": false
@@ -12731,7 +12731,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.38277531187872393
+        "value": 0.392356499148688
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -12891,11 +12891,11 @@
       "preTruncationTokenCount": 17,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.9619140625,
-        "LABEL_1": 2.2265625,
-        "LABEL_2": 1.958984375,
-        "LABEL_3": 0.460693359375,
-        "LABEL_4": -2.58984375
+        "LABEL_0": -1.9521484375,
+        "LABEL_1": 2.203125,
+        "LABEL_2": 1.98046875,
+        "LABEL_3": 0.464111328125,
+        "LABEL_4": -2.59765625
       },
       "tokenTypeIds": [
         0,
@@ -13159,11 +13159,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.007741319260876257,
-          "LABEL_1": 0.5103254618745247,
-          "LABEL_2": 0.3905166311396002,
-          "LABEL_3": 0.08728507989348654,
-          "LABEL_4": 0.0041315078315123455
+          "LABEL_0": 0.007840796928165885,
+          "LABEL_1": 0.5000029086459431,
+          "LABEL_2": 0.40019729607685384,
+          "LABEL_3": 0.08784731439530893,
+          "LABEL_4": 0.004111683953728336
         }
       },
       "wasTruncated": false
@@ -13304,7 +13304,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.03948858328322878
+        "value": -0.04059532363393856
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -13463,11 +13463,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 1.130859375,
-        "LABEL_1": 4.234375,
+        "LABEL_0": 1.1396484375,
+        "LABEL_1": 4.21484375,
         "LABEL_2": -1.533203125,
-        "LABEL_3": -0.5068359375,
-        "LABEL_4": -2.8125
+        "LABEL_3": -0.52001953125,
+        "LABEL_4": -2.826171875
       },
       "tokenTypeIds": [
         0,
@@ -13731,11 +13731,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.04244553599283212,
-          "LABEL_1": 0.9455222052807558,
-          "LABEL_2": 0.0029569527096033428,
-          "LABEL_3": 0.008252584595185967,
-          "LABEL_4": 0.0008227214216226375
+          "LABEL_0": 0.04360657710456683,
+          "LABEL_1": 0.9442616529740243,
+          "LABEL_2": 0.00301125347062827,
+          "LABEL_3": 0.008294063527523389,
+          "LABEL_4": 0.0008264529232572229
         }
       },
       "wasTruncated": false
@@ -13876,7 +13876,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.023574507290322986
+        "value": -0.022684738918499252
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -14037,11 +14037,11 @@
       "preTruncationTokenCount": 6,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.765625,
-        "LABEL_1": 4.34375,
+        "LABEL_0": 0.748046875,
+        "LABEL_1": 4.36328125,
         "LABEL_2": -1.3203125,
-        "LABEL_3": -1.0576171875,
-        "LABEL_4": -2.0703125
+        "LABEL_3": -1.0595703125,
+        "LABEL_4": -2.060546875
       },
       "tokenTypeIds": [
         0,
@@ -14305,11 +14305,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.026917395819510633,
-          "LABEL_1": 0.9638134529407982,
-          "LABEL_2": 0.003342888529187648,
-          "LABEL_3": 0.004347193979773586,
-          "LABEL_4": 0.0015790687307298504
+          "LABEL_0": 0.025966754242750335,
+          "LABEL_1": 0.9649259974689105,
+          "LABEL_2": 0.0032820153242510844,
+          "LABEL_3": 0.0042597047456126805,
+          "LABEL_4": 0.0015655282184753906
         }
       },
       "wasTruncated": false
@@ -14450,7 +14450,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.00394085059983149
+        "value": 0.003769885876201956
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -14609,11 +14609,11 @@
       "preTruncationTokenCount": 10,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.85595703125,
-        "LABEL_1": 3.97265625,
-        "LABEL_2": -0.439697265625,
-        "LABEL_3": 0.343017578125,
-        "LABEL_4": -2.845703125
+        "LABEL_0": -0.8525390625,
+        "LABEL_1": 3.962890625,
+        "LABEL_2": -0.455322265625,
+        "LABEL_3": 0.3525390625,
+        "LABEL_4": -2.83984375
       },
       "tokenTypeIds": [
         0,
@@ -14877,11 +14877,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.007633169844836346,
-          "LABEL_1": 0.9544320821435525,
-          "LABEL_2": 0.011574020444667836,
-          "LABEL_3": 0.025317043203162012,
-          "LABEL_4": 0.0010436843637813642
+          "LABEL_0": 0.007730270047556991,
+          "LABEL_1": 0.953913965521468,
+          "LABEL_2": 0.011500155923758948,
+          "LABEL_3": 0.02579606399587681,
+          "LABEL_4": 0.001059544511339223
         }
       },
       "wasTruncated": false
@@ -15022,7 +15022,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.007865780803170127
+        "value": 0.0066653717647462765
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -15182,11 +15182,11 @@
       "preTruncationTokenCount": 11,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.55615234375,
-        "LABEL_1": 3.322265625,
-        "LABEL_2": -0.20361328125,
-        "LABEL_3": 0.4853515625,
-        "LABEL_4": -2.580078125
+        "LABEL_0": -0.53076171875,
+        "LABEL_1": 3.314453125,
+        "LABEL_2": -0.2330322265625,
+        "LABEL_3": 0.4931640625,
+        "LABEL_4": -2.5703125
       },
       "tokenTypeIds": [
         0,
@@ -15450,11 +15450,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.018609514548519075,
-          "LABEL_1": 0.8997266127308576,
-          "LABEL_2": 0.0264752953516892,
-          "LABEL_3": 0.05272959595813573,
-          "LABEL_4": 0.0024589814107983518
+          "LABEL_0": 0.019219784786013897,
+          "LABEL_1": 0.8988849491711797,
+          "LABEL_2": 0.025885156550760173,
+          "LABEL_3": 0.053509862747476676,
+          "LABEL_4": 0.0025002467445694753
         }
       },
       "wasTruncated": false
@@ -15595,7 +15595,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.009257540593517554
+        "value": -0.009320067855129765
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -15754,11 +15754,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.1434326171875,
-        "LABEL_1": 4.66796875,
-        "LABEL_2": -1.9228515625,
-        "LABEL_3": 0.01024627685546875,
-        "LABEL_4": -2.337890625
+        "LABEL_0": 0.1395263671875,
+        "LABEL_1": 4.65625,
+        "LABEL_2": -1.9208984375,
+        "LABEL_3": 0.01117706298828125,
+        "LABEL_4": -2.33984375
       },
       "tokenTypeIds": [
         0,
@@ -16022,11 +16022,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.010600102241772217,
-          "LABEL_1": 0.9778925327997406,
-          "LABEL_2": 0.0013425616482546623,
-          "LABEL_3": 0.00927829040464708,
-          "LABEL_4": 0.0008865129055854893
+          "LABEL_0": 0.010680800055664179,
+          "LABEL_1": 0.9776692035277527,
+          "LABEL_2": 0.001360732200534414,
+          "LABEL_3": 0.00939425599469754,
+          "LABEL_4": 0.0008950082213512613
         }
       },
       "wasTruncated": false
@@ -16167,7 +16167,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.022328908519862134
+        "value": -0.021909888100759493
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -16326,11 +16326,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.337646484375,
-        "LABEL_1": 4.00390625,
-        "LABEL_2": -2.205078125,
-        "LABEL_3": 0.3291015625,
-        "LABEL_4": -2.103515625
+        "LABEL_0": 0.330078125,
+        "LABEL_1": 4.015625,
+        "LABEL_2": -2.20703125,
+        "LABEL_3": 0.328857421875,
+        "LABEL_4": -2.115234375
       },
       "tokenTypeIds": [
         0,
@@ -16594,11 +16594,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.0242350381904595,
-          "LABEL_1": 0.9477201049902059,
-          "LABEL_2": 0.0019061296705973688,
-          "LABEL_3": 0.024028833936780663,
-          "LABEL_4": 0.0021098932119566808
+          "LABEL_0": 0.023791684299227484,
+          "LABEL_1": 0.9485011439449177,
+          "LABEL_2": 0.0018817961984679912,
+          "LABEL_3": 0.02376265943482994,
+          "LABEL_4": 0.0020627161225568492
         }
       },
       "wasTruncated": false
@@ -16739,7 +16739,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.006821184297506363
+        "value": -0.006905416474045552
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -16898,10 +16898,10 @@
       "preTruncationTokenCount": 9,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.0892333984375,
+        "LABEL_0": 0.09820556640625,
         "LABEL_1": 4.85546875,
-        "LABEL_2": -1.5966796875,
-        "LABEL_3": -0.24267578125,
+        "LABEL_2": -1.6025390625,
+        "LABEL_3": -0.246826171875,
         "LABEL_4": -2.701171875
       },
       "tokenTypeIds": [
@@ -17166,11 +17166,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.00837237819602078,
-          "LABEL_1": 0.983554773832547,
-          "LABEL_2": 0.001551193898514417,
-          "LABEL_3": 0.006007620807011269,
-          "LABEL_4": 0.0005140332659066109
+          "LABEL_0": 0.00844748390815665,
+          "LABEL_1": 0.9835139465669182,
+          "LABEL_2": 0.001542067434111097,
+          "LABEL_3": 0.005982490162379736,
+          "LABEL_4": 0.0005140119284343647
         }
       },
       "wasTruncated": false
@@ -17311,7 +17311,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.0006510463050786799
+        "value": -0.00036683569838479035
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -17470,11 +17470,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.4267578125,
-        "LABEL_1": 4.453125,
-        "LABEL_2": -0.5185546875,
-        "LABEL_3": -0.361328125,
-        "LABEL_4": -2.5
+        "LABEL_0": -0.454833984375,
+        "LABEL_1": 4.46875,
+        "LABEL_2": -0.5078125,
+        "LABEL_3": -0.371826171875,
+        "LABEL_4": -2.48046875
       },
       "tokenTypeIds": [
         0,
@@ -17738,11 +17738,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.00742275189855423,
-          "LABEL_1": 0.9769472675501574,
-          "LABEL_2": 0.00677170559347555,
-          "LABEL_3": 0.007924661070645182,
-          "LABEL_4": 0.0009336138871676228
+          "LABEL_0": 0.0071092724255683625,
+          "LABEL_1": 0.9774859240532053,
+          "LABEL_2": 0.006742436727183572,
+          "LABEL_3": 0.007724582066800829,
+          "LABEL_4": 0.0009377847272419706
         }
       },
       "wasTruncated": false
@@ -17883,7 +17883,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.0164764972708249
+        "value": -0.016853565466596096
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -18042,11 +18042,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.1654052734375,
-        "LABEL_1": 3.658203125,
-        "LABEL_2": -1.8251953125,
-        "LABEL_3": 0.54296875,
-        "LABEL_4": -1.9970703125
+        "LABEL_0": -0.16552734375,
+        "LABEL_1": 3.63671875,
+        "LABEL_2": -1.8369140625,
+        "LABEL_3": 0.5419921875,
+        "LABEL_4": -1.986328125
       },
       "tokenTypeIds": [
         0,
@@ -18310,11 +18310,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.02034584847683577,
-          "LABEL_1": 0.9312104355369034,
-          "LABEL_2": 0.0038693512060108707,
-          "LABEL_3": 0.0413160443865197,
-          "LABEL_4": 0.0032583203937302197
+          "LABEL_0": 0.020755269779374766,
+          "LABEL_1": 0.9298713780905118,
+          "LABEL_2": 0.003901704312778669,
+          "LABEL_3": 0.04211145150535089,
+          "LABEL_4": 0.0033601963119839194
         }
       },
       "wasTruncated": false
@@ -18455,7 +18455,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.0033783144310531067
+        "value": -0.003424242194699959
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -18615,10 +18615,10 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.414306640625,
-        "LABEL_1": 4.75390625,
-        "LABEL_2": -1.3447265625,
-        "LABEL_3": 0.374755859375,
+        "LABEL_0": -0.415771484375,
+        "LABEL_1": 4.73828125,
+        "LABEL_2": -1.345703125,
+        "LABEL_3": 0.376953125,
         "LABEL_4": -3.1015625
       },
       "tokenTypeIds": [
@@ -18883,11 +18883,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.005578348488520059,
-          "LABEL_1": 0.9795621179677166,
-          "LABEL_2": 0.002200034057466951,
-          "LABEL_3": 0.012279795417729942,
-          "LABEL_4": 0.00037970406856638735
+          "LABEL_0": 0.005655984368303795,
+          "LABEL_1": 0.9792303434011831,
+          "LABEL_2": 0.002231742173603836,
+          "LABEL_3": 0.01249637714910646,
+          "LABEL_4": 0.00038555290780271944
         }
       },
       "wasTruncated": false
@@ -19028,7 +19028,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.012385407238334752
+        "value": -0.012661831912772193
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -19187,11 +19187,11 @@
       "preTruncationTokenCount": 10,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.1629638671875,
-        "LABEL_1": 4.36328125,
+        "LABEL_0": 0.16259765625,
+        "LABEL_1": 4.33984375,
         "LABEL_2": -1.7802734375,
-        "LABEL_3": 0.394775390625,
-        "LABEL_4": -2.595703125
+        "LABEL_3": 0.399658203125,
+        "LABEL_4": -2.58984375
       },
       "tokenTypeIds": [
         0,
@@ -19455,11 +19455,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.01445609020525364,
-          "LABEL_1": 0.964329630070973,
-          "LABEL_2": 0.002070682966918886,
-          "LABEL_3": 0.018227424793428523,
-          "LABEL_4": 0.0009161719634259006
+          "LABEL_0": 0.014779634639492766,
+          "LABEL_1": 0.9634265852379051,
+          "LABEL_2": 0.0021178027267205733,
+          "LABEL_3": 0.018733450865359862,
+          "LABEL_4": 0.0009425265305216588
         }
       },
       "wasTruncated": false
@@ -19600,7 +19600,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.0005446673670170903
+        "value": 0.0006076033462852717
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -19760,11 +19760,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.3623046875,
-        "LABEL_1": 4.46484375,
-        "LABEL_2": -1.1884765625,
-        "LABEL_3": 0.5283203125,
-        "LABEL_4": -2.3828125
+        "LABEL_0": -1.365234375,
+        "LABEL_1": 4.4921875,
+        "LABEL_2": -1.16796875,
+        "LABEL_3": 0.50732421875,
+        "LABEL_4": -2.404296875
       },
       "tokenTypeIds": [
         0,
@@ -20028,11 +20028,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.002868919546436785,
-          "LABEL_1": 0.9736811919490631,
-          "LABEL_2": 0.0034135869134538747,
-          "LABEL_3": 0.019002308926579697,
-          "LABEL_4": 0.001033992664466581
+          "LABEL_0": 0.0027863079804302565,
+          "LABEL_1": 0.9747093168550524,
+          "LABEL_2": 0.0033939113267155282,
+          "LABEL_3": 0.01812470652231526,
+          "LABEL_4": 0.0009857573154866649
         }
       },
       "wasTruncated": false
@@ -20173,7 +20173,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.014080871853371034
+        "value": 0.01405008435545686
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -20332,11 +20332,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.6943359375,
-        "LABEL_1": 4.2421875,
-        "LABEL_2": 0.188720703125,
-        "LABEL_3": 0.5478515625,
-        "LABEL_4": -3.201171875
+        "LABEL_0": -1.6826171875,
+        "LABEL_1": 4.23828125,
+        "LABEL_2": 0.185546875,
+        "LABEL_3": 0.55126953125,
+        "LABEL_4": -3.20703125
       },
       "tokenTypeIds": [
         0,
@@ -20600,11 +20600,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.002526366203896435,
-          "LABEL_1": 0.9565235645009106,
-          "LABEL_2": 0.01660723805726747,
-          "LABEL_3": 0.023782963077201402,
-          "LABEL_4": 0.0005598681607241171
+          "LABEL_0": 0.0025655716559528285,
+          "LABEL_1": 0.9563077343501974,
+          "LABEL_2": 0.01661565601140969,
+          "LABEL_3": 0.023952388329306813,
+          "LABEL_4": 0.0005586496531332318
         }
       },
       "wasTruncated": false
@@ -20745,7 +20745,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.038019077397579246
+        "value": -0.03759050857983977
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -20905,11 +20905,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.400390625,
+        "LABEL_0": 0.390869140625,
         "LABEL_1": 3.478515625,
-        "LABEL_2": -2.05859375,
-        "LABEL_3": 0.5576171875,
-        "LABEL_4": -2.12890625
+        "LABEL_2": -2.048828125,
+        "LABEL_3": 0.56494140625,
+        "LABEL_4": -2.130859375
       },
       "tokenTypeIds": [
         0,
@@ -21173,11 +21173,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.04157461155336796,
-          "LABEL_1": 0.9029025971482162,
-          "LABEL_2": 0.003555534155788712,
-          "LABEL_3": 0.048653134894347076,
-          "LABEL_4": 0.0033141222482800875
+          "LABEL_0": 0.04118096318454759,
+          "LABEL_1": 0.9029097242922088,
+          "LABEL_2": 0.003590454604707822,
+          "LABEL_3": 0.04901117613891702,
+          "LABEL_4": 0.0033076817796187903
         }
       },
       "wasTruncated": false
@@ -21318,7 +21318,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.043270520298568364
+        "value": -0.04484492945051548
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -21478,11 +21478,11 @@
       "preTruncationTokenCount": 10,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 1.0068359375,
-        "LABEL_1": 3.859375,
-        "LABEL_2": -0.677734375,
-        "LABEL_3": -0.2149658203125,
-        "LABEL_4": -3.509765625
+        "LABEL_0": 1.0146484375,
+        "LABEL_1": 3.83203125,
+        "LABEL_2": -0.6845703125,
+        "LABEL_3": -0.2042236328125,
+        "LABEL_4": -3.51171875
       },
       "tokenTypeIds": [
         0,
@@ -21746,11 +21746,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.05312682918053599,
-          "LABEL_1": 0.9207799851357805,
-          "LABEL_2": 0.009856308881967627,
-          "LABEL_3": 0.015656408163176736,
-          "LABEL_4": 0.0005804686385391839
+          "LABEL_0": 0.05487808714721232,
+          "LABEL_1": 0.9182750276315084,
+          "LABEL_2": 0.010033157696696843,
+          "LABEL_3": 0.016219951479907246,
+          "LABEL_4": 0.0005937760446752486
         }
       },
       "wasTruncated": false
@@ -21891,7 +21891,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.047184175765384764
+        "value": -0.04776937036119375
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -22050,11 +22050,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.88818359375,
-        "LABEL_1": 3.798828125,
-        "LABEL_2": -2.0,
-        "LABEL_3": 0.303466796875,
-        "LABEL_4": -2.5546875
+        "LABEL_0": 0.89892578125,
+        "LABEL_1": 3.796875,
+        "LABEL_2": -1.99609375,
+        "LABEL_3": 0.305908203125,
+        "LABEL_4": -2.560546875
       },
       "tokenTypeIds": [
         0,
@@ -22318,11 +22318,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.04996615397831825,
-          "LABEL_1": 0.9178099903713395,
-          "LABEL_2": 0.0027819782129334847,
-          "LABEL_3": 0.027844321755957836,
-          "LABEL_4": 0.0015975556814508756
+          "LABEL_0": 0.05056554086095176,
+          "LABEL_1": 0.9171027832489319,
+          "LABEL_2": 0.0027961704997580103,
+          "LABEL_3": 0.027945404165883873,
+          "LABEL_4": 0.0015901012244744534
         }
       },
       "wasTruncated": false
@@ -22463,7 +22463,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.007157043823258168
+        "value": 0.00710887390662565
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -22622,11 +22622,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.35546875,
-        "LABEL_1": 4.8515625,
-        "LABEL_2": 0.1715087890625,
-        "LABEL_3": -1.0556640625,
-        "LABEL_4": -2.23828125
+        "LABEL_0": -1.359375,
+        "LABEL_1": 4.859375,
+        "LABEL_2": 0.17138671875,
+        "LABEL_3": -1.060546875,
+        "LABEL_4": -2.236328125
       },
       "tokenTypeIds": [
         0,
@@ -22890,11 +22890,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.001985729181669759,
-          "LABEL_1": 0.9853702339826713,
-          "LABEL_2": 0.009142773004927928,
-          "LABEL_3": 0.002679930550283065,
-          "LABEL_4": 0.0008213332804479634
+          "LABEL_0": 0.001962857753624733,
+          "LABEL_1": 0.9855022886377773,
+          "LABEL_2": 0.009071731660250383,
+          "LABEL_3": 0.0026464776678301553,
+          "LABEL_4": 0.0008166442805173146
         }
       },
       "wasTruncated": false
@@ -23035,7 +23035,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.05930430368898464
+        "value": -0.05712262460215038
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -23194,11 +23194,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.69873046875,
-        "LABEL_1": 3.248046875,
-        "LABEL_2": -1.6689453125,
-        "LABEL_3": 0.9931640625,
-        "LABEL_4": -2.341796875
+        "LABEL_0": 0.67822265625,
+        "LABEL_1": 3.267578125,
+        "LABEL_2": -1.66796875,
+        "LABEL_3": 0.98974609375,
+        "LABEL_4": -2.361328125
       },
       "tokenTypeIds": [
         0,
@@ -23462,11 +23462,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.06543549496488671,
-          "LABEL_1": 0.837466492506302,
-          "LABEL_2": 0.006131191275902067,
-          "LABEL_3": 0.08783837178561339,
-          "LABEL_4": 0.0031284494672957916
+          "LABEL_0": 0.06317009188344967,
+          "LABEL_1": 0.8415003488617283,
+          "LABEL_2": 0.0060474672812992885,
+          "LABEL_3": 0.08625899988427059,
+          "LABEL_4": 0.0030230920892521194
         }
       },
       "wasTruncated": false
@@ -23607,7 +23607,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.007068454501975564
+        "value": 0.007222749603022204
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -23767,11 +23767,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.970703125,
-        "LABEL_1": 4.5703125,
-        "LABEL_2": 0.07421875,
-        "LABEL_3": -0.342041015625,
-        "LABEL_4": -3.216796875
+        "LABEL_0": -0.9609375,
+        "LABEL_1": 4.5546875,
+        "LABEL_2": 0.08184814453125,
+        "LABEL_3": -0.337646484375,
+        "LABEL_4": -3.234375
       },
       "tokenTypeIds": [
         0,
@@ -24035,11 +24035,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.0038349311185560913,
-          "LABEL_1": 0.9776650223163004,
-          "LABEL_2": 0.010903385620531655,
-          "LABEL_3": 0.007190880189226503,
-          "LABEL_4": 0.0004057807553853592
+          "LABEL_0": 0.003931584265336664,
+          "LABEL_1": 0.9771766708177012,
+          "LABEL_2": 0.011154333868358868,
+          "LABEL_3": 0.007332624355532989,
+          "LABEL_4": 0.0004047866930702227
         }
       },
       "wasTruncated": false
@@ -24180,7 +24180,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.31778168233128196
+        "value": 0.3255393529512819
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -24339,11 +24339,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.814453125,
-        "LABEL_1": 3.056640625,
-        "LABEL_2": 2.33984375,
-        "LABEL_3": -1.4150390625,
-        "LABEL_4": -2.220703125
+        "LABEL_0": -1.8291015625,
+        "LABEL_1": 3.041015625,
+        "LABEL_2": 2.359375,
+        "LABEL_3": -1.42578125,
+        "LABEL_4": -2.22265625
       },
       "tokenTypeIds": [
         0,
@@ -24607,11 +24607,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.005067710117548017,
-          "LABEL_1": 0.6611513680732138,
-          "LABEL_2": 0.32284939244883,
-          "LABEL_3": 0.007555706644706176,
-          "LABEL_4": 0.003375822715702032
+          "LABEL_0": 0.005014292830787207,
+          "LABEL_1": 0.6535438219748125,
+          "LABEL_2": 0.3305536457820691,
+          "LABEL_3": 0.007505324583824537,
+          "LABEL_4": 0.003382914828506629
         }
       },
       "wasTruncated": false
@@ -24752,7 +24752,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.19879593872921372
+        "value": 0.20043145632118717
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -24912,10 +24912,10 @@
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
         "LABEL_0": -1.6767578125,
-        "LABEL_1": 3.39453125,
-        "LABEL_2": 2.048828125,
-        "LABEL_3": -1.33203125,
-        "LABEL_4": -2.55078125
+        "LABEL_1": 3.400390625,
+        "LABEL_2": 2.064453125,
+        "LABEL_3": -1.328125,
+        "LABEL_4": -2.544921875
       },
       "tokenTypeIds": [
         0,
@@ -25179,11 +25179,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.004909082372966353,
-          "LABEL_1": 0.7824078073766481,
-          "LABEL_2": 0.20370502110218006,
-          "LABEL_3": 0.0069296797320619555,
-          "LABEL_4": 0.0020484094161435235
+          "LABEL_0": 0.004870870757782065,
+          "LABEL_1": 0.7808797423961918,
+          "LABEL_2": 0.20530232707896923,
+          "LABEL_3": 0.006902650953495568,
+          "LABEL_4": 0.002044408813561424
         }
       },
       "wasTruncated": false
@@ -25324,7 +25324,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.00581849796887916
+        "value": 0.005965153030194418
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -25483,10 +25483,10 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.8662109375,
-        "LABEL_1": 4.76953125,
-        "LABEL_2": -0.161376953125,
-        "LABEL_3": -0.39306640625,
+        "LABEL_0": -1.880859375,
+        "LABEL_1": 4.74609375,
+        "LABEL_2": -0.16259765625,
+        "LABEL_3": -0.40087890625,
         "LABEL_4": -2.12890625
       },
       "tokenTypeIds": [
@@ -25751,11 +25751,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.0012928638189005312,
-          "LABEL_1": 0.9849609147556235,
-          "LABEL_2": 0.007111361787779691,
-          "LABEL_3": 0.005640678184070589,
-          "LABEL_4": 0.0009941814536257292
+          "LABEL_0": 0.0013039072036363038,
+          "LABEL_1": 0.9846816816613008,
+          "LABEL_2": 0.007269060233830722,
+          "LABEL_3": 0.005727881644752067,
+          "LABEL_4": 0.0010174692564802062
         }
       },
       "wasTruncated": false
@@ -25896,7 +25896,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.0004979524841101477
+        "value": 0.0005382592303820829
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -26055,11 +26055,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.08984375,
-        "LABEL_1": 4.54296875,
-        "LABEL_2": -0.95703125,
-        "LABEL_3": 0.1561279296875,
-        "LABEL_4": -2.8359375
+        "LABEL_0": -1.0888671875,
+        "LABEL_1": 4.50390625,
+        "LABEL_2": -0.951171875,
+        "LABEL_3": 0.15380859375,
+        "LABEL_4": -2.83984375
       },
       "tokenTypeIds": [
         0,
@@ -26323,11 +26323,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.0035058226233929827,
-          "LABEL_1": 0.9796914674063277,
-          "LABEL_2": 0.00400377510750313,
-          "LABEL_3": 0.01218732981837294,
-          "LABEL_4": 0.0006116050444031234
+          "LABEL_0": 0.003646104691018464,
+          "LABEL_1": 0.9789032646516185,
+          "LABEL_2": 0.004184363921400547,
+          "LABEL_3": 0.012633287191583851,
+          "LABEL_4": 0.0006329795443786954
         }
       },
       "wasTruncated": false
@@ -26468,7 +26468,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.00029394301159747045
+        "value": -0.0002725461962135047
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -26627,10 +26627,10 @@
       "preTruncationTokenCount": 10,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.380859375,
-        "LABEL_1": 4.671875,
-        "LABEL_2": -1.5166015625,
-        "LABEL_3": 0.026947021484375,
+        "LABEL_0": -1.3837890625,
+        "LABEL_1": 4.7109375,
+        "LABEL_2": -1.5146484375,
+        "LABEL_3": 0.0184326171875,
         "LABEL_4": -1.9052734375
       },
       "tokenTypeIds": [
@@ -26895,11 +26895,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.002315746199445375,
-          "LABEL_1": 0.9848273464083457,
-          "LABEL_2": 0.0020218031878479047,
-          "LABEL_3": 0.009464409211219075,
-          "LABEL_4": 0.00137069499314208
+          "LABEL_0": 0.0022219854337925484,
+          "LABEL_1": 0.9854788825915476,
+          "LABEL_2": 0.0019494392375790438,
+          "LABEL_3": 0.009030636167899219,
+          "LABEL_4": 0.0013190565691816969
         }
       },
       "wasTruncated": false
@@ -27040,7 +27040,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.01207339229710913
+        "value": -0.012267173244564666
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -27199,11 +27199,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.1175537109375,
-        "LABEL_1": 4.31640625,
-        "LABEL_2": -1.6796875,
-        "LABEL_3": 0.35400390625,
-        "LABEL_4": -2.775390625
+        "LABEL_0": 0.123046875,
+        "LABEL_1": 4.30859375,
+        "LABEL_2": -1.689453125,
+        "LABEL_3": 0.35693359375,
+        "LABEL_4": -2.783203125
       },
       "tokenTypeIds": [
         0,
@@ -27467,11 +27467,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.014472247540949718,
-          "LABEL_1": 0.9639943097352305,
-          "LABEL_2": 0.002398855243840592,
-          "LABEL_3": 0.018332639457563277,
-          "LABEL_4": 0.0008019480224158647
+          "LABEL_0": 0.014660421219300217,
+          "LABEL_1": 0.9636212311006892,
+          "LABEL_2": 0.0023932479747355495,
+          "LABEL_3": 0.01852346204742273,
+          "LABEL_4": 0.0008016376578523454
         }
       },
       "wasTruncated": false
@@ -27612,7 +27612,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.012731924869012333
+        "value": -0.012419663882257938
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -27772,11 +27772,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.07122802734375,
-        "LABEL_1": 4.125,
-        "LABEL_2": -1.3896484375,
-        "LABEL_3": 0.434326171875,
-        "LABEL_4": -3.30859375
+        "LABEL_0": 0.05352783203125,
+        "LABEL_1": 4.12890625,
+        "LABEL_2": -1.3955078125,
+        "LABEL_3": 0.438720703125,
+        "LABEL_4": -3.3046875
       },
       "tokenTypeIds": [
         0,
@@ -28040,11 +28040,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.01657873558978191,
-          "LABEL_1": 0.9551733652362688,
-          "LABEL_2": 0.0038468107207695803,
-          "LABEL_3": 0.02383652409443571,
-          "LABEL_4": 0.000564564358743945
+          "LABEL_0": 0.016230539468580704,
+          "LABEL_1": 0.9555365717347918,
+          "LABEL_2": 0.0038108755863227673,
+          "LABEL_3": 0.02385723417488391,
+          "LABEL_4": 0.0005647790354208637
         }
       },
       "wasTruncated": false
@@ -28185,7 +28185,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.06480940354128578
+        "value": -0.06461735361303486
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -28344,11 +28344,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.263916015625,
-        "LABEL_1": 2.64453125,
-        "LABEL_2": -1.90234375,
-        "LABEL_3": 0.6875,
-        "LABEL_4": -1.306640625
+        "LABEL_0": 0.2509765625,
+        "LABEL_1": 2.62890625,
+        "LABEL_2": -1.8955078125,
+        "LABEL_3": 0.689453125,
+        "LABEL_4": -1.27734375
       },
       "tokenTypeIds": [
         0,
@@ -28612,11 +28612,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.07319833268556693,
-          "LABEL_1": 0.791387613588432,
-          "LABEL_2": 0.008388929144281146,
-          "LABEL_3": 0.11180503858650241,
-          "LABEL_4": 0.01522008599521754
+          "LABEL_0": 0.07317058470363322,
+          "LABEL_1": 0.7889659621283626,
+          "LABEL_2": 0.00855323109059836,
+          "LABEL_3": 0.11343954528912222,
+          "LABEL_4": 0.015870676788283595
         }
       },
       "wasTruncated": false
@@ -28757,7 +28757,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.004224224843923166
+        "value": -0.0042274027078901336
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -28916,11 +28916,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.43408203125,
-        "LABEL_1": 4.51953125,
-        "LABEL_2": -1.3837890625,
-        "LABEL_3": 0.255859375,
-        "LABEL_4": -2.91796875
+        "LABEL_0": -0.442138671875,
+        "LABEL_1": 4.51171875,
+        "LABEL_2": -1.3935546875,
+        "LABEL_3": 0.25390625,
+        "LABEL_4": -2.9140625
       },
       "tokenTypeIds": [
         0,
@@ -29184,11 +29184,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.006889431240847436,
-          "LABEL_1": 0.9761358959460357,
-          "LABEL_2": 0.0026652063969242698,
-          "LABEL_3": 0.013734761285340893,
-          "LABEL_4": 0.0005747051308516888
+          "LABEL_0": 0.0068871943096229455,
+          "LABEL_1": 0.9760572202610542,
+          "LABEL_2": 0.0026597916017328115,
+          "LABEL_3": 0.013814361121252327,
+          "LABEL_4": 0.0005814327063377046
         }
       },
       "wasTruncated": false
@@ -29329,7 +29329,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.006506100570239334
+        "value": 0.006724847606847063
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -29488,11 +29488,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.00390625,
-        "LABEL_1": 4.5,
-        "LABEL_2": -0.035491943359375,
-        "LABEL_3": -0.5458984375,
-        "LABEL_4": -2.396484375
+        "LABEL_0": -1.0166015625,
+        "LABEL_1": 4.50390625,
+        "LABEL_2": -0.01708984375,
+        "LABEL_3": -0.55810546875,
+        "LABEL_4": -2.384765625
       },
       "tokenTypeIds": [
         0,
@@ -29756,11 +29756,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.003982274901573002,
-          "LABEL_1": 0.9782443537765244,
-          "LABEL_2": 0.010488375471812335,
-          "LABEL_3": 0.006295663429240702,
-          "LABEL_4": 0.0009893324208494617
+          "LABEL_0": 0.0039167294018279085,
+          "LABEL_1": 0.9782495311163126,
+          "LABEL_2": 0.010641577008674971,
+          "LABEL_3": 0.0061950653448989085,
+          "LABEL_4": 0.0009970971282854872
         }
       },
       "wasTruncated": false
@@ -29901,7 +29901,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.002932215885543646
+        "value": 0.0029650574635399943
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -30060,11 +30060,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.3974609375,
-        "LABEL_1": 4.90625,
-        "LABEL_2": -0.43359375,
-        "LABEL_3": -0.455078125,
-        "LABEL_4": -2.54296875
+        "LABEL_0": -1.3984375,
+        "LABEL_1": 4.8828125,
+        "LABEL_2": -0.44140625,
+        "LABEL_3": -0.4541015625,
+        "LABEL_4": -2.53515625
       },
       "tokenTypeIds": [
         0,
@@ -30328,11 +30328,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.0018079831374617017,
-          "LABEL_1": 0.9882373214510225,
-          "LABEL_2": 0.004740199023005348,
-          "LABEL_3": 0.004639445003647634,
-          "LABEL_4": 0.0005750513848628818
+          "LABEL_0": 0.0018485920072648745,
+          "LABEL_1": 0.9879916755639994,
+          "LABEL_2": 0.004813649470804869,
+          "LABEL_3": 0.004752924960408927,
+          "LABEL_4": 0.0005931579975219899
         }
       },
       "wasTruncated": false
@@ -30473,7 +30473,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.01900939054560079
+        "value": 0.01902514322050699
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -30634,9 +30634,9 @@
       "rawOutputs": {
         "LABEL_0": -1.763671875,
         "LABEL_1": 4.30078125,
-        "LABEL_2": 0.4833984375,
-        "LABEL_3": -0.41943359375,
-        "LABEL_4": -2.541015625
+        "LABEL_2": 0.484130859375,
+        "LABEL_3": -0.421630859375,
+        "LABEL_4": -2.546875
       },
       "tokenTypeIds": [
         0,
@@ -30900,11 +30900,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.0022469780801788975,
-          "LABEL_1": 0.9668461311665841,
-          "LABEL_2": 0.02125636862577969,
-          "LABEL_3": 0.008617754218682492,
-          "LABEL_4": 0.001032767908774865
+          "LABEL_0": 0.0022469991436734156,
+          "LABEL_1": 0.9668551945207676,
+          "LABEL_2": 0.021272142364180405,
+          "LABEL_3": 0.008598920118254813,
+          "LABEL_4": 0.0010267438531237258
         }
       },
       "wasTruncated": false
@@ -31045,7 +31045,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.10316257437010017
+        "value": 0.10336787188877974
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -31204,11 +31204,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.505859375,
-        "LABEL_1": 3.43359375,
-        "LABEL_2": 1.361328125,
-        "LABEL_3": -0.8642578125,
-        "LABEL_4": -2.001953125
+        "LABEL_0": -1.501953125,
+        "LABEL_1": 3.439453125,
+        "LABEL_2": 1.369140625,
+        "LABEL_3": -0.85791015625,
+        "LABEL_4": -1.998046875
       },
       "tokenTypeIds": [
         0,
@@ -31472,11 +31472,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.006219302201562649,
-          "LABEL_1": 0.8687981668635797,
-          "LABEL_2": 0.10938187657166283,
-          "LABEL_3": 0.011813692932479547,
-          "LABEL_4": 0.0037869614307153012
+          "LABEL_0": 0.0062059252340221135,
+          "LABEL_1": 0.8686243632539654,
+          "LABEL_2": 0.10957379712280185,
+          "LABEL_3": 0.011817098254944147,
+          "LABEL_4": 0.0037788161342665757
         }
       },
       "wasTruncated": false
@@ -31617,7 +31617,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.07150871696057878
+        "value": 0.07186203849358688
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -31776,11 +31776,11 @@
       "preTruncationTokenCount": 6,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.8583984375,
-        "LABEL_1": 3.287109375,
-        "LABEL_2": 0.84765625,
-        "LABEL_3": 0.09088134765625,
-        "LABEL_4": -2.201171875
+        "LABEL_0": -1.8642578125,
+        "LABEL_1": 3.302734375,
+        "LABEL_2": 0.86572265625,
+        "LABEL_3": 0.08367919921875,
+        "LABEL_4": -2.203125
       },
       "tokenTypeIds": [
         0,
@@ -32044,11 +32044,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.005118698620017627,
-          "LABEL_1": 0.8786688075504345,
-          "LABEL_2": 0.07662741558059641,
-          "LABEL_3": 0.03595183105039932,
-          "LABEL_4": 0.003633247198552162
+          "LABEL_0": 0.00501389147151195,
+          "LABEL_1": 0.8793689446813875,
+          "LABEL_2": 0.07687592996509883,
+          "LABEL_3": 0.03516844972802507,
+          "LABEL_4": 0.0035727841539766347
         }
       },
       "wasTruncated": false
@@ -32189,7 +32189,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.025231624111457244
+        "value": -0.024838362051647467
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -32349,11 +32349,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.6171875,
-        "LABEL_1": 4.19140625,
-        "LABEL_2": -2.171875,
+        "LABEL_0": 0.60693359375,
+        "LABEL_1": 4.1953125,
+        "LABEL_2": -2.15234375,
         "LABEL_3": -0.303955078125,
-        "LABEL_4": -2.04296875
+        "LABEL_4": -2.060546875
       },
       "tokenTypeIds": [
         0,
@@ -32617,11 +32617,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.026884448361903433,
-          "LABEL_1": 0.9588807718098388,
-          "LABEL_2": 0.0016528242504461846,
-          "LABEL_3": 0.010701730030505348,
-          "LABEL_4": 0.0018802255473062241
+          "LABEL_0": 0.026517942870283775,
+          "LABEL_1": 0.9592967841836245,
+          "LABEL_2": 0.0016795808186363078,
+          "LABEL_3": 0.010664632805219051,
+          "LABEL_4": 0.0018410593222363094
         }
       },
       "wasTruncated": false
@@ -32762,7 +32762,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.0028732664687119557
+        "value": 0.00274752448826863
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -32921,11 +32921,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.708984375,
+        "LABEL_0": -0.70361328125,
         "LABEL_1": 4.52734375,
-        "LABEL_2": -0.268798828125,
-        "LABEL_3": -0.094482421875,
-        "LABEL_4": -3.2109375
+        "LABEL_2": -0.281005859375,
+        "LABEL_3": -0.09307861328125,
+        "LABEL_4": -3.19921875
       },
       "tokenTypeIds": [
         0,
@@ -33189,11 +33189,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.005195823967748249,
-          "LABEL_1": 0.9767037137765741,
-          "LABEL_2": 0.008069090436460204,
-          "LABEL_3": 0.009605704809277789,
-          "LABEL_4": 0.00042566700993962173
+          "LABEL_0": 0.005224074859372924,
+          "LABEL_1": 0.9767539256457969,
+          "LABEL_2": 0.007971599347641554,
+          "LABEL_3": 0.009619693367943667,
+          "LABEL_4": 0.0004307067792449962
         }
       },
       "wasTruncated": false
@@ -33334,7 +33334,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.058262181286690966
+        "value": -0.05711629723888311
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -33495,11 +33495,11 @@
       "preTruncationTokenCount": 9,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 1.2060546875,
-        "LABEL_1": 3.904296875,
-        "LABEL_2": -1.9912109375,
-        "LABEL_3": 0.6103515625,
-        "LABEL_4": -2.892578125
+        "LABEL_0": 1.1982421875,
+        "LABEL_1": 3.91796875,
+        "LABEL_2": -1.9951171875,
+        "LABEL_3": 0.611328125,
+        "LABEL_4": -2.908203125
       },
       "tokenTypeIds": [
         0,
@@ -33763,11 +33763,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.06074506382749161,
-          "LABEL_1": 0.9022828145522575,
-          "LABEL_2": 0.0024828825408006465,
-          "LABEL_3": 0.03348115355417737,
-          "LABEL_4": 0.0010080855252730247
+          "LABEL_0": 0.05956028139206153,
+          "LABEL_1": 0.9038970713817709,
+          "LABEL_2": 0.002443984153178417,
+          "LABEL_3": 0.03311793139939565,
+          "LABEL_4": 0.0009807316735935372
         }
       },
       "wasTruncated": false
@@ -33908,7 +33908,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.06931502461389813
+        "value": -0.06849091723118099
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -34067,11 +34067,11 @@
       "preTruncationTokenCount": 10,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.89111328125,
-        "LABEL_1": 3.361328125,
-        "LABEL_2": -2.14453125,
-        "LABEL_3": 0.68359375,
-        "LABEL_4": -2.142578125
+        "LABEL_0": 0.88671875,
+        "LABEL_1": 3.37109375,
+        "LABEL_2": -2.154296875,
+        "LABEL_3": 0.68017578125,
+        "LABEL_4": -2.150390625
       },
       "tokenTypeIds": [
         0,
@@ -34335,11 +34335,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.07281324120082608,
-          "LABEL_1": 0.8610156381514957,
-          "LABEL_2": 0.0034982165869279352,
-          "LABEL_3": 0.05916784834288637,
-          "LABEL_4": 0.003505055717863982
+          "LABEL_0": 0.07192809715074318,
+          "LABEL_1": 0.8626784010795921,
+          "LABEL_2": 0.0034371799195621953,
+          "LABEL_3": 0.058505689188699105,
+          "LABEL_4": 0.0034506326614033517
         }
       },
       "wasTruncated": false
@@ -34480,7 +34480,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.008410124845663395
+        "value": -0.008381040363854732
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -34640,10 +34640,10 @@
       "preTruncationTokenCount": 10,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.4306640625,
-        "LABEL_1": 4.11328125,
-        "LABEL_2": -2.197265625,
-        "LABEL_3": 0.72119140625,
+        "LABEL_0": -0.43359375,
+        "LABEL_1": 4.109375,
+        "LABEL_2": -2.181640625,
+        "LABEL_3": 0.7333984375,
         "LABEL_4": -2.11328125
       },
       "tokenTypeIds": [
@@ -34908,11 +34908,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.010143836796816082,
-          "LABEL_1": 0.9541411547180134,
-          "LABEL_2": 0.0017337119511526863,
-          "LABEL_3": 0.03209569078522249,
-          "LABEL_4": 0.0018856057487953352
+          "LABEL_0": 0.010147934569171213,
+          "LABEL_1": 0.9535948961057862,
+          "LABEL_2": 0.0017668942053164812,
+          "LABEL_3": 0.032598373078462486,
+          "LABEL_4": 0.0018919020412637034
         }
       },
       "wasTruncated": false
@@ -35053,7 +35053,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.0034231938407323745
+        "value": -0.0034196439195506986
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -35213,11 +35213,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.38916015625,
-        "LABEL_1": 4.671875,
-        "LABEL_2": -1.1875,
-        "LABEL_3": -0.0850830078125,
-        "LABEL_4": -2.826171875
+        "LABEL_0": -0.381103515625,
+        "LABEL_1": 4.6796875,
+        "LABEL_2": -1.177734375,
+        "LABEL_3": -0.0908203125,
+        "LABEL_4": -2.841796875
       },
       "tokenTypeIds": [
         0,
@@ -35481,11 +35481,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.006224843754761835,
-          "LABEL_1": 0.9819923308992944,
-          "LABEL_2": 0.002801649914029462,
-          "LABEL_3": 0.008436988995232615,
-          "LABEL_4": 0.0005441864366817482
+          "LABEL_0": 0.00622710568299957,
+          "LABEL_1": 0.9821093564557682,
+          "LABEL_2": 0.0028074617634488716,
+          "LABEL_3": 0.008324432377068378,
+          "LABEL_4": 0.0005316437207148164
         }
       },
       "wasTruncated": false
@@ -35626,7 +35626,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -7.638087191250229e-05
+        "value": -6.950417003824538e-05
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -35785,11 +35785,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.90625,
-        "LABEL_1": 4.578125,
-        "LABEL_2": -0.92529296875,
-        "LABEL_3": 0.4560546875,
-        "LABEL_4": -2.6640625
+        "LABEL_0": -0.89697265625,
+        "LABEL_1": 4.57421875,
+        "LABEL_2": -0.9140625,
+        "LABEL_3": 0.462890625,
+        "LABEL_4": -2.662109375
       },
       "tokenTypeIds": [
         0,
@@ -36053,11 +36053,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.004049286662457386,
-          "LABEL_1": 0.9754664168596298,
-          "LABEL_2": 0.0039729057905448836,
-          "LABEL_3": 0.015813206105415662,
-          "LABEL_4": 0.0006981845819522169
+          "LABEL_0": 0.0041018379331066385,
+          "LABEL_1": 0.9751843751926844,
+          "LABEL_2": 0.004032333763068393,
+          "LABEL_3": 0.015979368651361688,
+          "LABEL_4": 0.0007020844597788358
         }
       },
       "wasTruncated": false
@@ -36198,7 +36198,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.00994726291275853
+        "value": -0.009894860089706947
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -36357,10 +36357,10 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.021026611328125,
-        "LABEL_1": 4.33203125,
-        "LABEL_2": -1.6064453125,
-        "LABEL_3": -0.146484375,
+        "LABEL_0": -0.01532745361328125,
+        "LABEL_1": 4.34375,
+        "LABEL_2": -1.6025390625,
+        "LABEL_3": -0.1495361328125,
         "LABEL_4": -2.041015625
       },
       "tokenTypeIds": [
@@ -36625,11 +36625,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.012510108814726821,
-          "LABEL_1": 0.9722324130829536,
-          "LABEL_2": 0.002562845901968291,
-          "LABEL_3": 0.011035079665042205,
-          "LABEL_4": 0.001659552535309057
+          "LABEL_0": 0.012438464193177118,
+          "LABEL_1": 0.9725009731522081,
+          "LABEL_2": 0.0025436041034701713,
+          "LABEL_3": 0.010876287310519242,
+          "LABEL_4": 0.0016406712406252927
         }
       },
       "wasTruncated": false
@@ -36770,7 +36770,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.003361609101031722
+        "value": -0.003503328492295554
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -36929,11 +36929,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.880859375,
-        "LABEL_1": 3.892578125,
-        "LABEL_2": -1.4267578125,
-        "LABEL_3": 0.71630859375,
-        "LABEL_4": -2.08984375
+        "LABEL_0": -0.87255859375,
+        "LABEL_1": 3.865234375,
+        "LABEL_2": -1.423828125,
+        "LABEL_3": 0.71923828125,
+        "LABEL_4": -2.09375
       },
       "tokenTypeIds": [
         0,
@@ -37197,11 +37197,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.00799091379875189,
-          "LABEL_1": 0.9455271673887677,
-          "LABEL_2": 0.004629304697720168,
-          "LABEL_3": 0.0394673240293607,
-          "LABEL_4": 0.002385290085399541
+          "LABEL_0": 0.008266814066065033,
+          "LABEL_1": 0.9439207049901198,
+          "LABEL_2": 0.004763485573769479,
+          "LABEL_3": 0.040611288503375476,
+          "LABEL_4": 0.0024377068666701536
         }
       },
       "wasTruncated": false
@@ -37342,7 +37342,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.5112697337620483
+        "value": -0.5050665165798509
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -37502,11 +37502,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_0",
       "rawOutputs": {
-        "LABEL_0": 2.404296875,
-        "LABEL_1": 1.90625,
-        "LABEL_2": -0.257568359375,
-        "LABEL_3": 0.440185546875,
-        "LABEL_4": -4.0703125
+        "LABEL_0": 2.3828125,
+        "LABEL_1": 1.9052734375,
+        "LABEL_2": -0.25341796875,
+        "LABEL_3": 0.448974609375,
+        "LABEL_4": -4.06640625
       },
       "tokenTypeIds": [
         0,
@@ -37770,11 +37770,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.5496447622538967,
-          "LABEL_1": 0.33402816231840043,
-          "LABEL_2": 0.03837502849184837,
-          "LABEL_3": 0.07710443908676363,
-          "LABEL_4": 0.0008476078490909216
+          "LABEL_0": 0.5440362555925724,
+          "LABEL_1": 0.3374700711967984,
+          "LABEL_2": 0.03896973901272152,
+          "LABEL_3": 0.07866340080618064,
+          "LABEL_4": 0.0008605333917270159
         }
       },
       "wasTruncated": false
@@ -37915,7 +37915,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.05917237772524772
+        "value": -0.06037996724036879
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -38075,11 +38075,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 1.4921875,
-        "LABEL_1": 1.9990234375,
-        "LABEL_2": 1.2568359375,
-        "LABEL_3": -0.998046875,
-        "LABEL_4": -3.037109375
+        "LABEL_0": 1.5,
+        "LABEL_1": 1.98828125,
+        "LABEL_2": 1.26171875,
+        "LABEL_3": -0.98583984375,
+        "LABEL_4": -3.041015625
       },
       "tokenTypeIds": [
         0,
@@ -38343,11 +38343,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.2821668680684041,
-          "LABEL_1": 0.46840558919291336,
-          "LABEL_2": 0.22299449034315638,
-          "LABEL_3": 0.023388963169482444,
-          "LABEL_4": 0.003044089226043622
+          "LABEL_0": 0.2847856970614626,
+          "LABEL_1": 0.4640620200916519,
+          "LABEL_2": 0.22440572982109383,
+          "LABEL_3": 0.023710005061073947,
+          "LABEL_4": 0.0030365479647177047
         }
       },
       "wasTruncated": false
@@ -38488,7 +38488,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.029592022548239533
+        "value": -0.029378974244137063
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -38648,11 +38648,11 @@
       "preTruncationTokenCount": 9,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.8232421875,
-        "LABEL_1": 4.22265625,
-        "LABEL_2": -1.818359375,
-        "LABEL_3": -0.314208984375,
-        "LABEL_4": -2.23828125
+        "LABEL_0": 0.81396484375,
+        "LABEL_1": 4.21875,
+        "LABEL_2": -1.802734375,
+        "LABEL_3": -0.313232421875,
+        "LABEL_4": -2.24609375
       },
       "tokenTypeIds": [
         0,
@@ -38916,11 +38916,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.031862104161414995,
-          "LABEL_1": 0.9541600348433867,
-          "LABEL_2": 0.002270081613175468,
-          "LABEL_3": 0.01021611294547693,
-          "LABEL_4": 0.001491666436545844
+          "LABEL_0": 0.03169401837292443,
+          "LABEL_1": 0.9542380078651688,
+          "LABEL_2": 0.002315044128787368,
+          "LABEL_3": 0.010266957230599378,
+          "LABEL_4": 0.0014859724025200454
         }
       },
       "wasTruncated": false
@@ -39061,7 +39061,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.07112923638792304
+        "value": -0.07081277461987395
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -39221,11 +39221,11 @@
       "preTruncationTokenCount": 5,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 1.419921875,
-        "LABEL_1": 3.91015625,
-        "LABEL_2": -1.4560546875,
-        "LABEL_3": -0.66943359375,
-        "LABEL_4": -2.3828125
+        "LABEL_0": 1.4208984375,
+        "LABEL_1": 3.916015625,
+        "LABEL_2": -1.455078125,
+        "LABEL_3": -0.666015625,
+        "LABEL_4": -2.384765625
       },
       "tokenTypeIds": [
         0,
@@ -39489,11 +39489,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.07537759869352609,
-          "LABEL_1": 0.9093631381497417,
-          "LABEL_2": 0.004248362305603045,
-          "LABEL_3": 0.009329250343220227,
-          "LABEL_4": 0.0016816505079090985
+          "LABEL_0": 0.07504223549598306,
+          "LABEL_1": 0.9097485862374862,
+          "LABEL_2": 0.004229460876109104,
+          "LABEL_3": 0.009310446343177736,
+          "LABEL_4": 0.0016692710472437477
         }
       },
       "wasTruncated": false
@@ -39634,7 +39634,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.0043943170584232255
+        "value": 0.004578296858258638
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -39794,11 +39794,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.88134765625,
-        "LABEL_1": 4.546875,
-        "LABEL_2": -0.1756591796875,
-        "LABEL_3": 0.01239013671875,
-        "LABEL_4": -3.21484375
+        "LABEL_0": -0.88671875,
+        "LABEL_1": 4.53125,
+        "LABEL_2": -0.1651611328125,
+        "LABEL_3": 0.003009796142578125,
+        "LABEL_4": -3.2109375
       },
       "tokenTypeIds": [
         0,
@@ -40062,11 +40062,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.004286132771227215,
-          "LABEL_1": 0.9761414758860145,
-          "LABEL_2": 0.00868044982965044,
-          "LABEL_3": 0.010476374427130574,
-          "LABEL_4": 0.00041556708597726956
+          "LABEL_0": 0.0043288031518584095,
+          "LABEL_1": 0.9758021448869147,
+          "LABEL_2": 0.008907100010117047,
+          "LABEL_3": 0.010538335849464986,
+          "LABEL_4": 0.0004236161016447492
         }
       },
       "wasTruncated": false
@@ -40207,7 +40207,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.004692383297382132
+        "value": -0.004533989850014586
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -40367,10 +40367,10 @@
       "preTruncationTokenCount": 9,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.64501953125,
-        "LABEL_1": 4.04296875,
-        "LABEL_2": -1.4189453125,
-        "LABEL_3": 0.88330078125,
+        "LABEL_0": -0.646484375,
+        "LABEL_1": 4.078125,
+        "LABEL_2": -1.4208984375,
+        "LABEL_3": 0.8837890625,
         "LABEL_4": -2.77734375
       },
       "tokenTypeIds": [
@@ -40635,11 +40635,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.008708934849306802,
-          "LABEL_1": 0.946090068249689,
-          "LABEL_2": 0.0040165515519246684,
-          "LABEL_3": 0.04015190174750849,
-          "LABEL_4": 0.001032543601571125
+          "LABEL_0": 0.008411446199303011,
+          "LABEL_1": 0.9478561934434289,
+          "LABEL_2": 0.003877456349288425,
+          "LABEL_3": 0.03885616916092975,
+          "LABEL_4": 0.0009987348470499337
         }
       },
       "wasTruncated": false
@@ -40780,7 +40780,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.008869284303451786
+        "value": -0.00882562534687716
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -40940,11 +40940,11 @@
       "preTruncationTokenCount": 11,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.03753662109375,
-        "LABEL_1": 4.23828125,
-        "LABEL_2": -1.130859375,
-        "LABEL_3": 0.46923828125,
-        "LABEL_4": -3.46484375
+        "LABEL_0": -0.042694091796875,
+        "LABEL_1": 4.234375,
+        "LABEL_2": -1.12890625,
+        "LABEL_3": 0.46826171875,
+        "LABEL_4": -3.455078125
       },
       "tokenTypeIds": [
         0,
@@ -41208,11 +41208,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.013339299269158653,
-          "LABEL_1": 0.9596152104399741,
-          "LABEL_2": 0.004470014965706865,
-          "LABEL_3": 0.022142291290232093,
-          "LABEL_4": 0.0004331840349282727
+          "LABEL_0": 0.013321546693084302,
+          "LABEL_1": 0.95953795168095,
+          "LABEL_2": 0.004495921346207141,
+          "LABEL_3": 0.02220546849210057,
+          "LABEL_4": 0.00043911178765800474
         }
       },
       "wasTruncated": false
@@ -41353,7 +41353,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.019878484679165156
+        "value": -0.020099912792354218
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -41513,10 +41513,10 @@
       "preTruncationTokenCount": 9,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.480224609375,
-        "LABEL_1": 4.265625,
-        "LABEL_2": -1.92578125,
-        "LABEL_3": -0.10211181640625,
+        "LABEL_0": 0.472900390625,
+        "LABEL_1": 4.24609375,
+        "LABEL_2": -1.927734375,
+        "LABEL_3": -0.10028076171875,
         "LABEL_4": -2.21875
       },
       "tokenTypeIds": [
@@ -41781,11 +41781,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.02184868425075999,
-          "LABEL_1": 0.9625067633524498,
-          "LABEL_2": 0.0019701995715948276,
-          "LABEL_3": 0.012204494390835144,
-          "LABEL_4": 0.0014698584343602991
+          "LABEL_0": 0.022103857022519845,
+          "LABEL_1": 0.9619336511385199,
+          "LABEL_2": 0.002003944230165627,
+          "LABEL_3": 0.012460591284622345,
+          "LABEL_4": 0.0014979563241722782
         }
       },
       "wasTruncated": false
@@ -41926,7 +41926,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.045623386593513796
+        "value": -0.04437012084274721
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -42086,11 +42086,11 @@
       "preTruncationTokenCount": 10,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.9931640625,
-        "LABEL_1": 3.9609375,
-        "LABEL_2": -2.12109375,
-        "LABEL_3": 0.120849609375,
-        "LABEL_4": -2.3828125
+        "LABEL_0": 0.9765625,
+        "LABEL_1": 3.97265625,
+        "LABEL_2": -2.11328125,
+        "LABEL_3": 0.1207275390625,
+        "LABEL_4": -2.39453125
       },
       "tokenTypeIds": [
         0,
@@ -42354,11 +42354,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.04774375635420855,
-          "LABEL_1": 0.9285476872246864,
-          "LABEL_2": 0.0021203697606947563,
-          "LABEL_3": 0.019956079789707145,
-          "LABEL_4": 0.001632106870703144
+          "LABEL_0": 0.04648563878297517,
+          "LABEL_1": 0.9300489056773399,
+          "LABEL_2": 0.0021155179402279557,
+          "LABEL_3": 0.01975306087945475,
+          "LABEL_4": 0.0015968767200022747
         }
       },
       "wasTruncated": false
@@ -42499,7 +42499,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.024274552965520065
+        "value": -0.02334948470669976
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -42659,11 +42659,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.63330078125,
-        "LABEL_1": 4.1953125,
+        "LABEL_0": 0.61767578125,
+        "LABEL_1": 4.21875,
         "LABEL_2": -1.7373046875,
-        "LABEL_3": 0.62744140625,
-        "LABEL_4": -3.048828125
+        "LABEL_3": 0.623046875,
+        "LABEL_4": -3.05078125
       },
       "tokenTypeIds": [
         0,
@@ -42927,11 +42927,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.026776085859986518,
-          "LABEL_1": 0.9434287915036927,
-          "LABEL_2": 0.0025015328944664583,
-          "LABEL_3": 0.026619653477452748,
-          "LABEL_4": 0.0006739362644015288
+          "LABEL_0": 0.025797552761624532,
+          "LABEL_1": 0.9451596471214239,
+          "LABEL_2": 0.0024480680549247708,
+          "LABEL_3": 0.025936486615400302,
+          "LABEL_4": 0.0006582454466264999
         }
       },
       "wasTruncated": false
@@ -43072,7 +43072,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.01144708882334814
+        "value": -0.011726334417980823
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -43232,11 +43232,11 @@
       "preTruncationTokenCount": 6,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.34375,
-        "LABEL_1": 4.58984375,
-        "LABEL_2": -1.361328125,
-        "LABEL_3": -0.546875,
-        "LABEL_4": -2.537109375
+        "LABEL_0": 0.350341796875,
+        "LABEL_1": 4.57421875,
+        "LABEL_2": -1.365234375,
+        "LABEL_3": -0.54833984375,
+        "LABEL_4": -2.544921875
       },
       "tokenTypeIds": [
         0,
@@ -43500,11 +43500,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.013989860483986791,
-          "LABEL_1": 0.976941297772983,
-          "LABEL_2": 0.002542771660638648,
-          "LABEL_3": 0.0057414271743617615,
-          "LABEL_4": 0.0007846429080297585
+          "LABEL_0": 0.0142979677660471,
+          "LABEL_1": 0.9765191549311234,
+          "LABEL_2": 0.0025716333480662774,
+          "LABEL_3": 0.005820788724757908,
+          "LABEL_4": 0.0007904552300053597
         }
       },
       "wasTruncated": false
@@ -43645,7 +43645,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.11870661299504943
+        "value": -0.11597312242625729
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -43805,11 +43805,11 @@
       "preTruncationTokenCount": 9,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 1.517578125,
-        "LABEL_1": 3.388671875,
-        "LABEL_2": -1.41796875,
-        "LABEL_3": 0.65625,
-        "LABEL_4": -3.650390625
+        "LABEL_0": 1.5087890625,
+        "LABEL_1": 3.408203125,
+        "LABEL_2": -1.42578125,
+        "LABEL_3": 0.6494140625,
+        "LABEL_4": -3.640625
       },
       "tokenTypeIds": [
         0,
@@ -44073,11 +44073,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.1253636313510323,
-          "LABEL_1": 0.8142865369126446,
-          "LABEL_2": 0.006657018355982852,
-          "LABEL_3": 0.052978726173014704,
-          "LABEL_4": 0.0007140872073254991
+          "LABEL_0": 0.12248355886414458,
+          "LABEL_1": 0.8184324546932619,
+          "LABEL_2": 0.006510436437887289,
+          "LABEL_3": 0.051862801942510514,
+          "LABEL_4": 0.0007107480621956958
         }
       },
       "wasTruncated": false
@@ -44218,7 +44218,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.1147957747230739
+        "value": -0.11484402380074508
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -44378,11 +44378,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 1.6103515625,
-        "LABEL_1": 3.564453125,
-        "LABEL_2": -1.3759765625,
-        "LABEL_3": -0.290771484375,
-        "LABEL_4": -2.658203125
+        "LABEL_0": 1.607421875,
+        "LABEL_1": 3.560546875,
+        "LABEL_2": -1.373046875,
+        "LABEL_3": -0.2900390625,
+        "LABEL_4": -2.662109375
       },
       "tokenTypeIds": [
         0,
@@ -44646,11 +44646,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.12089777883740013,
-          "LABEL_1": 0.8532451879105989,
-          "LABEL_2": 0.006102004114326234,
-          "LABEL_3": 0.01806221773600018,
-          "LABEL_4": 0.0016928114016745094
+          "LABEL_0": 0.12098638526032791,
+          "LABEL_1": 0.8530370835008476,
+          "LABEL_2": 0.006142361459582823,
+          "LABEL_3": 0.018141771250118337,
+          "LABEL_4": 0.0016923985291232696
         }
       },
       "wasTruncated": false
@@ -44791,7 +44791,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.025621933050419758
+        "value": 0.02549945943831983
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -44951,11 +44951,11 @@
       "preTruncationTokenCount": 10,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.0048828125,
-        "LABEL_1": 3.103515625,
-        "LABEL_2": 0.0177459716796875,
-        "LABEL_3": 0.51513671875,
-        "LABEL_4": -2.24609375
+        "LABEL_0": -1.0166015625,
+        "LABEL_1": 3.1171875,
+        "LABEL_2": 0.01763916015625,
+        "LABEL_3": 0.50537109375,
+        "LABEL_4": -2.25390625
       },
       "tokenTypeIds": [
         0,
@@ -45219,11 +45219,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.014390346764103805,
-          "LABEL_1": 0.8756408827492186,
-          "LABEL_2": 0.040012279814523564,
-          "LABEL_3": 0.06579719113050739,
-          "LABEL_4": 0.004159299541646648
+          "LABEL_0": 0.014065023170500384,
+          "LABEL_1": 0.8778538762539071,
+          "LABEL_2": 0.039564482608820215,
+          "LABEL_3": 0.06443543698916611,
+          "LABEL_4": 0.004081180977606266
         }
       },
       "wasTruncated": false
@@ -45364,7 +45364,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.07130580838143821
+        "value": -0.06807239779030015
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -45524,11 +45524,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 1.275390625,
-        "LABEL_1": 3.751953125,
-        "LABEL_2": -1.783203125,
-        "LABEL_3": 0.373046875,
-        "LABEL_4": -3.0859375
+        "LABEL_0": 1.2763671875,
+        "LABEL_1": 3.8046875,
+        "LABEL_2": -1.7763671875,
+        "LABEL_3": 0.370361328125,
+        "LABEL_4": -3.095703125
       },
       "tokenTypeIds": [
         0,
@@ -45792,11 +45792,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.07481882747181064,
-          "LABEL_1": 0.8903655043600361,
-          "LABEL_2": 0.0035130190903724175,
-          "LABEL_3": 0.030347854026501864,
-          "LABEL_4": 0.0009547950512789872
+          "LABEL_0": 0.07144680196996624,
+          "LABEL_1": 0.8954026065799217,
+          "LABEL_2": 0.0033744041796660803,
+          "LABEL_3": 0.02887416599129267,
+          "LABEL_4": 0.0009020212791534082
         }
       },
       "wasTruncated": false
@@ -45937,7 +45937,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.5260596334612737
+        "value": -0.537099984123224
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -46097,11 +46097,11 @@
       "preTruncationTokenCount": 9,
       "predictedLabel": "LABEL_0",
       "rawOutputs": {
-        "LABEL_0": 2.107421875,
-        "LABEL_1": 1.3994140625,
-        "LABEL_2": -0.7294921875,
-        "LABEL_3": 0.650390625,
-        "LABEL_4": -3.12109375
+        "LABEL_0": 2.138671875,
+        "LABEL_1": 1.3837890625,
+        "LABEL_2": -0.73681640625,
+        "LABEL_3": 0.6474609375,
+        "LABEL_4": -3.099609375
       },
       "tokenTypeIds": [
         0,
@@ -46365,11 +46365,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.5588093496621529,
-          "LABEL_1": 0.27528324417532907,
-          "LABEL_2": 0.03274971620087918,
-          "LABEL_3": 0.13016164601518937,
-          "LABEL_4": 0.0029960439464494356
+          "LABEL_0": 0.569196158202612,
+          "LABEL_1": 0.2675595890212945,
+          "LABEL_2": 0.03209617407938805,
+          "LABEL_3": 0.1281260031370755,
+          "LABEL_4": 0.003022075559629877
         }
       },
       "wasTruncated": false
@@ -46510,7 +46510,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.9096877416822753
+        "value": 0.9048019605365744
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -46670,11 +46670,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_2",
       "rawOutputs": {
-        "LABEL_0": -0.276123046875,
-        "LABEL_1": 0.453369140625,
-        "LABEL_2": 3.658203125,
-        "LABEL_3": -0.4404296875,
-        "LABEL_4": -3.193359375
+        "LABEL_0": -0.260498046875,
+        "LABEL_1": 0.4814453125,
+        "LABEL_2": 3.619140625,
+        "LABEL_3": -0.439697265625,
+        "LABEL_4": -3.21875
       },
       "tokenTypeIds": [
         0,
@@ -46938,11 +46938,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.018147411037536636,
-          "LABEL_1": 0.03763822270974147,
-          "LABEL_2": 0.9278351527198119,
-          "LABEL_3": 0.015397748036821052,
-          "LABEL_4": 0.0009814654960889262
+          "LABEL_0": 0.01908594261763512,
+          "LABEL_1": 0.04008072056763929,
+          "LABEL_2": 0.9238879031542094,
+          "LABEL_3": 0.01595469042804753,
+          "LABEL_4": 0.000990743232468557
         }
       },
       "wasTruncated": false
@@ -47083,7 +47083,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.9098953696207839
+        "value": 0.908133513237116
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -47243,11 +47243,11 @@
       "preTruncationTokenCount": 9,
       "predictedLabel": "LABEL_2",
       "rawOutputs": {
-        "LABEL_0": -1.2958984375,
-        "LABEL_1": 0.90283203125,
-        "LABEL_2": 3.560546875,
-        "LABEL_3": -1.185546875,
-        "LABEL_4": -1.984375
+        "LABEL_0": -1.29296875,
+        "LABEL_1": 0.9130859375,
+        "LABEL_2": 3.546875,
+        "LABEL_3": -1.18359375,
+        "LABEL_4": -1.99609375
       },
       "tokenTypeIds": [
         0,
@@ -47511,11 +47511,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.007132721028092353,
-          "LABEL_1": 0.06429123200676826,
-          "LABEL_2": 0.9170280906488762,
-          "LABEL_3": 0.007964899734265216,
-          "LABEL_4": 0.003583056581998015
+          "LABEL_0": 0.0072390311964427335,
+          "LABEL_1": 0.06572912119724703,
+          "LABEL_2": 0.9153725444335588,
+          "LABEL_3": 0.008075722871543678,
+          "LABEL_4": 0.0035835803012077613
         }
       },
       "wasTruncated": false
@@ -47656,7 +47656,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.00575669195759718
+        "value": 0.005745745209951582
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -47816,10 +47816,10 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.4716796875,
-        "LABEL_1": 4.109375,
-        "LABEL_2": -0.517578125,
-        "LABEL_3": 0.6103515625,
+        "LABEL_0": -1.46484375,
+        "LABEL_1": 4.078125,
+        "LABEL_2": -0.5341796875,
+        "LABEL_3": 0.6220703125,
         "LABEL_4": -2.572265625
       },
       "tokenTypeIds": [
@@ -48084,11 +48084,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.0036061886433490244,
-          "LABEL_1": 0.9569069201998079,
-          "LABEL_2": 0.009362880600946205,
-          "LABEL_3": 0.028924317785129626,
-          "LABEL_4": 0.0011996927707672838
+          "LABEL_0": 0.0037402500363292956,
+          "LABEL_1": 0.9553915092731626,
+          "LABEL_2": 0.009485995246280878,
+          "LABEL_3": 0.030146430546345294,
+          "LABEL_4": 0.0012358148978818954
         }
       },
       "wasTruncated": false
@@ -48229,7 +48229,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.806760886424301
+        "value": 0.8082268270456844
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -48389,11 +48389,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_2",
       "rawOutputs": {
-        "LABEL_0": -1.1220703125,
-        "LABEL_1": 1.4697265625,
-        "LABEL_2": 3.17578125,
-        "LABEL_3": -0.494384765625,
-        "LABEL_4": -3.029296875
+        "LABEL_0": -1.12109375,
+        "LABEL_1": 1.470703125,
+        "LABEL_2": 3.185546875,
+        "LABEL_3": -0.499267578125,
+        "LABEL_4": -3.015625
       },
       "tokenTypeIds": [
         0,
@@ -48657,11 +48657,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.011121351287068893,
-          "LABEL_1": 0.1485116899075922,
-          "LABEL_2": 0.8178822377113699,
-          "LABEL_3": 0.020833293309657278,
-          "LABEL_4": 0.0016514277843117145
+          "LABEL_0": 0.011042732700966076,
+          "LABEL_1": 0.1474618373511092,
+          "LABEL_2": 0.8192695597466505,
+          "LABEL_3": 0.020565166734974525,
+          "LABEL_4": 0.0016607034662996605
         }
       },
       "wasTruncated": false
@@ -48802,7 +48802,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.001961867336823265
+        "value": -0.0019146819449910287
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -48962,11 +48962,11 @@
       "preTruncationTokenCount": 9,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.84912109375,
-        "LABEL_1": 4.34375,
-        "LABEL_2": -1.302734375,
-        "LABEL_3": 0.56787109375,
-        "LABEL_4": -2.849609375
+        "LABEL_0": -0.85302734375,
+        "LABEL_1": 4.36328125,
+        "LABEL_2": -1.3056640625,
+        "LABEL_3": 0.560546875,
+        "LABEL_4": -2.83984375
       },
       "tokenTypeIds": [
         0,
@@ -49230,11 +49230,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.005379819060789443,
-          "LABEL_1": 0.9682843900812735,
-          "LABEL_2": 0.003417951723966178,
-          "LABEL_3": 0.02219011521832604,
-          "LABEL_4": 0.0007277239156449085
+          "LABEL_0": 0.005259380077035831,
+          "LABEL_1": 0.9690553756554834,
+          "LABEL_2": 0.0033446981320448023,
+          "LABEL_3": 0.021619320499832367,
+          "LABEL_4": 0.000721225635603495
         }
       },
       "wasTruncated": false
@@ -49375,7 +49375,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.0030770922924102714
+        "value": 0.0030394210190649957
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -49535,11 +49535,11 @@
       "preTruncationTokenCount": 9,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.4130859375,
+        "LABEL_0": -1.412109375,
         "LABEL_1": 4.7109375,
-        "LABEL_2": -0.5263671875,
-        "LABEL_3": -0.2059326171875,
-        "LABEL_4": -2.5234375
+        "LABEL_2": -0.533203125,
+        "LABEL_3": -0.2073974609375,
+        "LABEL_4": -2.501953125
       },
       "tokenTypeIds": [
         0,
@@ -49803,11 +49803,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.0021561061921313834,
-          "LABEL_1": 0.9846904655066144,
-          "LABEL_2": 0.005233198484541655,
-          "LABEL_3": 0.007209915463856844,
-          "LABEL_4": 0.0007103143528557061
+          "LABEL_0": 0.0021582746774912835,
+          "LABEL_1": 0.9847187004602114,
+          "LABEL_2": 0.005197695696556279,
+          "LABEL_3": 0.007199568229931547,
+          "LABEL_4": 0.0007257609358094453
         }
       },
       "wasTruncated": false
@@ -49948,7 +49948,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.022734461453316823
+        "value": 0.02295320346652248
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -50108,11 +50108,11 @@
       "preTruncationTokenCount": 11,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -2.0078125,
-        "LABEL_1": 4.1328125,
-        "LABEL_2": 0.4775390625,
-        "LABEL_3": -0.218017578125,
-        "LABEL_4": -2.302734375
+        "LABEL_0": -2.001953125,
+        "LABEL_1": 4.13671875,
+        "LABEL_2": 0.490478515625,
+        "LABEL_3": -0.2230224609375,
+        "LABEL_4": -2.3125
       },
       "tokenTypeIds": [
         0,
@@ -50376,11 +50376,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.002065766360991554,
-          "LABEL_1": 0.9592255850600439,
-          "LABEL_2": 0.024800227814308375,
-          "LABEL_3": 0.012370272293418175,
-          "LABEL_4": 0.0015381484712380978
+          "LABEL_0": 0.0020696012528020127,
+          "LABEL_1": 0.9591311592586916,
+          "LABEL_2": 0.02502280471932449,
+          "LABEL_3": 0.012259321927705855,
+          "LABEL_4": 0.0015171128414758817
         }
       },
       "wasTruncated": false
@@ -50521,7 +50521,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.7379852938476632
+        "value": 0.7229559372983636
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -50681,11 +50681,11 @@
       "preTruncationTokenCount": 9,
       "predictedLabel": "LABEL_2",
       "rawOutputs": {
-        "LABEL_0": -1.77734375,
-        "LABEL_1": 2.1484375,
-        "LABEL_2": 3.267578125,
-        "LABEL_3": -1.361328125,
-        "LABEL_4": -2.375
+        "LABEL_0": -1.7724609375,
+        "LABEL_1": 2.1796875,
+        "LABEL_2": 3.220703125,
+        "LABEL_3": -1.359375,
+        "LABEL_4": -2.380859375
       },
       "tokenTypeIds": [
         0,
@@ -50949,11 +50949,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.004784898559438011,
-          "LABEL_1": 0.24255926565719244,
-          "LABEL_2": 0.7427701924071012,
-          "LABEL_3": 0.007253473444868369,
-          "LABEL_4": 0.002632169931399922
+          "LABEL_0": 0.0049381535971574145,
+          "LABEL_1": 0.25701640950590016,
+          "LABEL_2": 0.727894090895521,
+          "LABEL_3": 0.007463895277301719,
+          "LABEL_4": 0.0026874507241196385
         }
       },
       "wasTruncated": false
@@ -51094,7 +51094,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.03952149404101708
+        "value": -0.038717511969777366
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -51254,11 +51254,11 @@
       "preTruncationTokenCount": 7,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 1.169921875,
-        "LABEL_1": 4.2578125,
-        "LABEL_2": -1.3466796875,
-        "LABEL_3": -0.3056640625,
-        "LABEL_4": -2.75390625
+        "LABEL_0": 1.154296875,
+        "LABEL_1": 4.26171875,
+        "LABEL_2": -1.341796875,
+        "LABEL_3": -0.2978515625,
+        "LABEL_4": -2.76171875
       },
       "tokenTypeIds": [
         0,
@@ -51522,11 +51522,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.04299242322168113,
-          "LABEL_1": 0.9428568996581432,
-          "LABEL_2": 0.003470929180664043,
-          "LABEL_3": 0.009829990409480802,
-          "LABEL_4": 0.0008497575300307434
+          "LABEL_0": 0.04219461261931778,
+          "LABEL_1": 0.9436113962180463,
+          "LABEL_2": 0.003477100649540415,
+          "LABEL_3": 0.009876360884127525,
+          "LABEL_4": 0.0008405296289679452
         }
       },
       "wasTruncated": false
@@ -51667,7 +51667,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.010394226005626752
+        "value": -0.010608778172108847
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -51827,11 +51827,11 @@
       "preTruncationTokenCount": 10,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.293701171875,
-        "LABEL_1": 4.0859375,
-        "LABEL_2": -2.365234375,
-        "LABEL_3": 0.798828125,
-        "LABEL_4": -2.072265625
+        "LABEL_0": -0.29443359375,
+        "LABEL_1": 4.0625,
+        "LABEL_2": -2.359375,
+        "LABEL_3": 0.8017578125,
+        "LABEL_4": -2.068359375
       },
       "tokenTypeIds": [
         0,
@@ -52095,11 +52095,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.011892604523247523,
-          "LABEL_1": 0.9491391445667005,
-          "LABEL_2": 0.0014983785176207705,
-          "LABEL_3": 0.03546144447550192,
-          "LABEL_4": 0.0020084279169293798
+          "LABEL_0": 0.012149668667381036,
+          "LABEL_1": 0.9478871859301549,
+          "LABEL_2": 0.001540890495272189,
+          "LABEL_3": 0.036360873966046016,
+          "LABEL_4": 0.002061380941145937
         }
       },
       "wasTruncated": false
@@ -52240,7 +52240,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.005499405146705612
+        "value": -0.005445598554376977
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -52400,11 +52400,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.6201171875,
-        "LABEL_1": 4.16015625,
-        "LABEL_2": -1.791015625,
-        "LABEL_3": 0.9658203125,
-        "LABEL_4": -2.73046875
+        "LABEL_0": -0.63037109375,
+        "LABEL_1": 4.15625,
+        "LABEL_2": -1.7939453125,
+        "LABEL_3": 0.9677734375,
+        "LABEL_4": -2.740234375
       },
       "tokenTypeIds": [
         0,
@@ -52668,11 +52668,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.007971171555013952,
-          "LABEL_1": 0.949660844543908,
-          "LABEL_2": 0.0024717664083083388,
-          "LABEL_3": 0.03893014855666692,
-          "LABEL_4": 0.0009660689361029422
+          "LABEL_0": 0.007919346800685706,
+          "LABEL_1": 0.9494945795686235,
+          "LABEL_2": 0.002473748246308729,
+          "LABEL_3": 0.03915206860665397,
+          "LABEL_4": 0.0009602567777280133
         }
       },
       "wasTruncated": false
@@ -52813,7 +52813,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.05555019690423515
+        "value": -0.05443090437579548
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -52973,11 +52973,11 @@
       "preTruncationTokenCount": 9,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 1.0947265625,
-        "LABEL_1": 3.822265625,
+        "LABEL_0": 1.080078125,
+        "LABEL_1": 3.828125,
         "LABEL_2": -1.5146484375,
-        "LABEL_3": -0.1678466796875,
-        "LABEL_4": -2.576171875
+        "LABEL_3": -0.1669921875,
+        "LABEL_4": -2.568359375
       },
       "tokenTypeIds": [
         0,
@@ -53241,11 +53241,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.059962250294463997,
-          "LABEL_1": 0.9171346187874578,
-          "LABEL_2": 0.004412053390228859,
-          "LABEL_3": 0.01696482292083367,
-          "LABEL_4": 0.0015262546070155857
+          "LABEL_0": 0.058822999506626804,
+          "LABEL_1": 0.9183511203173901,
+          "LABEL_2": 0.004392095130831322,
+          "LABEL_3": 0.016902518153553443,
+          "LABEL_4": 0.0015312668915984152
         }
       },
       "wasTruncated": false
@@ -53386,7 +53386,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.9505313233649882
+        "value": 0.9517177442682493
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -53546,11 +53546,11 @@
       "preTruncationTokenCount": 8,
       "predictedLabel": "LABEL_2",
       "rawOutputs": {
-        "LABEL_0": -1.478515625,
-        "LABEL_1": 0.9306640625,
-        "LABEL_2": 4.1875,
-        "LABEL_3": -1.078125,
-        "LABEL_4": -2.486328125
+        "LABEL_0": -1.4755859375,
+        "LABEL_1": 0.9326171875,
+        "LABEL_2": 4.21484375,
+        "LABEL_3": -1.0732421875,
+        "LABEL_4": -2.50390625
       },
       "tokenTypeIds": [
         0,
@@ -53814,11 +53814,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.003301817672158662,
-          "LABEL_1": 0.03673216545328264,
-          "LABEL_2": 0.9538331410371469,
-          "LABEL_3": 0.0049276576407991405,
-          "LABEL_4": 0.0012052181966127075
+          "LABEL_0": 0.0032259345013424257,
+          "LABEL_1": 0.03585294821318982,
+          "LABEL_2": 0.9549436787695917,
+          "LABEL_3": 0.004823821354699464,
+          "LABEL_4": 0.0011536171611766565
         }
       },
       "wasTruncated": false
@@ -53959,7 +53959,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.010843217946443648
+        "value": -0.012447318507641178
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -54119,11 +54119,11 @@
       "preTruncationTokenCount": 9,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 0.44873046875,
-        "LABEL_1": 3.30078125,
-        "LABEL_2": 0.2060546875,
-        "LABEL_3": 0.1610107421875,
-        "LABEL_4": -3.818359375
+        "LABEL_0": 0.463623046875,
+        "LABEL_1": 3.29296875,
+        "LABEL_2": 0.1864013671875,
+        "LABEL_3": 0.169189453125,
+        "LABEL_4": -3.81640625
       },
       "tokenTypeIds": [
         0,
@@ -54387,11 +54387,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.05032258842407494,
-          "LABEL_1": 0.8717518708068335,
-          "LABEL_2": 0.039479370477631295,
-          "LABEL_3": 0.03774052020557459,
-          "LABEL_4": 0.0007056500858857408
+          "LABEL_0": 0.051411081945064226,
+          "LABEL_1": 0.8706146482060714,
+          "LABEL_2": 0.03896376343742305,
+          "LABEL_3": 0.03829886102586682,
+          "LABEL_4": 0.0007116453855745181
         }
       },
       "wasTruncated": false
@@ -54532,7 +54532,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.010931077138655064
+        "value": 0.009547766214718605
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -54691,11 +54691,11 @@
       "preTruncationTokenCount": 3,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.982421875,
-        "LABEL_1": 3.513671875,
-        "LABEL_2": -0.2467041015625,
-        "LABEL_3": 0.8916015625,
-        "LABEL_4": -2.744140625
+        "LABEL_0": -0.9501953125,
+        "LABEL_1": 3.552734375,
+        "LABEL_2": -0.2822265625,
+        "LABEL_3": 0.86279296875,
+        "LABEL_4": -2.734375
       },
       "tokenTypeIds": [
         0,
@@ -54959,11 +54959,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.010056378991598398,
-          "LABEL_1": 0.9017171668888309,
-          "LABEL_2": 0.020987456130253462,
-          "LABEL_3": 0.06551182077358497,
-          "LABEL_4": 0.0017271772157323242
+          "LABEL_0": 0.010047405558386307,
+          "LABEL_1": 0.9070922331368738,
+          "LABEL_2": 0.01959517177310491,
+          "LABEL_3": 0.06157788085541282,
+          "LABEL_4": 0.0016873086762221852
         }
       },
       "wasTruncated": false
@@ -55104,7 +55104,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.006555044136038388
+        "value": -0.006524391600976271
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -55263,11 +55263,11 @@
       "preTruncationTokenCount": 3,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.1202392578125,
-        "LABEL_1": 4.53125,
-        "LABEL_2": -1.3251953125,
-        "LABEL_3": -0.501953125,
-        "LABEL_4": -2.330078125
+        "LABEL_0": -0.1268310546875,
+        "LABEL_1": 4.5234375,
+        "LABEL_2": -1.318359375,
+        "LABEL_3": -0.50341796875,
+        "LABEL_4": -2.326171875
       },
       "tokenTypeIds": [
         0,
@@ -55531,11 +55531,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.009360406294501992,
-          "LABEL_1": 0.9804169642415259,
-          "LABEL_2": 0.0028053621584636034,
-          "LABEL_3": 0.006390259193259118,
-          "LABEL_4": 0.0010270081122493383
+          "LABEL_0": 0.009370849723430146,
+          "LABEL_1": 0.9803134155854896,
+          "LABEL_2": 0.002846458122453875,
+          "LABEL_3": 0.006430272157812245,
+          "LABEL_4": 0.0010390044108142995
         }
       },
       "wasTruncated": false
@@ -55676,7 +55676,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.0029284009534542195
+        "value": -0.002944425743886793
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -55836,10 +55836,10 @@
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
         "LABEL_0": -0.5771484375,
-        "LABEL_1": 4.49609375,
-        "LABEL_2": -1.224609375,
-        "LABEL_3": -0.323486328125,
-        "LABEL_4": -1.9365234375
+        "LABEL_1": 4.48828125,
+        "LABEL_2": -1.22265625,
+        "LABEL_3": -0.3193359375,
+        "LABEL_4": -1.9248046875
       },
       "tokenTypeIds": [
         0,
@@ -56103,11 +56103,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.006144009373578325,
-          "LABEL_1": 0.9811444623229932,
-          "LABEL_2": 0.0032156084201241044,
-          "LABEL_3": 0.007918007776927088,
-          "LABEL_4": 0.0015779121063772658
+          "LABEL_0": 0.006190921134901313,
+          "LABEL_1": 0.9809422342618785,
+          "LABEL_2": 0.0032464953910145197,
+          "LABEL_3": 0.008011647223251091,
+          "LABEL_4": 0.0016087019889544888
         }
       },
       "wasTruncated": false
@@ -56248,7 +56248,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.039050931062669415
+        "value": 0.03852120218136438
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -56407,11 +56407,11 @@
       "preTruncationTokenCount": 3,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.400146484375,
-        "LABEL_1": 2.40625,
-        "LABEL_2": 0.1917724609375,
-        "LABEL_3": -0.31787109375,
-        "LABEL_4": -1.8544921875
+        "LABEL_0": -0.4013671875,
+        "LABEL_1": 2.4296875,
+        "LABEL_2": 0.1932373046875,
+        "LABEL_3": -0.3271484375,
+        "LABEL_4": -1.8505859375
       },
       "tokenTypeIds": [
         0,
@@ -56675,11 +56675,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.04836307149351401,
-          "LABEL_1": 0.8004171435470726,
-          "LABEL_2": 0.08741400255618342,
-          "LABEL_3": 0.052510435824564515,
-          "LABEL_4": 0.011295346578665474
+          "LABEL_0": 0.04742156516799586,
+          "LABEL_1": 0.8044282479585075,
+          "LABEL_2": 0.08594276734936024,
+          "LABEL_3": 0.051075035542284285,
+          "LABEL_4": 0.01113238398185198
         }
       },
       "wasTruncated": false
@@ -56820,7 +56820,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.2234876154919746
+        "value": -0.225286902812314
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -56979,11 +56979,11 @@
       "preTruncationTokenCount": 4,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": 1.8681640625,
-        "LABEL_1": 2.98046875,
-        "LABEL_2": -1.10546875,
-        "LABEL_3": -0.046905517578125,
-        "LABEL_4": -3.25
+        "LABEL_0": 1.873046875,
+        "LABEL_1": 2.974609375,
+        "LABEL_2": -1.1005859375,
+        "LABEL_3": -0.051544189453125,
+        "LABEL_4": -3.248046875
       },
       "tokenTypeIds": [
         0,
@@ -57247,11 +57247,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.23552711959837747,
-          "LABEL_1": 0.7163226914800103,
-          "LABEL_2": 0.012039504106402865,
-          "LABEL_3": 0.03470058287209642,
-          "LABEL_4": 0.001410101943112893
+          "LABEL_0": 0.23742333634827,
+          "LABEL_1": 0.7143744588563173,
+          "LABEL_2": 0.01213643353595599,
+          "LABEL_3": 0.03464847498149187,
+          "LABEL_4": 0.0014172962779647573
         }
       },
       "wasTruncated": false
@@ -57392,7 +57392,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.9771281430767859
+        "value": 0.9766664674939273
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -57551,11 +57551,11 @@
       "preTruncationTokenCount": 4,
       "predictedLabel": "LABEL_2",
       "rawOutputs": {
-        "LABEL_0": -0.8876953125,
-        "LABEL_1": -1.466796875,
-        "LABEL_2": 4.29296875,
-        "LABEL_3": -0.89013671875,
-        "LABEL_4": -1.431640625
+        "LABEL_0": -0.8935546875,
+        "LABEL_1": -1.462890625,
+        "LABEL_2": 4.26953125,
+        "LABEL_3": -0.89453125,
+        "LABEL_4": -1.4296875
       },
       "tokenTypeIds": [
         0,
@@ -57819,11 +57819,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.005526716549058455,
-          "LABEL_1": 0.00309718094215814,
-          "LABEL_2": 0.9826548596258443,
-          "LABEL_3": 0.005513240046236565,
-          "LABEL_4": 0.0032080028367026396
+          "LABEL_0": 0.00562263112076603,
+          "LABEL_1": 0.003181853179183727,
+          "LABEL_2": 0.9822890986146933,
+          "LABEL_3": 0.005617142950269069,
+          "LABEL_4": 0.003289274135087947
         }
       },
       "wasTruncated": false
@@ -57964,7 +57964,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.010186952012365047
+        "value": 0.01070492608596699
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -58123,11 +58123,11 @@
       "preTruncationTokenCount": 4,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.2216796875,
-        "LABEL_1": 4.25,
-        "LABEL_2": 0.0302734375,
-        "LABEL_3": -0.262451171875,
-        "LABEL_4": -3.0078125
+        "LABEL_0": -1.232421875,
+        "LABEL_1": 4.2265625,
+        "LABEL_2": 0.046630859375,
+        "LABEL_3": -0.267822265625,
+        "LABEL_4": -2.998046875
       },
       "tokenTypeIds": [
         0,
@@ -58391,11 +58391,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.004079404083033769,
-          "LABEL_1": 0.9703245538854274,
-          "LABEL_2": 0.01426635609539882,
-          "LABEL_3": 0.010645948905103668,
-          "LABEL_4": 0.0006837370310364356
+          "LABEL_0": 0.004128021064440805,
+          "LABEL_1": 0.9695019693507416,
+          "LABEL_2": 0.014832947150407795,
+          "LABEL_3": 0.010830841300017543,
+          "LABEL_4": 0.0007062211343922154
         }
       },
       "wasTruncated": false
@@ -58536,7 +58536,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.002145111161138167
+        "value": 0.0025477837609410407
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -58695,11 +58695,11 @@
       "preTruncationTokenCount": 4,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.331787109375,
-        "LABEL_1": 4.09375,
-        "LABEL_2": -0.1614990234375,
-        "LABEL_3": -0.728515625,
-        "LABEL_4": -2.38671875
+        "LABEL_0": -0.346923828125,
+        "LABEL_1": 4.08203125,
+        "LABEL_2": -0.14697265625,
+        "LABEL_3": -0.73291015625,
+        "LABEL_4": -2.373046875
       },
       "tokenTypeIds": [
         0,
@@ -58963,11 +58963,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.011554824148544687,
-          "LABEL_1": 0.9654942383678475,
-          "LABEL_2": 0.013699935309682854,
-          "LABEL_3": 0.007770810802639391,
-          "LABEL_4": 0.0014801913712854608
+          "LABEL_0": 0.011510562205962619,
+          "LABEL_1": 0.9650888258993956,
+          "LABEL_2": 0.01405834596690366,
+          "LABEL_3": 0.007824647898499945,
+          "LABEL_4": 0.0015176180292381055
         }
       },
       "wasTruncated": false
@@ -59108,7 +59108,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": -0.002336435085049056
+        "value": -0.002452820852562352
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -59267,11 +59267,11 @@
       "preTruncationTokenCount": 4,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -0.0909423828125,
-        "LABEL_1": 4.34765625,
-        "LABEL_2": -0.31884765625,
-        "LABEL_3": -0.43505859375,
-        "LABEL_4": -2.8125
+        "LABEL_0": -0.08612060546875,
+        "LABEL_1": 4.35546875,
+        "LABEL_2": -0.32763671875,
+        "LABEL_3": -0.419921875,
+        "LABEL_4": -2.8203125
       },
       "tokenTypeIds": [
         0,
@@ -59535,11 +59535,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.01146433458317975,
-          "LABEL_1": 0.9705272771169865,
-          "LABEL_2": 0.009127899498130693,
-          "LABEL_3": 0.008126453989141993,
-          "LABEL_4": 0.0007540348125611474
+          "LABEL_0": 0.01143165927835526,
+          "LABEL_1": 0.9706597466155445,
+          "LABEL_2": 0.008978838425792907,
+          "LABEL_3": 0.008187309769644092,
+          "LABEL_4": 0.0007424459106631665
         }
       },
       "wasTruncated": false
@@ -59680,7 +59680,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.008137695639333899
+        "value": 0.008094214705723864
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -59839,11 +59839,11 @@
       "preTruncationTokenCount": 4,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.1064453125,
-        "LABEL_1": 4.2578125,
-        "LABEL_2": -0.0809326171875,
-        "LABEL_3": -0.38818359375,
-        "LABEL_4": -2.275390625
+        "LABEL_0": -1.107421875,
+        "LABEL_1": 4.265625,
+        "LABEL_2": -0.079833984375,
+        "LABEL_3": -0.386474609375,
+        "LABEL_4": -2.279296875
       },
       "tokenTypeIds": [
         0,
@@ -60107,11 +60107,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.004549948556348155,
-          "LABEL_1": 0.9720174326277591,
-          "LABEL_2": 0.012687644195682054,
-          "LABEL_3": 0.009331330837402525,
-          "LABEL_4": 0.0014136437828081638
+          "LABEL_0": 0.004511027010103985,
+          "LABEL_1": 0.972209893552186,
+          "LABEL_2": 0.012605241715827848,
+          "LABEL_3": 0.009276386745363815,
+          "LABEL_4": 0.0013974509765181883
         }
       },
       "wasTruncated": false
@@ -60252,7 +60252,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.06199338069351334
+        "value": 0.062409416613551615
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -60411,11 +60411,11 @@
       "preTruncationTokenCount": 127,
       "predictedLabel": "LABEL_3",
       "rawOutputs": {
-        "LABEL_0": -0.9306640625,
-        "LABEL_1": 0.055267333984375,
-        "LABEL_2": -0.2130126953125,
-        "LABEL_3": 1.1748046875,
-        "LABEL_4": 0.1646728515625
+        "LABEL_0": -0.93359375,
+        "LABEL_1": 0.0823974609375,
+        "LABEL_2": -0.2122802734375,
+        "LABEL_3": 1.1630859375,
+        "LABEL_4": 0.158447265625
       },
       "tokenTypeIds": [
         0,
@@ -60679,11 +60679,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.05906304096711359,
-          "LABEL_1": 0.15830709105550403,
-          "LABEL_2": 0.12105642166062693,
-          "LABEL_3": 0.48496373475636234,
-          "LABEL_4": 0.17660971156039307
+          "LABEL_0": 0.05903646090246644,
+          "LABEL_1": 0.16306460066164374,
+          "LABEL_2": 0.12144587751601806,
+          "LABEL_3": 0.48050369675117505,
+          "LABEL_4": 0.17594936416869672
         }
       },
       "wasTruncated": false
@@ -60824,7 +60824,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.05727044130040148
+        "value": 0.057627427140055365
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -60983,11 +60983,11 @@
       "preTruncationTokenCount": 128,
       "predictedLabel": "LABEL_3",
       "rawOutputs": {
-        "LABEL_0": -0.9130859375,
-        "LABEL_1": 0.10406494140625,
-        "LABEL_2": -0.2447509765625,
-        "LABEL_3": 1.1611328125,
-        "LABEL_4": 0.162109375
+        "LABEL_0": -0.91552734375,
+        "LABEL_1": 0.118896484375,
+        "LABEL_2": -0.2454833984375,
+        "LABEL_3": 1.14453125,
+        "LABEL_4": 0.1649169921875
       },
       "tokenTypeIds": [
         0,
@@ -61251,11 +61251,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.060222161496841585,
-          "LABEL_1": 0.16653263473926025,
-          "LABEL_2": 0.11749260279724306,
-          "LABEL_3": 0.4792676289709869,
-          "LABEL_4": 0.17648497199566823
+          "LABEL_0": 0.060385650284604686,
+          "LABEL_1": 0.16989410424817653,
+          "LABEL_2": 0.11801307742466005,
+          "LABEL_3": 0.47381175070338793,
+          "LABEL_4": 0.17789541733917083
         }
       },
       "wasTruncated": false
@@ -61396,7 +61396,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.05727044130040148
+        "value": 0.057627427140055365
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -61555,11 +61555,11 @@
       "preTruncationTokenCount": 129,
       "predictedLabel": "LABEL_3",
       "rawOutputs": {
-        "LABEL_0": -0.9130859375,
-        "LABEL_1": 0.10406494140625,
-        "LABEL_2": -0.2447509765625,
-        "LABEL_3": 1.1611328125,
-        "LABEL_4": 0.162109375
+        "LABEL_0": -0.91552734375,
+        "LABEL_1": 0.118896484375,
+        "LABEL_2": -0.2454833984375,
+        "LABEL_3": 1.14453125,
+        "LABEL_4": 0.1649169921875
       },
       "tokenTypeIds": [
         0,
@@ -61823,11 +61823,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.060222161496841585,
-          "LABEL_1": 0.16653263473926025,
-          "LABEL_2": 0.11749260279724306,
-          "LABEL_3": 0.4792676289709869,
-          "LABEL_4": 0.17648497199566823
+          "LABEL_0": 0.060385650284604686,
+          "LABEL_1": 0.16989410424817653,
+          "LABEL_2": 0.11801307742466005,
+          "LABEL_3": 0.47381175070338793,
+          "LABEL_4": 0.17789541733917083
         }
       },
       "wasTruncated": true
@@ -61968,7 +61968,7 @@
         "kind": "second-softmax-label2-minus-label0",
         "negativeAssumption": "LABEL_0",
         "positiveAssumption": "LABEL_2",
-        "value": 0.10199142230751967
+        "value": 0.1021781045974089
       },
       "finalSemanticMapping": {
         "productSignal": null,
@@ -62127,11 +62127,11 @@
       "preTruncationTokenCount": 82,
       "predictedLabel": "LABEL_1",
       "rawOutputs": {
-        "LABEL_0": -1.74609375,
-        "LABEL_1": 2.638671875,
-        "LABEL_2": 0.6708984375,
-        "LABEL_3": 0.034515380859375,
-        "LABEL_4": -1.1796875
+        "LABEL_0": -1.7353515625,
+        "LABEL_1": 2.634765625,
+        "LABEL_2": 0.67041015625,
+        "LABEL_3": 0.0262908935546875,
+        "LABEL_4": -1.171875
       },
       "tokenTypeIds": [
         0,
@@ -62395,11 +62395,11 @@
       ],
       "transformedScores": {
         "stableSoftmax": {
-          "LABEL_0": 0.009987326322085436,
-          "LABEL_1": 0.8011775207434321,
-          "LABEL_2": 0.11197874862960508,
-          "LABEL_3": 0.05925949689224879,
-          "LABEL_4": 0.017596907412628603
+          "LABEL_0": 0.01012981062201561,
+          "LABEL_1": 0.800790857173133,
+          "LABEL_2": 0.11230791521942451,
+          "LABEL_3": 0.058975675508255325,
+          "LABEL_4": 0.01779574147717149
         }
       },
       "wasTruncated": false

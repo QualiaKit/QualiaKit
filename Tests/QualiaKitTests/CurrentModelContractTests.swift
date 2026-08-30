@@ -6,6 +6,14 @@ import XCTest
 @testable import QualiaBert
 
 final class CurrentModelContractTests: XCTestCase {
+    private struct ManifestToleranceDocument: Decodable {
+        struct FloatingPointTolerance: Decodable {
+            let absoluteByField: [String: Double]
+        }
+
+        let floatingPointTolerance: FloatingPointTolerance
+    }
+
     private let labels = (0...4).map { "LABEL_\($0)" }
     private let fixtureDirectory = "Tests/Golden/current/current-russian-fixture-v1"
 
@@ -142,7 +150,16 @@ final class CurrentModelContractTests: XCTestCase {
         XCTAssertTrue(manifestValidationErrors(manifest).isEmpty)
         let schemaSelfTest = try runReferenceTool(["--schema-self-test"])
         XCTAssertEqual(schemaSelfTest.status, 0, schemaSelfTest.output)
-        XCTAssertTrue(schemaSelfTest.output.contains("compatible-resolved-evidence"))
+        for scenario in [
+            "compatible-resolved-evidence",
+            "unknown-without-owner",
+            "verified-without-evidence",
+            "invalid-product-signal-type",
+            "extra-gate-condition",
+            "open-with-unresolved-condition",
+        ] {
+            XCTAssertTrue(schemaSelfTest.output.contains(scenario), scenario)
+        }
 
         var unsupported = manifest
         unsupported["schemaVersion"] = 2
@@ -234,7 +251,7 @@ final class CurrentModelContractTests: XCTestCase {
         })
     }
 
-    func testSwiftTokenizerAndFinalMappingMatchIndependentGoldenCorpus() throws {
+    func testSwiftTokenizerMatchesIndependentGoldenCorpus() throws {
         let environment = ProcessInfo.processInfo.environment
         guard let vocabPath = environment["QUALIAKIT_TEST_VOCAB_PATH"] else {
             throw XCTSkip("asset-backed parity requires QUALIAKIT_TEST_VOCAB_PATH")
@@ -258,16 +275,23 @@ final class CurrentModelContractTests: XCTestCase {
             XCTAssertTrue(try ints(expected["tokenTypeIds"]).allSatisfy { $0 == 0 })
         }
 
-        guard let modelPath = environment["QUALIAKIT_TEST_MODEL_PATH"] else {
-            throw XCTSkip("raw model parity requires QUALIAKIT_TEST_MODEL_PATH")
+    }
+
+    func testCurrentSwiftTransformFormulaMatchesRawBackend() throws {
+        let environment = ProcessInfo.processInfo.environment
+        guard let vocabPath = environment["QUALIAKIT_TEST_VOCAB_PATH"],
+              let modelPath = environment["QUALIAKIT_TEST_MODEL_PATH"] else {
+            throw XCTSkip("same-backend formula unit test requires protected model and vocabulary")
         }
+        let tokenizer = try BertTokenizer(vocabURL: URL(fileURLWithPath: vocabPath))
+        let corpusCases = try array(try json(golden("corpus-v1.json"))["cases"])
         let sourceModelURL = URL(fileURLWithPath: modelPath)
         let compiledModelURL = sourceModelURL.lastPathComponent.hasSuffix(".mlmodelc")
             ? sourceModelURL
             : try MLModel.compileModel(at: sourceModelURL)
         let wrapper = try BertModelWrapper(modelURL: compiledModelURL)
         let rawOutputOracle = try MLModel(contentsOf: compiledModelURL)
-        for (source, expected) in zip(corpusCases, fixtureCases) {
+        for source in corpusCases {
             let text = try XCTUnwrap(source["text"] as? String)
             let tensors = tokenizer.tokenize(text: text)
             let actual = try wrapper.predictSentiment(inputIds: tensors.inputIds, attentionMask: tensors.attentionMask)
@@ -284,10 +308,92 @@ final class CurrentModelContractTests: XCTestCase {
             let denominator = exponentials.reduce(0, +)
             let expectedValue = exponentials[2] / denominator - exponentials[0] / denominator
             XCTAssertEqual(actual, expectedValue, accuracy: 0,
-                           "same-backend current Swift transform: \(expected["id"] as? String ?? "unknown")")
+                           "same-backend current Swift transform: \(source["id"] as? String ?? "unknown")")
             XCTAssertTrue(actual.isFinite)
             XCTAssertTrue((-1.0...1.0).contains(actual))
         }
+    }
+
+    func testCurrentSwiftRuntimeMatchesCommittedIndependentGolden() throws {
+        let environment = ProcessInfo.processInfo.environment
+        if let requestPath = environment["QUALIAKIT_CONTRACT_CAPTURE_REQUEST_PATH"],
+           let responsePath = environment["QUALIAKIT_CONTRACT_CAPTURE_RESPONSE_PATH"],
+           let modelPath = environment["QUALIAKIT_TEST_MODEL_PATH"] {
+            try captureCurrentSwiftRuntime(
+                modelPath: modelPath,
+                requestPath: requestPath,
+                responsePath: responsePath
+            )
+            return
+        }
+        guard let vocabPath = environment["QUALIAKIT_TEST_VOCAB_PATH"],
+              let modelPath = environment["QUALIAKIT_TEST_MODEL_PATH"] else {
+            throw XCTSkip("committed-golden runtime parity requires protected model and vocabulary")
+        }
+        let tokenizer = try BertTokenizer(vocabURL: URL(fileURLWithPath: vocabPath))
+        let corpusCases = try array(try json(golden("corpus-v1.json"))["cases"])
+        let fixtureCases = try array(try json(golden("fixture-v1.json"))["cases"])
+        let toleranceDocument = try JSONDecoder().decode(
+            ManifestToleranceDocument.self,
+            from: Data(contentsOf: url("Models/current/manifest.json"))
+        )
+        let tolerance = try XCTUnwrap(
+            toleranceDocument.floatingPointTolerance.absoluteByField["currentSwiftRuntimeDefault.value"]
+        )
+        let wrapper = try BertModelWrapper(modelURL: URL(fileURLWithPath: modelPath))
+
+        for (source, expected) in zip(corpusCases, fixtureCases) {
+            let identifier = try XCTUnwrap(source["id"] as? String)
+            XCTAssertEqual(identifier, expected["id"] as? String)
+            let text = try XCTUnwrap(source["text"] as? String)
+            let tensors = tokenizer.tokenize(text: text)
+            let actual = try wrapper.predictSentiment(
+                inputIds: tensors.inputIds,
+                attentionMask: tensors.attentionMask
+            )
+            let committedReference = try XCTUnwrap(
+                try object(expected["currentSwiftTransform"])["value"] as? NSNumber
+            ).doubleValue
+            XCTAssertEqual(
+                actual,
+                committedReference,
+                accuracy: tolerance,
+                "production BertModelWrapper versus committed reference transform: \(identifier)"
+            )
+        }
+    }
+
+    private func captureCurrentSwiftRuntime(
+        modelPath: String,
+        requestPath: String,
+        responsePath: String
+    ) throws {
+        let requestData = try Data(contentsOf: URL(fileURLWithPath: requestPath))
+        let request = try XCTUnwrap(
+            JSONSerialization.jsonObject(with: requestData) as? [String: Any]
+        )
+        let requestCases = try array(request["cases"])
+        let wrapper = try BertModelWrapper(modelURL: URL(fileURLWithPath: modelPath))
+        let cases: [[String: Any]] = try requestCases.map { item in
+            let identifier = try XCTUnwrap(item["id"] as? String)
+            let value = try wrapper.predictSentiment(
+                inputIds: try ints(item["inputIds"]),
+                attentionMask: try ints(item["attentionMask"])
+            )
+            return ["id": identifier, "value": value]
+        }
+        let response: [String: Any] = [
+            "helperSchemaVersion": 1,
+            "backend": "BertModelWrapper",
+            "computeUnits": "production-default",
+            "processIdentifier": ProcessInfo.processInfo.processIdentifier,
+            "cases": cases,
+        ]
+        let responseData = try JSONSerialization.data(
+            withJSONObject: response,
+            options: [.prettyPrinted, .sortedKeys]
+        )
+        try responseData.write(to: URL(fileURLWithPath: responsePath), options: .atomic)
     }
 
     private func modelInput(inputIds: [Int], attentionMask: [Int]) throws -> MLFeatureProvider {
@@ -308,7 +414,7 @@ final class CurrentModelContractTests: XCTestCase {
         ])
     }
 
-    func testCoreMLOutputContractAndTransforms() throws {
+    func testObservedRawClassifierScoresAndReferenceTransforms() throws {
         let manifest = try json("Models/current/manifest.json")
         let inputs = try object(manifest["inputs"])
         XCTAssertEqual(Set(inputs.keys), Set(["input_ids", "attention_mask", "token_type_ids"]))
@@ -320,12 +426,13 @@ final class CurrentModelContractTests: XCTestCase {
         }
         let outputs = try object(manifest["outputs"])
         XCTAssertEqual(try array(outputs["labels"]).compactMap { $0["name"] as? String }, labels)
-        XCTAssertEqual(try object(outputs["kind"])["value"] as? String, "classifier_logits")
-
-        let graph = try json("Models/current/graph-evidence.json")
-        XCTAssertEqual(graph["classifierSoftmaxBetweenLinearAndClassify"] as? Bool, false)
-        XCTAssertEqual((graph["encoderSoftmaxOperationCount"] as? NSNumber)?.intValue, 12)
-        XCTAssertEqual(try strings(graph["labels"]), labels)
+        let outputKind = try object(outputs["kind"])
+        XCTAssertEqual(outputKind["status"] as? String, "unknown")
+        XCTAssertTrue((outputKind["observation"] as? String ?? "").contains("raw classifier scores"))
+        XCTAssertFalse((outputKind["owner"] as? String ?? "").isEmpty)
+        XCTAssertFalse((outputKind["proofPlan"] as? String ?? "").isEmpty)
+        XCTAssertNil(outputKind["value"])
+        XCTAssertNil(outputKind["evidence"])
 
         let fixture = try json(golden("fixture-v1.json"))
         var observedNonProbabilityDictionary = false
@@ -384,7 +491,7 @@ final class CurrentModelContractTests: XCTestCase {
 
         let card = try String(contentsOf: url("Models/current/MODEL_CARD.md"), encoding: .utf8)
         for requiredMismatch in [
-            "Unicode normalization", "second stable softmax", "Missing dictionary labels",
+            "Unicode normalization", "committed reference transform", "Missing dictionary labels",
             "neutral-like behavior", "all-zero `token_type_ids`", "repository MIT license",
             "reference verifier pins CPU-only",
         ] {
@@ -460,6 +567,7 @@ final class CurrentModelContractTests: XCTestCase {
         let lock = try String(contentsOf: url("Tools/ModelContract/requirements.lock"), encoding: .utf8)
         for pin in ["python==3.14.0", "python-dependencies==standard-library-only", "swift==6.3.3",
                     "xcode==26.6", "coremlcompiler==3520.5.1", "coreml-compute-units==cpuOnly",
+                    "coreml-production-parity-compute-units==default",
                     "network-access==disabled"] {
             XCTAssertTrue(lock.contains(pin), pin)
         }
@@ -537,6 +645,47 @@ final class CurrentModelContractTests: XCTestCase {
             for field in tolerances.keys {
                 XCTAssertLessThanOrEqual(maxima[field, default: .infinity], tolerances[field, default: 0])
             }
+        }
+
+        let runtime = try object(calibration["currentSwiftRuntimeDefault"])
+        let runtimeCalibrationRuns = try array(runtime["calibrationRuns"])
+        let runtimeHoldoutRuns = try array(runtime["holdoutRuns"])
+        XCTAssertGreaterThanOrEqual(runtimeCalibrationRuns.count, 10)
+        XCTAssertGreaterThanOrEqual(runtimeHoldoutRuns.count, 5)
+        let runtimeRuns = runtimeCalibrationRuns + runtimeHoldoutRuns
+        XCTAssertTrue(runtimeRuns.allSatisfy { $0["freshOSProcess"] as? Bool == true })
+        XCTAssertTrue(runtimeRuns.allSatisfy { $0["computeUnits"] as? String == "production-default" })
+        XCTAssertTrue(runtimeRuns.allSatisfy {
+            ($0["productionSourceSha256"] as? String)?.count == 64
+                && ($0["testHarnessSourceSha256"] as? String)?.count == 64
+                && ($0["invocation"] as? String)?.contains("testCurrentSwiftRuntimeMatchesCommittedIndependentGolden") == true
+        })
+        let runtimeReference = Dictionary(uniqueKeysWithValues: try array(runtime["referenceCases"]).map {
+            (try XCTUnwrap($0["id"] as? String), try XCTUnwrap($0["value"] as? NSNumber).doubleValue)
+        })
+        let runtimeDeltas = try runtimeCalibrationRuns.flatMap { run in
+            try array(run["cases"]).map { item in
+                let identifier = try XCTUnwrap(item["id"] as? String)
+                let actual = try XCTUnwrap(item["value"] as? NSNumber).doubleValue
+                return abs(actual - (try XCTUnwrap(runtimeReference[identifier])))
+            }
+        }.sorted()
+        let runtimeTolerance = try XCTUnwrap(runtime["absoluteTolerance"] as? NSNumber).doubleValue
+        XCTAssertEqual(runtimeTolerance, try XCTUnwrap(runtimeDeltas.last), accuracy: 1e-15)
+        let manifestTolerances = try doubles(try object(
+            try json("Models/current/manifest.json")["floatingPointTolerance"]
+        )["absoluteByField"])
+        XCTAssertEqual(
+            manifestTolerances["currentSwiftRuntimeDefault.value"],
+            runtimeTolerance,
+            "production-default runtime tolerance must be published"
+        )
+        for run in runtimeHoldoutRuns {
+            XCTAssertEqual(run["withinFixedTolerance"] as? Bool, true)
+            XCTAssertLessThanOrEqual(
+                try XCTUnwrap(run["maximumDelta"] as? NSNumber).doubleValue,
+                runtimeTolerance
+            )
         }
     }
 

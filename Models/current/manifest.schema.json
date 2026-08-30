@@ -129,16 +129,7 @@
         "classLabel": { "$ref": "#/$defs/nonEmptyString" },
         "scores": { "$ref": "#/$defs/nonEmptyString" },
         "scoresType": { "$ref": "#/$defs/nonEmptyString" },
-        "kind": {
-          "type": "object",
-          "required": ["status", "value", "evidence"],
-          "properties": {
-            "status": { "$ref": "#/$defs/nonEmptyString" },
-            "value": { "$ref": "#/$defs/nonEmptyString" },
-            "evidence": { "$ref": "#/$defs/nonEmptyString" }
-          },
-          "additionalProperties": true
-        },
+        "kind": { "$ref": "#/$defs/outputKind" },
         "labels": {
           "type": "array",
           "minItems": 1,
@@ -221,10 +212,49 @@
         "rule": { "$ref": "#/$defs/nonEmptyString" },
         "conditions": {
           "type": "object",
-          "minProperties": 1,
-          "additionalProperties": { "enum": ["resolved", "unresolved"] }
+          "required": [
+            "labelSemantics",
+            "outputKind",
+            "provenance",
+            "tokenizerTrainingParity"
+          ],
+          "properties": {
+            "labelSemantics": { "enum": ["resolved", "unresolved"] },
+            "outputKind": { "enum": ["resolved", "unresolved"] },
+            "provenance": { "enum": ["resolved", "unresolved"] },
+            "tokenizerTrainingParity": { "enum": ["resolved", "unresolved"] }
+          },
+          "additionalProperties": false
         }
       },
+      "oneOf": [
+        {
+          "properties": {
+            "status": { "const": "open" },
+            "conditions": {
+              "properties": {
+                "labelSemantics": { "const": "resolved" },
+                "outputKind": { "const": "resolved" },
+                "provenance": { "const": "resolved" },
+                "tokenizerTrainingParity": { "const": "resolved" }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "status": { "const": "blocked" },
+            "conditions": {
+              "anyOf": [
+                { "properties": { "labelSemantics": { "const": "unresolved" } } },
+                { "properties": { "outputKind": { "const": "unresolved" } } },
+                { "properties": { "provenance": { "const": "unresolved" } } },
+                { "properties": { "tokenizerTrainingParity": { "const": "unresolved" } } }
+              ]
+            }
+          }
+        }
+      ],
       "additionalProperties": true
     }
   },
@@ -240,6 +270,39 @@
         "proofPlan": { "$ref": "#/$defs/nonEmptyString" },
         "evidence": { "$ref": "#/$defs/nonEmptyString" }
       },
+      "oneOf": [
+        {
+          "required": ["status", "owner", "proofPlan"],
+          "properties": { "status": { "const": "unknown" } }
+        },
+        {
+          "required": ["status", "evidence"],
+          "properties": { "status": { "const": "verified" } }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "outputKind": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["unknown", "verified"] },
+        "owner": { "$ref": "#/$defs/nonEmptyString" },
+        "proofPlan": { "$ref": "#/$defs/nonEmptyString" },
+        "observation": { "$ref": "#/$defs/nonEmptyString" },
+        "value": { "$ref": "#/$defs/nonEmptyString" },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "oneOf": [
+        {
+          "required": ["status", "owner", "proofPlan", "observation"],
+          "properties": { "status": { "const": "unknown" } }
+        },
+        {
+          "required": ["status", "value", "evidence"],
+          "properties": { "status": { "const": "verified" } }
+        }
+      ],
       "additionalProperties": true
     },
     "specialToken": {
@@ -271,7 +334,7 @@
       "properties": {
         "name": { "$ref": "#/$defs/nonEmptyString" },
         "semanticMeaning": { "$ref": "#/$defs/evidenceState" },
-        "productSignal": {}
+        "productSignal": { "type": ["string", "null"] }
       },
       "additionalProperties": true
     }

@@ -1,0 +1,80 @@
+{
+  "assetPolicy": {
+    "modelEnvironmentVariable": "QUALIAKIT_TEST_MODEL_PATH",
+    "protectedBytesCommitted": false,
+    "protectedBytesEmbeddedInPublicCI": false,
+    "vocabularyEnvironmentVariable": "QUALIAKIT_TEST_VOCAB_PATH"
+  },
+  "attestedFiles": {
+    ".github/workflows/ci.yml": "7b54468c3d88b79974080b4a2f4b710fe6c423d2f009fcd664b687de5d5e8f14",
+    "Models/current/MODEL_CARD.md": "c15be731d2cd545ee557270b34baa68fef841cdad4370c02eead99755e16c92e",
+    "Models/current/manifest.json": "d17a319f0eb2b4f41b2de9e745170ca2b38835fe9aa5d0b3700a5501d22785f3",
+    "Models/current/manifest.schema.json": "98ccc84270e80aa181117e8c769aabc3911fd7f0d0a3d306206a52c0ab72c356",
+    "Sources/QualiaBert/BertModelWrapper.swift": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
+    "Sources/QualiaBert/BertTokenizer.swift": "6f443dd4c360a9a00cc6347bfd22b630b61f18899b4a2409e3453e6f205c9314",
+    "Tests/Golden/current/current-russian-fixture-v1/calibration-v1.json": "0f1df446334ee1d9bb6f39fa15a962d61c7bcae4414e30e12971ccee86f244d5",
+    "Tests/Golden/current/current-russian-fixture-v1/corpus-v1.json": "41f3626cc3b8963712ec2b9a797908974c9bc8eb8f53245a9976cb7effcc840e",
+    "Tests/Golden/current/current-russian-fixture-v1/fixture-v1.json": "4a62cf8f46dba89e3e3217cfdaf625213280c222b667a4afca39fbd107af88da",
+    "Tests/Golden/current/current-russian-fixture-v1/index.json": "df095d83763085f8fb9a593008863999b9cb335b933341ca11cec09f236e587b",
+    "Tests/Golden/current/current-russian-fixture-v1/manifest.json": "d17a319f0eb2b4f41b2de9e745170ca2b38835fe9aa5d0b3700a5501d22785f3",
+    "Tests/Golden/current/current-russian-fixture-v1/run-report-v1.json": "573c13360902b8c21ff81bef1f6020e482c1a4283af87bfff11e2bf87371332d",
+    "Tests/QualiaKitTests/CurrentModelContractTests.swift": "4f9ff71d0a4cd6ac210260ce6c55d31e658431747b24ba5b33c760d1add4fbde",
+    "Tools/ModelContract/coreml_inference.swift": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
+    "Tools/ModelContract/reference_inference.py": "1109822f21d0f2a7f26507269a966b3b0c881040d49f7898000cf04eaef387f4",
+    "Tools/ModelContract/requirements.lock": "0f25a48615cfa9507984e98d996ba79b0d4fbf5b9f5b7dd3aa801b1a5d523ee1"
+  },
+  "commands": [
+    {
+      "command": "swift build",
+      "durationSeconds": 0.9195668330066837,
+      "exitCode": 0,
+      "outputSha256": "b0ce08d7cd752754ec56f3a027fb7bb843bd41753256e68fc29c13fdf76c50d4",
+      "status": "passed"
+    },
+    {
+      "command": "swift test --filter CurrentModelContractTests",
+      "durationSeconds": 7.83550262497738,
+      "exitCode": 0,
+      "outputSha256": "65d8f3cc4abfc20bb19c1ec097fc9fb20309046c6c67af50cc864d3e7cf5723a",
+      "status": "passed"
+    },
+    {
+      "command": "python3 Tools/ModelContract/reference_inference.py --verify",
+      "durationSeconds": 9.118421083985595,
+      "exitCode": 0,
+      "outputSha256": "c8d2d32943d8feb055ef3515b840b84d952a1e900ec36617598745456765b743",
+      "status": "passed"
+    }
+  ],
+  "contractVersion": "current-russian-v1",
+  "environment": {
+    "architecture": "arm64",
+    "backend": "CoreML",
+    "computeUnits": "cpuOnly",
+    "coremlcompiler": "3520.5.1",
+    "networkDependencies": [],
+    "os": "26.6.2",
+    "python": "3.14.0",
+    "pythonImplementation": "CPython",
+    "seedPolicy": "not exposed by Core ML prediction API",
+    "swift": "swift-driver version: 1.148.6 Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101)",
+    "xcode": "Xcode 26.6",
+    "xcodeBuild": "17F113"
+  },
+  "evidenceClosureSha256": "6031930ca290e8cce526494bfe1610cbb1f463061cd9795f2071608cb4b36366",
+  "fixtureVersion": "current-russian-fixture-v1",
+  "generatedAtUTC": "2026-08-30T14:39:28.202763+00:00",
+  "kind": "checksum-bound-protected-local-verification",
+  "protectedAssets": {
+    "modelComponents": {
+      "Data/com.apple.CoreML/model.mlmodel": "f7ac2156e756a2aacd1cca8cc3f3aded5e7b143147270ea0aea374747a609a42",
+      "Data/com.apple.CoreML/weights/weight.bin": "26c028484b4df267933afbfa3ef9ca421dc7450d48bd02c720146bd4444da2f2",
+      "Manifest.json": "a655c85265418a3c567fc48869e4bab5271b2340e33b7b67bdc395f3874bb302"
+    },
+    "modelPackageIdentitySha256": "6e9fd764c070b52228b28236bda4e889bc0558e51897f9baf9cc42a823aad78a",
+    "vocabularySha256": "78106a3d3ae8600d1ba573b967b9bb731d2c2282957cbc6e26ab20935c3da02b"
+  },
+  "schemaVersion": 1,
+  "sourceClosureSha256": "e3c08c151b268f1cbbe9eb60394c127d94e1a5718baff8b601d913fadad805cb",
+  "status": "passed"
+}

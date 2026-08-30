@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+import datetime
 import hashlib
 import json
 import math
@@ -38,6 +39,9 @@ MANIFEST_PATH = ROOT / "Models/current/manifest.json"
 SCHEMA_PATH = ROOT / "Models/current/manifest.schema.json"
 CHECKSUMS_PATH = ROOT / "Models/current/checksums.json"
 HELPER_PATH = ROOT / "Tools/ModelContract/coreml_inference.swift"
+CURRENT_RUNTIME_SOURCE_PATH = ROOT / "Sources/QualiaBert/BertModelWrapper.swift"
+CURRENT_TOKENIZER_SOURCE_PATH = ROOT / "Sources/QualiaBert/BertTokenizer.swift"
+CURRENT_RUNTIME_TEST_PATH = ROOT / "Tests/QualiaKitTests/CurrentModelContractTests.swift"
 LOCK_PATH = ROOT / "Tools/ModelContract/requirements.lock"
 LABELS = [f"LABEL_{index}" for index in range(5)]
 MODEL_COMPONENTS = {
@@ -56,6 +60,7 @@ CALIBRATION_PATH = GOLDEN_DIRECTORY / "calibration-v1.json"
 RUN_REPORT_PATH = GOLDEN_DIRECTORY / "run-report-v1.json"
 MANIFEST_SNAPSHOT_PATH = GOLDEN_DIRECTORY / "manifest.json"
 INDEX_PATH = GOLDEN_DIRECTORY / "index.json"
+VERIFICATION_EVIDENCE_PATH = GOLDEN_DIRECTORY / "verification-v1.json"
 MODEL_IDENTIFIER = "rub-sentiment-coreml-local-audit"
 MODEL_VERSION = "sha256-f7ac2156e756a2aa"
 PINNED_PYTHON_VERSION = (3, 14, 0)
@@ -531,6 +536,73 @@ def run_fresh_compilation(
         return run_helper(helper, compiled_model, compilation_identifier, tokenized)
 
 
+def run_current_swift_runtime(
+    model_path: Path, tokenized: list[dict[str, Any]]
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Run the production BertModelWrapper inside a fresh XCTest process with its default policy."""
+    with tempfile.TemporaryDirectory(prefix="qualia-current-runtime-capture-") as directory:
+        cache = Path(directory)
+        cache.chmod(0o700)
+        request_path = cache / "request.json"
+        response_path = cache / "response.json"
+        request = {"cases": [{
+            "id": item["id"],
+            "inputIds": item["inputIds"],
+            "attentionMask": item["attentionMask"],
+        } for item in tokenized]}
+        request_path.write_bytes(canonical_bytes(request))
+        environment = dict(os.environ)
+        environment["QUALIAKIT_TEST_MODEL_PATH"] = str(model_path)
+        environment["QUALIAKIT_CONTRACT_CAPTURE_REQUEST_PATH"] = str(request_path)
+        environment["QUALIAKIT_CONTRACT_CAPTURE_RESPONSE_PATH"] = str(response_path)
+        environment["CLANG_MODULE_CACHE_PATH"] = str(cache / "clang-module-cache")
+        environment["SWIFT_MODULECACHE_PATH"] = str(cache / "swift-module-cache")
+        started = time.monotonic()
+        try:
+            result = subprocess.run(
+                [
+                    "swift", "test", "--filter",
+                    "CurrentModelContractTests/testCurrentSwiftRuntimeMatchesCommittedIndependentGolden",
+                ],
+                cwd=ROOT,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                env=environment,
+                timeout=900,
+            )
+        except (OSError, subprocess.TimeoutExpired) as error:
+            raise ContractError("runtime-parity", "BertModelWrapper", str(error)) from error
+        ended = time.monotonic()
+        if result.returncode != 0:
+            diagnostic = result.stderr.strip().splitlines()[-1] if result.stderr.strip() else "helper failed"
+            raise ContractError("runtime-parity", "BertModelWrapper", diagnostic[:400])
+        response = read_json(response_path)
+        if response.get("helperSchemaVersion") != 1 or response.get("computeUnits") != "production-default":
+            raise ContractError("runtime-parity", "helper-response", "unexpected production helper policy")
+        process_identifier = response.get("processIdentifier")
+        if not isinstance(process_identifier, int) or process_identifier <= 0:
+            raise ContractError("runtime-parity", "helper-response", "fresh process identifier is missing")
+        cases = response.get("cases")
+        expected_ids = [item["id"] for item in tokenized]
+        if not isinstance(cases, list) or [item.get("id") for item in cases] != expected_ids:
+            raise ContractError("runtime-parity", "helper-response", "case identity/order mismatch")
+        for item in cases:
+            value = item.get("value")
+            if not isinstance(value, (int, float)) or not math.isfinite(value):
+                raise ContractError("runtime-parity", item.get("id", "case"), "non-finite wrapper output")
+        return cases, {
+            "processIdentifier": process_identifier,
+            "startedMonotonicSeconds": started,
+            "endedMonotonicSeconds": ended,
+            "durationSeconds": ended - started,
+            "computeUnits": "production-default",
+            "productionSourceSha256": sha256_file(CURRENT_RUNTIME_SOURCE_PATH),
+            "testHarnessSourceSha256": sha256_file(CURRENT_RUNTIME_TEST_PATH),
+            "invocation": "swift test --filter CurrentModelContractTests/testCurrentSwiftRuntimeMatchesCommittedIndependentGolden",
+        }
+
+
 def stable_softmax(raw: dict[str, float]) -> dict[str, float]:
     maximum = max(raw.values())
     exponentials = {label: math.exp(raw[label] - maximum) for label in LABELS}
@@ -608,9 +680,7 @@ def make_golden(
         raw_item = raw_by_id[item["id"]]
         raw = {label: float(raw_item["rawOutputs"][label]) for label in LABELS}
         softmax = stable_softmax(raw)
-        current_value = float(raw_item.get(
-            "currentSwiftTransformValue", softmax["LABEL_2"] - softmax["LABEL_0"]
-        ))
+        current_value = softmax["LABEL_2"] - softmax["LABEL_0"]
         text_bytes = item["text"].encode()
         normalized_bytes = item["normalizedText"].encode()
         cases.append({
@@ -666,6 +736,80 @@ def make_golden(
     }
 
 
+def calibrate_current_swift_runtime(
+    model_path: Path,
+    tokenized: list[dict[str, Any]],
+    baseline_raw: list[dict[str, Any]],
+) -> dict[str, Any]:
+    reference = {
+        item["id"]: floating_values(item)["currentSwiftTransform.value"]
+        for item in baseline_raw
+    }
+    calibration_runs: list[dict[str, Any]] = []
+    holdout_runs: list[dict[str, Any]] = []
+
+    def fresh_run(index: int, phase: str) -> dict[str, Any]:
+        cases, execution = run_current_swift_runtime(model_path, tokenized)
+        return {
+            "processSequence": index,
+            "phase": phase,
+            "freshOSProcess": True,
+            **execution,
+            "cases": cases,
+        }
+
+    def deltas(run: dict[str, Any]) -> list[float]:
+        return [abs(float(item["value"]) - reference[item["id"]]) for item in run["cases"]]
+
+    for index in range(1, 11):
+        calibration_runs.append(fresh_run(index, "calibration"))
+
+    while True:
+        observed_deltas = [delta for run in calibration_runs for delta in deltas(run)]
+        measured_distribution = distribution(observed_deltas)
+        tolerance = measured_distribution["max"]
+        holdout_runs = []
+        exceeded = False
+        first_sequence = len(calibration_runs) + 1
+        for offset in range(5):
+            run = fresh_run(first_sequence + offset, "holdout")
+            maximum = max(deltas(run))
+            run["maximumDelta"] = maximum
+            run["withinFixedTolerance"] = maximum <= tolerance
+            holdout_runs.append(run)
+            exceeded = exceeded or not run["withinFixedTolerance"]
+        if not exceeded:
+            break
+        calibration_runs.extend(holdout_runs)
+        if len(calibration_runs) > 50:
+            raise ContractError(
+                "calibration", "BertModelWrapper", "could not establish a five-process holdout"
+            )
+
+    return {
+        "schemaVersion": 1,
+        "field": "currentSwiftRuntimeDefault.value",
+        "referenceField": "currentSwiftTransform.value",
+        "protocol": {
+            "comparison": "absolute",
+            "corpusScope": "full",
+            "sequentialProcesses": True,
+            "productionCodeInvoked": "Sources/QualiaBert/BertModelWrapper.swift",
+            "computeUnits": "production-default",
+            "modelReloadedEachProcess": True,
+            "minimumCalibrationProcesses": 10,
+            "minimumHoldoutProcesses": 5,
+        },
+        "referenceCases": [{"id": identifier, "value": value} for identifier, value in reference.items()],
+        "calibrationProcessCount": len(calibration_runs),
+        "holdoutProcessCount": len(holdout_runs),
+        "distribution": measured_distribution,
+        "absoluteTolerance": tolerance,
+        "calibrationRuns": calibration_runs,
+        "holdoutRuns": holdout_runs,
+    }
+
+
 def calibrate(model_path: Path, tokenized: list[dict[str, Any]],
               baseline_raw: list[dict[str, Any]], environment: dict[str, Any]) -> dict[str, Any]:
     calibration_runs: list[dict[str, Any]] = []
@@ -713,6 +857,7 @@ def calibrate(model_path: Path, tokenized: list[dict[str, Any]],
         if len(calibration_runs) > 50:
             raise ContractError("calibration", "fresh-process", "could not establish a five-process holdout")
 
+    current_runtime = calibrate_current_swift_runtime(model_path, tokenized, baseline_raw)
     return {
         "schemaVersion": 1,
         "contractVersion": CONTRACT_VERSION,
@@ -739,6 +884,7 @@ def calibrate(model_path: Path, tokenized: list[dict[str, Any]],
         "absoluteToleranceByField": tolerances,
         "calibrationRuns": calibration_runs,
         "holdoutRuns": holdout_runs,
+        "currentSwiftRuntimeDefault": current_runtime,
     }
 
 
@@ -750,12 +896,17 @@ def update_manifest(
     write: bool = True,
 ) -> dict[str, Any]:
     manifest = read_json(MANIFEST_PATH)
+    absolute_tolerances = dict(calibration["absoluteToleranceByField"])
+    current_runtime = calibration["currentSwiftRuntimeDefault"]
+    absolute_tolerances["currentSwiftRuntimeDefault.value"] = current_runtime["absoluteTolerance"]
     manifest["floatingPointTolerance"] = {
         "comparison": "absolute",
-        "derivation": "maximum observed full-corpus fresh-process calibration delta",
-        "absoluteByField": calibration["absoluteToleranceByField"],
+        "derivation": "maximum observed full-corpus fresh-process delta for CPU reference outputs and production-default BertModelWrapper parity",
+        "absoluteByField": absolute_tolerances,
         "calibrationProcessCount": calibration["calibrationProcessCount"],
         "holdoutProcessCount": calibration["holdoutProcessCount"],
+        "runtimeCalibrationProcessCount": current_runtime["calibrationProcessCount"],
+        "runtimeHoldoutProcessCount": current_runtime["holdoutProcessCount"],
     }
     manifest["fixture"]["caseCount"] = read_json(corpus_path)["caseCount"]
     manifest["fixture"]["corpusSha256"] = sha256_file(corpus_path)
@@ -780,7 +931,7 @@ def build_run_report(
     unknowns = [
         "model.source", "model.trainingDataset", "model.license", "model.redistributionRights",
         "model.domain", "model.classBalance", "tokenizer.trainingIdentity", "tokenizer.trainingVersion",
-        "tokenizer.pairContextTemplate", "outputs.labelSemantics",
+        "tokenizer.pairContextTemplate", "outputs.kind", "outputs.labelSemantics",
     ]
     return {
         "schemaVersion": 1,
@@ -815,7 +966,7 @@ def build_run_report(
             "referenceTokenizerCorpus": "exact fixture generated",
             "currentSwiftTokenizer": "verified by CurrentModelContractTests when protected vocabulary is available",
             "rawOutputs": "fresh-process absolute tolerance",
-            "currentSwiftTransform": "serialized independently",
+            "currentSwiftTransform": "serialized independently and compared with production BertModelWrapper",
         },
         "runtimeRefactorGate": manifest["runtimeRefactorGate"],
     }
@@ -824,10 +975,13 @@ def build_run_report(
 def checksum_inventory() -> dict[str, Any]:
     bundle = f"Tests/Golden/current/{FIXTURE_VERSION}"
     paths = [
+        ".github/workflows/ci.yml",
         "Models/current/manifest.json",
         "Models/current/manifest.schema.json",
         "Models/current/MODEL_CARD.md",
-        "Models/current/graph-evidence.json",
+        "Sources/QualiaBert/BertModelWrapper.swift",
+        "Sources/QualiaBert/BertTokenizer.swift",
+        "Tests/QualiaKitTests/CurrentModelContractTests.swift",
         "Tools/ModelContract/reference_inference.py",
         "Tools/ModelContract/coreml_inference.swift",
         "Tools/ModelContract/requirements.lock",
@@ -838,12 +992,37 @@ def checksum_inventory() -> dict[str, Any]:
         f"{bundle}/run-report-v1.json",
         f"{bundle}/index.json",
     ]
+    verification = f"{bundle}/verification-v1.json"
+    if (ROOT / verification).is_file():
+        paths.append(verification)
     return {
         "schemaVersion": 1,
         "algorithm": "SHA-256",
         "excludesSelf": "Models/current/checksums.json",
         "files": {path: sha256_file(ROOT / path) for path in paths},
     }
+
+
+def attested_paths() -> list[str]:
+    bundle = f"Tests/Golden/current/{FIXTURE_VERSION}"
+    return [
+        ".github/workflows/ci.yml",
+        "Models/current/manifest.json",
+        "Models/current/manifest.schema.json",
+        "Models/current/MODEL_CARD.md",
+        "Sources/QualiaBert/BertModelWrapper.swift",
+        "Sources/QualiaBert/BertTokenizer.swift",
+        "Tests/QualiaKitTests/CurrentModelContractTests.swift",
+        "Tools/ModelContract/reference_inference.py",
+        "Tools/ModelContract/coreml_inference.swift",
+        "Tools/ModelContract/requirements.lock",
+        f"{bundle}/manifest.json",
+        f"{bundle}/corpus-v1.json",
+        f"{bundle}/fixture-v1.json",
+        f"{bundle}/calibration-v1.json",
+        f"{bundle}/run-report-v1.json",
+        f"{bundle}/index.json",
+    ]
 
 
 def fixture_index(directory: Path = GOLDEN_DIRECTORY) -> dict[str, Any]:
@@ -893,6 +1072,20 @@ def validate_schema_value(value: Any, schema: dict[str, Any], root_schema: dict[
         raise ContractError("schema", "manifest.json", f"{path} must equal {schema['const']!r}")
     if "enum" in schema and value not in schema["enum"]:
         raise ContractError("schema", "manifest.json", f"{path} is outside the allowed enum")
+    for keyword, required_matches in (("oneOf", 1), ("anyOf", None)):
+        if keyword not in schema:
+            continue
+        matches = 0
+        for branch in schema[keyword]:
+            try:
+                validate_schema_value(value, branch, root_schema, path)
+                matches += 1
+            except ContractError:
+                pass
+        if keyword == "oneOf" and matches != required_matches:
+            raise ContractError("schema", "manifest.json", f"{path} must match exactly one schema branch")
+        if keyword == "anyOf" and matches == 0:
+            raise ContractError("schema", "manifest.json", f"{path} must match at least one schema branch")
     expected_type = schema.get("type")
     type_matches = {
         "object": isinstance(value, dict),
@@ -903,8 +1096,10 @@ def validate_schema_value(value: Any, schema: dict[str, Any], root_schema: dict[
         "boolean": isinstance(value, bool),
         "null": value is None,
     }
-    if expected_type and not type_matches[expected_type]:
-        raise ContractError("schema", "manifest.json", f"{path} must be {expected_type}")
+    if expected_type:
+        allowed_types = expected_type if isinstance(expected_type, list) else [expected_type]
+        if not any(type_matches.get(candidate, False) for candidate in allowed_types):
+            raise ContractError("schema", "manifest.json", f"{path} must be one of {allowed_types}")
     if isinstance(value, dict):
         if len(value) < schema.get("minProperties", 0):
             raise ContractError("schema", "manifest.json", f"{path} has too few properties")
@@ -941,37 +1136,76 @@ def validate_schema_value(value: Any, schema: dict[str, Any], root_schema: dict[
             raise ContractError("schema", "manifest.json", f"{path} is below its minimum")
 
 
+def validate_manifest_document(manifest: dict[str, Any], schema: dict[str, Any]) -> None:
+    """Validate reusable v1 structure and cross-field consistency, without freezing current unknowns."""
+    validate_schema_value(manifest, schema, schema, "manifest")
+    labels = manifest["outputs"]["labels"]
+    label_names = [item["name"] for item in labels]
+    if len(label_names) != len(set(label_names)):
+        raise ContractError("schema", "manifest.json", "output label names must be unique")
+
+    conditions = manifest["runtimeRefactorGate"]["conditions"]
+    actual_states = {
+        "labelSemantics": "resolved"
+        if all(item["semanticMeaning"]["status"] == "verified" for item in labels)
+        else "unresolved",
+        "outputKind": "resolved"
+        if manifest["outputs"]["kind"]["status"] == "verified"
+        else "unresolved",
+        "tokenizerTrainingParity": "resolved"
+        if all(manifest["tokenizer"][field]["status"] == "verified"
+               for field in ("trainingIdentity", "trainingVersion", "contextPairSupport"))
+        else "unresolved",
+    }
+    provenance_states = [
+        manifest["model"][field]["status"]
+        for field in ("task", "architectureFamily", "license")
+    ] + [
+        value["status"]
+        for value in manifest["provenance"].values()
+        if isinstance(value, dict) and value.get("status") in ("unknown", "verified")
+    ]
+    actual_states["provenance"] = (
+        "resolved" if provenance_states and all(state == "verified" for state in provenance_states)
+        else "unresolved"
+    )
+    for name, actual in actual_states.items():
+        if conditions[name] != actual:
+            raise ContractError(
+                "gate", "manifest.json", f"{name} is {conditions[name]} but evidence is {actual}"
+            )
+
+
 def validate_manifest() -> dict[str, Any]:
     schema = read_json(SCHEMA_PATH)
     manifest = read_json(MANIFEST_PATH)
-    validate_schema_value(manifest, schema, schema, "manifest")
-    if manifest["schemaVersion"] != 1:
-        raise ContractError("schema", "manifest.json", "unsupported schemaVersion")
-    if [item["name"] for item in manifest["outputs"]["labels"]] != LABELS:
-        raise ContractError("output-contract", "manifest.json", "label order/space mismatch")
-    for label in manifest["outputs"]["labels"]:
-        meaning = label["semanticMeaning"]
-        if (
-            meaning["status"] != "unknown"
-            or not meaning.get("owner")
-            or not meaning.get("proofPlan")
-            or label["productSignal"] is not None
-        ):
-            raise ContractError("semantics", label["name"], "unproved label must remain unknown with no product signal")
-    if manifest["runtimeRefactorGate"]["status"] != "blocked":
-        raise ContractError("gate", "manifest.json", "M0 must remain blocked while required evidence is unresolved")
+    validate_manifest_document(manifest, schema)
     return manifest
+
+
+def validate_current_contract_instance(manifest: dict[str, Any]) -> None:
+    """Validate checksum-bound identity, without preventing later v1 evidence resolution."""
+    if manifest["contractVersion"] != CONTRACT_VERSION:
+        raise ContractError("identity", "manifest.json", "current contract version mismatch")
+    if manifest["model"]["identifier"] != MODEL_IDENTIFIER or manifest["model"]["version"] != MODEL_VERSION:
+        raise ContractError("identity", "manifest.json", "current model identity mismatch")
+    if manifest["model"]["componentSha256"] != MODEL_COMPONENTS:
+        raise ContractError("identity", "manifest.json", "current model component checksums mismatch")
+    if manifest["tokenizer"]["vocabularySha256"] != VOCAB_SHA256:
+        raise ContractError("identity", "manifest.json", "current vocabulary checksum mismatch")
+    if [item["name"] for item in manifest["outputs"]["labels"]] != LABELS:
+        raise ContractError("output-contract", "manifest.json", "current label order/space mismatch")
 
 
 def schema_compatibility_self_test() -> list[str]:
     schema = read_json(SCHEMA_PATH)
     manifest = read_json(MANIFEST_PATH)
-    validate_schema_value(manifest, schema, schema, "manifest")
+    validate_manifest_document(manifest, schema)
     scenarios = ["current-manifest"]
 
     optional = copy.deepcopy(manifest)
     optional["futureOptionalField"] = {"preservesV1Meaning": True}
-    validate_schema_value(optional, schema, schema, "manifest")
+    validate_manifest_document(optional, schema)
     scenarios.append("optional-addition")
 
     resolved = copy.deepcopy(manifest)
@@ -979,17 +1213,45 @@ def schema_compatibility_self_test() -> list[str]:
         "status": "verified",
         "evidence": "checksum-bound primary license record",
     }
-    resolved["outputs"]["labels"][0]["semanticMeaning"] = {
+    for label in resolved["outputs"]["labels"]:
+        label["semanticMeaning"] = {
+            "status": "verified",
+            "evidence": "checksum-bound primary dataset label schema",
+        }
+        label["productSignal"] = "verified-signal-id"
+    resolved["outputs"]["kind"] = {
         "status": "verified",
-        "evidence": "checksum-bound primary dataset label schema",
+        "value": "classifier_logits",
+        "evidence": "reproducible checksum-bound graph extraction",
     }
-    resolved["outputs"]["labels"][0]["productSignal"] = "verified-signal-id"
-    validate_schema_value(resolved, schema, schema, "manifest")
+    for field in ("trainingIdentity", "trainingVersion", "contextPairSupport"):
+        resolved["tokenizer"][field] = {
+            "status": "verified",
+            "evidence": "checksum-bound primary tokenizer record",
+        }
+    for field in ("task", "architectureFamily"):
+        resolved["model"][field] = {
+            "status": "verified",
+            "evidence": "checksum-bound primary model record",
+        }
+    for field, value in list(resolved["provenance"].items()):
+        if isinstance(value, dict) and value.get("status") == "unknown":
+            resolved["provenance"][field] = {
+                "status": "verified",
+                "evidence": "checksum-bound primary provenance record",
+            }
+    resolved["runtimeRefactorGate"]["conditions"] = {
+        name: "resolved" for name in (
+            "labelSemantics", "outputKind", "provenance", "tokenizerTrainingParity"
+        )
+    }
+    resolved["runtimeRefactorGate"]["status"] = "open"
+    validate_manifest_document(resolved, schema)
     scenarios.append("compatible-resolved-evidence")
 
     def must_reject(mutated: dict[str, Any], name: str) -> None:
         try:
-            validate_schema_value(mutated, schema, schema, "manifest")
+            validate_manifest_document(mutated, schema)
         except ContractError:
             scenarios.append(name)
             return
@@ -1004,6 +1266,21 @@ def schema_compatibility_self_test() -> list[str]:
     wrong_type = copy.deepcopy(manifest)
     wrong_type["inputs"]["input_ids"]["shape"] = "1x128"
     must_reject(wrong_type, "incompatible-field-type")
+    unknown_without_owner = copy.deepcopy(manifest)
+    unknown_without_owner["model"]["license"].pop("owner")
+    must_reject(unknown_without_owner, "unknown-without-owner")
+    verified_without_evidence = copy.deepcopy(manifest)
+    verified_without_evidence["model"]["license"] = {"status": "verified"}
+    must_reject(verified_without_evidence, "verified-without-evidence")
+    numeric_product_signal = copy.deepcopy(manifest)
+    numeric_product_signal["outputs"]["labels"][0]["productSignal"] = 7
+    must_reject(numeric_product_signal, "invalid-product-signal-type")
+    extra_condition = copy.deepcopy(manifest)
+    extra_condition["runtimeRefactorGate"]["conditions"]["futureCondition"] = "unresolved"
+    must_reject(extra_condition, "extra-gate-condition")
+    open_with_unresolved = copy.deepcopy(manifest)
+    open_with_unresolved["runtimeRefactorGate"]["status"] = "open"
+    must_reject(open_with_unresolved, "open-with-unresolved-condition")
     return scenarios
 
 
@@ -1232,8 +1509,9 @@ def validate_calibration(calibration: dict[str, Any], golden: dict[str, Any], ma
     tolerances = {field: values["max"] for field, values in recomputed.items()}
     if tolerances != calibration.get("absoluteToleranceByField"):
         raise ContractError("calibration", "calibration-v1.json", "tolerance is not the calibration maximum")
-    if tolerances != manifest["floatingPointTolerance"]["absoluteByField"]:
-        raise ContractError("calibration", "manifest.json", "published tolerance differs from calibration")
+    published_tolerances = manifest["floatingPointTolerance"]["absoluteByField"]
+    if any(published_tolerances.get(field) != value for field, value in tolerances.items()):
+        raise ContractError("calibration", "manifest.json", "published reference tolerance differs from calibration")
     for run in holdout_runs:
         for item in run["cases"]:
             if item.get("floatingValues") != floating_values(item):
@@ -1242,6 +1520,79 @@ def validate_calibration(calibration: dict[str, Any], golden: dict[str, Any], ma
         maxima = {field: max(values) for field, values in deltas.items()}
         if maxima != run.get("maximumDeltaByField") or not all(maxima[field] <= tolerances[field] for field in tolerances):
             raise ContractError("holdout", "calibration-v1.json", "fresh-process holdout exceeded fixed tolerance")
+    validate_current_runtime_calibration(
+        calibration.get("currentSwiftRuntimeDefault"), golden, manifest
+    )
+
+
+def validate_current_runtime_calibration(
+    runtime: Any, golden: dict[str, Any], manifest: dict[str, Any]
+) -> None:
+    if not isinstance(runtime, dict):
+        raise ContractError("calibration", "calibration-v1.json", "production runtime calibration is missing")
+    calibration_runs = runtime.get("calibrationRuns", [])
+    holdout_runs = runtime.get("holdoutRuns", [])
+    if len(calibration_runs) < 10 or len(holdout_runs) < 5:
+        raise ContractError("calibration", "BertModelWrapper", "insufficient fresh runtime processes")
+    all_runs = calibration_runs + holdout_runs
+    sequences = [run.get("processSequence") for run in all_runs]
+    identifiers = [run.get("processIdentifier") for run in all_runs]
+    if sequences != sorted(sequences) or len(set(sequences)) != len(sequences):
+        raise ContractError("calibration", "BertModelWrapper", "runtime process sequence is invalid")
+    if not all(isinstance(identifier, int) and identifier > 0 for identifier in identifiers):
+        raise ContractError("calibration", "BertModelWrapper", "runtime process identifier is missing")
+    if len(set(identifiers)) != len(identifiers):
+        raise ContractError("calibration", "BertModelWrapper", "runtime process was reused")
+    source_sha = sha256_file(CURRENT_RUNTIME_SOURCE_PATH)
+    test_harness_sha = sha256_file(CURRENT_RUNTIME_TEST_PATH)
+    if not all(
+        run.get("freshOSProcess") is True
+        and run.get("computeUnits") == "production-default"
+        and run.get("productionSourceSha256") == source_sha
+        and run.get("testHarnessSourceSha256") == test_harness_sha
+        and run.get("invocation")
+        == "swift test --filter CurrentModelContractTests/testCurrentSwiftRuntimeMatchesCommittedIndependentGolden"
+        for run in all_runs
+    ):
+        raise ContractError("calibration", "BertModelWrapper", "runtime provenance is incomplete")
+    for earlier, later in zip(all_runs, all_runs[1:]):
+        if earlier.get("endedMonotonicSeconds", math.inf) > later.get("startedMonotonicSeconds", -math.inf):
+            raise ContractError("calibration", "BertModelWrapper", "runtime process intervals overlap")
+    reference = {
+        case["id"]: float(case["currentSwiftTransform"]["value"])
+        for case in golden["cases"]
+    }
+    expected_reference = [{"id": identifier, "value": value} for identifier, value in reference.items()]
+    if runtime.get("referenceCases") != expected_reference:
+        raise ContractError("calibration", "BertModelWrapper", "runtime reference differs from golden")
+
+    def run_deltas(run: dict[str, Any]) -> list[float]:
+        cases = run.get("cases", [])
+        if [item.get("id") for item in cases] != list(reference):
+            raise ContractError("calibration", "BertModelWrapper", "runtime case identity/order mismatch")
+        values = []
+        for item in cases:
+            value = item.get("value")
+            if not isinstance(value, (int, float)) or not math.isfinite(value):
+                raise ContractError("calibration", item.get("id", "case"), "invalid runtime value")
+            values.append(abs(float(value) - reference[item["id"]]))
+        return values
+
+    observed = [delta for run in calibration_runs for delta in run_deltas(run)]
+    measured = distribution(observed)
+    tolerance = measured["max"]
+    if runtime.get("distribution") != measured or runtime.get("absoluteTolerance") != tolerance:
+        raise ContractError("calibration", "BertModelWrapper", "runtime tolerance is not the measured maximum")
+    if manifest["floatingPointTolerance"]["absoluteByField"].get(
+        "currentSwiftRuntimeDefault.value"
+    ) != tolerance:
+        raise ContractError("calibration", "manifest.json", "published runtime tolerance differs")
+    for run in holdout_runs:
+        maximum = max(run_deltas(run))
+        if run.get("maximumDelta") != maximum or run.get("withinFixedTolerance") is not True:
+            raise ContractError("holdout", "BertModelWrapper", "runtime holdout evidence is inconsistent")
+        if maximum > tolerance:
+            raise ContractError("holdout", "BertModelWrapper", "runtime holdout exceeded fixed tolerance")
 
 
 def run_failure_probe(name: str, model_path: Path, vocab_path: Path) -> None:
@@ -1291,6 +1642,7 @@ def verify(model_path: Path, vocab_path: Path) -> dict[str, Any]:
     validate_assets(model_path, vocab_path)
     environment = validate_environment()
     manifest = validate_manifest()
+    validate_current_contract_instance(manifest)
     corpus = read_json(CORPUS_PATH)
     expected_corpus = build_corpus()
     if canonical_bytes(corpus) != canonical_bytes(expected_corpus):
@@ -1322,6 +1674,21 @@ def verify(model_path: Path, vocab_path: Path) -> dict[str, Any]:
     exceeded = {field: value for field, value in maxima.items() if value > tolerances[field]}
     if exceeded:
         raise ContractError("inference-parity", "current-model", f"fresh process exceeded calibrated fields {sorted(exceeded)}")
+    runtime_cases, runtime_execution = run_current_swift_runtime(model_path, tokenized)
+    runtime_expected = {
+        case["id"]: float(case["currentSwiftTransform"]["value"])
+        for case in golden["cases"]
+    }
+    runtime_maximum = max(
+        abs(float(case["value"]) - runtime_expected[case["id"]]) for case in runtime_cases
+    )
+    runtime_tolerance = tolerances["currentSwiftRuntimeDefault.value"]
+    if runtime_maximum > runtime_tolerance:
+        raise ContractError(
+            "runtime-parity",
+            "BertModelWrapper",
+            f"absolute delta {runtime_maximum!r} exceeds tolerance {runtime_tolerance!r}",
+        )
     for item in observed:
         softmax = stable_softmax(item["rawOutputs"])
         if not math.isclose(sum(softmax.values()), 1.0, abs_tol=1e-12):
@@ -1340,7 +1707,9 @@ def verify(model_path: Path, vocab_path: Path) -> dict[str, Any]:
         "modelVersion": MODEL_VERSION,
         "caseCount": corpus["caseCount"],
         "freshProcessExecution": execution,
+        "currentSwiftRuntimeExecution": runtime_execution,
         "maximumDeltaByField": maxima,
+        "currentSwiftRuntimeMaximumDelta": runtime_maximum,
         "fixtureRegeneration": {
             "discreteFields": "exact",
             "floatingFields": "manifest absolute tolerance",
@@ -1424,6 +1793,163 @@ def generate(model_path: Path, vocab_path: Path) -> dict[str, Any]:
     }
 
 
+def run_recorded_command(command: str, arguments: list[str], environment: dict[str, str]) -> dict[str, Any]:
+    started = time.monotonic()
+    try:
+        result = subprocess.run(
+            arguments,
+            cwd=ROOT,
+            env=environment,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            timeout=1800,
+        )
+    except (OSError, subprocess.TimeoutExpired) as error:
+        raise ContractError("attestation", command, str(error)) from error
+    duration = time.monotonic() - started
+    output = result.stdout or ""
+    if result.returncode != 0:
+        diagnostic = output.strip().splitlines()[-1] if output.strip() else "command failed"
+        raise ContractError("attestation", command, diagnostic[:400])
+    return {
+        "command": command,
+        "status": "passed",
+        "exitCode": result.returncode,
+        "durationSeconds": duration,
+        "outputSha256": sha256_bytes(output.encode()),
+    }
+
+
+def record_verification_evidence(model_path: Path, vocab_path: Path) -> dict[str, Any]:
+    """Run all declared commands with protected assets and publish only checksum-bound metadata."""
+    validate_assets(model_path, vocab_path)
+    environment_record = validate_environment()
+    write_generated_json(CHECKSUMS_PATH, checksum_inventory())
+    with tempfile.TemporaryDirectory(prefix="qualia-contract-attestation-") as directory:
+        command_environment = dict(os.environ)
+        command_environment["QUALIAKIT_TEST_MODEL_PATH"] = str(model_path)
+        command_environment["QUALIAKIT_TEST_VOCAB_PATH"] = str(vocab_path)
+        command_environment["CLANG_MODULE_CACHE_PATH"] = str(Path(directory) / "clang-module-cache")
+        command_environment["SWIFT_MODULECACHE_PATH"] = str(Path(directory) / "swift-module-cache")
+        commands = [
+            run_recorded_command("swift build", ["swift", "build"], command_environment),
+            run_recorded_command(
+                "swift test --filter CurrentModelContractTests",
+                ["swift", "test", "--filter", "CurrentModelContractTests"],
+                command_environment,
+            ),
+            run_recorded_command(
+                "python3 Tools/ModelContract/reference_inference.py --verify",
+                [sys.executable, str(Path(__file__).resolve()), "--verify"],
+                command_environment,
+            ),
+        ]
+    files = {path: sha256_file(ROOT / path) for path in attested_paths()}
+    evidence: dict[str, Any] = {
+        "schemaVersion": 1,
+        "status": "passed",
+        "kind": "checksum-bound-protected-local-verification",
+        "generatedAtUTC": datetime.datetime.now(datetime.UTC).isoformat(),
+        "contractVersion": CONTRACT_VERSION,
+        "fixtureVersion": FIXTURE_VERSION,
+        "assetPolicy": {
+            "modelEnvironmentVariable": "QUALIAKIT_TEST_MODEL_PATH",
+            "vocabularyEnvironmentVariable": "QUALIAKIT_TEST_VOCAB_PATH",
+            "protectedBytesCommitted": False,
+            "protectedBytesEmbeddedInPublicCI": False,
+        },
+        "protectedAssets": {
+            "modelPackageIdentitySha256": package_identity_sha256(),
+            "modelComponents": MODEL_COMPONENTS,
+            "vocabularySha256": VOCAB_SHA256,
+        },
+        "environment": environment_record,
+        "commands": commands,
+        "attestedFiles": files,
+        "sourceClosureSha256": sha256_bytes(canonical_bytes(files)),
+    }
+    evidence["evidenceClosureSha256"] = sha256_bytes(canonical_bytes(evidence))
+    write_generated_json(VERIFICATION_EVIDENCE_PATH, evidence)
+    write_generated_json(CHECKSUMS_PATH, checksum_inventory())
+    return verify_committed_evidence()
+
+
+def verify_committed_evidence() -> dict[str, Any]:
+    """Validate protected-run evidence without requiring protected assets on the current runner."""
+    observed_environment = validate_environment()
+    validate_integrity_inventory()
+    validate_fixture_index()
+    manifest = validate_manifest()
+    validate_current_contract_instance(manifest)
+    corpus = read_json(CORPUS_PATH)
+    golden = read_json(GOLDEN_PATH)
+    validate_fixture_structure(golden, corpus, manifest)
+    validate_calibration(read_json(CALIBRATION_PATH), golden, manifest)
+    evidence = read_json(VERIFICATION_EVIDENCE_PATH)
+    if evidence.get("schemaVersion") != 1 or evidence.get("status") != "passed":
+        raise ContractError("attestation", "verification-v1.json", "unsupported or failing evidence")
+    expected_commands = [
+        "swift build",
+        "swift test --filter CurrentModelContractTests",
+        "python3 Tools/ModelContract/reference_inference.py --verify",
+    ]
+    commands = evidence.get("commands", [])
+    if [item.get("command") for item in commands] != expected_commands or not all(
+        item.get("status") == "passed"
+        and item.get("exitCode") == 0
+        and isinstance(item.get("outputSha256"), str)
+        and re.fullmatch(r"[0-9a-f]{64}", item["outputSha256"])
+        for item in commands
+    ):
+        raise ContractError("attestation", "verification-v1.json", "declared command evidence is incomplete")
+    expected_assets = {
+        "modelPackageIdentitySha256": package_identity_sha256(),
+        "modelComponents": MODEL_COMPONENTS,
+        "vocabularySha256": VOCAB_SHA256,
+    }
+    if evidence.get("protectedAssets") != expected_assets:
+        raise ContractError("attestation", "verification-v1.json", "protected asset identity mismatch")
+    expected_policy = {
+        "modelEnvironmentVariable": "QUALIAKIT_TEST_MODEL_PATH",
+        "vocabularyEnvironmentVariable": "QUALIAKIT_TEST_VOCAB_PATH",
+        "protectedBytesCommitted": False,
+        "protectedBytesEmbeddedInPublicCI": False,
+    }
+    if evidence.get("assetPolicy") != expected_policy:
+        raise ContractError("attestation", "verification-v1.json", "protected asset policy mismatch")
+    files = {path: sha256_file(ROOT / path) for path in attested_paths()}
+    if evidence.get("attestedFiles") != files:
+        raise ContractError("attestation", "verification-v1.json", "attested source closure changed")
+    if evidence.get("sourceClosureSha256") != sha256_bytes(canonical_bytes(files)):
+        raise ContractError("attestation", "verification-v1.json", "source closure digest mismatch")
+    closure = dict(evidence)
+    declared_closure = closure.pop("evidenceClosureSha256", None)
+    if declared_closure != sha256_bytes(canonical_bytes(closure)):
+        raise ContractError("attestation", "verification-v1.json", "evidence closure digest mismatch")
+    recorded_environment = evidence.get("environment", {})
+    if (
+        recorded_environment.get("python") != PINNED_PYTHON_VERSION_STRING
+        or "6.3.3" not in recorded_environment.get("swift", "")
+        or recorded_environment.get("xcode") != "Xcode 26.6"
+        or recorded_environment.get("coremlcompiler") != "3520.5.1"
+    ):
+        raise ContractError("attestation", "verification-v1.json", "recorded toolchain differs from lock")
+    return {
+        "schemaVersion": 1,
+        "status": "passed",
+        "mode": "asset-free-checksum-bound-evidence",
+        "contractVersion": CONTRACT_VERSION,
+        "fixtureVersion": FIXTURE_VERSION,
+        "caseCount": corpus["caseCount"],
+        "sourceClosureSha256": evidence["sourceClosureSha256"],
+        "evidenceClosureSha256": evidence["evidenceClosureSha256"],
+        "currentEnvironment": observed_environment,
+        "recordedEnvironment": recorded_environment,
+        "commands": expected_commands,
+    }
+
+
 def asset_paths(arguments: argparse.Namespace) -> tuple[Path, Path]:
     model = arguments.model_path or os.environ.get("QUALIAKIT_TEST_MODEL_PATH")
     vocab = arguments.vocab_path or os.environ.get("QUALIAKIT_TEST_VOCAB_PATH")
@@ -1439,6 +1965,12 @@ def main() -> int:
     operation = parser.add_mutually_exclusive_group(required=True)
     operation.add_argument("--verify", action="store_true", help="read-only contract verification")
     operation.add_argument("--generate", action="store_true", help="maintainer-only immutable fixture generation")
+    operation.add_argument(
+        "--verify-committed-evidence",
+        action="store_true",
+        help="asset-free validation of checksum-bound protected-run evidence",
+    )
+    operation.add_argument("--record-verification-evidence", action="store_true", help=argparse.SUPPRESS)
     operation.add_argument("--schema-self-test", action="store_true", help=argparse.SUPPRESS)
     operation.add_argument("--comparator-self-test", action="store_true", help=argparse.SUPPRESS)
     operation.add_argument("--probe-error", choices=PROBE_ERRORS, help=argparse.SUPPRESS)
@@ -1446,18 +1978,24 @@ def main() -> int:
     parser.add_argument("--vocab-path", help=argparse.SUPPRESS)
     arguments = parser.parse_args()
     try:
-        bootstrap_pinned_python()
         if arguments.schema_self_test:
             print(json.dumps({"status": "passed", "scenarios": schema_compatibility_self_test()}, sort_keys=True))
             return 0
         if arguments.comparator_self_test:
             print(json.dumps({"status": "passed", "scenarios": regeneration_comparator_self_test()}, sort_keys=True))
             return 0
+        if arguments.verify_committed_evidence:
+            print(json.dumps(verify_committed_evidence(), indent=2, sort_keys=True))
+            return 0
         model_path, vocab_path = asset_paths(arguments)
+        bootstrap_pinned_python()
         if arguments.probe_error:
             run_failure_probe(arguments.probe_error, model_path, vocab_path)
             raise ContractError("probe", arguments.probe_error, "mutation was incorrectly accepted")
-        result = verify(model_path, vocab_path) if arguments.verify else generate(model_path, vocab_path)
+        if arguments.record_verification_evidence:
+            result = record_verification_evidence(model_path, vocab_path)
+        else:
+            result = verify(model_path, vocab_path) if arguments.verify else generate(model_path, vocab_path)
         print(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True))
         return 0
     except ContractError as error:

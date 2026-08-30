@@ -91,15 +91,10 @@ func run() throws {
             }
             raw[expectedLabel] = value
         }
-        let maximum = raw.values.max() ?? 0
-        let exponentials = labels.map { Foundation.exp(raw[$0, default: 0] - maximum) }
-        let denominator = exponentials.reduce(0, +)
-        let currentSwiftTransformValue = exponentials[2] / denominator - exponentials[0] / denominator
         results.append([
             "id": identifier,
             "predictedLabel": label,
             "rawOutputs": raw,
-            "currentSwiftTransformValue": currentSwiftTransformValue,
         ])
     }
 

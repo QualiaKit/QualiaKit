@@ -1,11 +1,11 @@
 {
   "contractVersion": "current-russian-v1",
   "files": {
-    "calibration-v1.json": "b133d387720b34dc0508e63392d2514ada55e621f1683de15ac8700ff5fe0370",
+    "calibration-v1.json": "0f1df446334ee1d9bb6f39fa15a962d61c7bcae4414e30e12971ccee86f244d5",
     "corpus-v1.json": "41f3626cc3b8963712ec2b9a797908974c9bc8eb8f53245a9976cb7effcc840e",
-    "fixture-v1.json": "b01ba282033904d85a5b5a38f32b0c8123b8f74a0d1d48fb1237754f3da39476",
-    "manifest.json": "68efe475da27c13d37e65927df416b1bfa6f12353df86a65a3467cc5d327940e",
-    "run-report-v1.json": "f5f291676b2a79bda8ee716dfde1fe711b697de7e9624b528410e8002f1a7952"
+    "fixture-v1.json": "4a62cf8f46dba89e3e3217cfdaf625213280c222b667a4afca39fbd107af88da",
+    "manifest.json": "d17a319f0eb2b4f41b2de9e745170ca2b38835fe9aa5d0b3700a5501d22785f3",
+    "run-report-v1.json": "573c13360902b8c21ff81bef1f6020e482c1a4283af87bfff11e2bf87371332d"
   },
   "fixtureVersion": "current-russian-fixture-v1",
   "schemaVersion": 1

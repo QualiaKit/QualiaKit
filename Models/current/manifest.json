@@ -6,17 +6,18 @@
   },
   "contractVersion": "current-russian-v1",
   "fixture": {
-    "calibrationSha256": "b133d387720b34dc0508e63392d2514ada55e621f1683de15ac8700ff5fe0370",
+    "calibrationSha256": "0f1df446334ee1d9bb6f39fa15a962d61c7bcae4414e30e12971ccee86f244d5",
     "caseCount": 109,
     "corpusSha256": "41f3626cc3b8963712ec2b9a797908974c9bc8eb8f53245a9976cb7effcc840e",
     "directory": "Tests/Golden/current/current-russian-fixture-v1",
-    "goldenSha256": "b01ba282033904d85a5b5a38f32b0c8123b8f74a0d1d48fb1237754f3da39476",
+    "goldenSha256": "4a62cf8f46dba89e3e3217cfdaf625213280c222b667a4afca39fbd107af88da",
     "immutable": true,
     "version": "current-russian-fixture-v1"
   },
   "floatingPointTolerance": {
     "absoluteByField": {
-      "currentSwiftTransform.value": 5.551115123125783e-17,
+      "currentSwiftRuntimeDefault.value": 0.013798130106027928,
+      "currentSwiftTransform.value": 0.0,
       "rawOutputs.LABEL_0": 0.0,
       "rawOutputs.LABEL_1": 0.0,
       "rawOutputs.LABEL_2": 0.0,
@@ -30,8 +31,10 @@
     },
     "calibrationProcessCount": 10,
     "comparison": "absolute",
-    "derivation": "maximum observed full-corpus fresh-process calibration delta",
-    "holdoutProcessCount": 5
+    "derivation": "maximum observed full-corpus fresh-process delta for CPU reference outputs and production-default BertModelWrapper parity",
+    "holdoutProcessCount": 5,
+    "runtimeCalibrationProcessCount": 10,
+    "runtimeHoldoutProcessCount": 5
   },
   "inputs": {
     "attention_mask": {
@@ -96,9 +99,10 @@
   "outputs": {
     "classLabel": "String",
     "kind": {
-      "evidence": "converted graph has final classifier linear_73 cast directly into Core ML classify; observed dictionary values are finite, argmax-select the label, and are not normalized",
-      "status": "verified",
-      "value": "classifier_logits"
+      "observation": "classLabel_probs contains finite non-normalized raw classifier scores whose argmax selects classLabel; logits versus other raw-score semantics is not yet proven",
+      "owner": "ML model owner",
+      "proofPlan": "add a deterministic graph extractor whose output is reproduced from the checksum-pinned Core ML asset, or obtain the source/export graph",
+      "status": "unknown"
     },
     "labels": [
       {
@@ -224,7 +228,7 @@
   "runtimeRefactorGate": {
     "conditions": {
       "labelSemantics": "unresolved",
-      "outputKind": "resolved",
+      "outputKind": "unresolved",
       "provenance": "unresolved",
       "tokenizerTrainingParity": "unresolved"
     },

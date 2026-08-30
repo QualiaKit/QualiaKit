@@ -6,4 +6,5 @@ swift==6.3.3
 xcode==26.6
 coremlcompiler==3520.5.1
 coreml-compute-units==cpuOnly
+coreml-production-parity-compute-units==default
 network-access==disabled
