@@ -1,6 +1,12 @@
-#if canImport(CoreHaptics)
-import CoreHaptics
-import Foundation
+/// Observable lifecycle for the Core Haptics renderer.
+public enum HapticRendererLifecycleState: Hashable, Sendable {
+    case idle
+    case preparing
+    case ready
+    case suspending
+    case suspended
+    case recovering
+}
 
 /// Core Haptics-backed renderer with independent long-lived and one-shot
 /// player ownership. It is injected like any other renderer and has no global
@@ -9,63 +15,67 @@ import Foundation
 public final class CoreHapticRenderer: HapticRendering {
     public let capabilities: HapticCapabilities
     public private(set) var activeEffects: [HapticEffectID: HapticActiveEffect] = [:]
-    public private(set) var isPrepared = false
-    public private(set) var isSuspended = false
+    public private(set) var lifecycleState: HapticRendererLifecycleState = .idle
     public private(set) var lastLifecycleError: HapticError?
 
-    /// Core Haptics player references never leave MainActor isolation. The
-    /// unchecked conformance only allows the actor-isolated renderer reference
-    /// to be weakly captured by Core Haptics' sendable completion callback.
-    private struct OneShotPlayer: @unchecked Sendable {
-        let channel: HapticChannel
-        let player: CHHapticAdvancedPatternPlayer
+    public var isPrepared: Bool { lifecycleState == .ready }
+    public var isSuspended: Bool {
+        lifecycleState == .suspending || lifecycleState == .suspended
     }
 
-    private var engine: CHHapticEngine?
-    private var activePlayers: [HapticEffectID: CHHapticAdvancedPatternPlayer] = [:]
+    package var activeLongLivedPlayerCount: Int { activePlayers.count }
+    package var activeOneShotPlayerCount: Int { oneShotPlayers.count }
+
+    private struct OneShotPlayer: Sendable {
+        let channel: HapticChannel
+        let player: any HapticRuntimePlayer
+    }
+
+    private let backend: any HapticRuntimeEngine
+    private var activePlayers: [HapticEffectID: any HapticRuntimePlayer] = [:]
     private var oneShotPlayers: [UInt64: OneShotPlayer] = [:]
     private var nextOneShotID: UInt64 = 0
+    private var suspensionWaiters: [CheckedContinuation<Void, Never>] = []
 
-    public init() {
-        let hardware = CHHapticEngine.capabilitiesForHardware()
-        let supported = hardware.supportsHaptics
-        self.capabilities = HapticCapabilities(
-            supportsHaptics: supported,
-            supportsContinuousHaptics: supported,
-            supportsParameterCurves: supported
-        )
+    public convenience init() {
+        self.init(backend: CoreHapticsRuntimeEngine())
+    }
+
+    package init(backend: any HapticRuntimeEngine) {
+        self.backend = backend
+        capabilities = backend.capabilities
+        installLifecycleHandlers()
     }
 
     public func prepare() throws {
         guard capabilities.supportsHaptics else {
             throw HapticError.hapticsUnavailable
         }
-        guard !isSuspended else {
+
+        switch lifecycleState {
+        case .ready:
+            return
+        case .idle:
+            break
+        case .preparing, .suspending, .suspended, .recovering:
             throw HapticError.invalidLifecycleState
         }
-        if isPrepared {
-            return
-        }
 
+        lifecycleState = .preparing
         do {
-            if engine == nil {
-                let engine = try CHHapticEngine()
-                engine.playsHapticsOnly = true
-                installLifecycleHandlers(on: engine)
-                self.engine = engine
-            }
-            try engine?.start()
-            isPrepared = true
+            try backend.start()
+            lifecycleState = .ready
             lastLifecycleError = nil
         } catch {
-            isPrepared = false
-            lastLifecycleError = .enginePreparationFailed
-            throw HapticError.enginePreparationFailed
+            lifecycleState = .idle
+            let error = typed(error, fallback: .enginePreparationFailed)
+            lastLifecycleError = error
+            throw error
         }
     }
 
     public func execute(_ command: HapticCommand) throws {
-        guard isPrepared, !isSuspended, engine != nil else {
+        guard lifecycleState == .ready else {
             throw HapticError.invalidLifecycleState
         }
 
@@ -81,12 +91,11 @@ public final class CoreHapticRenderer: HapticRendering {
 
         case let .start(id, pattern, _):
             guard activePlayers[id] == nil else {
-                // Repeated start is explicitly idempotent. A changed pattern
-                // must use replace so no duplicate player is created.
                 activeEffects = nextEffects
                 return
             }
             activePlayers[id] = try makeAndStartPlayer(pattern: pattern)
+            activeEffects = nextEffects
 
         case let .replace(id, pattern, _):
             guard let previous = activePlayers[id] else {
@@ -94,11 +103,12 @@ public final class CoreHapticRenderer: HapticRendering {
             }
             let replacement = try makeAndStartPlayer(pattern: pattern)
             do {
-                try previous.stop(atTime: CHHapticTimeImmediate)
+                try previous.stop()
                 activePlayers[id] = replacement
+                activeEffects = nextEffects
             } catch {
-                try? replacement.stop(atTime: CHHapticTimeImmediate)
-                throw HapticError.playerStopFailed
+                try? replacement.stop()
+                throw typed(error, fallback: .playerStopFailed)
             }
 
         case let .stop(id):
@@ -110,42 +120,77 @@ public final class CoreHapticRenderer: HapticRendering {
         case .stopAll:
             try stopAllPlayers()
         }
-
-        activeEffects = nextEffects
     }
 
-    public func suspend() {
-        isSuspended = true
+    public func suspend() async {
+        switch lifecycleState {
+        case .suspended:
+            return
+        case .suspending:
+            await waitForSuspension()
+            return
+        case .idle, .ready, .preparing, .recovering:
+            break
+        }
+
+        lifecycleState = .suspending
         lastLifecycleError = nil
+
+        var stopFailure: HapticError?
         do {
-            try stopChannel(.ambient)
-        } catch let error as HapticError {
-            lastLifecycleError = error
+            try stopAllPlayers()
         } catch {
-            lastLifecycleError = .playerStopFailed
+            stopFailure = typed(error, fallback: .playerStopFailed)
         }
-        activeEffects = activeEffects.filter { $0.value.channel != .ambient }
-        engine?.stop(completionHandler: nil)
-        isPrepared = false
+
+        do {
+            try await backend.stop()
+        } catch {
+            if stopFailure == nil {
+                stopFailure = typed(error, fallback: .engineStopFailed)
+            }
+        }
+
+        // Completion means the explicit engine stop has finished. Every old
+        // player is invalid at this boundary, including any player whose
+        // individual stop reported an error.
+        clearPlayerState()
+        if let stopFailure {
+            lastLifecycleError = stopFailure
+        }
+        finishSuspension()
     }
 
-    public func resume() throws {
-        isSuspended = false
-        do {
+    public func resume() async throws {
+        if lifecycleState == .suspending {
+            await waitForSuspension()
+        }
+
+        switch lifecycleState {
+        case .ready:
+            return
+        case .idle:
             try prepare()
-        } catch {
-            isSuspended = true
-            throw error
+        case .suspended:
+            lifecycleState = .idle
+            do {
+                try prepare()
+            } catch {
+                lifecycleState = .suspended
+                throw error
+            }
+        case .preparing, .suspending, .recovering:
+            throw HapticError.invalidLifecycleState
         }
     }
 
-    private func installLifecycleHandlers(on engine: CHHapticEngine) {
-        engine.stoppedHandler = { [weak self] _ in
+    private func installLifecycleHandlers() {
+        backend.stoppedHandler = { [weak self] in
             Task { @MainActor [weak self] in
                 self?.handleInterruption()
             }
         }
-        engine.resetHandler = { [weak self] in
+        backend.resetHandler = { [weak self] in
             Task { @MainActor [weak self] in
                 self?.handleReset()
             }
@@ -153,38 +198,56 @@ public final class CoreHapticRenderer: HapticRendering {
     }
 
     private func handleInterruption() {
-        activePlayers.removeAll(keepingCapacity: true)
-        oneShotPlayers.removeAll(keepingCapacity: true)
-        activeEffects.removeAll(keepingCapacity: true)
-        isPrepared = false
-        guard !isSuspended else { return }
+        clearPlayerState()
         lastLifecycleError = .engineInterrupted
+
+        switch lifecycleState {
+        case .suspending, .suspended:
+            break
+        case .idle, .preparing, .ready, .recovering:
+            lifecycleState = .idle
+        }
     }
 
     private func handleReset() {
+        guard lifecycleState != .suspending,
+              lifecycleState != .suspended else {
+            clearPlayerState()
+            lastLifecycleError = .engineReset
+            return
+        }
+
+        guard lifecycleState == .ready else {
+            clearPlayerState()
+            lifecycleState = .idle
+            lastLifecycleError = .engineReset
+            return
+        }
+
         let retainedEffects = HapticCommandSemantics.effectsRetainedAfterReset(activeEffects)
-        let effectsToRestore = Array(retainedEffects.values)
+        let effectsToRestore = retainedEffects.values.sorted {
+            $0.id.orderingKey < $1.id.orderingKey
+        }
         activePlayers.removeAll(keepingCapacity: true)
         oneShotPlayers.removeAll(keepingCapacity: true)
         activeEffects = retainedEffects
-        isPrepared = false
+        lifecycleState = .recovering
         lastLifecycleError = .engineReset
 
         do {
-            try engine?.start()
-            isPrepared = true
+            try backend.start()
             for effect in effectsToRestore {
                 activePlayers[effect.id] = try makeAndStartPlayer(pattern: effect.pattern)
             }
+            lifecycleState = .ready
             lastLifecycleError = nil
         } catch {
             for player in activePlayers.values {
-                try? player.stop(atTime: CHHapticTimeImmediate)
+                try? player.stop()
             }
-            activePlayers.removeAll(keepingCapacity: true)
-            activeEffects.removeAll(keepingCapacity: true)
-            isPrepared = false
-            lastLifecycleError = .enginePreparationFailed
+            clearPlayerState()
+            lifecycleState = .idle
+            lastLifecycleError = typed(error, fallback: .enginePreparationFailed)
         }
     }
 
@@ -193,63 +256,51 @@ public final class CoreHapticRenderer: HapticRendering {
         precondition(nextOneShotID < .max, "CoreHapticRenderer one-shot ID overflow")
         nextOneShotID += 1
         let identifier = nextOneShotID
-        player.completionHandler = { [weak self] _ in
+        player.completionHandler = { [weak self] in
             Task { @MainActor [weak self] in
                 self?.oneShotPlayers.removeValue(forKey: identifier)
             }
         }
         oneShotPlayers[identifier] = OneShotPlayer(channel: channel, player: player)
         do {
-            try player.start(atTime: CHHapticTimeImmediate)
+            try player.start()
         } catch {
             oneShotPlayers.removeValue(forKey: identifier)
-            throw HapticError.playerStartFailed
+            throw typed(error, fallback: .playerStartFailed)
         }
     }
 
     private func makeAndStartPlayer(
-        pattern descriptor: HapticPattern
-    ) throws -> CHHapticAdvancedPatternPlayer {
-        let player = try makePlayer(pattern: descriptor)
+        pattern: HapticPattern
+    ) throws -> any HapticRuntimePlayer {
+        let player = try makePlayer(pattern: pattern)
         do {
-            try player.start(atTime: CHHapticTimeImmediate)
+            try player.start()
             return player
         } catch {
-            throw HapticError.playerStartFailed
+            throw typed(error, fallback: .playerStartFailed)
         }
     }
 
-    private func makePlayer(
-        pattern descriptor: HapticPattern
-    ) throws -> CHHapticAdvancedPatternPlayer {
-        guard let engine else {
-            throw HapticError.invalidLifecycleState
-        }
-
-        let pattern = try makeCorePattern(descriptor)
-        let player: CHHapticAdvancedPatternPlayer
+    private func makePlayer(pattern: HapticPattern) throws -> any HapticRuntimePlayer {
         do {
-            player = try engine.makeAdvancedPlayer(with: pattern)
+            return try backend.makePlayer(pattern: pattern)
         } catch {
-            throw HapticError.playerCreationFailed
+            throw typed(error, fallback: .playerCreationFailed)
         }
-
-        if case let .loop(period) = descriptor.looping {
-            player.loopEnabled = true
-            player.loopEnd = period.timeInterval
-        }
-        return player
     }
 
     private func stopEffect(_ id: HapticEffectID) throws {
         guard let player = activePlayers[id] else {
+            activeEffects.removeValue(forKey: id)
             return
         }
         do {
-            try player.stop(atTime: CHHapticTimeImmediate)
+            try player.stop()
             activePlayers.removeValue(forKey: id)
+            activeEffects.removeValue(forKey: id)
         } catch {
-            throw HapticError.playerStopFailed
+            throw typed(error, fallback: .playerStopFailed)
         }
     }
 
@@ -257,6 +308,7 @@ public final class CoreHapticRenderer: HapticRendering {
         let effectIDs = activeEffects.values
             .filter { $0.channel == channel }
             .map(\.id)
+            .sorted { $0.orderingKey < $1.orderingKey }
         for id in effectIDs {
             try stopEffect(id)
         }
@@ -264,123 +316,55 @@ public final class CoreHapticRenderer: HapticRendering {
         let oneShotIDs = oneShotPlayers
             .filter { $0.value.channel == channel }
             .map(\.key)
+            .sorted()
         for id in oneShotIDs {
-            guard let record = oneShotPlayers[id] else { continue }
-            do {
-                try record.player.stop(atTime: CHHapticTimeImmediate)
-                oneShotPlayers.removeValue(forKey: id)
-            } catch {
-                throw HapticError.playerStopFailed
-            }
+            try stopOneShot(id)
         }
     }
 
     private func stopAllPlayers() throws {
-        for id in Array(activePlayers.keys) {
+        let effectIDs = Set(activePlayers.keys)
+            .union(activeEffects.keys)
+            .sorted { $0.orderingKey < $1.orderingKey }
+        for id in effectIDs {
             try stopEffect(id)
         }
-        for id in Array(oneShotPlayers.keys) {
-            guard let record = oneShotPlayers[id] else { continue }
-            do {
-                try record.player.stop(atTime: CHHapticTimeImmediate)
-                oneShotPlayers.removeValue(forKey: id)
-            } catch {
-                throw HapticError.playerStopFailed
-            }
+        for id in oneShotPlayers.keys.sorted() {
+            try stopOneShot(id)
         }
     }
 
-    private func makeCorePattern(_ descriptor: HapticPattern) throws -> CHHapticPattern {
-        let events = descriptor.events.map { event -> CHHapticEvent in
-            let parameters: [CHHapticEventParameter]
-            let eventType: CHHapticEvent.EventType
-            let relativeTime: TimeInterval
-            let duration: TimeInterval
-
-            switch event {
-            case let .transient(at, intensity, sharpness):
-                eventType = .hapticTransient
-                relativeTime = at.timeInterval
-                duration = 0
-                parameters = Self.parameters(intensity: intensity, sharpness: sharpness)
-
-            case let .continuous(at, eventDuration, intensity, sharpness):
-                eventType = .hapticContinuous
-                relativeTime = at.timeInterval
-                duration = eventDuration.timeInterval
-                parameters = Self.parameters(intensity: intensity, sharpness: sharpness)
-            }
-
-            return CHHapticEvent(
-                eventType: eventType,
-                parameters: parameters,
-                relativeTime: relativeTime,
-                duration: duration
-            )
-        }
-
-        let curves = descriptor.curves.map { curve -> CHHapticParameterCurve in
-            let parameterID: CHHapticDynamicParameter.ID
-            switch curve.parameter {
-            case .intensity:
-                parameterID = .hapticIntensityControl
-            case .sharpness:
-                parameterID = .hapticSharpnessControl
-            }
-            let points = curve.controlPoints.map {
-                CHHapticParameterCurve.ControlPoint(
-                    relativeTime: $0.at.timeInterval,
-                    value: $0.value.rawValue
-                )
-            }
-            return CHHapticParameterCurve(
-                parameterID: parameterID,
-                controlPoints: points,
-                relativeTime: 0
-            )
-        }
-
+    private func stopOneShot(_ id: UInt64) throws {
+        guard let record = oneShotPlayers[id] else { return }
         do {
-            return try CHHapticPattern(events: events, parameterCurves: curves)
+            try record.player.stop()
+            oneShotPlayers.removeValue(forKey: id)
         } catch {
-            throw HapticError.playerCreationFailed
+            throw typed(error, fallback: .playerStopFailed)
         }
     }
 
-    private static func parameters(
-        intensity: HapticValue,
-        sharpness: HapticValue
-    ) -> [CHHapticEventParameter] {
-        [
-            CHHapticEventParameter(
-                parameterID: .hapticIntensity,
-                value: intensity.rawValue
-            ),
-            CHHapticEventParameter(
-                parameterID: .hapticSharpness,
-                value: sharpness.rawValue
-            ),
-        ]
+    private func clearPlayerState() {
+        activePlayers.removeAll(keepingCapacity: true)
+        oneShotPlayers.removeAll(keepingCapacity: true)
+        activeEffects.removeAll(keepingCapacity: true)
     }
-}
 
-private extension Duration {
-    var timeInterval: TimeInterval {
-        let parts = components
-        return Double(parts.seconds) + Double(parts.attoseconds) / 1_000_000_000_000_000_000
+    private func waitForSuspension() async {
+        guard lifecycleState == .suspending else { return }
+        await withCheckedContinuation { continuation in
+            suspensionWaiters.append(continuation)
+        }
     }
-}
-#else
-@MainActor
-public final class CoreHapticRenderer: HapticRendering {
-    public let capabilities: HapticCapabilities = .unavailable
 
-    public init() {}
-    public func prepare() throws { throw HapticError.hapticsUnavailable }
-    public func execute(_ command: HapticCommand) throws {
-        throw HapticError.hapticsUnavailable
+    private func finishSuspension() {
+        lifecycleState = .suspended
+        let waiters = suspensionWaiters
+        suspensionWaiters.removeAll(keepingCapacity: true)
+        waiters.forEach { $0.resume() }
     }
-    public func suspend() {}
-    public func resume() throws { throw HapticError.hapticsUnavailable }
+
+    private func typed(_ error: Error, fallback: HapticError) -> HapticError {
+        error as? HapticError ?? fallback
+    }
 }
-#endif

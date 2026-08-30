@@ -19,33 +19,46 @@ public struct HapticOwnerID: Hashable, Codable, Sendable {
     }
 }
 
-/// Stable identity for a long-lived effect.
-///
-/// A non-nil owner scopes the effect to a session/coordinator. A nil owner is
-/// an explicit global scope rather than missing ownership metadata.
+/// Mandatory ownership scope for a long-lived effect.
+public enum HapticEffectScope: Hashable, Codable, Sendable {
+    case owned(HapticOwnerID)
+    case global
+}
+
+/// Stable identity for a long-lived effect. Callers must deliberately choose
+/// either a session/coordinator owner or the explicit global scope.
 public struct HapticEffectID: Hashable, Codable, Sendable {
     public let rawValue: String
-    public let owner: HapticOwnerID?
+    public let scope: HapticEffectScope
 
-    public init(rawValue: String, owner: HapticOwnerID? = nil) throws {
+    public init(rawValue: String, scope: HapticEffectScope) throws {
         guard !rawValue.isBlank else {
             throw HapticError.invalidHapticIdentifier
         }
         self.rawValue = rawValue
-        self.owner = owner
+        self.scope = scope
     }
 
     private enum CodingKeys: String, CodingKey {
         case rawValue
-        case owner
+        case scope
     }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         try self.init(
             rawValue: container.decode(String.self, forKey: .rawValue),
-            owner: container.decodeIfPresent(HapticOwnerID.self, forKey: .owner)
+            scope: container.decode(HapticEffectScope.self, forKey: .scope)
         )
+    }
+
+    package var orderingKey: (scope: Int, owner: String, rawValue: String) {
+        switch scope {
+        case let .owned(owner):
+            return (1, owner.rawValue, rawValue)
+        case .global:
+            return (0, "", rawValue)
+        }
     }
 }
 

@@ -30,6 +30,7 @@ public struct HapticRecordingEntry: Hashable, Sendable {
 public enum HapticResetRecoveryResult: Hashable, Sendable {
     case success
     case failure(HapticError)
+    case suppressedWhileSuspended
 }
 
 public enum HapticRecordingLifecycleEvent: Hashable, Sendable {
@@ -113,14 +114,14 @@ public final class RecordingHapticRenderer: HapticRendering {
         }
     }
 
-    public func suspend() {
+    public func suspend() async {
         lifecycleHistory.append(.suspend)
         activeEffects = activeEffects.filter { $0.value.channel != .ambient }
         isPrepared = false
         isSuspended = true
     }
 
-    public func resume() throws {
+    public func resume() async throws {
         lifecycleHistory.append(.resume)
         if let failure = consumeFailure() {
             lastLifecycleError = failure
@@ -143,6 +144,14 @@ public final class RecordingHapticRenderer: HapticRendering {
     }
 
     public func simulateEngineReset() {
+        guard !isSuspended else {
+            activeEffects.removeAll(keepingCapacity: true)
+            isPrepared = false
+            lastLifecycleError = .engineReset
+            lifecycleHistory.append(.engineReset(.suppressedWhileSuspended))
+            return
+        }
+
         let retainedEffects = HapticCommandSemantics.effectsRetainedAfterReset(activeEffects)
         let failure = consumeFailure()
             ?? (capabilities.supportsHaptics ? nil : .hapticsUnavailable)
@@ -198,8 +207,6 @@ public final class RecordingHapticRenderer: HapticRendering {
         _ left: HapticActiveEffect,
         _ right: HapticActiveEffect
     ) -> Bool {
-        let leftOwner = left.id.owner?.rawValue ?? ""
-        let rightOwner = right.id.owner?.rawValue ?? ""
-        return (leftOwner, left.id.rawValue) < (rightOwner, right.id.rawValue)
+        left.id.orderingKey < right.id.orderingKey
     }
 }

@@ -31,8 +31,8 @@ public protocol HapticRendering: AnyObject {
     var capabilities: HapticCapabilities { get }
     func prepare() throws
     func execute(_ command: HapticCommand) throws
-    func suspend()
-    func resume() throws
+    func suspend() async
+    func resume() async throws
 }
 
 /// An explicitly selected no-op renderer. It advertises no physical support
@@ -45,15 +45,15 @@ public final class NoOpHapticRenderer: HapticRendering {
 
     public func prepare() throws {}
     public func execute(_ command: HapticCommand) throws {}
-    public func suspend() {}
-    public func resume() throws {}
+    public func suspend() async {}
+    public func resume() async throws {}
 }
 
 package enum HapticCommandSemantics {
     package static func effectsRetainedAfterReset(
         _ activeEffects: [HapticEffectID: HapticActiveEffect]
     ) -> [HapticEffectID: HapticActiveEffect] {
-        activeEffects.filter { $0.key.owner == nil }
+        activeEffects.filter { $0.key.scope == .global }
     }
 
     package static func nextActiveEffects(

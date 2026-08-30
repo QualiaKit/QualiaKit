@@ -7,6 +7,7 @@ public enum HapticError: Error, Hashable, Sendable {
     case hapticsUnavailable
     case unsupportedFeature(HapticFeature)
     case enginePreparationFailed
+    case engineStopFailed
     case invalidLifecycleState
     case invalidCommand
     case playerCreationFailed
