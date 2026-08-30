@@ -50,6 +50,7 @@ final class SceneStateTests: XCTestCase {
         XCTAssertEqual(third.current.trends[.suspense], .rising)
         XCTAssertEqual(third.current.revision, 3)
         XCTAssertEqual(third.current.updatedAt, .seconds(2))
+        XCTAssertEqual(third.evidence[.suspense]?.value, 0.90)
         XCTAssertTrue(first.events.isEmpty)
         XCTAssertTrue(second.events.isEmpty)
         XCTAssertTrue(third.events.isEmpty)
@@ -68,38 +69,41 @@ final class SceneStateTests: XCTestCase {
             at: .seconds(1)
         )
 
+        XCTAssertEqual(impact.evidence[.impact]?.value, 0.95)
         XCTAssertEqual(impact.events[.impact]?.value, 0.95)
         XCTAssertNil(impact.current.signals[.impact])
         XCTAssertNil(impact.current.trends[.impact])
         XCTAssertTrue(later.events.isEmpty)
+        XCTAssertTrue(later.evidence.isEmpty)
         XCTAssertNil(later.current.signals[.impact])
     }
 
-    func testAnalysisFailureLeavesStoredStateAtRevisionSeven() throws {
+    func testEventMissingZeroAndLowEvidenceRemainDistinct() throws {
         let reducer = QualiaSceneReducer()
-        var storedState = QualiaSceneState.initial()
-        for revision in 1...7 {
-            storedState = reducer.reduce(
-                state: storedState,
-                observation: observation(signals: [.suspense: 0.5]),
-                at: .seconds(revision)
-            ).current
-        }
+        let missing = reducer.reduce(
+            state: .initial(),
+            observation: observation(),
+            at: .zero
+        )
+        let zero = reducer.reduce(
+            state: .initial(),
+            observation: observation(signals: [.impact: 0]),
+            at: .zero
+        )
+        let low = reducer.reduce(
+            state: .initial(),
+            observation: observation(signals: [.impact: 0.5]),
+            at: .zero
+        )
 
-        do {
-            let acceptedObservation = try failingAnalysis()
-            storedState = reducer.reduce(
-                state: storedState,
-                observation: acceptedObservation,
-                at: .seconds(8)
-            ).current
-        } catch TestFailure.analysisFailed {
-            // A failed analysis produces no observation and therefore no
-            // reducer invocation or scene-state commit.
-        }
-
-        XCTAssertEqual(storedState.revision, 7)
-        XCTAssertEqual(storedState.updatedAt, .seconds(7))
+        XCTAssertNil(missing.evidence[.impact])
+        XCTAssertNil(missing.events[.impact])
+        XCTAssertEqual(zero.evidence[.impact]?.value, 0)
+        XCTAssertEqual(zero.events[.impact]?.value, 0)
+        XCTAssertEqual(low.evidence[.impact]?.value, 0.5)
+        XCTAssertEqual(low.events[.impact]?.value, 0.5)
+        XCTAssertNotEqual(missing, zero)
+        XCTAssertNotEqual(zero, low)
     }
 
     func testMissingEvidenceRemainsDistinctFromExplicitZero() throws {
@@ -155,6 +159,29 @@ final class SceneStateTests: XCTestCase {
         XCTAssertEqual(decayed.phase, .resolving)
     }
 
+    func testContinuousConfidenceRemainsFreshTransitionEvidence() throws {
+        let reducer = QualiaSceneReducer()
+        let observed = reducer.reduce(
+            state: .initial(),
+            observation: observation(
+                signals: [.suspense: 0.9],
+                signalConfidences: [.suspense: 0.82]
+            ),
+            at: .zero
+        )
+        let missing = reducer.reduce(
+            state: observed.current,
+            observation: observation(),
+            at: .seconds(1)
+        )
+
+        XCTAssertEqual(observed.evidence[.suspense]?.value, 0.9)
+        XCTAssertEqual(observed.evidence[.suspense]?.confidence, 0.82)
+        XCTAssertEqual(observed.current.signals[.suspense], 0.9)
+        XCTAssertNil(missing.evidence[.suspense])
+        XCTAssertLessThan(missing.current.signals[.suspense] ?? 1, 0.9)
+    }
+
     func testActiveSceneResolvesAndEventuallyReturnsToIdle() throws {
         let reducer = QualiaSceneReducer()
         let active = reducer.reduce(
@@ -200,21 +227,23 @@ final class SceneStateTests: XCTestCase {
             state: .initial(),
             observation: observation(valence: 0.9, confidence: 0.8),
             at: .zero
-        ).current
+        )
         let decayed = reducer.reduce(
-            state: observed,
+            state: observed.current,
             observation: observation(),
             at: .seconds(2)
         ).current
 
+        XCTAssertEqual(observed.current.dimensions.valence?.value, 0.9)
+        XCTAssertNil(observed.current.dimensions.valence?.confidence)
         XCTAssertEqual(decayed.dimensions.valence?.value ?? -1, 0.7, accuracy: 0.0001)
-        XCTAssertEqual(decayed.dimensions.valence?.confidence, 0.8)
+        XCTAssertNil(decayed.dimensions.valence?.confidence)
         XCTAssertEqual(decayed.phase, .idle)
     }
 
     func testUnconfiguredCustomSignalUsesNeutralIgnoreDefault() throws {
         let custom = try QualiaSignal(rawValue: "com.example.unconfigured")
-        let restoredState = QualiaSceneState(
+        let restoredState = try QualiaSceneState(
             dimensions: .init(),
             signals: [custom: 0.8],
             trends: [custom: .rising],
@@ -279,9 +308,6 @@ final class SceneStateTests: XCTestCase {
                 trendEpsilon: 1.1
             )
         }
-        assertConfigurationError(.invalidEventThreshold) {
-            try QualiaEventSignalConfiguration(threshold: .infinity)
-        }
         assertConfigurationError(.invalidPhaseThresholds) {
             try QualiaScenePhaseConfiguration(
                 signals: [],
@@ -291,7 +317,6 @@ final class SceneStateTests: XCTestCase {
             )
         }
 
-        let event = try QualiaEventSignalConfiguration(threshold: 0.5)
         let invalidPhase = try QualiaScenePhaseConfiguration(
             signals: [.impact],
             idleThreshold: 0.1,
@@ -300,10 +325,109 @@ final class SceneStateTests: XCTestCase {
         )
         assertConfigurationError(.invalidPhaseSignal(.impact)) {
             try QualiaSceneReducerConfiguration(
-                signals: [.impact: .event(event)],
+                signals: [.impact: .event],
                 phase: invalidPhase
             )
         }
+    }
+
+    func testPublicStateConstructionRejectsInvalidValues() throws {
+        assertValidationError(.stateContainsAnalyzerConfidence) {
+            try QualiaSceneState(
+                dimensions: .init(
+                    valence: try QualiaScore(value: 0.5, confidence: 0.8)
+                ),
+                signals: [:],
+                trends: [:],
+                phase: .idle,
+                revision: 0,
+                updatedAt: .zero
+            )
+        }
+        assertValidationError(.invalidStateSignal(.suspense)) {
+            try QualiaSceneState(
+                dimensions: .init(),
+                signals: [.suspense: .nan],
+                trends: [:],
+                phase: .idle,
+                revision: 0,
+                updatedAt: .zero
+            )
+        }
+        assertValidationError(.trendWithoutSignal(.suspense)) {
+            try QualiaSceneState(
+                dimensions: .init(),
+                signals: [:],
+                trends: [.suspense: .rising],
+                phase: .idle,
+                revision: 0,
+                updatedAt: .zero
+            )
+        }
+    }
+
+    func testPublicTransitionConstructionValidatesRevisionTimeAndEvents() throws {
+        let previous = QualiaSceneState.initial(at: .seconds(1))
+        let sameRevision = try QualiaSceneState(
+            dimensions: .init(),
+            signals: [:],
+            trends: [:],
+            phase: .idle,
+            revision: 0,
+            updatedAt: .seconds(2)
+        )
+        assertValidationError(.invalidTransitionRevision) {
+            try QualiaSceneTransition(
+                previous: previous,
+                current: sameRevision,
+                evidence: [:],
+                events: [:]
+            )
+        }
+
+        let older = try QualiaSceneState(
+            dimensions: .init(),
+            signals: [:],
+            trends: [:],
+            phase: .idle,
+            revision: 1,
+            updatedAt: .zero
+        )
+        assertValidationError(.nonMonotonicTransitionTime) {
+            try QualiaSceneTransition(
+                previous: previous,
+                current: older,
+                evidence: [:],
+                events: [:]
+            )
+        }
+
+        let current = try QualiaSceneState(
+            dimensions: .init(),
+            signals: [:],
+            trends: [:],
+            phase: .idle,
+            revision: 1,
+            updatedAt: .seconds(2)
+        )
+        let impact = try QualiaScore(value: 0.5)
+        assertValidationError(.invalidEventEvidence(.impact)) {
+            try QualiaSceneTransition(
+                previous: previous,
+                current: current,
+                evidence: [:],
+                events: [.impact: impact]
+            )
+        }
+
+        XCTAssertNoThrow(
+            try QualiaSceneTransition(
+                previous: previous,
+                current: current,
+                evidence: [.impact: impact],
+                events: [.impact: impact]
+            )
+        )
     }
 
     func testScenePublicValuesAreSendable() {
@@ -313,12 +437,12 @@ final class SceneStateTests: XCTestCase {
         assertSendable(QualiaSceneTransition.self)
         assertSendable(QualiaMissingDataPolicy.self)
         assertSendable(QualiaContinuousSignalConfiguration.self)
-        assertSendable(QualiaEventSignalConfiguration.self)
         assertSendable(QualiaSignalReduction.self)
         assertSendable(QualiaScenePhaseConfiguration.self)
         assertSendable(QualiaSceneReducerConfiguration.self)
         assertSendable(QualiaSceneReducer.self)
         assertSendable(QualiaSceneConfigurationError.self)
+        assertSendable(QualiaSceneValidationError.self)
     }
 
     private func reducer(
@@ -340,24 +464,29 @@ final class SceneStateTests: XCTestCase {
     private func observation(
         valence: Float? = nil,
         confidence: Float? = nil,
-        signals: [QualiaSignal: Float] = [:]
+        signals: [QualiaSignal: Float] = [:],
+        signalConfidences: [QualiaSignal: Float] = [:]
     ) -> QualiaObservation {
         QualiaObservation(
             inputID: try! QualiaInputID(rawValue: "scene-fixture"),
             dimensions: QualiaDimensions(
                 valence: valence.map { try! QualiaScore(value: $0, confidence: confidence) }
             ),
-            signals: signals.mapValues { try! QualiaScore(value: $0) },
+            signals: Dictionary(uniqueKeysWithValues: signals.map { signal, value in
+                (
+                    signal,
+                    try! QualiaScore(
+                        value: value,
+                        confidence: signalConfidences[signal]
+                    )
+                )
+            }),
             language: try! QualiaLanguage(rawValue: "en"),
             analyzer: try! QualiaAnalyzerIdentity(
                 identifier: "com.example.scene-fixture",
                 version: "1"
             )
         )
-    }
-
-    private func failingAnalysis() throws -> QualiaObservation {
-        throw TestFailure.analysisFailed
     }
 
     private func assertConfigurationError<T>(
@@ -376,9 +505,21 @@ final class SceneStateTests: XCTestCase {
         }
     }
 
-    private func assertSendable<T: Sendable>(_: T.Type) {}
-}
+    private func assertValidationError<T>(
+        _ expected: QualiaSceneValidationError,
+        file: StaticString = #filePath,
+        line: UInt = #line,
+        _ operation: () throws -> T
+    ) {
+        XCTAssertThrowsError(try operation(), file: file, line: line) { error in
+            XCTAssertEqual(
+                error as? QualiaSceneValidationError,
+                expected,
+                file: file,
+                line: line
+            )
+        }
+    }
 
-private enum TestFailure: Error {
-    case analysisFailed
+    private func assertSendable<T: Sendable>(_: T.Type) {}
 }

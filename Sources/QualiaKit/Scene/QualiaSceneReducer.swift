@@ -34,15 +34,21 @@ public struct QualiaSceneReducer: QualiaSceneReducing, Sendable {
         // becoming accidentally sticky after a configuration change.
         var signals: [QualiaSignal: Float] = [:]
         var trends: [QualiaSignal: QualiaTrend] = [:]
+        var evidence: [QualiaSignal: QualiaScore] = [:]
         var events: [QualiaSignal: QualiaScore] = [:]
 
         for (signal, reduction) in configuration.signals {
+            let observedScore = observation.signals[signal]
+            if let observedScore {
+                evidence[signal] = observedScore
+            }
+
             switch reduction {
             case let .continuous(policy):
                 let previous = state.signals[signal]
                 let current = reduceContinuousValue(
                     previous: previous,
-                    observed: observation.signals[signal]?.value,
+                    observed: observedScore?.value,
                     elapsed: elapsed,
                     configuration: policy
                 )
@@ -59,13 +65,12 @@ public struct QualiaSceneReducer: QualiaSceneReducing, Sendable {
                     trends.removeValue(forKey: signal)
                 }
 
-            case let .event(policy):
+            case .event:
                 // Event-like evidence has independent, immediate decay: it is
                 // emitted only for this transition and never copied into state.
                 signals.removeValue(forKey: signal)
                 trends.removeValue(forKey: signal)
-                if let score = observation.signals[signal],
-                   score.value >= policy.threshold {
+                if let score = observedScore {
                     events[signal] = score
                 }
             }
@@ -77,7 +82,7 @@ public struct QualiaSceneReducer: QualiaSceneReducing, Sendable {
             trends: trends
         )
         let current = QualiaSceneState(
-            dimensions: dimensions,
+            validatedDimensions: dimensions,
             signals: signals,
             trends: trends,
             phase: phase,
@@ -86,8 +91,9 @@ public struct QualiaSceneReducer: QualiaSceneReducing, Sendable {
         )
 
         return QualiaSceneTransition(
-            previous: state,
+            validatedPrevious: state,
             current: current,
+            evidence: evidence,
             events: events
         )
     }
@@ -111,9 +117,10 @@ public struct QualiaSceneReducer: QualiaSceneReducing, Sendable {
             return .init()
         }
 
-        let confidence = observed.valence?.confidence ?? previous.valence?.confidence
         return QualiaDimensions(
-            valence: validatedScore(value: value, confidence: confidence)
+            // Analyzer confidence describes fresh evidence, not a smoothed or
+            // decayed state value. Never attach it to accumulated state.
+            valence: validatedScore(value: value)
         )
     }
 
@@ -216,9 +223,9 @@ public struct QualiaSceneReducer: QualiaSceneReducing, Sendable {
         return .idle
     }
 
-    private func validatedScore(value: Float, confidence: Float?) -> QualiaScore {
+    private func validatedScore(value: Float) -> QualiaScore {
         do {
-            return try QualiaScore(value: value, confidence: confidence)
+            return try QualiaScore(value: value)
         } catch {
             preconditionFailure("QualiaSceneReducer produced an invalid dimension score")
         }

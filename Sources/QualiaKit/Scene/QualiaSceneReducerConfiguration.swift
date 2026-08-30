@@ -4,7 +4,6 @@ public enum QualiaSceneConfigurationError: Error, Hashable, Sendable {
     case invalidDecayHalfLife
     case invalidDecayTarget
     case invalidTrendEpsilon
-    case invalidEventThreshold
     case invalidPhaseThresholds
     case invalidPhaseSignal(QualiaSignal)
 }
@@ -51,23 +50,13 @@ public struct QualiaContinuousSignalConfiguration: Hashable, Sendable {
     }
 }
 
-/// Transition-local behavior for event-like evidence.
-public struct QualiaEventSignalConfiguration: Hashable, Sendable {
-    public let threshold: Float
-
-    public init(threshold: Float) throws {
-        guard threshold.isFinite, (0...1).contains(threshold) else {
-            throw QualiaSceneConfigurationError.invalidEventThreshold
-        }
-        self.threshold = threshold
-    }
-}
-
 /// Selects whether an observed signal accumulates in scene state or is emitted
 /// only on the current transition.
 public enum QualiaSignalReduction: Hashable, Sendable {
     case continuous(QualiaContinuousSignalConfiguration)
-    case event(QualiaEventSignalConfiguration)
+    /// Preserve every explicitly observed score as transition-local evidence.
+    /// Qualification thresholds belong to reaction policy.
+    case event
 }
 
 /// Thresholds and driving signals for deterministic phase calculation.
@@ -132,7 +121,6 @@ public struct QualiaSceneReducerConfiguration: Sendable {
             missingDataPolicy: .decay(halfLife: .seconds(4), toward: 0),
             trendEpsilon: 0.025
         )
-        let impact = try! QualiaEventSignalConfiguration(threshold: 0.6)
         let phase = try! QualiaScenePhaseConfiguration(
             signals: [.suspense, .threat],
             idleThreshold: 0.1,
@@ -143,7 +131,7 @@ public struct QualiaSceneReducerConfiguration: Sendable {
             signals: [
                 .suspense: .continuous(continuous),
                 .threat: .continuous(continuous),
-                .impact: .event(impact),
+                .impact: .event,
             ],
             phase: phase
         )
