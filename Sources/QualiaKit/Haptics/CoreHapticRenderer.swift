@@ -25,6 +25,13 @@ public final class CoreHapticRenderer: HapticRendering {
 
     package var activeLongLivedPlayerCount: Int { activePlayers.count }
     package var activeOneShotPlayerCount: Int { oneShotPlayers.count }
+    package var pendingCleanupPlayerCount: Int { pendingCleanupPlayers.count }
+    package var suspensionWaiterCount: Int { suspensionWaiters.count }
+
+    private enum DesiredLifecycleState {
+        case ready
+        case suspended
+    }
 
     private struct OneShotPlayer: Sendable {
         let channel: HapticChannel
@@ -34,8 +41,12 @@ public final class CoreHapticRenderer: HapticRendering {
     private let backend: any HapticRuntimeEngine
     private var activePlayers: [HapticEffectID: any HapticRuntimePlayer] = [:]
     private var oneShotPlayers: [UInt64: OneShotPlayer] = [:]
+    private var pendingCleanupPlayers: [UInt64: any HapticRuntimePlayer] = [:]
     private var nextOneShotID: UInt64 = 0
+    private var nextCleanupID: UInt64 = 0
     private var suspensionWaiters: [CheckedContinuation<Void, Never>] = []
+    private var lifecycleRequestGeneration: UInt64 = 0
+    private var desiredLifecycleState: DesiredLifecycleState = .ready
 
     public convenience init() {
         self.init(backend: CoreHapticsRuntimeEngine())
@@ -65,6 +76,7 @@ public final class CoreHapticRenderer: HapticRendering {
         do {
             try backend.start()
             lifecycleState = .ready
+            desiredLifecycleState = .ready
             lastLifecycleError = nil
         } catch {
             lifecycleState = .idle
@@ -101,15 +113,22 @@ public final class CoreHapticRenderer: HapticRendering {
             guard let previous = activePlayers[id] else {
                 throw HapticError.invalidLifecycleState
             }
-            let replacement = try makeAndStartPlayer(pattern: pattern)
+            let replacement = try makePlayer(pattern: pattern)
             do {
                 try previous.stop()
-                activePlayers[id] = replacement
-                activeEffects = nextEffects
             } catch {
-                try? replacement.stop()
                 throw typed(error, fallback: .playerStopFailed)
             }
+            activePlayers.removeValue(forKey: id)
+            activeEffects.removeValue(forKey: id)
+            do {
+                try replacement.start()
+            } catch {
+                retainForCleanup(replacement)
+                throw typed(error, fallback: .playerStartFailed)
+            }
+            activePlayers[id] = replacement
+            activeEffects = nextEffects
 
         case let .stop(id):
             try stopEffect(id)
@@ -123,47 +142,57 @@ public final class CoreHapticRenderer: HapticRendering {
     }
 
     public func suspend() async {
-        switch lifecycleState {
-        case .suspended:
-            return
-        case .suspending:
-            await waitForSuspension()
-            return
-        case .idle, .ready, .preparing, .recovering:
-            break
-        }
+        let requestGeneration = beginLifecycleRequest(.suspended)
 
-        lifecycleState = .suspending
-        lastLifecycleError = nil
-
-        var stopFailure: HapticError?
-        do {
-            try stopAllPlayers()
-        } catch {
-            stopFailure = typed(error, fallback: .playerStopFailed)
-        }
-
-        do {
-            try await backend.stop()
-        } catch {
-            if stopFailure == nil {
-                stopFailure = typed(error, fallback: .engineStopFailed)
+        while isCurrentLifecycleRequest(requestGeneration, desired: .suspended) {
+            switch lifecycleState {
+            case .suspended:
+                return
+            case .suspending:
+                await waitForSuspension()
+                continue
+            case .idle, .ready, .preparing, .recovering:
+                break
             }
-        }
 
-        // Completion means the explicit engine stop has finished. Every old
-        // player is invalid at this boundary, including any player whose
-        // individual stop reported an error.
-        clearPlayerState()
-        if let stopFailure {
-            lastLifecycleError = stopFailure
+            lifecycleState = .suspending
+            lastLifecycleError = nil
+
+            var stopFailure: HapticError?
+            do {
+                try stopAllPlayers()
+            } catch {
+                stopFailure = typed(error, fallback: .playerStopFailed)
+            }
+
+            do {
+                try await backend.stop()
+            } catch {
+                if stopFailure == nil {
+                    stopFailure = typed(error, fallback: .engineStopFailed)
+                }
+            }
+
+            // Completion means the explicit engine stop has finished. Every
+            // old player is invalid at this boundary, including players whose
+            // individual or deferred cleanup stop reported an error.
+            clearPlayerState()
+            if let stopFailure {
+                lastLifecycleError = stopFailure
+            }
+            finishSuspension()
+            return
         }
-        finishSuspension()
     }
 
     public func resume() async throws {
+        let requestGeneration = beginLifecycleRequest(.ready)
         if lifecycleState == .suspending {
             await waitForSuspension()
+        }
+        try Task.checkCancellation()
+        guard isCurrentLifecycleRequest(requestGeneration, desired: .ready) else {
+            return
         }
 
         switch lifecycleState {
@@ -230,6 +259,7 @@ public final class CoreHapticRenderer: HapticRendering {
         }
         activePlayers.removeAll(keepingCapacity: true)
         oneShotPlayers.removeAll(keepingCapacity: true)
+        pendingCleanupPlayers.removeAll(keepingCapacity: true)
         activeEffects = retainedEffects
         lifecycleState = .recovering
         lastLifecycleError = .engineReset
@@ -242,12 +272,16 @@ public final class CoreHapticRenderer: HapticRendering {
             lifecycleState = .ready
             lastLifecycleError = nil
         } catch {
-            for player in activePlayers.values {
-                try? player.stop()
+            let recoveryError = typed(error, fallback: .enginePreparationFailed)
+            moveTrackedPlayersToPendingCleanup()
+            do {
+                try stopPendingCleanupPlayers()
+            } catch {
+                // Failed cleanup players remain in pendingCleanupPlayers and
+                // are retried by stopAll/suspend or invalidated by engine stop.
             }
-            clearPlayerState()
             lifecycleState = .idle
-            lastLifecycleError = typed(error, fallback: .enginePreparationFailed)
+            lastLifecycleError = recoveryError
         }
     }
 
@@ -266,6 +300,7 @@ public final class CoreHapticRenderer: HapticRendering {
             try player.start()
         } catch {
             oneShotPlayers.removeValue(forKey: identifier)
+            retainForCleanup(player)
             throw typed(error, fallback: .playerStartFailed)
         }
     }
@@ -278,6 +313,7 @@ public final class CoreHapticRenderer: HapticRendering {
             try player.start()
             return player
         } catch {
+            retainForCleanup(player)
             throw typed(error, fallback: .playerStartFailed)
         }
     }
@@ -323,14 +359,37 @@ public final class CoreHapticRenderer: HapticRendering {
     }
 
     private func stopAllPlayers() throws {
+        var firstFailure: HapticError?
         let effectIDs = Set(activePlayers.keys)
             .union(activeEffects.keys)
             .sorted { $0.orderingKey < $1.orderingKey }
         for id in effectIDs {
-            try stopEffect(id)
+            do {
+                try stopEffect(id)
+            } catch {
+                if firstFailure == nil {
+                    firstFailure = typed(error, fallback: .playerStopFailed)
+                }
+            }
         }
         for id in oneShotPlayers.keys.sorted() {
-            try stopOneShot(id)
+            do {
+                try stopOneShot(id)
+            } catch {
+                if firstFailure == nil {
+                    firstFailure = typed(error, fallback: .playerStopFailed)
+                }
+            }
+        }
+        do {
+            try stopPendingCleanupPlayers()
+        } catch {
+            if firstFailure == nil {
+                firstFailure = typed(error, fallback: .playerStopFailed)
+            }
+        }
+        if let firstFailure {
+            throw firstFailure
         }
     }
 
@@ -347,7 +406,44 @@ public final class CoreHapticRenderer: HapticRendering {
     private func clearPlayerState() {
         activePlayers.removeAll(keepingCapacity: true)
         oneShotPlayers.removeAll(keepingCapacity: true)
+        pendingCleanupPlayers.removeAll(keepingCapacity: true)
         activeEffects.removeAll(keepingCapacity: true)
+    }
+
+    private func retainForCleanup(_ player: any HapticRuntimePlayer) {
+        precondition(nextCleanupID < .max, "CoreHapticRenderer cleanup ID overflow")
+        nextCleanupID += 1
+        pendingCleanupPlayers[nextCleanupID] = player
+    }
+
+    private func moveTrackedPlayersToPendingCleanup() {
+        for player in activePlayers.values {
+            retainForCleanup(player)
+        }
+        for record in oneShotPlayers.values {
+            retainForCleanup(record.player)
+        }
+        activePlayers.removeAll(keepingCapacity: true)
+        oneShotPlayers.removeAll(keepingCapacity: true)
+        activeEffects.removeAll(keepingCapacity: true)
+    }
+
+    private func stopPendingCleanupPlayers() throws {
+        var firstFailure: HapticError?
+        for id in pendingCleanupPlayers.keys.sorted() {
+            guard let player = pendingCleanupPlayers[id] else { continue }
+            do {
+                try player.stop()
+                pendingCleanupPlayers.removeValue(forKey: id)
+            } catch {
+                if firstFailure == nil {
+                    firstFailure = typed(error, fallback: .playerStopFailed)
+                }
+            }
+        }
+        if let firstFailure {
+            throw firstFailure
+        }
     }
 
     private func waitForSuspension() async {
@@ -362,6 +458,25 @@ public final class CoreHapticRenderer: HapticRendering {
         let waiters = suspensionWaiters
         suspensionWaiters.removeAll(keepingCapacity: true)
         waiters.forEach { $0.resume() }
+    }
+
+    private func beginLifecycleRequest(
+        _ desiredState: DesiredLifecycleState
+    ) -> UInt64 {
+        precondition(
+            lifecycleRequestGeneration < .max,
+            "CoreHapticRenderer lifecycle generation overflow"
+        )
+        lifecycleRequestGeneration += 1
+        desiredLifecycleState = desiredState
+        return lifecycleRequestGeneration
+    }
+
+    private func isCurrentLifecycleRequest(
+        _ generation: UInt64,
+        desired state: DesiredLifecycleState
+    ) -> Bool {
+        generation == lifecycleRequestGeneration && desiredLifecycleState == state
     }
 
     private func typed(_ error: Error, fallback: HapticError) -> HapticError {

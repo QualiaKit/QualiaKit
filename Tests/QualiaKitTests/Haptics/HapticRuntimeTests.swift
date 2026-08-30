@@ -392,6 +392,69 @@ final class HapticRuntimeTests: XCTestCase {
         XCTAssertEqual(renderer.activeOneShotPlayerCount, 0)
     }
 
+    func testLatestSuspendWinsOverOlderWaitingResume() async throws {
+        let backend = ControlledHapticRuntimeEngine()
+        backend.delaysEngineStop = true
+        let renderer = CoreHapticRenderer(backend: backend)
+        try renderer.prepare()
+
+        let firstSuspension = Task { await renderer.suspend() }
+        for _ in 0..<100 where !backend.hasPendingEngineStop {
+            await Task.yield()
+        }
+
+        let resumption = Task { try await renderer.resume() }
+        for _ in 0..<100 where renderer.suspensionWaiterCount < 1 {
+            await Task.yield()
+        }
+        let latestSuspension = Task { await renderer.suspend() }
+        for _ in 0..<100 where renderer.suspensionWaiterCount < 2 {
+            await Task.yield()
+        }
+
+        XCTAssertEqual(renderer.suspensionWaiterCount, 2)
+        backend.completeEngineStop()
+        await firstSuspension.value
+        try await resumption.value
+        await latestSuspension.value
+
+        XCTAssertEqual(renderer.lifecycleState, .suspended)
+        XCTAssertEqual(backend.startCallCount, 1)
+        XCTAssertFalse(renderer.isPrepared)
+    }
+
+    func testCancelledWaitingResumeDoesNotRestartEngine() async throws {
+        let backend = ControlledHapticRuntimeEngine()
+        backend.delaysEngineStop = true
+        let renderer = CoreHapticRenderer(backend: backend)
+        try renderer.prepare()
+
+        let suspension = Task { await renderer.suspend() }
+        for _ in 0..<100 where !backend.hasPendingEngineStop {
+            await Task.yield()
+        }
+        let resumption = Task { try await renderer.resume() }
+        for _ in 0..<100 where renderer.suspensionWaiterCount < 1 {
+            await Task.yield()
+        }
+
+        resumption.cancel()
+        backend.completeEngineStop()
+        await suspension.value
+
+        do {
+            try await resumption.value
+            XCTFail("A cancelled resume must throw CancellationError")
+        } catch is CancellationError {
+            // Expected.
+        } catch {
+            XCTFail("Unexpected cancellation error: \(error)")
+        }
+
+        XCTAssertEqual(renderer.lifecycleState, .suspended)
+        XCTAssertEqual(backend.startCallCount, 1)
+    }
+
     func testEngineStopFailureIsRecordedAfterStopCompletion() async throws {
         let backend = ControlledHapticRuntimeEngine()
         backend.delaysEngineStop = true
@@ -496,6 +559,70 @@ final class HapticRuntimeTests: XCTestCase {
         XCTAssertEqual(backend.activePlayerCount, 0)
     }
 
+    func testReplaceDoesNotStartReplacementBeforePreviousPlayerStops() throws {
+        let backend = ControlledHapticRuntimeEngine()
+        let renderer = CoreHapticRenderer(backend: backend)
+        let id = try effectID("heartbeat", owner: "session-a")
+        try renderer.prepare()
+        try renderer.execute(.start(id: id, pattern: heartbeat(), channel: .ambient))
+        backend.playerStopFailureCalls = [1]
+
+        XCTAssertThrowsError(
+            try renderer.execute(
+                .replace(
+                    id: id,
+                    pattern: try heartbeat(duration: .seconds(2)),
+                    channel: .ambient
+                )
+            )
+        ) { error in
+            XCTAssertEqual(error as? HapticError, .playerStopFailed)
+        }
+
+        XCTAssertEqual(renderer.activeEffects[id]?.pattern, heartbeat())
+        XCTAssertEqual(renderer.activeLongLivedPlayerCount, 1)
+        XCTAssertEqual(renderer.pendingCleanupPlayerCount, 0)
+        XCTAssertEqual(backend.createdPlayers.count, 2)
+        XCTAssertTrue(backend.createdPlayers[0].isStarted)
+        XCTAssertFalse(backend.createdPlayers[1].isStarted)
+        XCTAssertEqual(backend.activePlayerCount, 1)
+
+        backend.playerStopFailureCalls = []
+        try renderer.execute(.stopAll)
+        XCTAssertEqual(backend.activePlayerCount, 0)
+    }
+
+    func testResetRecoveryRetainsPlayersWhoseCleanupFails() async throws {
+        let backend = ControlledHapticRuntimeEngine()
+        let renderer = CoreHapticRenderer(backend: backend)
+        let first = try HapticEffectID(rawValue: "a", scope: .global)
+        let second = try HapticEffectID(rawValue: "b", scope: .global)
+        try renderer.prepare()
+        try renderer.execute(.start(id: first, pattern: heartbeat(), channel: .ambient))
+        try renderer.execute(.start(id: second, pattern: heartbeat(), channel: .ambient))
+        backend.playerStartFailureCalls = [4]
+        backend.playerStopFailureCalls = [2]
+
+        backend.triggerReset()
+        for _ in 0..<100 where renderer.lifecycleState == .ready {
+            await Task.yield()
+        }
+
+        XCTAssertEqual(renderer.lifecycleState, .idle)
+        XCTAssertTrue(renderer.activeEffects.isEmpty)
+        XCTAssertEqual(renderer.activeLongLivedPlayerCount, 0)
+        XCTAssertEqual(renderer.pendingCleanupPlayerCount, 1)
+        XCTAssertEqual(backend.activePlayerCount, 1)
+        XCTAssertEqual(renderer.lastLifecycleError, .playerStartFailed)
+
+        backend.playerStopFailureCalls = []
+        await renderer.suspend()
+
+        XCTAssertEqual(renderer.lifecycleState, .suspended)
+        XCTAssertEqual(renderer.pendingCleanupPlayerCount, 0)
+        XCTAssertEqual(backend.activePlayerCount, 0)
+    }
+
     func testStopFailureDuringSuspendDoesNotPoisonStableIDAfterResume() async throws {
         let backend = ControlledHapticRuntimeEngine()
         let renderer = CoreHapticRenderer(backend: backend)
@@ -518,6 +645,64 @@ final class HapticRuntimeTests: XCTestCase {
         XCTAssertEqual(renderer.activeEffects.count, 1)
         XCTAssertEqual(renderer.activeLongLivedPlayerCount, 1)
         XCTAssertEqual(backend.createdPlayers.count, 2)
+    }
+
+    func testPrepareWhileSuspendedMatchesProductionAndRecording() async throws {
+        let backend = ControlledHapticRuntimeEngine()
+        let production = CoreHapticRenderer(backend: backend)
+        let recording = RecordingHapticRenderer()
+        try production.prepare()
+        try recording.prepare()
+        await production.suspend()
+        await recording.suspend()
+
+        XCTAssertThrowsError(try production.prepare()) { error in
+            XCTAssertEqual(error as? HapticError, .invalidLifecycleState)
+        }
+        XCTAssertThrowsError(try recording.prepare()) { error in
+            XCTAssertEqual(error as? HapticError, .invalidLifecycleState)
+        }
+        XCTAssertEqual(production.lifecycleState, .suspended)
+        XCTAssertEqual(recording.lifecycleState, .suspended)
+    }
+
+    func testResetWhileIdleDoesNotPrepareProductionOrRecording() async {
+        let backend = ControlledHapticRuntimeEngine()
+        let production = CoreHapticRenderer(backend: backend)
+        let recording = RecordingHapticRenderer()
+
+        backend.triggerReset()
+        await Task.yield()
+        recording.simulateEngineReset()
+
+        XCTAssertEqual(production.lifecycleState, .idle)
+        XCTAssertEqual(recording.lifecycleState, .idle)
+        XCTAssertEqual(backend.startCallCount, 0)
+        XCTAssertEqual(recording.lifecycleHistory.last, .engineReset(.ignoredWhileIdle))
+    }
+
+    func testReadyResetRestoresOnlyGlobalEffectsInProductionAndRecording() async throws {
+        let backend = ControlledHapticRuntimeEngine()
+        let production = CoreHapticRenderer(backend: backend)
+        let recording = RecordingHapticRenderer()
+        let global = try HapticEffectID(rawValue: "global", scope: .global)
+        let owned = try effectID("owned", owner: "session-a")
+        try production.prepare()
+        try recording.prepare()
+        for renderer: any HapticRendering in [production, recording] {
+            try renderer.execute(.start(id: global, pattern: heartbeat(), channel: .ambient))
+            try renderer.execute(.start(id: owned, pattern: heartbeat(), channel: .ambient))
+        }
+
+        backend.triggerReset()
+        await Task.yield()
+        recording.simulateEngineReset()
+
+        XCTAssertEqual(Set(production.activeEffects.keys), [global])
+        XCTAssertEqual(Set(recording.activeEffects.keys), [global])
+        XCTAssertEqual(production.lifecycleState, .ready)
+        XCTAssertEqual(recording.lifecycleState, .ready)
+        XCTAssertEqual(backend.startCallCount, 2)
     }
 
     func testIdentifiersAreValidatedOwnedAndCodable() throws {
@@ -686,10 +871,12 @@ private final class ControlledHapticRuntimeEngine: HapticRuntimeEngine {
     var stoppedHandler: (@Sendable () -> Void)?
     var resetHandler: (@Sendable () -> Void)?
     var delaysEngineStop = false
+    var playerStartFailureCalls: Set<Int> = []
     var playerStopFailureCalls: Set<Int> = []
 
     private(set) var startCallCount = 0
     private(set) var stopCallCount = 0
+    private(set) var playerStartCallCount = 0
     private(set) var playerStopCallCount = 0
     private(set) var createdPlayers: [ControlledHapticRuntimePlayer] = []
 
@@ -732,6 +919,7 @@ private final class ControlledHapticRuntimeEngine: HapticRuntimeEngine {
     }
 
     func triggerReset() {
+        invalidatePlayers()
         resetHandler?()
     }
 
@@ -743,6 +931,13 @@ private final class ControlledHapticRuntimeEngine: HapticRuntimeEngine {
         playerStopCallCount += 1
         if playerStopFailureCalls.contains(playerStopCallCount) {
             throw HapticError.playerStopFailed
+        }
+    }
+
+    func startPlayer() throws {
+        playerStartCallCount += 1
+        if playerStartFailureCalls.contains(playerStartCallCount) {
+            throw HapticError.playerStartFailed
         }
     }
 
@@ -764,6 +959,7 @@ private final class ControlledHapticRuntimePlayer: HapticRuntimePlayer {
     }
 
     func start() throws {
+        try engine.startPlayer()
         isStarted = true
         isStopped = false
     }
