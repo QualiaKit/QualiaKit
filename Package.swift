@@ -15,6 +15,10 @@ let package = Package(
             name: "QualiaKit",
             targets: ["QualiaKit"]
         ),
+        .library(
+            name: "QualiaTesting",
+            targets: ["QualiaTesting"]
+        ),
         // Qualia (Core): Lightweight, zero-dependency sentiment analysis with NLTagger
         .library(
             name: "Qualia",
@@ -27,11 +31,16 @@ let package = Package(
         ),
     ],
     targets: [
-        // QualiaKit 2.0 domain and analyzer runtime.
-        // It has no Core ML, Core Haptics, or external package dependencies.
+        // QualiaKit 2.0 domain, analyzer, and injected haptic runtime.
+        // It has no Core ML or external package dependencies.
         .target(
             name: "QualiaKit",
             path: "Sources/QualiaKit"
+        ),
+        .target(
+            name: "QualiaTesting",
+            dependencies: ["QualiaKit"],
+            path: "Sources/QualiaTesting"
         ),
         // Core target with haptics, NLTagger, and SwiftUI integration
         .target(
@@ -47,7 +56,7 @@ let package = Package(
         // Tests
         .testTarget(
             name: "QualiaKitTests",
-            dependencies: ["QualiaKit", "Qualia", "QualiaBert"],
+            dependencies: ["QualiaKit", "QualiaTesting", "Qualia", "QualiaBert"],
             resources: [.copy("Resources")]
         ),
     ]

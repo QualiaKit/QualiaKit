@@ -10,7 +10,7 @@
     "Models/current/MODEL_CARD.md": "c15be731d2cd545ee557270b34baa68fef841cdad4370c02eead99755e16c92e",
     "Models/current/manifest.json": "43f507fd7a27c177bdd38da736aaa6826b3bcce25f905f8cb55815e87e435656",
     "Models/current/manifest.schema.json": "d155c7ec622758500496665340b55997bcb69174e2723bd68b2a8dc877f20a25",
-    "Package.swift": "a8374e4a3b61b6f2e292961f380b04ee67715216910b1c62bdb54963d895fe9e",
+    "Package.swift": "20d5e4c4e54a9cb26d484b4b36a87ea14e86c97a6534f8af9e5440c391282896",
     "Sources/QualiaBert/BertModelWrapper.swift": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
     "Sources/QualiaBert/BertProvider.swift": "25681f7ecbebd6ee5d0cb1534fc05fa6ef63663f475fbc838dbd8bf7b06cc8f8",
     "Sources/QualiaBert/BertTokenizer.swift": "6f443dd4c360a9a00cc6347bfd22b630b61f18899b4a2409e3453e6f205c9314",
@@ -28,23 +28,23 @@
   "commands": [
     {
       "command": "swift build",
-      "durationSeconds": 1.2460222499794327,
+      "durationSeconds": 1.0787152079865336,
       "exitCode": 0,
       "outputSha256": "81052b4e2eb5bd48da8bb59091743984b06c9f6cec772c1c4174b7ea05154aa9",
       "status": "passed"
     },
     {
       "command": "swift test --filter CurrentModelContractTests",
-      "durationSeconds": 8.225658209004905,
+      "durationSeconds": 9.143073249986628,
       "exitCode": 0,
-      "outputSha256": "dfede226518e133f99c625d60445568b3e23d55180c07cb43838dfa8414be52f",
+      "outputSha256": "3ea9c3c2b3eeeeb98f7c81e20ce1672153fbb92c316f2c08884a9ae6ba6ad316",
       "status": "passed"
     },
     {
       "command": "python3 Tools/ModelContract/reference_inference.py --verify",
-      "durationSeconds": 9.174851125018904,
+      "durationSeconds": 8.758273792016553,
       "exitCode": 0,
-      "outputSha256": "bcb8f8927e1105eade1ca3debe25cc94b079756b2b4d283b558d93cdc1eb7c9b",
+      "outputSha256": "d2ecc82dc81f1c86f7e1d49c6b8dc3cf70789b796034eb7fa3d419993f709f91",
       "status": "passed"
     }
   ],
@@ -63,9 +63,9 @@
     "xcode": "Xcode 26.6",
     "xcodeBuild": "17F113"
   },
-  "evidenceClosureSha256": "2e9944ec59f9ad579592150963fba2cbe7db9edd2c85577e5457f4a1fad69988",
+  "evidenceClosureSha256": "408b000ae4a6a9b2619583a58bbf7c43b40ed84630e2d955ec13773a5e921a9f",
   "fixtureVersion": "current-russian-fixture-v1",
-  "generatedAtUTC": "2026-08-30T15:56:31.062970+00:00",
+  "generatedAtUTC": "2026-08-30T18:40:43.785492+00:00",
   "kind": "checksum-bound-protected-local-verification",
   "protectedAssets": {
     "modelComponents": {
@@ -77,11 +77,11 @@
     "vocabularySha256": "78106a3d3ae8600d1ba573b967b9bb731d2c2282957cbc6e26ab20935c3da02b"
   },
   "schemaVersion": 1,
-  "sourceClosureSha256": "a6ab9dc1ba868bc4d2cdfcfccf8aa6030be96e84c7d17563c28df114e9ed27ea",
+  "sourceClosureSha256": "b45f1318574f7c00afd40efb13a3cd828107892e62f88372b83d53a63d662032",
   "status": "passed",
-  "swiftBuildInputClosureSha256": "eefd8bff7f304cc751469b029399204ca04774f0af6b3ee64f9fe697d9203eb7",
+  "swiftBuildInputClosureSha256": "430529ab24e1e90b006c90d20bad81ad348022607938beb85d4b7ec2e29c07e0",
   "swiftBuildInputs": {
-    "Package.swift": "a8374e4a3b61b6f2e292961f380b04ee67715216910b1c62bdb54963d895fe9e",
+    "Package.swift": "20d5e4c4e54a9cb26d484b4b36a87ea14e86c97a6534f8af9e5440c391282896",
     "Sources/QualiaBert/BertModelWrapper.swift": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
     "Sources/QualiaBert/BertProvider.swift": "25681f7ecbebd6ee5d0cb1534fc05fa6ef63663f475fbc838dbd8bf7b06cc8f8",
     "Sources/QualiaBert/BertTokenizer.swift": "6f443dd4c360a9a00cc6347bfd22b630b61f18899b4a2409e3453e6f205c9314",
