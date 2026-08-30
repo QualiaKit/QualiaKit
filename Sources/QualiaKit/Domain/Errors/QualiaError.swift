@@ -13,6 +13,7 @@ public enum QualiaError: Error, Hashable, Sendable {
     case languageUndetermined
     case unsupportedLanguage(QualiaLanguage)
     case unsupportedContext
+    case unsupportedInputStructure
     case analyzerUnavailable(identity: QualiaAnalyzerIdentity)
     case invalidAnalyzerOutput(identity: QualiaAnalyzerIdentity)
     case incompatibleFallbackCapabilities

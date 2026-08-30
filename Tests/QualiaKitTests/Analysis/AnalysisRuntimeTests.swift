@@ -258,6 +258,47 @@ final class AnalysisRuntimeTests: XCTestCase {
         XCTAssertEqual(analyzer.capabilities.execution, .hybrid)
     }
 
+    func testFallbackDoesNotAdvertiseFallbackOnlyLanguagesWithoutUnsupportedLanguageCause() throws {
+        let russian = language("ru")
+        let english = language("en")
+        let primary = TestAnalyzer(
+            capabilities: capabilities(languages: [russian]),
+            behavior: .waitForCancellation
+        )
+        let fallback = TestAnalyzer(
+            capabilities: capabilities(languages: [english]),
+            behavior: .waitForCancellation
+        )
+
+        let analyzer = try FallbackAnalyzer(
+            primary: primary,
+            fallback: fallback,
+            causes: [.analyzerUnavailable]
+        )
+
+        XCTAssertEqual(analyzer.capabilities.languages, [russian])
+    }
+
+    func testFallbackWithEmptyCausesKeepsPrimaryExecutionMode() throws {
+        let english = language("en")
+        let primary = TestAnalyzer(
+            capabilities: capabilities(languages: [english], execution: .onDevice),
+            behavior: .waitForCancellation
+        )
+        let fallback = TestAnalyzer(
+            capabilities: capabilities(languages: [english], execution: .remote),
+            behavior: .waitForCancellation
+        )
+
+        let analyzer = try FallbackAnalyzer(
+            primary: primary,
+            fallback: fallback,
+            causes: []
+        )
+
+        XCTAssertEqual(analyzer.capabilities.execution, .onDevice)
+    }
+
     func testUnsupportedContextNeverStartsFallback() async throws {
         let english = language("en")
         let primary = TestAnalyzer(
@@ -286,6 +327,37 @@ final class AnalysisRuntimeTests: XCTestCase {
         let primaryInvocationCount = await primary.invocationCount
         let fallbackInvocationCount = await fallback.invocationCount
         XCTAssertEqual(primaryInvocationCount, 0)
+        XCTAssertEqual(fallbackInvocationCount, 0)
+    }
+
+    func testUnsupportedInputStructureNeverStartsFallback() async throws {
+        let english = language("en")
+        let primary = TestAnalyzer(
+            capabilities: capabilities(languages: [english]),
+            behavior: .fail(.unsupportedInputStructure)
+        )
+        let fallback = TestAnalyzer(
+            capabilities: capabilities(languages: [english]),
+            behavior: .succeed(
+                identity: identity("com.example.fallback"),
+                language: english
+            )
+        )
+        let analyzer = try FallbackAnalyzer(
+            primary: primary,
+            fallback: fallback,
+            causes: [.languageUndetermined, .unsupportedLanguage, .analyzerUnavailable]
+        )
+
+        do {
+            _ = try await analyzer.analyze(input(language: english))
+            XCTFail("Expected unsupported input structure")
+        } catch let error as QualiaError {
+            XCTAssertEqual(error, .unsupportedInputStructure)
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+        let fallbackInvocationCount = await fallback.invocationCount
         XCTAssertEqual(fallbackInvocationCount, 0)
     }
 
@@ -354,6 +426,59 @@ final class AnalysisRuntimeTests: XCTestCase {
             } catch {
                 XCTFail("Unexpected error: \(error)")
             }
+        }
+    }
+
+    func testObservationLanguageMustMatchExplicitInputLanguage() async throws {
+        let english = language("en")
+        let russian = language("ru")
+        let analyzerIdentity = identity("com.example.primary")
+        let observation = QualiaObservation(
+            inputID: inputID("input"),
+            language: russian,
+            analyzer: analyzerIdentity
+        )
+        let analyzer = TestAnalyzer(
+            capabilities: capabilities(languages: [english, russian], dimensions: []),
+            behavior: .returnObservation(observation)
+        )
+
+        do {
+            _ = try await QualiaAnalyzerContract.analyze(
+                analyzer,
+                input: input(language: english)
+            )
+            XCTFail("Expected explicit language mismatch")
+        } catch let error as QualiaError {
+            XCTAssertEqual(error, .invalidAnalyzerOutput(identity: analyzerIdentity))
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+
+    func testContractPrefersCancellationWhenAnalyzerThrowsAnotherError() async throws {
+        let english = language("en")
+        let analyzer = TestAnalyzer(
+            capabilities: capabilities(languages: [english]),
+            behavior: .replaceCancellation(with: .languageUndetermined)
+        )
+        let task = Task {
+            try await QualiaAnalyzerContract.analyze(
+                analyzer,
+                input: input(language: english)
+            )
+        }
+
+        await analyzer.waitUntilInvoked()
+        task.cancel()
+
+        do {
+            _ = try await task.value
+            XCTFail("Expected cancellation")
+        } catch is CancellationError {
+            // Expected.
+        } catch {
+            XCTFail("Unexpected error: \(error)")
         }
     }
 
@@ -433,6 +558,64 @@ final class AnalysisRuntimeTests: XCTestCase {
         XCTAssertTrue(observation.signals.isEmpty)
     }
 
+    func testAppleAnalyzerAcceptsMultipleSentencesInOneParagraph() async throws {
+        let probe = SentimentScorerProbe(score: 0.4)
+        let analyzer = AppleSentimentAnalyzer { text in
+            await probe.score(text)
+        }
+        let request = input(
+            text: "The opening is hopeful. The ending remains uncertain.",
+            language: language("en")
+        )
+
+        let observation = try await analyzer.analyze(request)
+
+        XCTAssertEqual(observation.dimensions.valence?.value, 0.7)
+        let invocationCount = await probe.invocationCount
+        XCTAssertEqual(invocationCount, 1)
+    }
+
+    func testAppleAnalyzerRejectsMultipleNonemptyParagraphsBeforeScoring() async throws {
+        let probe = SentimentScorerProbe(score: 0)
+        let analyzer = AppleSentimentAnalyzer { text in
+            await probe.score(text)
+        }
+        let texts = [
+            "This is wonderful.\r\n\r\nBut the ending is terrible.",
+            "This is wonderful.\u{2029}But the ending is terrible.",
+        ]
+
+        for (index, text) in texts.enumerated() {
+            do {
+                _ = try await analyzer.analyze(
+                    input(id: "multi-paragraph-\(index)", text: text, language: language("en"))
+                )
+                XCTFail("Expected unsupported input structure")
+            } catch let error as QualiaError {
+                XCTAssertEqual(error, .unsupportedInputStructure)
+            } catch {
+                XCTFail("Unexpected error: \(error)")
+            }
+        }
+        let invocationCount = await probe.invocationCount
+        XCTAssertEqual(invocationCount, 0)
+    }
+
+    func testAppleAnalyzerAllowsTrailingParagraphSeparators() async throws {
+        let probe = SentimentScorerProbe(score: 0)
+        let analyzer = AppleSentimentAnalyzer { text in
+            await probe.score(text)
+        }
+
+        let observation = try await analyzer.analyze(
+            input(text: "One paragraph with a trailing separator.\r\n\r\n", language: language("en"))
+        )
+
+        XCTAssertEqual(observation.dimensions.valence?.value, 0.5)
+        let invocationCount = await probe.invocationCount
+        XCTAssertEqual(invocationCount, 1)
+    }
+
     func testAppleAnalyzerIsShareableAcrossConcurrentCalls() async throws {
         let analyzer = AppleSentimentAnalyzer()
 
@@ -490,6 +673,7 @@ private actor TestAnalyzer: QualiaAnalyzing {
         case returnObservation(QualiaObservation)
         case fail(QualiaError)
         case waitForCancellation
+        case replaceCancellation(with: QualiaError)
     }
 
     nonisolated let capabilities: QualiaAnalyzerCapabilities
@@ -525,6 +709,13 @@ private actor TestAnalyzer: QualiaAnalyzing {
         case .waitForCancellation:
             try await Task.sleep(nanoseconds: 60_000_000_000)
             throw CancellationError()
+        case let .replaceCancellation(error):
+            do {
+                try await Task.sleep(nanoseconds: 60_000_000_000)
+            } catch {
+                throw error
+            }
+            throw error
         }
     }
 
@@ -535,6 +726,20 @@ private actor TestAnalyzer: QualiaAnalyzing {
         await withCheckedContinuation { continuation in
             invocationWaiters.append(continuation)
         }
+    }
+}
+
+private actor SentimentScorerProbe {
+    private let configuredScore: Float
+    private(set) var invocationCount = 0
+
+    init(score: Float) {
+        configuredScore = score
+    }
+
+    func score(_ text: String) -> Float {
+        invocationCount += 1
+        return configuredScore
     }
 }
 

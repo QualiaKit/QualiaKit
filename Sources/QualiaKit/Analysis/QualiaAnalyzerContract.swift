@@ -6,7 +6,13 @@ package enum QualiaAnalyzerContract {
         try Task.checkCancellation()
         try validate(input: input, capabilities: analyzer.capabilities)
 
-        let observation = try await analyzer.analyze(input)
+        let observation: QualiaObservation
+        do {
+            observation = try await analyzer.analyze(input)
+        } catch {
+            try Task.checkCancellation()
+            throw error
+        }
 
         try Task.checkCancellation()
         try validate(
@@ -37,6 +43,10 @@ package enum QualiaAnalyzerContract {
         capabilities: QualiaAnalyzerCapabilities
     ) throws {
         guard observation.inputID == input.id else {
+            throw QualiaError.invalidAnalyzerOutput(identity: observation.analyzer)
+        }
+        if let expectedLanguage = input.language,
+           observation.language != expectedLanguage {
             throw QualiaError.invalidAnalyzerOutput(identity: observation.analyzer)
         }
         guard capabilities.languages.contains(observation.language) else {

@@ -24,15 +24,21 @@ public struct FallbackAnalyzer: QualiaAnalyzing {
         self.primary = primary
         self.fallback = fallback
         self.causes = causes
-        self.capabilities = QualiaAnalyzerCapabilities(
-            languages: primary.capabilities.languages.union(fallback.capabilities.languages),
-            dimensions: primary.capabilities.dimensions,
-            signals: primary.capabilities.signals,
-            acceptsContext: primary.capabilities.acceptsContext,
-            execution: Self.compositeExecution(
+        let advertisedLanguages = causes.contains(.unsupportedLanguage)
+            ? primary.capabilities.languages.union(fallback.capabilities.languages)
+            : primary.capabilities.languages
+        let advertisedExecution = causes.isEmpty
+            ? primary.capabilities.execution
+            : Self.compositeExecution(
                 primary.capabilities.execution,
                 fallback.capabilities.execution
             )
+        self.capabilities = QualiaAnalyzerCapabilities(
+            languages: advertisedLanguages,
+            dimensions: primary.capabilities.dimensions,
+            signals: primary.capabilities.signals,
+            acceptsContext: primary.capabilities.acceptsContext,
+            execution: advertisedExecution
         )
     }
 
