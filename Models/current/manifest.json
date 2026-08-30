@@ -1,0 +1,286 @@
+{
+  "compatibility": {
+    "breakingChangesRequireSchemaIncrement": true,
+    "consumersMustRejectUnsupportedVersions": true,
+    "v1Additions": "optional-only-with-preserved-meaning"
+  },
+  "contractVersion": "current-russian-v1",
+  "fixture": {
+    "calibrationSha256": "4fad118b02b00da41536fe9ff832e8032051512dfc8712d4cdfab64b204a01ea",
+    "caseCount": 109,
+    "corpusSha256": "41f3626cc3b8963712ec2b9a797908974c9bc8eb8f53245a9976cb7effcc840e",
+    "directory": "Tests/Golden/current/current-russian-fixture-v1",
+    "goldenSha256": "4a62cf8f46dba89e3e3217cfdaf625213280c222b667a4afca39fbd107af88da",
+    "immutable": true,
+    "version": "current-russian-fixture-v1"
+  },
+  "floatingPointTolerance": {
+    "absoluteByField": {
+      "currentSwiftRuntimeDefault.value": 0.013798130106027928,
+      "currentSwiftTransform.value": 0.0,
+      "rawOutputs.LABEL_0": 0.0,
+      "rawOutputs.LABEL_1": 0.0,
+      "rawOutputs.LABEL_2": 0.0,
+      "rawOutputs.LABEL_3": 0.0,
+      "rawOutputs.LABEL_4": 0.0,
+      "stableSoftmax.LABEL_0": 0.0,
+      "stableSoftmax.LABEL_1": 0.0,
+      "stableSoftmax.LABEL_2": 0.0,
+      "stableSoftmax.LABEL_3": 0.0,
+      "stableSoftmax.LABEL_4": 0.0
+    },
+    "calibrationProcessCount": 10,
+    "comparison": "absolute",
+    "derivation": "maximum observed full-corpus fresh-process delta for CPU reference outputs and production-default BertModelWrapper parity",
+    "holdoutProcessCount": 5,
+    "runtimeCalibrationProcessCount": 10,
+    "runtimeHoldoutProcessCount": 5
+  },
+  "inputs": {
+    "attention_mask": {
+      "dataType": "Int32",
+      "required": true,
+      "shape": [
+        1,
+        128
+      ]
+    },
+    "input_ids": {
+      "dataType": "Int32",
+      "required": true,
+      "shape": [
+        1,
+        128
+      ]
+    },
+    "token_type_ids": {
+      "dataType": "Int32",
+      "required": true,
+      "shape": [
+        1,
+        128
+      ]
+    }
+  },
+  "model": {
+    "architectureFamily": {
+      "owner": "ML model owner",
+      "proofPlan": "obtain the source checkpoint/config rather than infer architecture from converted operation names",
+      "status": "unknown"
+    },
+    "componentSha256": {
+      "Data/com.apple.CoreML/model.mlmodel": "f7ac2156e756a2aacd1cca8cc3f3aded5e7b143147270ea0aea374747a609a42",
+      "Data/com.apple.CoreML/weights/weight.bin": "26c028484b4df267933afbfa3ef9ca421dc7450d48bd02c720146bd4444da2f2",
+      "Manifest.json": "a655c85265418a3c567fc48869e4bab5271b2340e33b7b67bdc395f3874bb302"
+    },
+    "identifier": "rub-sentiment-coreml-local-audit",
+    "identityBasis": "checksum-pinned Core ML package components; no upstream release identity was found",
+    "languages": [
+      "ru"
+    ],
+    "license": {
+      "owner": "Legal and ML model owner",
+      "proofPlan": "produce primary model and dataset license records tied to the checksum-pinned asset",
+      "status": "unknown"
+    },
+    "packageIdentitySha256": "6e9fd764c070b52228b28236bda4e889bc0558e51897f9baf9cc42a823aad78a",
+    "redistribution": {
+      "allowed": false,
+      "reason": "model and dataset license and ownership chain are unproven",
+      "status": "blocked"
+    },
+    "task": {
+      "owner": "ML model owner",
+      "proofPlan": "obtain the training configuration and dataset label schema",
+      "status": "unknown"
+    },
+    "version": "sha256-f7ac2156e756a2aa"
+  },
+  "outputs": {
+    "classLabel": "String",
+    "kind": {
+      "observation": "classLabel_probs contains finite non-normalized raw classifier scores whose argmax selects classLabel; logits versus other raw-score semantics is not yet proven",
+      "owner": "ML model owner",
+      "proofPlan": "add a deterministic graph extractor whose output is reproduced from the checksum-pinned Core ML asset, or obtain the source/export graph",
+      "status": "unknown"
+    },
+    "labels": [
+      {
+        "name": "LABEL_0",
+        "productSignal": null,
+        "semanticMeaning": {
+          "owner": "ML model owner",
+          "proofPlan": "obtain primary dataset label schema or export mapping tied to the asset",
+          "status": "unknown"
+        }
+      },
+      {
+        "name": "LABEL_1",
+        "productSignal": null,
+        "semanticMeaning": {
+          "owner": "ML model owner",
+          "proofPlan": "obtain primary dataset label schema or export mapping tied to the asset",
+          "status": "unknown"
+        }
+      },
+      {
+        "name": "LABEL_2",
+        "productSignal": null,
+        "semanticMeaning": {
+          "owner": "ML model owner",
+          "proofPlan": "obtain primary dataset label schema or export mapping tied to the asset",
+          "status": "unknown"
+        }
+      },
+      {
+        "name": "LABEL_3",
+        "productSignal": null,
+        "semanticMeaning": {
+          "owner": "ML model owner",
+          "proofPlan": "obtain primary dataset label schema or export mapping tied to the asset",
+          "status": "unknown"
+        }
+      },
+      {
+        "name": "LABEL_4",
+        "productSignal": null,
+        "semanticMeaning": {
+          "owner": "ML model owner",
+          "proofPlan": "obtain primary dataset label schema or export mapping tied to the asset",
+          "status": "unknown"
+        }
+      }
+    ],
+    "scores": "classLabel_probs",
+    "scoresType": "Dictionary<String,Double>"
+  },
+  "ownership": {
+    "contract": "QualiaKit maintainers",
+    "legalEvidence": "Legal owner",
+    "modelEvidence": "ML model owner"
+  },
+  "provenance": {
+    "classBalance": {
+      "owner": "ML model owner",
+      "proofPlan": "obtain versioned training/evaluation split statistics",
+      "status": "unknown"
+    },
+    "dataset": {
+      "owner": "ML model owner",
+      "proofPlan": "obtain dataset records, versions, splits and license evidence",
+      "status": "unknown"
+    },
+    "domain": {
+      "owner": "ML model owner",
+      "proofPlan": "obtain dataset documentation and independently evaluate declared domains",
+      "status": "unknown"
+    },
+    "exportMetadata": {
+      "conversionDate": "2025-11-17",
+      "coremltools": "9.0",
+      "sourceDialect": "TorchScript",
+      "sourceFramework": "torch==2.9.1",
+      "status": "verified-from-coreml-metadata"
+    },
+    "source": {
+      "owner": "ML model owner",
+      "proofPlan": "locate the source repository/checkpoint and bind it cryptographically to this export",
+      "status": "unknown"
+    },
+    "trainingConfiguration": {
+      "owner": "ML model owner",
+      "proofPlan": "obtain training and export scripts with pinned environments",
+      "status": "unknown"
+    }
+  },
+  "releaseRisks": [
+    {
+      "field": "source",
+      "releaseImpact": "cannot reproduce or upgrade the source model",
+      "status": "open"
+    },
+    {
+      "field": "dataset",
+      "releaseImpact": "cannot evaluate coverage, consent, or data rights",
+      "status": "open"
+    },
+    {
+      "field": "license",
+      "releaseImpact": "model and vocabulary redistribution remains blocked",
+      "status": "open"
+    },
+    {
+      "field": "domain",
+      "releaseImpact": "no domain or narrative-quality claim is permitted",
+      "status": "open"
+    },
+    {
+      "field": "classBalance",
+      "releaseImpact": "class bias and threshold behavior are unknown",
+      "status": "open"
+    },
+    {
+      "field": "redistributionRights",
+      "releaseImpact": "protected assets remain external and Git-ignored",
+      "status": "open"
+    }
+  ],
+  "runtimeRefactorGate": {
+    "conditions": {
+      "labelSemantics": "unresolved",
+      "outputKind": "unresolved",
+      "provenance": "unresolved",
+      "tokenizerTrainingParity": "unresolved"
+    },
+    "rule": "blocked-if-any-condition-is-unresolved",
+    "status": "blocked"
+  },
+  "schemaVersion": 1,
+  "tokenizer": {
+    "contextPairSupport": {
+      "owner": "ML model owner",
+      "proofPlan": "obtain the training input template proving single-text or pair/context formatting",
+      "status": "unknown"
+    },
+    "lowercase": true,
+    "maxSequenceLength": 128,
+    "reconstructionBoundary": "exactly reproduces the unchanged Swift lowercase, Unicode punctuation/whitespace split, greedy WordPiece-like lookup, padding and truncation behavior; it does not prove training-tokenizer identity",
+    "specialTokens": {
+      "cls": {
+        "id": 101,
+        "token": "[CLS]"
+      },
+      "mask": {
+        "id": 103,
+        "token": "[MASK]"
+      },
+      "pad": {
+        "id": 0,
+        "token": "[PAD]"
+      },
+      "sep": {
+        "id": 102,
+        "token": "[SEP]"
+      },
+      "unk": {
+        "id": 100,
+        "token": "[UNK]"
+      }
+    },
+    "trainingIdentity": {
+      "owner": "ML model owner",
+      "proofPlan": "obtain the training tokenizer config and lockfile and match its vocabulary checksum",
+      "status": "unknown"
+    },
+    "trainingVersion": {
+      "owner": "ML model owner",
+      "proofPlan": "obtain the source tokenizer package name and exact version",
+      "status": "unknown"
+    },
+    "type": "wordpiece-like-reconstruction",
+    "unicodeNormalization": "none-observed",
+    "vocabulary": "external:QUALIAKIT_TEST_VOCAB_PATH",
+    "vocabularyLineCount": 119547,
+    "vocabularySha256": "78106a3d3ae8600d1ba573b967b9bb731d2c2282957cbc6e26ab20935c3da02b"
+  }
+}

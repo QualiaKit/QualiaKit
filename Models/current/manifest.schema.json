@@ -1,0 +1,638 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualiakit.dev/schemas/model-contract-v1.json",
+  "title": "QualiaKit model contract schema v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "contractVersion",
+    "compatibility",
+    "model",
+    "tokenizer",
+    "inputs",
+    "outputs",
+    "floatingPointTolerance",
+    "fixture",
+    "provenance",
+    "ownership",
+    "releaseRisks",
+    "runtimeRefactorGate"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "contractVersion": { "$ref": "#/$defs/nonEmptyString" },
+    "compatibility": {
+      "type": "object",
+      "required": [
+        "v1Additions",
+        "breakingChangesRequireSchemaIncrement",
+        "consumersMustRejectUnsupportedVersions"
+      ],
+      "properties": {
+        "v1Additions": { "$ref": "#/$defs/nonEmptyString" },
+        "breakingChangesRequireSchemaIncrement": { "type": "boolean" },
+        "consumersMustRejectUnsupportedVersions": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "model": {
+      "type": "object",
+      "required": [
+        "identifier",
+        "version",
+        "identityBasis",
+        "packageIdentitySha256",
+        "componentSha256",
+        "task",
+        "architectureFamily",
+        "languages",
+        "license",
+        "redistribution"
+      ],
+      "properties": {
+        "identifier": { "$ref": "#/$defs/nonEmptyString" },
+        "version": { "$ref": "#/$defs/nonEmptyString" },
+        "identityBasis": { "$ref": "#/$defs/nonEmptyString" },
+        "packageIdentitySha256": { "$ref": "#/$defs/sha256" },
+        "componentSha256": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "$ref": "#/$defs/sha256" }
+        },
+        "task": { "$ref": "#/$defs/taskState" },
+        "architectureFamily": { "$ref": "#/$defs/architectureState" },
+        "languages": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "license": { "$ref": "#/$defs/licenseState" },
+        "redistribution": {
+          "type": "object",
+          "required": ["status", "allowed", "reason"],
+          "properties": {
+            "status": { "$ref": "#/$defs/nonEmptyString" },
+            "allowed": { "type": "boolean" },
+            "reason": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "tokenizer": {
+      "type": "object",
+      "required": [
+        "type",
+        "vocabulary",
+        "vocabularySha256",
+        "vocabularyLineCount",
+        "lowercase",
+        "unicodeNormalization",
+        "maxSequenceLength",
+        "specialTokens",
+        "trainingIdentity",
+        "trainingVersion",
+        "contextPairSupport",
+        "reconstructionBoundary"
+      ],
+      "properties": {
+        "type": { "$ref": "#/$defs/nonEmptyString" },
+        "vocabulary": { "$ref": "#/$defs/nonEmptyString" },
+        "vocabularySha256": { "$ref": "#/$defs/sha256" },
+        "vocabularyLineCount": { "type": "integer", "minimum": 1 },
+        "lowercase": { "type": "boolean" },
+        "unicodeNormalization": { "$ref": "#/$defs/nonEmptyString" },
+        "maxSequenceLength": { "type": "integer", "minimum": 1 },
+        "specialTokens": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "$ref": "#/$defs/specialToken" }
+        },
+        "trainingIdentity": { "$ref": "#/$defs/tokenizerIdentityState" },
+        "trainingVersion": { "$ref": "#/$defs/tokenizerVersionState" },
+        "contextPairSupport": { "$ref": "#/$defs/tokenizerContextState" },
+        "reconstructionBoundary": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": true
+    },
+    "inputs": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/tensor" }
+    },
+    "outputs": {
+      "type": "object",
+      "required": ["classLabel", "scores", "scoresType", "kind", "labels"],
+      "properties": {
+        "classLabel": { "$ref": "#/$defs/nonEmptyString" },
+        "scores": { "$ref": "#/$defs/nonEmptyString" },
+        "scoresType": { "$ref": "#/$defs/nonEmptyString" },
+        "kind": { "$ref": "#/$defs/outputKind" },
+        "labels": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/label" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "floatingPointTolerance": {
+      "type": "object",
+      "required": [
+        "comparison",
+        "derivation",
+        "absoluteByField",
+        "calibrationProcessCount",
+        "holdoutProcessCount"
+      ],
+      "properties": {
+        "comparison": { "enum": ["absolute", "relative", "absoluteOrRelative"] },
+        "derivation": { "$ref": "#/$defs/nonEmptyString" },
+        "absoluteByField": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "type": "number", "minimum": 0 }
+        },
+        "calibrationProcessCount": { "type": "integer", "minimum": 1 },
+        "holdoutProcessCount": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": true
+    },
+    "fixture": {
+      "type": "object",
+      "required": [
+        "version",
+        "immutable",
+        "caseCount",
+        "corpusSha256",
+        "goldenSha256",
+        "calibrationSha256"
+      ],
+      "properties": {
+        "version": { "$ref": "#/$defs/nonEmptyString" },
+        "immutable": { "type": "boolean" },
+        "caseCount": { "type": "integer", "minimum": 1 },
+        "corpusSha256": { "$ref": "#/$defs/sha256" },
+        "goldenSha256": { "$ref": "#/$defs/sha256" },
+        "calibrationSha256": { "$ref": "#/$defs/sha256" },
+        "directory": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": true
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "source",
+        "dataset",
+        "domain",
+        "classBalance",
+        "trainingConfiguration",
+        "exportMetadata"
+      ],
+      "properties": {
+        "source": { "$ref": "#/$defs/sourceProvenanceState" },
+        "dataset": { "$ref": "#/$defs/datasetProvenanceState" },
+        "domain": { "$ref": "#/$defs/domainProvenanceState" },
+        "classBalance": { "$ref": "#/$defs/classBalanceProvenanceState" },
+        "trainingConfiguration": { "$ref": "#/$defs/trainingConfigurationProvenanceState" },
+        "exportMetadata": { "$ref": "#/$defs/exportMetadata" }
+      },
+      "additionalProperties": true
+    },
+    "ownership": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "releaseRisks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["field", "status", "releaseImpact"],
+        "properties": {
+          "field": { "$ref": "#/$defs/nonEmptyString" },
+          "status": { "$ref": "#/$defs/nonEmptyString" },
+          "releaseImpact": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "runtimeRefactorGate": {
+      "type": "object",
+      "required": ["status", "rule", "conditions"],
+      "properties": {
+        "status": { "enum": ["blocked", "open"] },
+        "rule": { "$ref": "#/$defs/nonEmptyString" },
+        "conditions": {
+          "type": "object",
+          "required": [
+            "labelSemantics",
+            "outputKind",
+            "provenance",
+            "tokenizerTrainingParity"
+          ],
+          "properties": {
+            "labelSemantics": { "enum": ["resolved", "unresolved"] },
+            "outputKind": { "enum": ["resolved", "unresolved"] },
+            "provenance": { "enum": ["resolved", "unresolved"] },
+            "tokenizerTrainingParity": { "enum": ["resolved", "unresolved"] }
+          },
+          "additionalProperties": false
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "status": { "const": "open" },
+            "conditions": {
+              "properties": {
+                "labelSemantics": { "const": "resolved" },
+                "outputKind": { "const": "resolved" },
+                "provenance": { "const": "resolved" },
+                "tokenizerTrainingParity": { "const": "resolved" }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "status": { "const": "blocked" },
+            "conditions": {
+              "anyOf": [
+                { "properties": { "labelSemantics": { "const": "unresolved" } } },
+                { "properties": { "outputKind": { "const": "unresolved" } } },
+                { "properties": { "provenance": { "const": "unresolved" } } },
+                { "properties": { "tokenizerTrainingParity": { "const": "unresolved" } } }
+              ]
+            }
+          }
+        }
+      ],
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "unknownEvidenceState": {
+      "type": "object",
+      "required": ["status", "owner", "proofPlan"],
+      "properties": {
+        "status": { "const": "unknown" },
+        "owner": { "$ref": "#/$defs/nonEmptyString" },
+        "proofPlan": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": true
+    },
+    "taskState": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["unknown", "verified"] },
+        "value": { "$ref": "#/$defs/nonEmptyString" },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "oneOf": [
+        { "$ref": "#/$defs/unknownEvidenceState" },
+        {
+          "required": ["status", "value", "evidence"],
+          "properties": { "status": { "const": "verified" } }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "architectureState": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["unknown", "verified"] },
+        "value": {
+          "type": "object",
+          "required": ["family", "version"],
+          "properties": {
+            "family": { "$ref": "#/$defs/nonEmptyString" },
+            "version": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": true
+        },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "oneOf": [
+        { "$ref": "#/$defs/unknownEvidenceState" },
+        {
+          "required": ["status", "value", "evidence"],
+          "properties": { "status": { "const": "verified" } }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "licenseState": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["unknown", "verified"] },
+        "value": { "$ref": "#/$defs/licenseValue" },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "oneOf": [
+        { "$ref": "#/$defs/unknownEvidenceState" },
+        {
+          "required": ["status", "value", "evidence"],
+          "properties": { "status": { "const": "verified" } }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "licenseValue": {
+      "oneOf": [
+        { "$ref": "#/$defs/nonEmptyString" },
+        {
+          "type": "object",
+          "required": ["restrictionStatus", "reason"],
+          "properties": {
+            "restrictionStatus": { "const": "restricted" },
+            "reason": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "tokenizerIdentityState": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["unknown", "verified"] },
+        "value": { "$ref": "#/$defs/nonEmptyString" },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "oneOf": [
+        { "$ref": "#/$defs/unknownEvidenceState" },
+        {
+          "required": ["status", "value", "evidence"],
+          "properties": { "status": { "const": "verified" } }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "tokenizerVersionState": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["unknown", "verified"] },
+        "value": { "$ref": "#/$defs/nonEmptyString" },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "oneOf": [
+        { "$ref": "#/$defs/unknownEvidenceState" },
+        {
+          "required": ["status", "value", "evidence"],
+          "properties": { "status": { "const": "verified" } }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "tokenizerContextState": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["unknown", "verified"] },
+        "value": {
+          "type": "object",
+          "required": ["mode", "template"],
+          "properties": {
+            "mode": { "enum": ["singleText", "pair", "formatted"] },
+            "template": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": true
+        },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "oneOf": [
+        { "$ref": "#/$defs/unknownEvidenceState" },
+        {
+          "required": ["status", "value", "evidence"],
+          "properties": { "status": { "const": "verified" } }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "outputKind": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["unknown", "verified"] },
+        "owner": { "$ref": "#/$defs/nonEmptyString" },
+        "proofPlan": { "$ref": "#/$defs/nonEmptyString" },
+        "observation": { "$ref": "#/$defs/nonEmptyString" },
+        "value": {
+          "enum": [
+            "logits",
+            "mutually-exclusive-probabilities",
+            "independent-probabilities"
+          ]
+        },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "oneOf": [
+        {
+          "required": ["status", "owner", "proofPlan", "observation"],
+          "properties": { "status": { "const": "unknown" } }
+        },
+        {
+          "required": ["status", "value", "evidence"],
+          "properties": { "status": { "const": "verified" } }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "labelSemanticState": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["unknown", "verified"] },
+        "value": {
+          "type": "object",
+          "required": ["canonicalMeaning"],
+          "properties": {
+            "canonicalMeaning": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": true
+        },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "oneOf": [
+        { "$ref": "#/$defs/unknownEvidenceState" },
+        {
+          "required": ["status", "value", "evidence"],
+          "properties": { "status": { "const": "verified" } }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "sourceProvenanceState": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["unknown", "verified"] },
+        "value": {
+          "type": "object",
+          "required": ["identifier", "revision", "artifactSha256"],
+          "properties": {
+            "identifier": { "$ref": "#/$defs/nonEmptyString" },
+            "revision": { "$ref": "#/$defs/nonEmptyString" },
+            "artifactSha256": { "$ref": "#/$defs/sha256" }
+          },
+          "additionalProperties": true
+        },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "oneOf": [
+        { "$ref": "#/$defs/unknownEvidenceState" },
+        {
+          "required": ["status", "value", "evidence"],
+          "properties": { "status": { "const": "verified" } }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "datasetProvenanceState": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["unknown", "verified"] },
+        "value": {
+          "type": "object",
+          "required": ["identifier", "version", "license"],
+          "properties": {
+            "identifier": { "$ref": "#/$defs/nonEmptyString" },
+            "version": { "$ref": "#/$defs/nonEmptyString" },
+            "license": { "$ref": "#/$defs/licenseValue" }
+          },
+          "additionalProperties": true
+        },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "oneOf": [
+        { "$ref": "#/$defs/unknownEvidenceState" },
+        {
+          "required": ["status", "value", "evidence"],
+          "properties": { "status": { "const": "verified" } }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "domainProvenanceState": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["unknown", "verified"] },
+        "value": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "oneOf": [
+        { "$ref": "#/$defs/unknownEvidenceState" },
+        {
+          "required": ["status", "value", "evidence"],
+          "properties": { "status": { "const": "verified" } }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "classBalanceProvenanceState": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["unknown", "verified"] },
+        "value": {
+          "type": "object",
+          "required": ["split", "countsByLabel"],
+          "properties": {
+            "split": { "$ref": "#/$defs/nonEmptyString" },
+            "countsByLabel": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": { "type": "integer", "minimum": 0 }
+            }
+          },
+          "additionalProperties": true
+        },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "oneOf": [
+        { "$ref": "#/$defs/unknownEvidenceState" },
+        {
+          "required": ["status", "value", "evidence"],
+          "properties": { "status": { "const": "verified" } }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "trainingConfigurationProvenanceState": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["unknown", "verified"] },
+        "value": {
+          "type": "object",
+          "required": ["trainingArtifactSha256", "exportArtifactSha256", "environmentLockSha256"],
+          "properties": {
+            "trainingArtifactSha256": { "$ref": "#/$defs/sha256" },
+            "exportArtifactSha256": { "$ref": "#/$defs/sha256" },
+            "environmentLockSha256": { "$ref": "#/$defs/sha256" }
+          },
+          "additionalProperties": true
+        },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "oneOf": [
+        { "$ref": "#/$defs/unknownEvidenceState" },
+        {
+          "required": ["status", "value", "evidence"],
+          "properties": { "status": { "const": "verified" } }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "exportMetadata": {
+      "type": "object",
+      "required": ["status", "sourceFramework", "sourceDialect", "coremltools", "conversionDate"],
+      "properties": {
+        "status": { "const": "verified-from-coreml-metadata" },
+        "sourceFramework": { "$ref": "#/$defs/nonEmptyString" },
+        "sourceDialect": { "$ref": "#/$defs/nonEmptyString" },
+        "coremltools": { "$ref": "#/$defs/nonEmptyString" },
+        "conversionDate": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": true
+    },
+    "specialToken": {
+      "type": "object",
+      "required": ["token", "id"],
+      "properties": {
+        "token": { "$ref": "#/$defs/nonEmptyString" },
+        "id": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "tensor": {
+      "type": "object",
+      "required": ["dataType", "shape", "required"],
+      "properties": {
+        "dataType": { "$ref": "#/$defs/nonEmptyString" },
+        "shape": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "integer", "minimum": 1 }
+        },
+        "required": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "label": {
+      "type": "object",
+      "required": ["name", "semanticMeaning", "productSignal"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "semanticMeaning": { "$ref": "#/$defs/labelSemanticState" },
+        "productSignal": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
