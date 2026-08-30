@@ -973,16 +973,18 @@ def build_run_report(
 
 
 def swift_build_input_paths() -> list[str]:
-    """Return package-graph and source/resource inputs compiled by the attested commands."""
-    paths = ["Package.swift"]
+    """Return only Swift inputs capable of changing the audited model-contract behavior."""
+    paths = [
+        "Package.swift",
+        "Tests/QualiaKitTests/CurrentModelContractTests.swift",
+    ]
     if (ROOT / "Package.resolved").is_file():
         paths.append("Package.resolved")
-    for directory in (ROOT / "Sources", ROOT / "Tests" / "QualiaKitTests"):
-        paths.extend(
-            str(path.relative_to(ROOT))
-            for path in sorted(directory.rglob("*"))
-            if path.is_file()
-        )
+    paths.extend(
+        str(path.relative_to(ROOT))
+        for path in sorted((ROOT / "Sources" / "QualiaBert").rglob("*"))
+        if path.is_file()
+    )
     return sorted(set(paths))
 
 
