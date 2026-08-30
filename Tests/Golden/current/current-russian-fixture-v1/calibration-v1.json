@@ -2634,17 +2634,17 @@
         }
       ],
       "computeUnits": "cpuOnly",
-      "durationSeconds": 2.2833907089952845,
-      "endedMonotonicSeconds": 143276.250196,
+      "durationSeconds": 2.1551325840118807,
+      "endedMonotonicSeconds": 145508.983324125,
       "freshOSProcess": true,
       "helperExecutableSha256": "107ae6042111689f4a02b474834038bb53ce1c1d7f3032b2ee429e027bf7e7b4",
       "helperSourceSha256": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
       "phase": "calibration",
       "privateCompilationDirectory": true,
-      "privateCompilationIdentifier": "c46352c5ea3a492a9b763ac9f0833b09",
-      "processIdentifier": 73990,
+      "privateCompilationIdentifier": "ebe90f8a7a4541dba99480cc5ebebd1c",
+      "processIdentifier": 76182,
       "processSequence": 1,
-      "startedMonotonicSeconds": 143273.966805291
+      "startedMonotonicSeconds": 145506.828191541
     },
     {
       "cases": [
@@ -5266,17 +5266,17 @@
         }
       ],
       "computeUnits": "cpuOnly",
-      "durationSeconds": 1.9096570420078933,
-      "endedMonotonicSeconds": 143280.421333625,
+      "durationSeconds": 2.4448020000127144,
+      "endedMonotonicSeconds": 145513.639127125,
       "freshOSProcess": true,
       "helperExecutableSha256": "107ae6042111689f4a02b474834038bb53ce1c1d7f3032b2ee429e027bf7e7b4",
       "helperSourceSha256": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
       "phase": "calibration",
       "privateCompilationDirectory": true,
-      "privateCompilationIdentifier": "74fe025933004223b0ba5b0869bd3473",
-      "processIdentifier": 74010,
+      "privateCompilationIdentifier": "44e418f3788b4e8294cb46d8b59220b1",
+      "processIdentifier": 76197,
       "processSequence": 2,
-      "startedMonotonicSeconds": 143278.511676583
+      "startedMonotonicSeconds": 145511.194325125
     },
     {
       "cases": [
@@ -7898,17 +7898,17 @@
         }
       ],
       "computeUnits": "cpuOnly",
-      "durationSeconds": 1.8668273329967633,
-      "endedMonotonicSeconds": 143284.503401791,
+      "durationSeconds": 1.9724965829809662,
+      "endedMonotonicSeconds": 145517.922224333,
       "freshOSProcess": true,
       "helperExecutableSha256": "107ae6042111689f4a02b474834038bb53ce1c1d7f3032b2ee429e027bf7e7b4",
       "helperSourceSha256": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
       "phase": "calibration",
       "privateCompilationDirectory": true,
-      "privateCompilationIdentifier": "bc518e9ea78443028c7a687440c01bd2",
-      "processIdentifier": 74026,
+      "privateCompilationIdentifier": "b06fcfa65d754612a0ab4469f2d51976",
+      "processIdentifier": 76217,
       "processSequence": 3,
-      "startedMonotonicSeconds": 143282.636574458
+      "startedMonotonicSeconds": 145515.94972775
     },
     {
       "cases": [
@@ -10530,17 +10530,17 @@
         }
       ],
       "computeUnits": "cpuOnly",
-      "durationSeconds": 2.1290682920080144,
-      "endedMonotonicSeconds": 143288.836613833,
+      "durationSeconds": 2.126152666984126,
+      "endedMonotonicSeconds": 145522.264630875,
       "freshOSProcess": true,
       "helperExecutableSha256": "107ae6042111689f4a02b474834038bb53ce1c1d7f3032b2ee429e027bf7e7b4",
       "helperSourceSha256": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
       "phase": "calibration",
       "privateCompilationDirectory": true,
-      "privateCompilationIdentifier": "592e102adc52447499c98c5d970854cf",
-      "processIdentifier": 74041,
+      "privateCompilationIdentifier": "024d46e40d7c4803a06d1f2b2142fbba",
+      "processIdentifier": 76232,
       "processSequence": 4,
-      "startedMonotonicSeconds": 143286.707545541
+      "startedMonotonicSeconds": 145520.138478208
     },
     {
       "cases": [
@@ -13162,17 +13162,17 @@
         }
       ],
       "computeUnits": "cpuOnly",
-      "durationSeconds": 1.9133918329898734,
-      "endedMonotonicSeconds": 143292.962949958,
+      "durationSeconds": 2.321631874976447,
+      "endedMonotonicSeconds": 145526.809161375,
       "freshOSProcess": true,
       "helperExecutableSha256": "107ae6042111689f4a02b474834038bb53ce1c1d7f3032b2ee429e027bf7e7b4",
       "helperSourceSha256": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
       "phase": "calibration",
       "privateCompilationDirectory": true,
-      "privateCompilationIdentifier": "406a1d7efd1f4c51bbc69f03d98e8202",
-      "processIdentifier": 74057,
+      "privateCompilationIdentifier": "57d6248dee834430aa10c82544a6af03",
+      "processIdentifier": 76248,
       "processSequence": 5,
-      "startedMonotonicSeconds": 143291.049558125
+      "startedMonotonicSeconds": 145524.4875295
     },
     {
       "cases": [
@@ -15794,17 +15794,17 @@
         }
       ],
       "computeUnits": "cpuOnly",
-      "durationSeconds": 1.950021042022854,
-      "endedMonotonicSeconds": 143297.122512708,
+      "durationSeconds": 2.3897692500031553,
+      "endedMonotonicSeconds": 145531.531780333,
       "freshOSProcess": true,
       "helperExecutableSha256": "107ae6042111689f4a02b474834038bb53ce1c1d7f3032b2ee429e027bf7e7b4",
       "helperSourceSha256": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
       "phase": "calibration",
       "privateCompilationDirectory": true,
-      "privateCompilationIdentifier": "321a5cb238c1461fb73b827c085f3e73",
-      "processIdentifier": 74073,
+      "privateCompilationIdentifier": "d498042cff7b4cdeb526d6a25bdb2c4a",
+      "processIdentifier": 76263,
       "processSequence": 6,
-      "startedMonotonicSeconds": 143295.172491666
+      "startedMonotonicSeconds": 145529.142011083
     },
     {
       "cases": [
@@ -18426,17 +18426,17 @@
         }
       ],
       "computeUnits": "cpuOnly",
-      "durationSeconds": 1.9855207910004538,
-      "endedMonotonicSeconds": 143301.432711416,
+      "durationSeconds": 2.103662166016875,
+      "endedMonotonicSeconds": 145536.021363041,
       "freshOSProcess": true,
       "helperExecutableSha256": "107ae6042111689f4a02b474834038bb53ce1c1d7f3032b2ee429e027bf7e7b4",
       "helperSourceSha256": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
       "phase": "calibration",
       "privateCompilationDirectory": true,
-      "privateCompilationIdentifier": "af6bafff4db947098355621ade586f20",
-      "processIdentifier": 74088,
+      "privateCompilationIdentifier": "a9231fcdbcd646be9cf57c36becf25b5",
+      "processIdentifier": 76278,
       "processSequence": 7,
-      "startedMonotonicSeconds": 143299.447190625
+      "startedMonotonicSeconds": 145533.917700875
     },
     {
       "cases": [
@@ -21058,17 +21058,17 @@
         }
       ],
       "computeUnits": "cpuOnly",
-      "durationSeconds": 1.9040055419900455,
-      "endedMonotonicSeconds": 143305.658864125,
+      "durationSeconds": 2.105812792025972,
+      "endedMonotonicSeconds": 145540.443180833,
       "freshOSProcess": true,
       "helperExecutableSha256": "107ae6042111689f4a02b474834038bb53ce1c1d7f3032b2ee429e027bf7e7b4",
       "helperSourceSha256": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
       "phase": "calibration",
       "privateCompilationDirectory": true,
-      "privateCompilationIdentifier": "e24c6eecc1ff4acf9af2dfc922bb749c",
-      "processIdentifier": 74106,
+      "privateCompilationIdentifier": "c405d0e48ee443d48cefdf9d59030431",
+      "processIdentifier": 76294,
       "processSequence": 8,
-      "startedMonotonicSeconds": 143303.754858583
+      "startedMonotonicSeconds": 145538.337368041
     },
     {
       "cases": [
@@ -23690,17 +23690,17 @@
         }
       ],
       "computeUnits": "cpuOnly",
-      "durationSeconds": 1.938614291982958,
-      "endedMonotonicSeconds": 143309.846946958,
+      "durationSeconds": 2.2539375000051223,
+      "endedMonotonicSeconds": 145544.966860708,
       "freshOSProcess": true,
       "helperExecutableSha256": "107ae6042111689f4a02b474834038bb53ce1c1d7f3032b2ee429e027bf7e7b4",
       "helperSourceSha256": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
       "phase": "calibration",
       "privateCompilationDirectory": true,
-      "privateCompilationIdentifier": "6553c6706980477fb236d73b0310b51c",
-      "processIdentifier": 74122,
+      "privateCompilationIdentifier": "492e568328f841c5b6130a64b85822fa",
+      "processIdentifier": 76310,
       "processSequence": 9,
-      "startedMonotonicSeconds": 143307.908332666
+      "startedMonotonicSeconds": 145542.712923208
     },
     {
       "cases": [
@@ -26322,17 +26322,17 @@
         }
       ],
       "computeUnits": "cpuOnly",
-      "durationSeconds": 2.122428583999863,
-      "endedMonotonicSeconds": 143314.364340875,
+      "durationSeconds": 2.3607361660106108,
+      "endedMonotonicSeconds": 145549.978205416,
       "freshOSProcess": true,
       "helperExecutableSha256": "107ae6042111689f4a02b474834038bb53ce1c1d7f3032b2ee429e027bf7e7b4",
       "helperSourceSha256": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
       "phase": "calibration",
       "privateCompilationDirectory": true,
-      "privateCompilationIdentifier": "af39cfe4a8a242a5ae32115138521a3b",
-      "processIdentifier": 74137,
+      "privateCompilationIdentifier": "0d6c02ab742946d8a48929c91b239d60",
+      "processIdentifier": 76325,
       "processSequence": 10,
-      "startedMonotonicSeconds": 143312.241912291
+      "startedMonotonicSeconds": 145547.61746925
     }
   ],
   "contractVersion": "current-russian-v1",
@@ -26780,15 +26780,15 @@
           }
         ],
         "computeUnits": "production-default",
-        "durationSeconds": 4.386442624992924,
-        "endedMonotonicSeconds": 143340.846402458,
+        "durationSeconds": 3.7846027909836266,
+        "endedMonotonicSeconds": 145576.159826041,
         "freshOSProcess": true,
         "invocation": "swift test --filter CurrentModelContractTests/testCurrentSwiftRuntimeMatchesCommittedIndependentGolden",
         "phase": "calibration",
-        "processIdentifier": 74265,
+        "processIdentifier": 76497,
         "processSequence": 1,
         "productionSourceSha256": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
-        "startedMonotonicSeconds": 143336.459959833,
+        "startedMonotonicSeconds": 145572.37522325,
         "testHarnessSourceSha256": "4f9ff71d0a4cd6ac210260ce6c55d31e658431747b24ba5b33c760d1add4fbde"
       },
       {
@@ -27231,15 +27231,15 @@
           }
         ],
         "computeUnits": "production-default",
-        "durationSeconds": 5.363322416989831,
-        "endedMonotonicSeconds": 143346.2125065,
+        "durationSeconds": 3.713788916997146,
+        "endedMonotonicSeconds": 145579.876577583,
         "freshOSProcess": true,
         "invocation": "swift test --filter CurrentModelContractTests/testCurrentSwiftRuntimeMatchesCommittedIndependentGolden",
         "phase": "calibration",
-        "processIdentifier": 74314,
+        "processIdentifier": 76545,
         "processSequence": 2,
         "productionSourceSha256": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
-        "startedMonotonicSeconds": 143340.849184083,
+        "startedMonotonicSeconds": 145576.162788666,
         "testHarnessSourceSha256": "4f9ff71d0a4cd6ac210260ce6c55d31e658431747b24ba5b33c760d1add4fbde"
       },
       {
@@ -27682,15 +27682,15 @@
           }
         ],
         "computeUnits": "production-default",
-        "durationSeconds": 4.842755166988354,
-        "endedMonotonicSeconds": 143351.059858083,
+        "durationSeconds": 3.548723708023317,
+        "endedMonotonicSeconds": 145583.427780916,
         "freshOSProcess": true,
         "invocation": "swift test --filter CurrentModelContractTests/testCurrentSwiftRuntimeMatchesCommittedIndependentGolden",
         "phase": "calibration",
-        "processIdentifier": 74361,
+        "processIdentifier": 76593,
         "processSequence": 3,
         "productionSourceSha256": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
-        "startedMonotonicSeconds": 143346.217102916,
+        "startedMonotonicSeconds": 145579.879057208,
         "testHarnessSourceSha256": "4f9ff71d0a4cd6ac210260ce6c55d31e658431747b24ba5b33c760d1add4fbde"
       },
       {
@@ -28133,15 +28133,15 @@
           }
         ],
         "computeUnits": "production-default",
-        "durationSeconds": 3.420634667010745,
-        "endedMonotonicSeconds": 143354.4840695,
+        "durationSeconds": 3.602348125015851,
+        "endedMonotonicSeconds": 145587.033123375,
         "freshOSProcess": true,
         "invocation": "swift test --filter CurrentModelContractTests/testCurrentSwiftRuntimeMatchesCommittedIndependentGolden",
         "phase": "calibration",
-        "processIdentifier": 74408,
+        "processIdentifier": 76665,
         "processSequence": 4,
         "productionSourceSha256": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
-        "startedMonotonicSeconds": 143351.063434833,
+        "startedMonotonicSeconds": 145583.43077525,
         "testHarnessSourceSha256": "4f9ff71d0a4cd6ac210260ce6c55d31e658431747b24ba5b33c760d1add4fbde"
       },
       {
@@ -28584,15 +28584,15 @@
           }
         ],
         "computeUnits": "production-default",
-        "durationSeconds": 3.420133250008803,
-        "endedMonotonicSeconds": 143357.906533791,
+        "durationSeconds": 4.260427333007101,
+        "endedMonotonicSeconds": 145591.296696291,
         "freshOSProcess": true,
         "invocation": "swift test --filter CurrentModelContractTests/testCurrentSwiftRuntimeMatchesCommittedIndependentGolden",
         "phase": "calibration",
-        "processIdentifier": 74456,
+        "processIdentifier": 76725,
         "processSequence": 5,
         "productionSourceSha256": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
-        "startedMonotonicSeconds": 143354.486400541,
+        "startedMonotonicSeconds": 145587.036268958,
         "testHarnessSourceSha256": "4f9ff71d0a4cd6ac210260ce6c55d31e658431747b24ba5b33c760d1add4fbde"
       },
       {
@@ -29035,15 +29035,15 @@
           }
         ],
         "computeUnits": "production-default",
-        "durationSeconds": 4.405917208001483,
-        "endedMonotonicSeconds": 143362.314784916,
+        "durationSeconds": 5.764202041988028,
+        "endedMonotonicSeconds": 145597.065213333,
         "freshOSProcess": true,
         "invocation": "swift test --filter CurrentModelContractTests/testCurrentSwiftRuntimeMatchesCommittedIndependentGolden",
         "phase": "calibration",
-        "processIdentifier": 74504,
+        "processIdentifier": 76772,
         "processSequence": 6,
         "productionSourceSha256": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
-        "startedMonotonicSeconds": 143357.908867708,
+        "startedMonotonicSeconds": 145591.301011291,
         "testHarnessSourceSha256": "4f9ff71d0a4cd6ac210260ce6c55d31e658431747b24ba5b33c760d1add4fbde"
       },
       {
@@ -29486,15 +29486,15 @@
           }
         ],
         "computeUnits": "production-default",
-        "durationSeconds": 5.3128790839982685,
-        "endedMonotonicSeconds": 143367.630430875,
+        "durationSeconds": 3.774746999988565,
+        "endedMonotonicSeconds": 145600.844229541,
         "freshOSProcess": true,
         "invocation": "swift test --filter CurrentModelContractTests/testCurrentSwiftRuntimeMatchesCommittedIndependentGolden",
         "phase": "calibration",
-        "processIdentifier": 74551,
+        "processIdentifier": 76831,
         "processSequence": 7,
         "productionSourceSha256": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
-        "startedMonotonicSeconds": 143362.317551791,
+        "startedMonotonicSeconds": 145597.069482541,
         "testHarnessSourceSha256": "4f9ff71d0a4cd6ac210260ce6c55d31e658431747b24ba5b33c760d1add4fbde"
       },
       {
@@ -29937,15 +29937,15 @@
           }
         ],
         "computeUnits": "production-default",
-        "durationSeconds": 3.7943275409925263,
-        "endedMonotonicSeconds": 143371.428238791,
+        "durationSeconds": 4.515581083018333,
+        "endedMonotonicSeconds": 145605.364148541,
         "freshOSProcess": true,
         "invocation": "swift test --filter CurrentModelContractTests/testCurrentSwiftRuntimeMatchesCommittedIndependentGolden",
         "phase": "calibration",
-        "processIdentifier": 74598,
+        "processIdentifier": 76879,
         "processSequence": 8,
         "productionSourceSha256": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
-        "startedMonotonicSeconds": 143367.63391125,
+        "startedMonotonicSeconds": 145600.848567458,
         "testHarnessSourceSha256": "4f9ff71d0a4cd6ac210260ce6c55d31e658431747b24ba5b33c760d1add4fbde"
       },
       {
@@ -30388,15 +30388,15 @@
           }
         ],
         "computeUnits": "production-default",
-        "durationSeconds": 3.6005916249996517,
-        "endedMonotonicSeconds": 143375.031267125,
+        "durationSeconds": 5.50157208298333,
+        "endedMonotonicSeconds": 145610.869231083,
         "freshOSProcess": true,
         "invocation": "swift test --filter CurrentModelContractTests/testCurrentSwiftRuntimeMatchesCommittedIndependentGolden",
         "phase": "calibration",
-        "processIdentifier": 74645,
+        "processIdentifier": 76927,
         "processSequence": 9,
         "productionSourceSha256": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
-        "startedMonotonicSeconds": 143371.4306755,
+        "startedMonotonicSeconds": 145605.367659,
         "testHarnessSourceSha256": "4f9ff71d0a4cd6ac210260ce6c55d31e658431747b24ba5b33c760d1add4fbde"
       },
       {
@@ -30839,15 +30839,15 @@
           }
         ],
         "computeUnits": "production-default",
-        "durationSeconds": 3.8855839159805328,
-        "endedMonotonicSeconds": 143378.920141416,
+        "durationSeconds": 5.197211624996271,
+        "endedMonotonicSeconds": 145616.070741375,
         "freshOSProcess": true,
         "invocation": "swift test --filter CurrentModelContractTests/testCurrentSwiftRuntimeMatchesCommittedIndependentGolden",
         "phase": "calibration",
-        "processIdentifier": 74692,
+        "processIdentifier": 76974,
         "processSequence": 10,
         "productionSourceSha256": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
-        "startedMonotonicSeconds": 143375.0345575,
+        "startedMonotonicSeconds": 145610.87352975,
         "testHarnessSourceSha256": "4f9ff71d0a4cd6ac210260ce6c55d31e658431747b24ba5b33c760d1add4fbde"
       }
     ],
@@ -31302,16 +31302,16 @@
           }
         ],
         "computeUnits": "production-default",
-        "durationSeconds": 3.6582417089957744,
-        "endedMonotonicSeconds": 143382.582007875,
+        "durationSeconds": 4.803773041989189,
+        "endedMonotonicSeconds": 145620.895753958,
         "freshOSProcess": true,
         "invocation": "swift test --filter CurrentModelContractTests/testCurrentSwiftRuntimeMatchesCommittedIndependentGolden",
         "maximumDelta": 0.013798130106027928,
         "phase": "holdout",
-        "processIdentifier": 74739,
+        "processIdentifier": 77021,
         "processSequence": 11,
         "productionSourceSha256": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
-        "startedMonotonicSeconds": 143378.923766166,
+        "startedMonotonicSeconds": 145616.091980916,
         "testHarnessSourceSha256": "4f9ff71d0a4cd6ac210260ce6c55d31e658431747b24ba5b33c760d1add4fbde",
         "withinFixedTolerance": true
       },
@@ -31755,16 +31755,16 @@
           }
         ],
         "computeUnits": "production-default",
-        "durationSeconds": 4.226309457997559,
-        "endedMonotonicSeconds": 143386.811919958,
+        "durationSeconds": 4.877178707974963,
+        "endedMonotonicSeconds": 145625.778101666,
         "freshOSProcess": true,
         "invocation": "swift test --filter CurrentModelContractTests/testCurrentSwiftRuntimeMatchesCommittedIndependentGolden",
         "maximumDelta": 0.013798130106027928,
         "phase": "holdout",
-        "processIdentifier": 74786,
+        "processIdentifier": 77068,
         "processSequence": 12,
         "productionSourceSha256": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
-        "startedMonotonicSeconds": 143382.5856105,
+        "startedMonotonicSeconds": 145620.900922958,
         "testHarnessSourceSha256": "4f9ff71d0a4cd6ac210260ce6c55d31e658431747b24ba5b33c760d1add4fbde",
         "withinFixedTolerance": true
       },
@@ -32208,16 +32208,16 @@
           }
         ],
         "computeUnits": "production-default",
-        "durationSeconds": 4.63745600002585,
-        "endedMonotonicSeconds": 143391.453188,
+        "durationSeconds": 4.536350749986013,
+        "endedMonotonicSeconds": 145630.319310583,
         "freshOSProcess": true,
         "invocation": "swift test --filter CurrentModelContractTests/testCurrentSwiftRuntimeMatchesCommittedIndependentGolden",
         "maximumDelta": 0.013798130106027928,
         "phase": "holdout",
-        "processIdentifier": 74833,
+        "processIdentifier": 77115,
         "processSequence": 13,
         "productionSourceSha256": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
-        "startedMonotonicSeconds": 143386.815732,
+        "startedMonotonicSeconds": 145625.782959833,
         "testHarnessSourceSha256": "4f9ff71d0a4cd6ac210260ce6c55d31e658431747b24ba5b33c760d1add4fbde",
         "withinFixedTolerance": true
       },
@@ -32661,16 +32661,16 @@
           }
         ],
         "computeUnits": "production-default",
-        "durationSeconds": 3.4402270420105197,
-        "endedMonotonicSeconds": 143394.925561375,
+        "durationSeconds": 4.362718332995428,
+        "endedMonotonicSeconds": 145634.687967916,
         "freshOSProcess": true,
         "invocation": "swift test --filter CurrentModelContractTests/testCurrentSwiftRuntimeMatchesCommittedIndependentGolden",
         "maximumDelta": 0.013798130106027928,
         "phase": "holdout",
-        "processIdentifier": 74880,
+        "processIdentifier": 77165,
         "processSequence": 14,
         "productionSourceSha256": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
-        "startedMonotonicSeconds": 143391.485334333,
+        "startedMonotonicSeconds": 145630.325249583,
         "testHarnessSourceSha256": "4f9ff71d0a4cd6ac210260ce6c55d31e658431747b24ba5b33c760d1add4fbde",
         "withinFixedTolerance": true
       },
@@ -33114,16 +33114,16 @@
           }
         ],
         "computeUnits": "production-default",
-        "durationSeconds": 3.3512987499998417,
-        "endedMonotonicSeconds": 143398.279617625,
+        "durationSeconds": 4.645685208000941,
+        "endedMonotonicSeconds": 145639.337904083,
         "freshOSProcess": true,
         "invocation": "swift test --filter CurrentModelContractTests/testCurrentSwiftRuntimeMatchesCommittedIndependentGolden",
         "maximumDelta": 0.013798130106027928,
         "phase": "holdout",
-        "processIdentifier": 74929,
+        "processIdentifier": 77216,
         "processSequence": 15,
         "productionSourceSha256": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
-        "startedMonotonicSeconds": 143394.928318875,
+        "startedMonotonicSeconds": 145634.692218875,
         "testHarnessSourceSha256": "4f9ff71d0a4cd6ac210260ce6c55d31e658431747b24ba5b33c760d1add4fbde",
         "withinFixedTolerance": true
       }
@@ -36306,8 +36306,8 @@
         }
       ],
       "computeUnits": "cpuOnly",
-      "durationSeconds": 2.570407499995781,
-      "endedMonotonicSeconds": 143319.331753708,
+      "durationSeconds": 1.9068757079949137,
+      "endedMonotonicSeconds": 145554.289836791,
       "freshOSProcess": true,
       "helperExecutableSha256": "107ae6042111689f4a02b474834038bb53ce1c1d7f3032b2ee429e027bf7e7b4",
       "helperSourceSha256": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
@@ -36326,10 +36326,10 @@
       },
       "phase": "holdout",
       "privateCompilationDirectory": true,
-      "privateCompilationIdentifier": "94310ff770b0414b92fa1c60f3927c85",
-      "processIdentifier": 74152,
+      "privateCompilationIdentifier": "9ab70d3320e446b9a33a78df66b769f8",
+      "processIdentifier": 76340,
       "processSequence": 11,
-      "startedMonotonicSeconds": 143316.761346208,
+      "startedMonotonicSeconds": 145552.382961083,
       "withinFixedTolerance": true
     },
     {
@@ -38952,8 +38952,8 @@
         }
       ],
       "computeUnits": "cpuOnly",
-      "durationSeconds": 1.896581667009741,
-      "endedMonotonicSeconds": 143323.524038,
+      "durationSeconds": 1.9952360829920508,
+      "endedMonotonicSeconds": 145558.562027583,
       "freshOSProcess": true,
       "helperExecutableSha256": "107ae6042111689f4a02b474834038bb53ce1c1d7f3032b2ee429e027bf7e7b4",
       "helperSourceSha256": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
@@ -38972,10 +38972,10 @@
       },
       "phase": "holdout",
       "privateCompilationDirectory": true,
-      "privateCompilationIdentifier": "4b21250c016e459bac9641f4f4bfb98a",
-      "processIdentifier": 74168,
+      "privateCompilationIdentifier": "603a3305d41d461fb705a1795d5a74a3",
+      "processIdentifier": 76356,
       "processSequence": 12,
-      "startedMonotonicSeconds": 143321.627456333,
+      "startedMonotonicSeconds": 145556.5667915,
       "withinFixedTolerance": true
     },
     {
@@ -41598,8 +41598,8 @@
         }
       ],
       "computeUnits": "cpuOnly",
-      "durationSeconds": 1.8926223749876954,
-      "endedMonotonicSeconds": 143327.676929666,
+      "durationSeconds": 2.117027042026166,
+      "endedMonotonicSeconds": 145562.934756833,
       "freshOSProcess": true,
       "helperExecutableSha256": "107ae6042111689f4a02b474834038bb53ce1c1d7f3032b2ee429e027bf7e7b4",
       "helperSourceSha256": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
@@ -41618,10 +41618,10 @@
       },
       "phase": "holdout",
       "privateCompilationDirectory": true,
-      "privateCompilationIdentifier": "eff02e640f654084a1afef08077a6715",
-      "processIdentifier": 74184,
+      "privateCompilationIdentifier": "1a1040a07f8141648aa229a414242d77",
+      "processIdentifier": 76372,
       "processSequence": 13,
-      "startedMonotonicSeconds": 143325.784307291,
+      "startedMonotonicSeconds": 145560.817729791,
       "withinFixedTolerance": true
     },
     {
@@ -44244,8 +44244,8 @@
         }
       ],
       "computeUnits": "cpuOnly",
-      "durationSeconds": 2.020895833004033,
-      "endedMonotonicSeconds": 143332.072944416,
+      "durationSeconds": 2.3925190420122817,
+      "endedMonotonicSeconds": 145567.717245083,
       "freshOSProcess": true,
       "helperExecutableSha256": "107ae6042111689f4a02b474834038bb53ce1c1d7f3032b2ee429e027bf7e7b4",
       "helperSourceSha256": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
@@ -44264,10 +44264,10 @@
       },
       "phase": "holdout",
       "privateCompilationDirectory": true,
-      "privateCompilationIdentifier": "c32fa0e79cab4038bbd9cf9ad1d567dc",
-      "processIdentifier": 74199,
+      "privateCompilationIdentifier": "a784dcaaced040919475ebd065906359",
+      "processIdentifier": 76387,
       "processSequence": 14,
-      "startedMonotonicSeconds": 143330.052048583,
+      "startedMonotonicSeconds": 145565.324726041,
       "withinFixedTolerance": true
     },
     {
@@ -46890,8 +46890,8 @@
         }
       ],
       "computeUnits": "cpuOnly",
-      "durationSeconds": 2.033049666992156,
-      "endedMonotonicSeconds": 143336.449977708,
+      "durationSeconds": 2.2039614589884877,
+      "endedMonotonicSeconds": 145572.351936875,
       "freshOSProcess": true,
       "helperExecutableSha256": "107ae6042111689f4a02b474834038bb53ce1c1d7f3032b2ee429e027bf7e7b4",
       "helperSourceSha256": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
@@ -46910,10 +46910,10 @@
       },
       "phase": "holdout",
       "privateCompilationDirectory": true,
-      "privateCompilationIdentifier": "dad032acfcc342f08a13df9e231b2202",
-      "processIdentifier": 74218,
+      "privateCompilationIdentifier": "91c97cea89394319a482d48c0a73e8f8",
+      "processIdentifier": 76402,
       "processSequence": 15,
-      "startedMonotonicSeconds": 143334.416928041,
+      "startedMonotonicSeconds": 145570.147975416,
       "withinFixedTolerance": true
     }
   ],

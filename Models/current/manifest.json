@@ -6,7 +6,7 @@
   },
   "contractVersion": "current-russian-v1",
   "fixture": {
-    "calibrationSha256": "0f1df446334ee1d9bb6f39fa15a962d61c7bcae4414e30e12971ccee86f244d5",
+    "calibrationSha256": "4fad118b02b00da41536fe9ff832e8032051512dfc8712d4cdfab64b204a01ea",
     "caseCount": 109,
     "corpusSha256": "41f3626cc3b8963712ec2b9a797908974c9bc8eb8f53245a9976cb7effcc840e",
     "directory": "Tests/Golden/current/current-russian-fixture-v1",

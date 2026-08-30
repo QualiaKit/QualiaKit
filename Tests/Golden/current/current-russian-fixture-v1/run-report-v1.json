@@ -1,21 +1,21 @@
 {
   "baselineFreshProcess": {
     "computeUnits": "cpuOnly",
-    "durationSeconds": 2.4632032500230707,
-    "endedMonotonicSeconds": 143271.7470355,
+    "durationSeconds": 2.415118957986124,
+    "endedMonotonicSeconds": 145504.679017791,
     "helperExecutableSha256": "107ae6042111689f4a02b474834038bb53ce1c1d7f3032b2ee429e027bf7e7b4",
     "helperSourceSha256": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
     "privateCompilationDirectory": true,
-    "privateCompilationIdentifier": "aa0beb95d824455baabd7600ec07ef39",
-    "processIdentifier": 73969,
-    "startedMonotonicSeconds": 143269.28383225
+    "privateCompilationIdentifier": "b446c467a88e48bb963d2b20e67752d4",
+    "processIdentifier": 76151,
+    "startedMonotonicSeconds": 145502.263898833
   },
   "caseCount": 109,
   "checksums": {
-    "calibrationSha256": "0f1df446334ee1d9bb6f39fa15a962d61c7bcae4414e30e12971ccee86f244d5",
+    "calibrationSha256": "4fad118b02b00da41536fe9ff832e8032051512dfc8712d4cdfab64b204a01ea",
     "corpusSha256": "41f3626cc3b8963712ec2b9a797908974c9bc8eb8f53245a9976cb7effcc840e",
     "goldenSha256": "4a62cf8f46dba89e3e3217cfdaf625213280c222b667a4afca39fbd107af88da",
-    "manifestSha256": "d17a319f0eb2b4f41b2de9e745170ca2b38835fe9aa5d0b3700a5501d22785f3",
+    "manifestSha256": "43f507fd7a27c177bdd38da736aaa6826b3bcce25f905f8cb55815e87e435656",
     "modelComponents": {
       "Data/com.apple.CoreML/model.mlmodel": "f7ac2156e756a2aacd1cca8cc3f3aded5e7b143147270ea0aea374747a609a42",
       "Data/com.apple.CoreML/weights/weight.bin": "26c028484b4df267933afbfa3ef9ca421dc7450d48bd02c720146bd4444da2f2",
@@ -23,7 +23,7 @@
     },
     "modelPackageIdentitySha256": "6e9fd764c070b52228b28236bda4e889bc0558e51897f9baf9cc42a823aad78a",
     "requirementsLockSha256": "0f25a48615cfa9507984e98d996ba79b0d4fbf5b9f5b7dd3aa801b1a5d523ee1",
-    "schemaSha256": "98ccc84270e80aa181117e8c769aabc3911fd7f0d0a3d306206a52c0ab72c356",
+    "schemaSha256": "d155c7ec622758500496665340b55997bcb69174e2723bd68b2a8dc877f20a25",
     "vocabularySha256": "78106a3d3ae8600d1ba573b967b9bb731d2c2282957cbc6e26ab20935c3da02b"
   },
   "computePolicy": {
@@ -33,9 +33,9 @@
   },
   "contractVersion": "current-russian-v1",
   "durationsSeconds": {
-    "baselineInferenceCorpus": 2.4632032500230707,
-    "tokenizationCorpus": 0.001207833003718406,
-    "transformCorpus": 0.0017090410110540688
+    "baselineInferenceCorpus": 2.415118957986124,
+    "tokenizationCorpus": 0.0013482909998856485,
+    "transformCorpus": 0.0018041660077869892
   },
   "environment": {
     "architecture": "arm64",

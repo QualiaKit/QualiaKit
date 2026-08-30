@@ -972,16 +972,27 @@ def build_run_report(
     }
 
 
-def checksum_inventory() -> dict[str, Any]:
+def swift_build_input_paths() -> list[str]:
+    """Return package-graph and source/resource inputs compiled by the attested commands."""
+    paths = ["Package.swift"]
+    if (ROOT / "Package.resolved").is_file():
+        paths.append("Package.resolved")
+    for directory in (ROOT / "Sources", ROOT / "Tests" / "QualiaKitTests"):
+        paths.extend(
+            str(path.relative_to(ROOT))
+            for path in sorted(directory.rglob("*"))
+            if path.is_file()
+        )
+    return sorted(set(paths))
+
+
+def attested_paths() -> list[str]:
     bundle = f"Tests/Golden/current/{FIXTURE_VERSION}"
     paths = [
         ".github/workflows/ci.yml",
         "Models/current/manifest.json",
         "Models/current/manifest.schema.json",
         "Models/current/MODEL_CARD.md",
-        "Sources/QualiaBert/BertModelWrapper.swift",
-        "Sources/QualiaBert/BertTokenizer.swift",
-        "Tests/QualiaKitTests/CurrentModelContractTests.swift",
         "Tools/ModelContract/reference_inference.py",
         "Tools/ModelContract/coreml_inference.swift",
         "Tools/ModelContract/requirements.lock",
@@ -992,6 +1003,12 @@ def checksum_inventory() -> dict[str, Any]:
         f"{bundle}/run-report-v1.json",
         f"{bundle}/index.json",
     ]
+    return sorted(set(paths + swift_build_input_paths()))
+
+
+def checksum_inventory() -> dict[str, Any]:
+    bundle = f"Tests/Golden/current/{FIXTURE_VERSION}"
+    paths = attested_paths()
     verification = f"{bundle}/verification-v1.json"
     if (ROOT / verification).is_file():
         paths.append(verification)
@@ -1001,28 +1018,6 @@ def checksum_inventory() -> dict[str, Any]:
         "excludesSelf": "Models/current/checksums.json",
         "files": {path: sha256_file(ROOT / path) for path in paths},
     }
-
-
-def attested_paths() -> list[str]:
-    bundle = f"Tests/Golden/current/{FIXTURE_VERSION}"
-    return [
-        ".github/workflows/ci.yml",
-        "Models/current/manifest.json",
-        "Models/current/manifest.schema.json",
-        "Models/current/MODEL_CARD.md",
-        "Sources/QualiaBert/BertModelWrapper.swift",
-        "Sources/QualiaBert/BertTokenizer.swift",
-        "Tests/QualiaKitTests/CurrentModelContractTests.swift",
-        "Tools/ModelContract/reference_inference.py",
-        "Tools/ModelContract/coreml_inference.swift",
-        "Tools/ModelContract/requirements.lock",
-        f"{bundle}/manifest.json",
-        f"{bundle}/corpus-v1.json",
-        f"{bundle}/fixture-v1.json",
-        f"{bundle}/calibration-v1.json",
-        f"{bundle}/run-report-v1.json",
-        f"{bundle}/index.json",
-    ]
 
 
 def fixture_index(directory: Path = GOLDEN_DIRECTORY) -> dict[str, Any]:
@@ -1144,29 +1139,31 @@ def validate_manifest_document(manifest: dict[str, Any], schema: dict[str, Any])
     if len(label_names) != len(set(label_names)):
         raise ContractError("schema", "manifest.json", "output label names must be unique")
 
+    def has_verified_value(state: Any) -> bool:
+        return isinstance(state, dict) and state.get("status") == "verified" and "value" in state
+
     conditions = manifest["runtimeRefactorGate"]["conditions"]
     actual_states = {
         "labelSemantics": "resolved"
-        if all(item["semanticMeaning"]["status"] == "verified" for item in labels)
+        if all(has_verified_value(item["semanticMeaning"]) for item in labels)
         else "unresolved",
         "outputKind": "resolved"
-        if manifest["outputs"]["kind"]["status"] == "verified"
+        if has_verified_value(manifest["outputs"]["kind"])
         else "unresolved",
         "tokenizerTrainingParity": "resolved"
-        if all(manifest["tokenizer"][field]["status"] == "verified"
+        if all(has_verified_value(manifest["tokenizer"][field])
                for field in ("trainingIdentity", "trainingVersion", "contextPairSupport"))
         else "unresolved",
     }
     provenance_states = [
-        manifest["model"][field]["status"]
+        manifest["model"][field]
         for field in ("task", "architectureFamily", "license")
     ] + [
-        value["status"]
-        for value in manifest["provenance"].values()
-        if isinstance(value, dict) and value.get("status") in ("unknown", "verified")
+        manifest["provenance"][field]
+        for field in ("source", "dataset", "domain", "classBalance", "trainingConfiguration")
     ]
     actual_states["provenance"] = (
-        "resolved" if provenance_states and all(state == "verified" for state in provenance_states)
+        "resolved" if all(has_verified_value(state) for state in provenance_states)
         else "unresolved"
     )
     for name, actual in actual_states.items():
@@ -1211,35 +1208,84 @@ def schema_compatibility_self_test() -> list[str]:
     resolved = copy.deepcopy(manifest)
     resolved["model"]["license"] = {
         "status": "verified",
+        "value": "Apache-2.0",
         "evidence": "checksum-bound primary license record",
     }
-    for label in resolved["outputs"]["labels"]:
+    for index, label in enumerate(resolved["outputs"]["labels"]):
         label["semanticMeaning"] = {
             "status": "verified",
+            "value": {"canonicalMeaning": f"canonical-meaning-{index}"},
             "evidence": "checksum-bound primary dataset label schema",
         }
-        label["productSignal"] = "verified-signal-id"
+        label["productSignal"] = f"verified-signal-{index}"
     resolved["outputs"]["kind"] = {
         "status": "verified",
-        "value": "classifier_logits",
+        "value": "logits",
         "evidence": "reproducible checksum-bound graph extraction",
     }
-    for field in ("trainingIdentity", "trainingVersion", "contextPairSupport"):
-        resolved["tokenizer"][field] = {
-            "status": "verified",
-            "evidence": "checksum-bound primary tokenizer record",
-        }
-    for field in ("task", "architectureFamily"):
-        resolved["model"][field] = {
-            "status": "verified",
-            "evidence": "checksum-bound primary model record",
-        }
-    for field, value in list(resolved["provenance"].items()):
-        if isinstance(value, dict) and value.get("status") == "unknown":
-            resolved["provenance"][field] = {
-                "status": "verified",
-                "evidence": "checksum-bound primary provenance record",
-            }
+    resolved["tokenizer"]["trainingIdentity"] = {
+        "status": "verified",
+        "value": "bert-base-multilingual-cased-tokenizer",
+        "evidence": "checksum-bound primary tokenizer record",
+    }
+    resolved["tokenizer"]["trainingVersion"] = {
+        "status": "verified",
+        "value": "1.0.0",
+        "evidence": "checksum-bound primary tokenizer lockfile",
+    }
+    resolved["tokenizer"]["contextPairSupport"] = {
+        "status": "verified",
+        "value": {"mode": "singleText", "template": "[CLS] text [SEP]"},
+        "evidence": "checksum-bound primary training input template",
+    }
+    resolved["model"]["task"] = {
+        "status": "verified",
+        "value": "sentiment-classification",
+        "evidence": "checksum-bound primary model record",
+    }
+    resolved["model"]["architectureFamily"] = {
+        "status": "verified",
+        "value": {"family": "BERT", "version": "verified-checkpoint-v1"},
+        "evidence": "checksum-bound primary model record",
+    }
+    sample_sha256 = "0" * 64
+    resolved["provenance"]["source"] = {
+        "status": "verified",
+        "value": {
+            "identifier": "primary-model-repository",
+            "revision": "verified-revision",
+            "artifactSha256": sample_sha256,
+        },
+        "evidence": "checksum-bound primary source record",
+    }
+    resolved["provenance"]["dataset"] = {
+        "status": "verified",
+        "value": {
+            "identifier": "primary-training-dataset",
+            "version": "verified-version",
+            "license": "Apache-2.0",
+        },
+        "evidence": "checksum-bound primary dataset record",
+    }
+    resolved["provenance"]["domain"] = {
+        "status": "verified",
+        "value": ["reviews"],
+        "evidence": "checksum-bound primary dataset documentation",
+    }
+    resolved["provenance"]["classBalance"] = {
+        "status": "verified",
+        "value": {"split": "train", "countsByLabel": {"LABEL_0": 100}},
+        "evidence": "checksum-bound primary dataset statistics",
+    }
+    resolved["provenance"]["trainingConfiguration"] = {
+        "status": "verified",
+        "value": {
+            "trainingArtifactSha256": sample_sha256,
+            "exportArtifactSha256": sample_sha256,
+            "environmentLockSha256": sample_sha256,
+        },
+        "evidence": "checksum-bound primary training and export records",
+    }
     resolved["runtimeRefactorGate"]["conditions"] = {
         name: "resolved" for name in (
             "labelSemantics", "outputKind", "provenance", "tokenizerTrainingParity"
@@ -1269,9 +1315,30 @@ def schema_compatibility_self_test() -> list[str]:
     unknown_without_owner = copy.deepcopy(manifest)
     unknown_without_owner["model"]["license"].pop("owner")
     must_reject(unknown_without_owner, "unknown-without-owner")
+    verified_without_value = copy.deepcopy(manifest)
+    verified_without_value["model"]["license"] = {
+        "status": "verified",
+        "evidence": "checksum-bound primary license record",
+    }
+    must_reject(verified_without_value, "verified-without-value")
     verified_without_evidence = copy.deepcopy(manifest)
-    verified_without_evidence["model"]["license"] = {"status": "verified"}
+    verified_without_evidence["model"]["license"] = {
+        "status": "verified",
+        "value": "Apache-2.0",
+    }
     must_reject(verified_without_evidence, "verified-without-evidence")
+    invalid_output_kind = copy.deepcopy(resolved)
+    invalid_output_kind["outputs"]["kind"]["value"] = "probably_logits"
+    must_reject(invalid_output_kind, "unknown-output-kind")
+    labels_without_values = copy.deepcopy(resolved)
+    labels_without_values["outputs"]["labels"][0]["semanticMeaning"].pop("value")
+    must_reject(labels_without_values, "resolved-label-condition-without-semantic-values")
+    tokenizer_without_values = copy.deepcopy(resolved)
+    tokenizer_without_values["tokenizer"]["trainingIdentity"].pop("value")
+    must_reject(tokenizer_without_values, "resolved-tokenizer-condition-without-contract-values")
+    provenance_without_values = copy.deepcopy(resolved)
+    provenance_without_values["provenance"]["source"].pop("value")
+    must_reject(provenance_without_values, "resolved-provenance-condition-without-structured-values")
     numeric_product_signal = copy.deepcopy(manifest)
     numeric_product_signal["outputs"]["labels"][0]["productSignal"] = 7
     must_reject(numeric_product_signal, "invalid-product-signal-type")
@@ -1846,6 +1913,10 @@ def record_verification_evidence(model_path: Path, vocab_path: Path) -> dict[str
             ),
         ]
     files = {path: sha256_file(ROOT / path) for path in attested_paths()}
+    swift_build_inputs = {
+        path: files[path]
+        for path in swift_build_input_paths()
+    }
     evidence: dict[str, Any] = {
         "schemaVersion": 1,
         "status": "passed",
@@ -1868,6 +1939,8 @@ def record_verification_evidence(model_path: Path, vocab_path: Path) -> dict[str
         "commands": commands,
         "attestedFiles": files,
         "sourceClosureSha256": sha256_bytes(canonical_bytes(files)),
+        "swiftBuildInputs": swift_build_inputs,
+        "swiftBuildInputClosureSha256": sha256_bytes(canonical_bytes(swift_build_inputs)),
     }
     evidence["evidenceClosureSha256"] = sha256_bytes(canonical_bytes(evidence))
     write_generated_json(VERIFICATION_EVIDENCE_PATH, evidence)
@@ -1923,6 +1996,14 @@ def verify_committed_evidence() -> dict[str, Any]:
         raise ContractError("attestation", "verification-v1.json", "attested source closure changed")
     if evidence.get("sourceClosureSha256") != sha256_bytes(canonical_bytes(files)):
         raise ContractError("attestation", "verification-v1.json", "source closure digest mismatch")
+    swift_build_inputs = {
+        path: files[path]
+        for path in swift_build_input_paths()
+    }
+    if evidence.get("swiftBuildInputs") != swift_build_inputs:
+        raise ContractError("attestation", "verification-v1.json", "Swift build input closure changed")
+    if evidence.get("swiftBuildInputClosureSha256") != sha256_bytes(canonical_bytes(swift_build_inputs)):
+        raise ContractError("attestation", "verification-v1.json", "Swift build input digest mismatch")
     closure = dict(evidence)
     declared_closure = closure.pop("evidenceClosureSha256", None)
     if declared_closure != sha256_bytes(canonical_bytes(closure)):
