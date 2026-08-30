@@ -27,7 +27,8 @@ let package = Package(
         ),
     ],
     targets: [
-        // QualiaKit 2.0 domain layer. It intentionally has no framework dependencies.
+        // QualiaKit 2.0 domain and analyzer runtime.
+        // It has no Core ML, Core Haptics, or external package dependencies.
         .target(
             name: "QualiaKit",
             path: "Sources/QualiaKit"

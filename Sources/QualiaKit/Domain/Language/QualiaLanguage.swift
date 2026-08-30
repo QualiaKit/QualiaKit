@@ -11,4 +11,8 @@ public struct QualiaLanguage: Hashable, Sendable {
         }
         self.rawValue = rawValue
     }
+
+    init(validatedRawValue rawValue: String) {
+        self.rawValue = rawValue
+    }
 }
