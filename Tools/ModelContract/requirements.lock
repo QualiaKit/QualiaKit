@@ -1,0 +1,9 @@
+# QualiaKit current-model reference environment (network-free)
+lock-format==1
+python==3.14.0
+python-dependencies==standard-library-only
+swift==6.3.3
+xcode==26.6
+coremlcompiler==3520.5.1
+coreml-compute-units==cpuOnly
+network-access==disabled

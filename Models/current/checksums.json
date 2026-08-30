@@ -1,0 +1,20 @@
+{
+  "algorithm": "SHA-256",
+  "excludesSelf": "Models/current/checksums.json",
+  "files": {
+    "Models/current/MODEL_CARD.md": "d68ed2f60048723fa0f97b18e0fdee457f2eca77d7fe8ec2978d5cd64a952115",
+    "Models/current/graph-evidence.json": "ca2a90f61c1ce742a84847470360e738b3e5ed4015b62e986212b5ae576280a4",
+    "Models/current/manifest.json": "68efe475da27c13d37e65927df416b1bfa6f12353df86a65a3467cc5d327940e",
+    "Models/current/manifest.schema.json": "e5dcf8d15af0398e50de2fa26489db574f3d99a5b6a1cae2f2ade21c251bbcce",
+    "Tests/Golden/current/current-russian-fixture-v1/calibration-v1.json": "b133d387720b34dc0508e63392d2514ada55e621f1683de15ac8700ff5fe0370",
+    "Tests/Golden/current/current-russian-fixture-v1/corpus-v1.json": "41f3626cc3b8963712ec2b9a797908974c9bc8eb8f53245a9976cb7effcc840e",
+    "Tests/Golden/current/current-russian-fixture-v1/fixture-v1.json": "b01ba282033904d85a5b5a38f32b0c8123b8f74a0d1d48fb1237754f3da39476",
+    "Tests/Golden/current/current-russian-fixture-v1/index.json": "97ddecfc9c77c11e4f1a3d31b29c25555fe3878a6862d574050a99c537e4e375",
+    "Tests/Golden/current/current-russian-fixture-v1/manifest.json": "68efe475da27c13d37e65927df416b1bfa6f12353df86a65a3467cc5d327940e",
+    "Tests/Golden/current/current-russian-fixture-v1/run-report-v1.json": "f5f291676b2a79bda8ee716dfde1fe711b697de7e9624b528410e8002f1a7952",
+    "Tools/ModelContract/coreml_inference.swift": "824b55d1a8ccb3b9c7ec1091c5fde1105a47af03db1494f7ca0ca68a7f0d722e",
+    "Tools/ModelContract/reference_inference.py": "f50467b41eb4136f676e14f2535069af77d90e857829b18d63095f15fc080bfe",
+    "Tools/ModelContract/requirements.lock": "2309f3802186d4453a1af46e48873f86f4b078c3d09f195fe7e2d7f80049266c"
+  },
+  "schemaVersion": 1
+}

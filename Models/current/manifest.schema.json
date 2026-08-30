@@ -1,0 +1,280 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualiakit.dev/schemas/model-contract-v1.json",
+  "title": "QualiaKit model contract schema v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "contractVersion",
+    "compatibility",
+    "model",
+    "tokenizer",
+    "inputs",
+    "outputs",
+    "floatingPointTolerance",
+    "fixture",
+    "provenance",
+    "ownership",
+    "releaseRisks",
+    "runtimeRefactorGate"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "contractVersion": { "$ref": "#/$defs/nonEmptyString" },
+    "compatibility": {
+      "type": "object",
+      "required": [
+        "v1Additions",
+        "breakingChangesRequireSchemaIncrement",
+        "consumersMustRejectUnsupportedVersions"
+      ],
+      "properties": {
+        "v1Additions": { "$ref": "#/$defs/nonEmptyString" },
+        "breakingChangesRequireSchemaIncrement": { "type": "boolean" },
+        "consumersMustRejectUnsupportedVersions": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "model": {
+      "type": "object",
+      "required": [
+        "identifier",
+        "version",
+        "identityBasis",
+        "packageIdentitySha256",
+        "componentSha256",
+        "task",
+        "architectureFamily",
+        "languages",
+        "license",
+        "redistribution"
+      ],
+      "properties": {
+        "identifier": { "$ref": "#/$defs/nonEmptyString" },
+        "version": { "$ref": "#/$defs/nonEmptyString" },
+        "identityBasis": { "$ref": "#/$defs/nonEmptyString" },
+        "packageIdentitySha256": { "$ref": "#/$defs/sha256" },
+        "componentSha256": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "$ref": "#/$defs/sha256" }
+        },
+        "task": { "$ref": "#/$defs/evidenceState" },
+        "architectureFamily": { "$ref": "#/$defs/evidenceState" },
+        "languages": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "license": { "$ref": "#/$defs/evidenceState" },
+        "redistribution": {
+          "type": "object",
+          "required": ["status", "allowed", "reason"],
+          "properties": {
+            "status": { "$ref": "#/$defs/nonEmptyString" },
+            "allowed": { "type": "boolean" },
+            "reason": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "tokenizer": {
+      "type": "object",
+      "required": [
+        "type",
+        "vocabulary",
+        "vocabularySha256",
+        "vocabularyLineCount",
+        "lowercase",
+        "unicodeNormalization",
+        "maxSequenceLength",
+        "specialTokens",
+        "trainingIdentity",
+        "trainingVersion",
+        "contextPairSupport",
+        "reconstructionBoundary"
+      ],
+      "properties": {
+        "type": { "$ref": "#/$defs/nonEmptyString" },
+        "vocabulary": { "$ref": "#/$defs/nonEmptyString" },
+        "vocabularySha256": { "$ref": "#/$defs/sha256" },
+        "vocabularyLineCount": { "type": "integer", "minimum": 1 },
+        "lowercase": { "type": "boolean" },
+        "unicodeNormalization": { "$ref": "#/$defs/nonEmptyString" },
+        "maxSequenceLength": { "type": "integer", "minimum": 1 },
+        "specialTokens": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "$ref": "#/$defs/specialToken" }
+        },
+        "trainingIdentity": { "$ref": "#/$defs/evidenceState" },
+        "trainingVersion": { "$ref": "#/$defs/evidenceState" },
+        "contextPairSupport": { "$ref": "#/$defs/evidenceState" },
+        "reconstructionBoundary": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": true
+    },
+    "inputs": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/tensor" }
+    },
+    "outputs": {
+      "type": "object",
+      "required": ["classLabel", "scores", "scoresType", "kind", "labels"],
+      "properties": {
+        "classLabel": { "$ref": "#/$defs/nonEmptyString" },
+        "scores": { "$ref": "#/$defs/nonEmptyString" },
+        "scoresType": { "$ref": "#/$defs/nonEmptyString" },
+        "kind": {
+          "type": "object",
+          "required": ["status", "value", "evidence"],
+          "properties": {
+            "status": { "$ref": "#/$defs/nonEmptyString" },
+            "value": { "$ref": "#/$defs/nonEmptyString" },
+            "evidence": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": true
+        },
+        "labels": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/label" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "floatingPointTolerance": {
+      "type": "object",
+      "required": [
+        "comparison",
+        "derivation",
+        "absoluteByField",
+        "calibrationProcessCount",
+        "holdoutProcessCount"
+      ],
+      "properties": {
+        "comparison": { "enum": ["absolute", "relative", "absoluteOrRelative"] },
+        "derivation": { "$ref": "#/$defs/nonEmptyString" },
+        "absoluteByField": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "type": "number", "minimum": 0 }
+        },
+        "calibrationProcessCount": { "type": "integer", "minimum": 1 },
+        "holdoutProcessCount": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": true
+    },
+    "fixture": {
+      "type": "object",
+      "required": [
+        "version",
+        "immutable",
+        "caseCount",
+        "corpusSha256",
+        "goldenSha256",
+        "calibrationSha256"
+      ],
+      "properties": {
+        "version": { "$ref": "#/$defs/nonEmptyString" },
+        "immutable": { "type": "boolean" },
+        "caseCount": { "type": "integer", "minimum": 1 },
+        "corpusSha256": { "$ref": "#/$defs/sha256" },
+        "goldenSha256": { "$ref": "#/$defs/sha256" },
+        "calibrationSha256": { "$ref": "#/$defs/sha256" },
+        "directory": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": true
+    },
+    "provenance": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": true
+    },
+    "ownership": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "releaseRisks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["field", "status", "releaseImpact"],
+        "properties": {
+          "field": { "$ref": "#/$defs/nonEmptyString" },
+          "status": { "$ref": "#/$defs/nonEmptyString" },
+          "releaseImpact": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "runtimeRefactorGate": {
+      "type": "object",
+      "required": ["status", "rule", "conditions"],
+      "properties": {
+        "status": { "enum": ["blocked", "open"] },
+        "rule": { "$ref": "#/$defs/nonEmptyString" },
+        "conditions": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "enum": ["resolved", "unresolved"] }
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "evidenceState": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["unknown", "verified"] },
+        "owner": { "$ref": "#/$defs/nonEmptyString" },
+        "proofPlan": { "$ref": "#/$defs/nonEmptyString" },
+        "evidence": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": true
+    },
+    "specialToken": {
+      "type": "object",
+      "required": ["token", "id"],
+      "properties": {
+        "token": { "$ref": "#/$defs/nonEmptyString" },
+        "id": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "tensor": {
+      "type": "object",
+      "required": ["dataType", "shape", "required"],
+      "properties": {
+        "dataType": { "$ref": "#/$defs/nonEmptyString" },
+        "shape": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "integer", "minimum": 1 }
+        },
+        "required": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "label": {
+      "type": "object",
+      "required": ["name", "semanticMeaning", "productSignal"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "semanticMeaning": { "$ref": "#/$defs/evidenceState" },
+        "productSignal": {}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

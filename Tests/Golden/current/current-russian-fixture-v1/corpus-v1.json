@@ -1,0 +1,1057 @@
+{
+  "caseCount": 109,
+  "cases": [
+    {
+      "categories": [
+        "whitespace"
+      ],
+      "id": "edge-empty",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": ""
+    },
+    {
+      "categories": [
+        "whitespace"
+      ],
+      "id": "edge-whitespace",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": " \t\n  "
+    },
+    {
+      "categories": [
+        "yo_e",
+        "punctuation"
+      ],
+      "id": "unicode-yo",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Ёжик идёт под тёплый дождь."
+    },
+    {
+      "categories": [
+        "yo_e",
+        "punctuation"
+      ],
+      "id": "unicode-e",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Ежик идет под теплый дождь."
+    },
+    {
+      "categories": [
+        "dash_variants",
+        "negation"
+      ],
+      "id": "dash-hyphen",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Старый дом — не конец пути."
+    },
+    {
+      "categories": [
+        "dash_variants"
+      ],
+      "id": "dash-en",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Тихий лес – безопасное место."
+    },
+    {
+      "categories": [
+        "dash_variants",
+        "yo_e"
+      ],
+      "id": "dash-em",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Шаг — пауза — ещё один шаг."
+    },
+    {
+      "categories": [
+        "quote_variants"
+      ],
+      "id": "quotes-angle",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Он прошептал: «Я рядом»."
+    },
+    {
+      "categories": [
+        "quote_variants",
+        "negation"
+      ],
+      "id": "quotes-curly",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Она ответила: “Это не сон”."
+    },
+    {
+      "categories": [
+        "quote_variants",
+        "negation"
+      ],
+      "id": "quotes-ascii",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Голос сказал: \"Не бойся\"."
+    },
+    {
+      "categories": [
+        "ellipses"
+      ],
+      "id": "ellipsis-unicode",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Дверь медленно открылась…"
+    },
+    {
+      "categories": [
+        "ellipses"
+      ],
+      "id": "ellipsis-ascii",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Дверь медленно открылась..."
+    },
+    {
+      "categories": [
+        "emoji",
+        "yo_e"
+      ],
+      "id": "emoji-light",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "В окне зажёгся свет ✨"
+    },
+    {
+      "categories": [
+        "emoji"
+      ],
+      "id": "emoji-alarm",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Сирена замолчала 🚨, все целы."
+    },
+    {
+      "categories": [
+        "emoji"
+      ],
+      "id": "emoji-family",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Семья вернулась домой 👨‍👩‍👧‍👦"
+    },
+    {
+      "categories": [
+        "mixed_scripts",
+        "yo_e"
+      ],
+      "id": "mixed-latin",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Система SAFE, но экран всё ещё мигает."
+    },
+    {
+      "categories": [
+        "mixed_scripts",
+        "dash_variants"
+      ],
+      "id": "mixed-number",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Сектор B-12 закрыт до 07:30."
+    },
+    {
+      "categories": [
+        "mixed_scripts",
+        "negation"
+      ],
+      "id": "mixed-cyrillic-latin",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Код доступа alphaБета42 не принят."
+    },
+    {
+      "categories": [
+        "casing"
+      ],
+      "id": "case-lower",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "это только начало"
+    },
+    {
+      "categories": [
+        "casing"
+      ],
+      "id": "case-title",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Это Только Начало"
+    },
+    {
+      "categories": [
+        "casing"
+      ],
+      "id": "case-upper",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "ЭТО ТОЛЬКО НАЧАЛО"
+    },
+    {
+      "categories": [
+        "unknown_words"
+      ],
+      "id": "unknown-long",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "сверхквазипсевдонедоразумение"
+    },
+    {
+      "categories": [
+        "unknown_words",
+        "mixed_scripts"
+      ],
+      "id": "unknown-symbols",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "абракадабраxyz987 и qqqщщщ"
+    },
+    {
+      "categories": [
+        "punctuation"
+      ],
+      "id": "punctuation-dense",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Стой!!! Кто там?! Никого; показалось."
+    },
+    {
+      "categories": [
+        "whitespace",
+        "dash_variants",
+        "negation"
+      ],
+      "id": "newline-dialogue",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "— Ты слышал?\n— Нет, ничего."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-001",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "На лестнице погас свет, и шаги стали ближе."
+    },
+    {
+      "categories": [
+        "production_like",
+        "negation"
+      ],
+      "id": "narrative-002",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "За окном качнулась ветка, хотя ветра не было."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-003",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Письмо лежало на столе без подписи."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-004",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Лифт остановился между этажами."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-005",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Телефон зазвонил в пустой комнате."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-006",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "В коридоре появилась новая дверь."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-007",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Часы пробили тринадцать раз."
+    },
+    {
+      "categories": [
+        "production_like",
+        "yo_e"
+      ],
+      "id": "narrative-008",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Собака смотрела в тёмный угол."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-009",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "На снегу виднелась одна цепочка следов."
+    },
+    {
+      "categories": [
+        "production_like",
+        "yo_e"
+      ],
+      "id": "narrative-010",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Ключ подошёл к старому замку."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-011",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Герой спрятал карту и продолжил путь."
+    },
+    {
+      "categories": [
+        "production_like",
+        "yo_e"
+      ],
+      "id": "narrative-012",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Поезд медленно вошёл в туман."
+    },
+    {
+      "categories": [
+        "production_like",
+        "yo_e"
+      ],
+      "id": "narrative-013",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Радио поймало далёкий шёпот."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-014",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Вода под мостом внезапно замерла."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-015",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Книга открылась на последней странице."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-016",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Фонарь мигнул и снова загорелся."
+    },
+    {
+      "categories": [
+        "production_like",
+        "yo_e"
+      ],
+      "id": "narrative-017",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Путники нашли тёплое убежище."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-018",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Утром команда получила хорошие новости."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-019",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Старый механизм наконец заработал."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-020",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Друзья встретились у знакомого дома."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-021",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Врач из вымышленной истории закончил смену."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-022",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Капитан проверил маршрут перед отплытием."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-023",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Музыка стихла перед началом спектакля."
+    },
+    {
+      "categories": [
+        "production_like",
+        "yo_e"
+      ],
+      "id": "narrative-024",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Ребёнок нашёл потерянную игрушку."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-025",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Дождь закончился, и облака разошлись."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-026",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Последний автобус ждал на остановке."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-027",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Архив оказался аккуратно рассортирован."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-028",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Экспедиция передала сигнал на базу."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-029",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Сад наполнился запахом сирени."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-030",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "На площади зажглись праздничные огни."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-031",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Разговор завершился спокойным согласием."
+    },
+    {
+      "categories": [
+        "production_like",
+        "negation"
+      ],
+      "id": "narrative-032",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Неизвестный силуэт исчез за поворотом."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-033",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Комната казалась меньше, чем вчера."
+    },
+    {
+      "categories": [
+        "production_like",
+        "negation",
+        "yo_e"
+      ],
+      "id": "narrative-034",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "В стене тихо щёлкнул скрытый механизм."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-035",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Песок под ногами начал едва заметно дрожать."
+    },
+    {
+      "categories": [
+        "production_like",
+        "yo_e"
+      ],
+      "id": "narrative-036",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Из закрытого шкафа донёсся стук."
+    },
+    {
+      "categories": [
+        "production_like",
+        "negation"
+      ],
+      "id": "narrative-037",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Карта показывала дорогу, которой не существовало."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-038",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "В зеркале отражалось открытое окно."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-039",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Свеча погасла без причины."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "narrative-040",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "На пороге лежал свежий букет."
+    },
+    {
+      "categories": [
+        "negation",
+        "production_like"
+      ],
+      "id": "negation-001",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Я не боюсь этого пустого коридора."
+    },
+    {
+      "categories": [
+        "negation",
+        "production_like"
+      ],
+      "id": "negation-002",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Это вовсе не плохая новость."
+    },
+    {
+      "categories": [
+        "negation",
+        "production_like"
+      ],
+      "id": "negation-003",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Никто не пострадал во время учебной тревоги."
+    },
+    {
+      "categories": [
+        "negation",
+        "production_like"
+      ],
+      "id": "negation-004",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Опасность не подтвердилась."
+    },
+    {
+      "categories": [
+        "negation",
+        "production_like"
+      ],
+      "id": "negation-005",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Неожиданный шум оказался звуком дождя."
+    },
+    {
+      "categories": [
+        "negation",
+        "production_like"
+      ],
+      "id": "negation-006",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Герой никогда не открывает дверь без проверки."
+    },
+    {
+      "categories": [
+        "negation",
+        "production_like"
+      ],
+      "id": "negation-007",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Мы не потеряли карту, она лежит в рюкзаке."
+    },
+    {
+      "categories": [
+        "negation",
+        "production_like"
+      ],
+      "id": "negation-008",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Ни один сигнал не указывал на угрозу."
+    },
+    {
+      "categories": [
+        "negation",
+        "production_like"
+      ],
+      "id": "negation-009",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Не было ни крика, ни следов борьбы."
+    },
+    {
+      "categories": [
+        "negation",
+        "production_like"
+      ],
+      "id": "negation-010",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Странный силуэт оказался обычной вешалкой."
+    },
+    {
+      "categories": [
+        "negation",
+        "production_like"
+      ],
+      "id": "negation-011",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Система не обнаружила ошибок."
+    },
+    {
+      "categories": [
+        "negation",
+        "production_like"
+      ],
+      "id": "negation-012",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Я едва не забыл выключить фонарь."
+    },
+    {
+      "categories": [
+        "negation",
+        "production_like"
+      ],
+      "id": "negation-013",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Нельзя сказать, что путь был опасным."
+    },
+    {
+      "categories": [
+        "negation",
+        "production_like"
+      ],
+      "id": "negation-014",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Он не только вернулся, но и привёл помощь."
+    },
+    {
+      "categories": [
+        "negation",
+        "production_like"
+      ],
+      "id": "negation-015",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Тишина здесь не означает беду."
+    },
+    {
+      "categories": [
+        "hard_negative",
+        "production_like"
+      ],
+      "id": "hard-negative-001",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Ужасно вкусный пирог исчез за минуту."
+    },
+    {
+      "categories": [
+        "hard_negative",
+        "production_like"
+      ],
+      "id": "hard-negative-002",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Страшно красивый закат окрасил море."
+    },
+    {
+      "categories": [
+        "hard_negative",
+        "production_like"
+      ],
+      "id": "hard-negative-003",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Убийственный темп репетиции всем понравился."
+    },
+    {
+      "categories": [
+        "hard_negative",
+        "production_like"
+      ],
+      "id": "hard-negative-004",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Кровь дракона — название безалкогольного напитка."
+    },
+    {
+      "categories": [
+        "hard_negative",
+        "production_like"
+      ],
+      "id": "hard-negative-005",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Фильм ужасов оказался доброй пародией."
+    },
+    {
+      "categories": [
+        "hard_negative",
+        "production_like"
+      ],
+      "id": "hard-negative-006",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Мёртвая петля была фигурой на авиашоу."
+    },
+    {
+      "categories": [
+        "hard_negative",
+        "production_like"
+      ],
+      "id": "hard-negative-007",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "В игре герой получил безопасный учебный удар."
+    },
+    {
+      "categories": [
+        "hard_negative",
+        "production_like"
+      ],
+      "id": "hard-negative-008",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Кошмарный свитер подарили на шуточный праздник."
+    },
+    {
+      "categories": [
+        "hard_negative",
+        "production_like"
+      ],
+      "id": "hard-negative-009",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Опасно близкий счёт сделал матч интереснее."
+    },
+    {
+      "categories": [
+        "hard_negative",
+        "production_like"
+      ],
+      "id": "hard-negative-010",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Тревога была только плановой проверкой."
+    },
+    {
+      "categories": [
+        "hard_negative",
+        "production_like"
+      ],
+      "id": "hard-negative-011",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Монстр на плакате рекламировал детский спектакль."
+    },
+    {
+      "categories": [
+        "hard_negative",
+        "production_like"
+      ],
+      "id": "hard-negative-012",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Призрак оказался рисунком на занавеске."
+    },
+    {
+      "categories": [
+        "hard_negative",
+        "production_like"
+      ],
+      "id": "hard-negative-013",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Взрыв смеха раздался в зрительном зале."
+    },
+    {
+      "categories": [
+        "hard_negative",
+        "production_like"
+      ],
+      "id": "hard-negative-014",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Роковой аккорд завершил весёлую песню."
+    },
+    {
+      "categories": [
+        "hard_negative",
+        "production_like"
+      ],
+      "id": "hard-negative-015",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Пугающе точный прогноз помог путешественникам."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "short-001",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Да."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "short-002",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Нет."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "short-003",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Возможно."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "short-004",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Тихо."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "short-005",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Слишком тихо."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "short-006",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Всё хорошо."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "short-007",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Путь свободен."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "short-008",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Свет погас."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "short-009",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Дверь открыта."
+    },
+    {
+      "categories": [
+        "production_like"
+      ],
+      "id": "short-010",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "Сигнал принят."
+    },
+    {
+      "categories": [
+        "truncation"
+      ],
+      "id": "truncation-125",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и"
+    },
+    {
+      "categories": [
+        "truncation"
+      ],
+      "id": "truncation-126",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и"
+    },
+    {
+      "categories": [
+        "truncation"
+      ],
+      "id": "truncation-127",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и и"
+    },
+    {
+      "categories": [
+        "truncation"
+      ],
+      "id": "truncation-wordpiece",
+      "languageHint": "ru",
+      "source": "authored-sanitized",
+      "text": "путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники путешественники"
+    }
+  ],
+  "fixtureVersion": "current-russian-fixture-v1",
+  "license": "repository MIT license; authored sanitized text; no production user text",
+  "requiredCoverage": [
+    "casing",
+    "dash_variants",
+    "ellipses",
+    "emoji",
+    "hard_negative",
+    "mixed_scripts",
+    "negation",
+    "quote_variants",
+    "truncation",
+    "unknown_words",
+    "yo_e"
+  ],
+  "schemaVersion": 1
+}

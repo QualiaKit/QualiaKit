@@ -1,0 +1,12 @@
+{
+  "contractVersion": "current-russian-v1",
+  "files": {
+    "calibration-v1.json": "b133d387720b34dc0508e63392d2514ada55e621f1683de15ac8700ff5fe0370",
+    "corpus-v1.json": "41f3626cc3b8963712ec2b9a797908974c9bc8eb8f53245a9976cb7effcc840e",
+    "fixture-v1.json": "b01ba282033904d85a5b5a38f32b0c8123b8f74a0d1d48fb1237754f3da39476",
+    "manifest.json": "68efe475da27c13d37e65927df416b1bfa6f12353df86a65a3467cc5d327940e",
+    "run-report-v1.json": "f5f291676b2a79bda8ee716dfde1fe711b697de7e9624b528410e8002f1a7952"
+  },
+  "fixtureVersion": "current-russian-fixture-v1",
+  "schemaVersion": 1
+}
