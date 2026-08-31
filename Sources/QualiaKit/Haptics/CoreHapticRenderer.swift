@@ -91,7 +91,13 @@ public final class CoreHapticRenderer: HapticRendering {
         guard lifecycleState == .ready else {
             throw HapticError.invalidLifecycleState
         }
-        try requireCompletedPendingCleanup()
+
+        switch command {
+        case .play, .start, .replace:
+            try requireCompletedPendingCleanup()
+        case .stop, .stopChannel, .stopAll:
+            break
+        }
 
         let nextEffects = try HapticCommandSemantics.nextActiveEffects(
             after: command,
