@@ -65,9 +65,10 @@ public final class CoreHapticRenderer: HapticRendering {
 
         switch lifecycleState {
         case .ready:
+            try requireCompletedPendingCleanup()
             return
         case .idle:
-            break
+            try requireCompletedPendingCleanup()
         case .preparing, .suspending, .suspended, .recovering:
             throw HapticError.invalidLifecycleState
         }
@@ -90,6 +91,7 @@ public final class CoreHapticRenderer: HapticRendering {
         guard lifecycleState == .ready else {
             throw HapticError.invalidLifecycleState
         }
+        try requireCompletedPendingCleanup()
 
         let nextEffects = try HapticCommandSemantics.nextActiveEffects(
             after: command,
@@ -124,8 +126,7 @@ public final class CoreHapticRenderer: HapticRendering {
             do {
                 try replacement.start()
             } catch {
-                retainForCleanup(replacement)
-                throw typed(error, fallback: .playerStartFailed)
+                throw cleanupAfterFailedStart(replacement, startError: error)
             }
             activePlayers[id] = replacement
             activeEffects = nextEffects
@@ -300,8 +301,7 @@ public final class CoreHapticRenderer: HapticRendering {
             try player.start()
         } catch {
             oneShotPlayers.removeValue(forKey: identifier)
-            retainForCleanup(player)
-            throw typed(error, fallback: .playerStartFailed)
+            throw cleanupAfterFailedStart(player, startError: error)
         }
     }
 
@@ -313,8 +313,7 @@ public final class CoreHapticRenderer: HapticRendering {
             try player.start()
             return player
         } catch {
-            retainForCleanup(player)
-            throw typed(error, fallback: .playerStartFailed)
+            throw cleanupAfterFailedStart(player, startError: error)
         }
     }
 
@@ -414,6 +413,33 @@ public final class CoreHapticRenderer: HapticRendering {
         precondition(nextCleanupID < .max, "CoreHapticRenderer cleanup ID overflow")
         nextCleanupID += 1
         pendingCleanupPlayers[nextCleanupID] = player
+    }
+
+    private func cleanupAfterFailedStart(
+        _ player: any HapticRuntimePlayer,
+        startError: Error
+    ) -> HapticError {
+        do {
+            try player.stop()
+        } catch {
+            retainForCleanup(player)
+        }
+        return typed(startError, fallback: .playerStartFailed)
+    }
+
+    private func requireCompletedPendingCleanup() throws {
+        guard !pendingCleanupPlayers.isEmpty else { return }
+        do {
+            try stopPendingCleanupPlayers()
+        } catch {
+            let error = typed(error, fallback: .playerStopFailed)
+            lastLifecycleError = error
+            throw error
+        }
+        guard pendingCleanupPlayers.isEmpty else {
+            lastLifecycleError = .playerStopFailed
+            throw HapticError.playerStopFailed
+        }
     }
 
     private func moveTrackedPlayersToPendingCleanup() {
