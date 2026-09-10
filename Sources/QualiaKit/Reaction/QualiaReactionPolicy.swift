@@ -51,30 +51,102 @@ public struct QualiaHapticPreferences: Hashable, Sendable {
     }()
 }
 
-/// Session-owned state threaded through pure policy evaluations.
+/// Validation failures for externally restored reaction state.
+public enum QualiaReactionStateError: Error, Hashable, Sendable {
+    case invalidNormalizedValue
+    case invalidIntensityScale
+    case mismatchedEffectID
+}
+
+/// The last ambient descriptor successfully applied by a renderer.
 ///
-/// A policy never mutates this value. The caller decides when a returned
-/// `nextState` is committed, which keeps renderer failures and stale session
-/// results outside policy planning.
+/// `normalizedValue` is the policy-owned experience value used to create the
+/// pattern. It remains separate from semantic scene state so a failed replace
+/// can be reconciled against the last physical state.
+public struct QualiaAppliedAmbientState: Hashable, Sendable {
+    public let effectID: HapticEffectID
+    public let normalizedValue: Float
+    public let intensityScale: Float
+    public let pattern: HapticPattern
+
+    public init(
+        effectID: HapticEffectID,
+        normalizedValue: Float,
+        intensityScale: Float,
+        pattern: HapticPattern
+    ) throws {
+        guard normalizedValue.isFinite, (0...1).contains(normalizedValue) else {
+            throw QualiaReactionStateError.invalidNormalizedValue
+        }
+        guard intensityScale.isFinite, (0...1).contains(intensityScale) else {
+            throw QualiaReactionStateError.invalidIntensityScale
+        }
+
+        self.effectID = effectID
+        self.normalizedValue = normalizedValue
+        self.intensityScale = intensityScale
+        self.pattern = pattern
+    }
+
+    init(
+        validatedEffectID effectID: HapticEffectID,
+        normalizedValue: Float,
+        intensityScale: Float,
+        pattern: HapticPattern
+    ) {
+        self.effectID = effectID
+        self.normalizedValue = normalizedValue
+        self.intensityScale = intensityScale
+        self.pattern = pattern
+    }
+}
+
+/// Session-owned physical reaction state threaded through pure evaluations.
+///
+/// A policy never mutates this value. The caller MUST commit a returned
+/// `nextState` only after its corresponding state-changing renderer command
+/// succeeds. Failed commands therefore retain the last applied descriptor for
+/// deterministic retry and reconciliation.
 public struct QualiaReactionState: Hashable, Sendable {
-    public let activeEffects: Set<HapticEffectID>
+    public let activeAmbientEffects: [HapticEffectID: QualiaAppliedAmbientState]
 
-    public init(activeEffects: Set<HapticEffectID> = []) {
-        self.activeEffects = activeEffects
+    public var activeEffects: Set<HapticEffectID> {
+        Set(activeAmbientEffects.keys)
     }
 
-    public static let empty = Self()
-
-    func activating(_ id: HapticEffectID) -> Self {
-        var effects = activeEffects
-        effects.insert(id)
-        return Self(activeEffects: effects)
+    public init(
+        activeAmbientEffects: [HapticEffectID: QualiaAppliedAmbientState] = [:]
+    ) throws {
+        guard activeAmbientEffects.allSatisfy({ $0.key == $0.value.effectID }) else {
+            throw QualiaReactionStateError.mismatchedEffectID
+        }
+        self.activeAmbientEffects = activeAmbientEffects
     }
 
-    func deactivating(_ id: HapticEffectID) -> Self {
-        var effects = activeEffects
-        effects.remove(id)
-        return Self(activeEffects: effects)
+    public static let empty = Self(validatedAmbientEffects: [:])
+
+    public func appliedAmbientState(
+        for effectID: HapticEffectID
+    ) -> QualiaAppliedAmbientState? {
+        activeAmbientEffects[effectID]
+    }
+
+    public func applying(_ appliedState: QualiaAppliedAmbientState) -> Self {
+        var effects = activeAmbientEffects
+        effects[appliedState.effectID] = appliedState
+        return Self(validatedAmbientEffects: effects)
+    }
+
+    public func removingEffect(_ effectID: HapticEffectID) -> Self {
+        var effects = activeAmbientEffects
+        effects.removeValue(forKey: effectID)
+        return Self(validatedAmbientEffects: effects)
+    }
+
+    private init(
+        validatedAmbientEffects: [HapticEffectID: QualiaAppliedAmbientState]
+    ) {
+        self.activeAmbientEffects = validatedAmbientEffects
     }
 }
 
@@ -84,23 +156,23 @@ public struct QualiaReactionContext: Hashable, Sendable {
     public let hapticCapabilities: HapticCapabilities
     public let preferences: QualiaHapticPreferences
     public let instant: Duration
+    public let effectScope: HapticEffectScope
     public let state: QualiaReactionState
-    public let ownerID: HapticOwnerID?
 
     public init(
         analyzerCapabilities: QualiaAnalyzerCapabilities,
         hapticCapabilities: HapticCapabilities,
         preferences: QualiaHapticPreferences = .default,
         instant: Duration,
-        state: QualiaReactionState = .empty,
-        ownerID: HapticOwnerID? = nil
+        effectScope: HapticEffectScope,
+        state: QualiaReactionState = .empty
     ) {
         self.analyzerCapabilities = analyzerCapabilities
         self.hapticCapabilities = hapticCapabilities
         self.preferences = preferences
         self.instant = instant
+        self.effectScope = effectScope
         self.state = state
-        self.ownerID = ownerID
     }
 }
 
@@ -133,12 +205,26 @@ public struct QualiaReactionPlan: Hashable, Sendable {
 
     public init(
         hapticCommands: [HapticCommand],
-        rationale: QualiaReactionRationale? = nil,
-        nextState: QualiaReactionState = .empty
+        rationale: QualiaReactionRationale?,
+        nextState: QualiaReactionState
     ) {
         self.hapticCommands = hapticCommands
         self.rationale = rationale
         self.nextState = nextState
+    }
+
+    /// Convenience for stateless/accent-only custom policies that explicitly
+    /// preserve all applied ambient state from the current context.
+    public static func preservingState(
+        hapticCommands: [HapticCommand],
+        rationale: QualiaReactionRationale?,
+        from context: QualiaReactionContext
+    ) -> Self {
+        Self(
+            hapticCommands: hapticCommands,
+            rationale: rationale,
+            nextState: context.state
+        )
     }
 }
 
