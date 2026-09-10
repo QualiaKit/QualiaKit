@@ -29,6 +29,11 @@ public struct HapticCapabilities: Hashable, Sendable {
 @MainActor
 public protocol HapticRendering: AnyObject {
     var capabilities: HapticCapabilities { get }
+    /// The renderer's post-command long-lived state.
+    ///
+    /// Callers use this snapshot to reconcile policy state when `execute(_:)`
+    /// throws after partially changing physical playback.
+    var activeEffects: [HapticEffectID: HapticActiveEffect] { get }
     func prepare() throws
     func execute(_ command: HapticCommand) throws
     func suspend() async
@@ -40,6 +45,7 @@ public protocol HapticRendering: AnyObject {
 @MainActor
 public final class NoOpHapticRenderer: HapticRendering {
     public let capabilities: HapticCapabilities = .unavailable
+    public let activeEffects: [HapticEffectID: HapticActiveEffect] = [:]
 
     public init() {}
 

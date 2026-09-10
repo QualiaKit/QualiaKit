@@ -98,6 +98,11 @@ extension ReactionPolicyTests {
         )
         renderer.failNext()
         XCTAssertThrowsError(try renderer.execute(XCTUnwrap(failed.hapticCommands.first)))
+        let stateAfterFailure = failed.reconciledStateAfterFailure(
+            from: appliedState,
+            rendererActiveEffects: renderer.activeEffects
+        )
+        XCTAssertEqual(stateAfterFailure, appliedState)
 
         let retry = policy.plan(
             for: try transition(
@@ -106,7 +111,7 @@ extension ReactionPolicyTests {
                 previousPhase: .active,
                 currentPhase: .active
             ),
-            context: context(signals: [.suspense], state: appliedState)
+            context: context(signals: [.suspense], state: stateAfterFailure)
         )
         try execute(retry, on: renderer)
         let reconciledState = retry.nextState
@@ -128,6 +133,52 @@ extension ReactionPolicyTests {
             renderer.activeEffects[effectID]?.pattern,
             reconciledState.appliedAmbientState(for: effectID)?.pattern
         )
+    }
+
+    func testFailureAfterAppliedReplaceKeepsProposedSnapshot() throws {
+        let policy = HorrorNarrativePolicy()
+        let renderer = RecordingHapticRenderer()
+        let previousState = try activeState(policy: policy, tension: 0.8)
+        let impact = try QualiaScore(value: 0.95, confidence: 0.9)
+        try renderer.prepare()
+        try renderer.execute(
+            .start(
+                id: XCTUnwrap(previousState.activeEffects.first),
+                pattern: XCTUnwrap(previousState.activeAmbientEffects.values.first).pattern,
+                channel: .ambient
+            )
+        )
+
+        let plan = policy.plan(
+            for: try transition(
+                previousSignals: [.suspense: 0.8],
+                currentSignals: [.suspense: 0.9],
+                previousPhase: .active,
+                currentPhase: .active,
+                evidence: [.impact: impact],
+                events: [.impact: impact]
+            ),
+            context: context(signals: [.suspense, .impact], state: previousState)
+        )
+        XCTAssertEqual(plan.hapticCommands.count, 2)
+        try renderer.execute(plan.hapticCommands[0])
+        renderer.failNext()
+        XCTAssertThrowsError(try renderer.execute(plan.hapticCommands[1]))
+
+        let reconciled = plan.reconciledStateAfterFailure(
+            from: previousState,
+            rendererActiveEffects: renderer.activeEffects
+        )
+
+        XCTAssertEqual(reconciled, plan.nextState)
+    }
+
+    func testPartialReplaceFailureRestartsAboveUpdateDelta() throws {
+        try assertPartialReplaceFailureRestarts(nextTension: 0.92)
+    }
+
+    func testPartialReplaceFailureRestartsInsideUpdateDelta() throws {
+        try assertPartialReplaceFailureRestarts(nextTension: 0.82)
     }
 
     func testIndependentOwnersDoNotShareOrStopEachOthersAmbientEffect() throws {
@@ -187,10 +238,159 @@ extension ReactionPolicyTests {
 
     private func execute(
         _ plan: QualiaReactionPlan,
-        on renderer: RecordingHapticRenderer
+        on renderer: any HapticRendering
     ) throws {
         for command in plan.hapticCommands {
             try renderer.execute(command)
         }
     }
+
+    private func assertPartialReplaceFailureRestarts(
+        nextTension: Float,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) throws {
+        let fixture = try makePartialReplaceFailure(file: file, line: line)
+        let recovery = fixture.policy.plan(
+            for: try transition(
+                previousSignals: [.suspense: 0.9],
+                currentSignals: [.suspense: nextTension],
+                previousPhase: .active,
+                currentPhase: .active
+            ),
+            context: context(
+                signals: [.suspense],
+                state: fixture.reconciledState,
+                effectScope: fixture.effectScope
+            )
+        )
+
+        guard case let .start(effectID, pattern, .ambient) = try XCTUnwrap(
+            recovery.hapticCommands.first,
+            file: file,
+            line: line
+        ) else {
+            return XCTFail(
+                "Expected missing physical effect to restart at tension \(nextTension)",
+                file: file,
+                line: line
+            )
+        }
+
+        try execute(recovery, on: fixture.renderer)
+        XCTAssertEqual(fixture.renderer.activeEffects[effectID]?.pattern, pattern)
+        XCTAssertEqual(
+            recovery.nextState.appliedAmbientState(for: effectID)?.pattern,
+            pattern,
+            file: file,
+            line: line
+        )
+    }
+
+    private func makePartialReplaceFailure(
+        file: StaticString,
+        line: UInt
+    ) throws -> PartialReplaceFailureFixture {
+        let backend = ReplacementStartFailingEngine()
+        let renderer = CoreHapticRenderer(backend: backend)
+        let policy = HorrorNarrativePolicy()
+        let owner = try HapticOwnerID(rawValue: "partial-replace-session")
+        let effectScope = HapticEffectScope.owned(owner)
+        try renderer.prepare()
+
+        let start = policy.plan(
+            for: try transition(currentSignals: [.suspense: 0.8], currentPhase: .active),
+            context: context(signals: [.suspense], effectScope: effectScope)
+        )
+        try execute(start, on: renderer)
+        let previousState = start.nextState
+
+        let replacement = policy.plan(
+            for: try transition(
+                previousSignals: [.suspense: 0.8],
+                currentSignals: [.suspense: 0.9],
+                previousPhase: .active,
+                currentPhase: .active
+            ),
+            context: context(
+                signals: [.suspense],
+                state: previousState,
+                effectScope: effectScope
+            )
+        )
+        backend.failNextPlayerStart()
+        XCTAssertThrowsError(
+            try execute(replacement, on: renderer),
+            file: file,
+            line: line
+        ) { error in
+            XCTAssertEqual(error as? HapticError, .playerStartFailed, file: file, line: line)
+        }
+        XCTAssertTrue(renderer.activeEffects.isEmpty, file: file, line: line)
+
+        let reconciledState = replacement.reconciledStateAfterFailure(
+            from: previousState,
+            rendererActiveEffects: renderer.activeEffects
+        )
+        XCTAssertTrue(reconciledState.activeEffects.isEmpty, file: file, line: line)
+
+        return PartialReplaceFailureFixture(
+            policy: policy,
+            renderer: renderer,
+            effectScope: effectScope,
+            reconciledState: reconciledState
+        )
+    }
+}
+
+@MainActor
+private struct PartialReplaceFailureFixture {
+    let policy: HorrorNarrativePolicy
+    let renderer: CoreHapticRenderer
+    let effectScope: HapticEffectScope
+    let reconciledState: QualiaReactionState
+}
+
+@MainActor
+private final class ReplacementStartFailingEngine: HapticRuntimeEngine {
+    let capabilities: HapticCapabilities = .full
+    var stoppedHandler: (@Sendable () -> Void)?
+    var resetHandler: (@Sendable () -> Void)?
+
+    private var shouldFailNextPlayerStart = false
+
+    func start() throws {}
+    func stop() async throws {}
+
+    func makePlayer(pattern: HapticPattern) throws -> any HapticRuntimePlayer {
+        _ = pattern
+        return ReplacementStartFailingPlayer(engine: self)
+    }
+
+    func failNextPlayerStart() {
+        shouldFailNextPlayerStart = true
+    }
+
+    func startPlayer() throws {
+        guard shouldFailNextPlayerStart else { return }
+        shouldFailNextPlayerStart = false
+        throw HapticError.playerStartFailed
+    }
+}
+
+@MainActor
+private final class ReplacementStartFailingPlayer: HapticRuntimePlayer {
+    var completionHandler: (@Sendable () -> Void)?
+
+    private unowned let engine: ReplacementStartFailingEngine
+
+    init(engine: ReplacementStartFailingEngine) {
+        self.engine = engine
+    }
+
+    func start() throws {
+        try engine.startPlayer()
+    }
+
+    func stop() throws {}
 }
