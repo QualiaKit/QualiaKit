@@ -8,16 +8,36 @@ extension ReactionPolicyTests {
         preferences: QualiaHapticPreferences = .default,
         instant: Duration = .zero,
         state: QualiaReactionState = .empty,
-        ownerID: HapticOwnerID? = nil
+        effectScope: HapticEffectScope = .global
     ) -> QualiaReactionContext {
         QualiaReactionContext(
             analyzerCapabilities: capabilities(signals: signals, dimensions: dimensions),
             hapticCapabilities: haptics,
             preferences: preferences,
             instant: instant,
-            state: state,
-            ownerID: ownerID
+            effectScope: effectScope,
+            state: state
         )
+    }
+
+    func activeState(
+        policy: HorrorNarrativePolicy = HorrorNarrativePolicy(),
+        tension: Float,
+        intensityScale: Float = 1,
+        effectScope: HapticEffectScope = .global
+    ) throws -> QualiaReactionState {
+        let preferences = try QualiaHapticPreferences(intensityScale: intensityScale)
+        return policy.plan(
+            for: try transition(
+                currentSignals: [.suspense: tension],
+                currentPhase: .active
+            ),
+            context: context(
+                signals: [.suspense],
+                preferences: preferences,
+                effectScope: effectScope
+            )
+        ).nextState
     }
 
     func capabilities(

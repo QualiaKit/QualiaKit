@@ -10,7 +10,7 @@ public enum HorrorNarrativeCompatibilityMode: String, Hashable, Sendable {
 /// transition-local impact/shock accents.
 public struct HorrorNarrativePolicy: QualiaReactionPolicy, Sendable {
     public static let identifier = "qualia.horror-narrative"
-    public static let version = "1.0.0-beta.1"
+    public static let version = "1.0.0-beta.2"
 
     public let configuration: Configuration
 
@@ -58,8 +58,9 @@ public extension HorrorNarrativePolicy {
         for transition: QualiaSceneTransition,
         context: QualiaReactionContext
     ) -> QualiaReactionPlan {
-        let effectID = makeEffectID(ownerID: context.ownerID)
-        let wasActive = context.state.activeEffects.contains(effectID)
+        let effectID = makeEffectID(scope: context.effectScope)
+        let appliedAmbient = context.state.appliedAmbientState(for: effectID)
+        let wasActive = appliedAmbient != nil
         let baseFacts = compatibilityFacts(context: context)
 
         guard context.preferences.enabled,
@@ -76,7 +77,7 @@ public extension HorrorNarrativePolicy {
             return noOp(
                 rule: "haptics-unavailable",
                 facts: baseFacts,
-                state: context.state.deactivating(effectID)
+                state: context.state
             )
         }
         if let mismatch = strictRuntimeMismatch(context: context) {
@@ -103,7 +104,7 @@ public extension HorrorNarrativePolicy {
             transition: transition,
             context: context,
             effectID: effectID,
-            wasActive: wasActive,
+            appliedState: appliedAmbient,
             result: &result
         )
         planAccent(
@@ -186,14 +187,15 @@ private extension HorrorNarrativePolicy {
         transition: QualiaSceneTransition,
         context: QualiaReactionContext,
         effectID: HapticEffectID,
-        wasActive: Bool,
+        appliedState: QualiaAppliedAmbientState?,
         result: inout HorrorPlanningResult
     ) {
+        let wasActive = appliedState != nil
         if let reason = ambientSuppressionReason(context: context) {
             result.facts.append(fact("ambient-suppression", reason))
             if wasActive {
                 result.commands.append(.stop(id: effectID))
-                result.state = result.state.deactivating(effectID)
+                result.state = result.state.removingEffect(effectID)
                 result.ruleIdentifiers.append("ambient-stop")
             }
             return
@@ -210,40 +212,94 @@ private extension HorrorNarrativePolicy {
         )
         result.facts.append(fact("previous-tension", previousTension))
         result.facts.append(fact("tension", currentTension))
+        if let appliedState {
+            result.facts.append(fact("applied-tension", appliedState.normalizedValue))
+            result.facts.append(
+                fact("applied-intensity-scale", appliedState.intensityScale)
+            )
+        }
 
         if wasActive, currentTension <= configuration.stopThreshold {
-            result.commands.append(.stop(id: effectID))
-            result.state = result.state.deactivating(effectID)
-            result.ruleIdentifiers.append("ambient-stop")
+            stopAmbient(effectID: effectID, result: &result)
         } else if !wasActive, currentTension >= configuration.startThreshold {
-            result.commands.append(
-                .start(
-                    id: effectID,
-                    pattern: makeAmbientPattern(
-                        tension: currentTension,
-                        intensityScale: context.preferences.intensityScale
-                    ),
-                    channel: .ambient
-                )
+            startAmbient(
+                effectID: effectID,
+                tension: currentTension,
+                intensityScale: context.preferences.intensityScale,
+                result: &result
             )
-            result.state = result.state.activating(effectID)
-            result.ruleIdentifiers.append("ambient-start")
-        } else if wasActive,
-                  abs(currentTension - previousTension) >= configuration.minimumUpdateDelta {
-            result.commands.append(
-                .replace(
-                    id: effectID,
-                    pattern: makeAmbientPattern(
-                        tension: currentTension,
-                        intensityScale: context.preferences.intensityScale
-                    ),
-                    channel: .ambient
-                )
+        } else if let appliedState,
+                  shouldReplace(
+                    appliedState: appliedState,
+                    tension: currentTension,
+                    intensityScale: context.preferences.intensityScale
+                  ) {
+            updateAmbient(
+                effectID: effectID,
+                tension: currentTension,
+                intensityScale: context.preferences.intensityScale,
+                result: &result
             )
-            result.ruleIdentifiers.append("ambient-update")
         } else if wasActive {
             result.ruleIdentifiers.append("ambient-stable")
         }
+    }
+
+    func stopAmbient(
+        effectID: HapticEffectID,
+        result: inout HorrorPlanningResult
+    ) {
+        result.commands.append(.stop(id: effectID))
+        result.state = result.state.removingEffect(effectID)
+        result.ruleIdentifiers.append("ambient-stop")
+    }
+
+    func startAmbient(
+        effectID: HapticEffectID,
+        tension: Float,
+        intensityScale: Float,
+        result: inout HorrorPlanningResult
+    ) {
+        let pattern = makeAmbientPattern(
+            tension: tension,
+            intensityScale: intensityScale
+        )
+        result.commands.append(
+            .start(id: effectID, pattern: pattern, channel: .ambient)
+        )
+        result.state = result.state.applying(
+            makeAppliedState(
+                effectID: effectID,
+                tension: tension,
+                intensityScale: intensityScale,
+                pattern: pattern
+            )
+        )
+        result.ruleIdentifiers.append("ambient-start")
+    }
+
+    func updateAmbient(
+        effectID: HapticEffectID,
+        tension: Float,
+        intensityScale: Float,
+        result: inout HorrorPlanningResult
+    ) {
+        let pattern = makeAmbientPattern(
+            tension: tension,
+            intensityScale: intensityScale
+        )
+        result.commands.append(
+            .replace(id: effectID, pattern: pattern, channel: .ambient)
+        )
+        result.state = result.state.applying(
+            makeAppliedState(
+                effectID: effectID,
+                tension: tension,
+                intensityScale: intensityScale,
+                pattern: pattern
+            )
+        )
+        result.ruleIdentifiers.append("ambient-update")
     }
 
     func planAccent(
@@ -276,144 +332,6 @@ private extension HorrorNarrativePolicy {
         }
     }
 
-    func ambientSuppressionReason(context: QualiaReactionContext) -> String? {
-        if configuration.compatibilityMode == .transientAccentsOnly {
-            return "compatibility-mode"
-        }
-        if !context.preferences.continuousEffectsEnabled {
-            return "continuous-effects-disabled"
-        }
-        if !context.hapticCapabilities.supportsContinuousHaptics {
-            return "continuous-haptics-unavailable"
-        }
-        if !context.analyzerCapabilities.signals.contains(.suspense) {
-            return "missing-suspense-capability"
-        }
-        return nil
-    }
-
-    private static let continuousSignals: Set<QualiaSignal> = [
-        .suspense,
-        .threat,
-        .urgency,
-    ]
-
-    private static let accentSignals: Set<QualiaSignal> = [
-        .impact,
-        .shock,
-    ]
-
-    private func tension(
-        signals: [QualiaSignal: Float],
-        supportedSignals: Set<QualiaSignal>
-    ) -> Float {
-        max(
-            supportedSignals.contains(.suspense) ? signals[.suspense] ?? 0 : 0,
-            supportedSignals.contains(.threat) ? (signals[.threat] ?? 0) * 0.8 : 0,
-            supportedSignals.contains(.urgency) ? (signals[.urgency] ?? 0) * 0.6 : 0
-        )
-    }
-
-    private func qualifyingAccent(
-        events: [QualiaSignal: QualiaScore],
-        supportedSignals: Set<QualiaSignal>
-    ) -> (signal: QualiaSignal, score: QualiaScore)? {
-        supportedSignals
-            .compactMap { signal -> (QualiaSignal, QualiaScore)? in
-                guard let score = events[signal],
-                      score.value >= configuration.accentThreshold else {
-                    return nil
-                }
-                if let requiredConfidence = configuration.minimumAccentConfidence {
-                    guard let confidence = score.confidence,
-                          confidence >= requiredConfidence else {
-                        return nil
-                    }
-                }
-                return (signal, score)
-            }
-            .max { left, right in
-                if left.1.value == right.1.value {
-                    return left.0.rawValue > right.0.rawValue
-                }
-                return left.1.value < right.1.value
-            }
-    }
-
-    private func makeAmbientPattern(
-        tension: Float,
-        intensityScale: Float
-    ) -> HapticPattern {
-        let intensity = (
-            configuration.minimumAmbientIntensity
-                + (configuration.maximumAmbientIntensity
-                    - configuration.minimumAmbientIntensity) * tension
-        ) * intensityScale
-
-        do {
-            return try HapticPattern(
-                duration: configuration.ambientCycleDuration,
-                events: [
-                    .continuous(
-                        at: .zero,
-                        duration: configuration.ambientCycleDuration,
-                        intensity: HapticValue(intensity),
-                        sharpness: HapticValue(0.2)
-                    )
-                ],
-                looping: .loop(period: configuration.ambientCycleDuration)
-            )
-        } catch {
-            preconditionFailure("Validated HorrorNarrativePolicy produced an invalid ambient pattern: \(error)")
-        }
-    }
-
-    private func makeAccentPattern(
-        evidence: Float,
-        intensityScale: Float
-    ) -> HapticPattern {
-        let normalized = (evidence - configuration.accentThreshold)
-            / max(0.0001, 1 - configuration.accentThreshold)
-        let intensity = (0.55 + 0.45 * normalized) * intensityScale
-
-        do {
-            return try HapticPattern(
-                duration: configuration.accentPatternDuration,
-                events: [
-                    .transient(
-                        at: .zero,
-                        intensity: HapticValue(intensity),
-                        sharpness: HapticValue(0.85)
-                    )
-                ]
-            )
-        } catch {
-            preconditionFailure("Validated HorrorNarrativePolicy produced an invalid accent pattern: \(error)")
-        }
-    }
-
-    private func makeEffectID(ownerID: HapticOwnerID?) -> HapticEffectID {
-        do {
-            return try HapticEffectID(
-                rawValue: configuration.effectName,
-                scope: ownerID.map(HapticEffectScope.owned) ?? .global
-            )
-        } catch {
-            preconditionFailure("Validated HorrorNarrativePolicy produced an invalid effect ID: \(error)")
-        }
-    }
-
-    private func compatibilityFacts(
-        context: QualiaReactionContext
-    ) -> [QualiaDiagnosticFact] {
-        [
-            fact("compatibility-mode", configuration.compatibilityMode.rawValue),
-            fact("continuous-effects-enabled", context.preferences.continuousEffectsEnabled),
-            fact("intensity-scale", context.preferences.intensityScale),
-            fact("threshold-curve-version", "horror-tension-v1"),
-        ]
-    }
-
     private func suppressAndStopIfNeeded(
         rule: String,
         effectID: HapticEffectID,
@@ -429,7 +347,7 @@ private extension HorrorNarrativePolicy {
                 ruleIdentifier: rule,
                 facts: facts
             ),
-            nextState: context.state.deactivating(effectID)
+            nextState: context.state.removingEffect(effectID)
         )
     }
 
@@ -450,17 +368,6 @@ private extension HorrorNarrativePolicy {
         )
     }
 
-    private func fact(_ key: String, _ value: String) -> QualiaDiagnosticFact {
-        QualiaDiagnosticFact(key: key, value: value)
-    }
-
-    private func fact(_ key: String, _ value: Bool) -> QualiaDiagnosticFact {
-        fact(key, value ? "true" : "false")
-    }
-
-    private func fact(_ key: String, _ value: Float) -> QualiaDiagnosticFact {
-        fact(key, value.reactionFactValue)
-    }
 }
 
 public extension QualiaSignal {

@@ -104,7 +104,7 @@ final class ReactionPolicyTests: XCTestCase {
         let owner = try HapticOwnerID(rawValue: "session-pure-planning")
         let plan = HorrorNarrativePolicy().plan(
             for: try transition(currentSignals: [.suspense: 0.9], currentPhase: .active),
-            context: context(signals: [.suspense], ownerID: owner)
+            context: context(signals: [.suspense], effectScope: .owned(owner))
         )
 
         XCTAssertTrue(renderer.commands.isEmpty)
@@ -117,8 +117,7 @@ final class ReactionPolicyTests: XCTestCase {
     }
 
     func testNoReactionPolicyAlwaysRetainsStateWithoutCommands() throws {
-        let id = try HapticEffectID(rawValue: "existing", scope: .global)
-        let state = QualiaReactionState(activeEffects: [id])
+        let state = try activeState(tension: 0.8)
         let suppliedContext = context(signals: [], state: state)
 
         let first = NoReactionPolicy().plan(
@@ -242,7 +241,7 @@ extension ReactionPolicyTests {
 
         let start = policy.plan(
             for: try transition(currentSignals: [.suspense: 0.8], currentPhase: .active),
-            context: context(signals: [.suspense], state: state, ownerID: owner)
+            context: context(signals: [.suspense], state: state, effectScope: .owned(owner))
         )
         state = start.nextState
         let stable = policy.plan(
@@ -252,7 +251,7 @@ extension ReactionPolicyTests {
                 previousPhase: .active,
                 currentPhase: .resolving
             ),
-            context: context(signals: [.suspense], state: state, ownerID: owner)
+            context: context(signals: [.suspense], state: state, effectScope: .owned(owner))
         )
         let update = policy.plan(
             for: try transition(
@@ -261,7 +260,7 @@ extension ReactionPolicyTests {
                 previousPhase: .resolving,
                 currentPhase: .resolving
             ),
-            context: context(signals: [.suspense], state: state, ownerID: owner)
+            context: context(signals: [.suspense], state: state, effectScope: .owned(owner))
         )
         state = update.nextState
         let stop = policy.plan(
@@ -271,7 +270,7 @@ extension ReactionPolicyTests {
                 previousPhase: .resolving,
                 currentPhase: .resolving
             ),
-            context: context(signals: [.suspense], state: state, ownerID: owner)
+            context: context(signals: [.suspense], state: state, effectScope: .owned(owner))
         )
 
         guard case let .start(startID, _, .ambient) = try XCTUnwrap(start.hapticCommands.first),
@@ -318,7 +317,7 @@ extension ReactionPolicyTests {
             rawValue: policy.configuration.effectName,
             scope: .global
         )
-        let state = QualiaReactionState(activeEffects: [id])
+        let state = try activeState(policy: policy, tension: 0.9)
         let preferences = try QualiaHapticPreferences(enabled: false)
         let plan = policy.plan(
             for: try transition(currentSignals: [.suspense: 0.9], currentPhase: .active),
@@ -358,7 +357,7 @@ extension ReactionPolicyTests {
             context: context(
                 signals: [.suspense, .impact],
                 preferences: preferences,
-                state: QualiaReactionState(activeEffects: [id])
+                state: try activeState(policy: policy, tension: 0.9)
             )
         )
 
@@ -502,7 +501,7 @@ extension ReactionPolicyTests {
         let suppliedContext = context(
             signals: [.suspense, .threat],
             instant: .seconds(42),
-            ownerID: owner
+            effectScope: .owned(owner)
         )
 
         XCTAssertEqual(
