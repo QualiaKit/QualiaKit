@@ -103,10 +103,10 @@ public struct QualiaAppliedAmbientState: Hashable, Sendable {
 
 /// Session-owned physical reaction state threaded through pure evaluations.
 ///
-/// A policy never mutates this value. The caller MUST commit a returned
-/// `nextState` only after its corresponding state-changing renderer command
-/// succeeds. Failed commands therefore retain the last applied descriptor for
-/// deterministic retry and reconciliation.
+/// A policy never mutates this value. After all renderer commands succeed, the
+/// caller commits the plan's `nextState`. If execution throws, the caller uses
+/// `QualiaReactionPlan.reconciledStateAfterFailure` with the renderer's
+/// post-command `activeEffects` instead of assuming execution was atomic.
 public struct QualiaReactionState: Hashable, Sendable {
     public let activeAmbientEffects: [HapticEffectID: QualiaAppliedAmbientState]
 
@@ -143,7 +143,7 @@ public struct QualiaReactionState: Hashable, Sendable {
         return Self(validatedAmbientEffects: effects)
     }
 
-    private init(
+    init(
         validatedAmbientEffects: [HapticEffectID: QualiaAppliedAmbientState]
     ) {
         self.activeAmbientEffects = validatedAmbientEffects
@@ -225,6 +225,40 @@ public struct QualiaReactionPlan: Hashable, Sendable {
             rationale: rationale,
             nextState: context.state
         )
+    }
+
+    /// Reconciles the previous and proposed reaction snapshots with physical
+    /// renderer state after any command throws.
+    ///
+    /// A command may fail before changing playback, after successfully
+    /// applying a state change, or midway through a destructive replacement.
+    /// Only a descriptor that exactly matches the renderer is retained. The
+    /// method never adopts effects outside the previous/next policy state, so
+    /// effects owned by other sessions remain isolated.
+    public func reconciledStateAfterFailure(
+        from previousState: QualiaReactionState,
+        rendererActiveEffects: [HapticEffectID: HapticActiveEffect]
+    ) -> QualiaReactionState {
+        let candidateIDs = previousState.activeEffects.union(nextState.activeEffects)
+        var reconciled: [HapticEffectID: QualiaAppliedAmbientState] = [:]
+
+        for effectID in candidateIDs {
+            guard let rendererEffect = rendererActiveEffects[effectID],
+                  rendererEffect.id == effectID,
+                  rendererEffect.channel == .ambient else {
+                continue
+            }
+
+            if let proposed = nextState.appliedAmbientState(for: effectID),
+               proposed.pattern == rendererEffect.pattern {
+                reconciled[effectID] = proposed
+            } else if let previous = previousState.appliedAmbientState(for: effectID),
+                      previous.pattern == rendererEffect.pattern {
+                reconciled[effectID] = previous
+            }
+        }
+
+        return QualiaReactionState(validatedAmbientEffects: reconciled)
     }
 }
 
