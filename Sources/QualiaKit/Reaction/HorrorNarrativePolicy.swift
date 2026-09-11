@@ -10,7 +10,7 @@ public enum HorrorNarrativeCompatibilityMode: String, Hashable, Sendable {
 /// transition-local impact/shock accents.
 public struct HorrorNarrativePolicy: QualiaReactionPolicy, Sendable {
     public static let identifier = "qualia.horror-narrative"
-    public static let version = "1.0.0-beta.2"
+    public static let version = "1.0.0-beta.3"
 
     public let configuration: Configuration
 
@@ -74,10 +74,9 @@ public extension HorrorNarrativePolicy {
             )
         }
         guard context.hapticCapabilities.supportsHaptics else {
-            return noOp(
-                rule: "haptics-unavailable",
-                facts: baseFacts,
-                state: context.state
+            return suppressAndStopIfNeeded(
+                rule: "haptics-unavailable", effectID: effectID,
+                wasActive: wasActive, facts: baseFacts, context: context
             )
         }
         if let mismatch = strictRuntimeMismatch(context: context) {
@@ -91,7 +90,8 @@ public extension HorrorNarrativePolicy {
         }
 
         let inputs = supportedInputs(for: transition, context: context)
-        guard inputs.hasContinuous || inputs.hasAccent || wasActive else {
+        guard inputs.hasContinuous || inputs.hasAccent || wasActive
+                || context.state.heartbeats[effectID] != nil else {
             return noOp(
                 rule: "no-supported-signal",
                 facts: baseFacts,
@@ -190,116 +190,21 @@ private extension HorrorNarrativePolicy {
         appliedState: QualiaAppliedAmbientState?,
         result: inout HorrorPlanningResult
     ) {
-        let wasActive = appliedState != nil
         if let reason = ambientSuppressionReason(context: context) {
             result.facts.append(fact("ambient-suppression", reason))
-            if wasActive {
+            if appliedState != nil {
                 result.commands.append(.stop(id: effectID))
-                result.state = result.state.removingEffect(effectID)
                 result.ruleIdentifiers.append("ambient-stop")
             }
+            result.state = result.state.removingEffect(effectID)
+            result.state.heartbeats.removeValue(forKey: effectID)
             return
         }
-
-        let supportedSignals = context.analyzerCapabilities.signals
-        let previousTension = tension(
-            signals: transition.previous.signals,
-            supportedSignals: supportedSignals
-        )
-        let currentTension = tension(
-            signals: transition.current.signals,
-            supportedSignals: supportedSignals
-        )
-        result.facts.append(fact("previous-tension", previousTension))
-        result.facts.append(fact("tension", currentTension))
-        if let appliedState {
-            result.facts.append(fact("applied-tension", appliedState.normalizedValue))
-            result.facts.append(
-                fact("applied-intensity-scale", appliedState.intensityScale)
-            )
-        }
-
-        if wasActive, currentTension <= configuration.stopThreshold {
-            stopAmbient(effectID: effectID, result: &result)
-        } else if !wasActive, currentTension >= configuration.startThreshold {
-            startAmbient(
-                effectID: effectID,
-                tension: currentTension,
-                intensityScale: context.preferences.intensityScale,
-                result: &result
-            )
-        } else if let appliedState,
-                  shouldReplace(
-                    appliedState: appliedState,
-                    tension: currentTension,
-                    intensityScale: context.preferences.intensityScale
-                  ) {
-            updateAmbient(
-                effectID: effectID,
-                tension: currentTension,
-                intensityScale: context.preferences.intensityScale,
-                result: &result
-            )
-        } else if wasActive {
-            result.ruleIdentifiers.append("ambient-stable")
-        }
-    }
-
-    func stopAmbient(
-        effectID: HapticEffectID,
-        result: inout HorrorPlanningResult
-    ) {
-        result.commands.append(.stop(id: effectID))
-        result.state = result.state.removingEffect(effectID)
-        result.ruleIdentifiers.append("ambient-stop")
-    }
-
-    func startAmbient(
-        effectID: HapticEffectID,
-        tension: Float,
-        intensityScale: Float,
-        result: inout HorrorPlanningResult
-    ) {
-        let pattern = makeAmbientPattern(
-            tension: tension,
-            intensityScale: intensityScale
-        )
-        result.commands.append(
-            .start(id: effectID, pattern: pattern, channel: .ambient)
-        )
-        result.state = result.state.applying(
-            makeAppliedState(
-                effectID: effectID,
-                tension: tension,
-                intensityScale: intensityScale,
-                pattern: pattern
-            )
-        )
-        result.ruleIdentifiers.append("ambient-start")
-    }
-
-    func updateAmbient(
-        effectID: HapticEffectID,
-        tension: Float,
-        intensityScale: Float,
-        result: inout HorrorPlanningResult
-    ) {
-        let pattern = makeAmbientPattern(
-            tension: tension,
-            intensityScale: intensityScale
-        )
-        result.commands.append(
-            .replace(id: effectID, pattern: pattern, channel: .ambient)
-        )
-        result.state = result.state.applying(
-            makeAppliedState(
-                effectID: effectID,
-                tension: tension,
-                intensityScale: intensityScale,
-                pattern: pattern
-            )
-        )
-        result.ruleIdentifiers.append("ambient-update")
+        let decision = heartbeatDecision(transition: transition, context: context, effectID: effectID)
+        result.commands.append(contentsOf: decision.hapticCommands)
+        result.state = decision.nextState
+        result.facts.append(contentsOf: decision.rationale?.facts ?? [])
+        if let rule = decision.rationale?.ruleIdentifier { result.ruleIdentifiers.append(rule) }
     }
 
     func planAccent(
@@ -339,7 +244,9 @@ private extension HorrorNarrativePolicy {
         facts: [QualiaDiagnosticFact],
         context: QualiaReactionContext
     ) -> QualiaReactionPlan {
-        QualiaReactionPlan(
+        var state = context.state.removingEffect(effectID)
+        state.heartbeats.removeValue(forKey: effectID)
+        return QualiaReactionPlan(
             hapticCommands: wasActive ? [.stop(id: effectID)] : [],
             rationale: .make(
                 policyIdentifier: Self.identifier,
@@ -347,7 +254,7 @@ private extension HorrorNarrativePolicy {
                 ruleIdentifier: rule,
                 facts: facts
             ),
-            nextState: context.state.removingEffect(effectID)
+            nextState: state
         )
     }
 

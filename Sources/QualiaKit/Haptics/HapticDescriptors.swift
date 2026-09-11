@@ -131,12 +131,15 @@ public struct HapticPattern: Hashable, Sendable {
     public let events: [HapticEvent]
     public let curves: [HapticParameterCurve]
     public let looping: HapticLooping
+    /// Upper bound for physical playback, independent of future commands.
+    public let playbackDuration: Duration?
 
     public init(
         duration: Duration,
         events: [HapticEvent],
         curves: [HapticParameterCurve] = [],
-        looping: HapticLooping = .none
+        looping: HapticLooping = .none,
+        playbackDuration: Duration? = nil
     ) throws {
         guard duration > .zero,
               !events.isEmpty,
@@ -160,6 +163,11 @@ public struct HapticPattern: Hashable, Sendable {
             }
         }
 
+        if let playbackDuration, playbackDuration <= .zero {
+            throw HapticError.invalidHapticPattern
+        }
+
+        self.playbackDuration = playbackDuration
         self.duration = duration
         self.events = events
         self.curves = curves

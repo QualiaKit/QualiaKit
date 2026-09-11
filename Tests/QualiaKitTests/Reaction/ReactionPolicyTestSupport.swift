@@ -1,12 +1,22 @@
 import QualiaKit
 
 extension ReactionPolicyTests {
+    // Preserve the spec-0007 low-threshold scenarios explicitly. Production
+    // candidate defaults are exercised in HeartbeatEffectTests.
+    func narrativePolicy() -> HorrorNarrativePolicy {
+        do {
+            return HorrorNarrativePolicy(configuration: try .init(heartbeat: .init(
+                startThreshold: 0.7, stopThreshold: 0.4, minimumBPMDelta: 2
+            )))
+        } catch { preconditionFailure("Invalid test policy: \(error)") }
+    }
+
     func context(
         signals: Set<QualiaSignal> = [],
         dimensions: Set<QualiaDimension> = [],
         haptics: HapticCapabilities = .full,
         preferences: QualiaHapticPreferences = .default,
-        instant: Duration = .zero,
+        instant: Duration? = nil,
         state: QualiaReactionState = .empty,
         effectScope: HapticEffectScope = .global
     ) -> QualiaReactionContext {
@@ -14,20 +24,20 @@ extension ReactionPolicyTests {
             analyzerCapabilities: capabilities(signals: signals, dimensions: dimensions),
             hapticCapabilities: haptics,
             preferences: preferences,
-            instant: instant,
+            instant: instant ?? (state.activeEffects.isEmpty ? .zero : .seconds(1)),
             effectScope: effectScope,
             state: state
         )
     }
 
     func activeState(
-        policy: HorrorNarrativePolicy = HorrorNarrativePolicy(),
+        policy: HorrorNarrativePolicy? = nil,
         tension: Float,
         intensityScale: Float = 1,
         effectScope: HapticEffectScope = .global
     ) throws -> QualiaReactionState {
         let preferences = try QualiaHapticPreferences(intensityScale: intensityScale)
-        return policy.plan(
+        return (policy ?? narrativePolicy()).plan(
             for: try transition(
                 currentSignals: [.suspense: tension],
                 currentPhase: .active
@@ -59,7 +69,7 @@ extension ReactionPolicyTests {
         previousPhase: QualiaScenePhase = .idle,
         currentPhase: QualiaScenePhase = .idle,
         currentValence: Float? = nil,
-        evidence: [QualiaSignal: QualiaScore] = [:],
+        evidence: [QualiaSignal: QualiaScore]? = nil,
         events: [QualiaSignal: QualiaScore] = [:]
     ) throws -> QualiaSceneTransition {
         let previous = try QualiaSceneState(
@@ -86,7 +96,7 @@ extension ReactionPolicyTests {
         return try QualiaSceneTransition(
             previous: previous,
             current: current,
-            evidence: evidence,
+            evidence: try evidence ?? currentSignals.mapValues { try QualiaScore(value: $0, confidence: 0.9) }.merging(events) { _, event in event },
             events: events
         )
     }

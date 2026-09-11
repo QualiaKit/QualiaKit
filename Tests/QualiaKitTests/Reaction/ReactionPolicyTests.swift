@@ -7,7 +7,7 @@ import QualiaTesting
 @MainActor
 final class ReactionPolicyTests: XCTestCase {
     func testNoSupportedSignalProducesNoCommandAndExplainsDecision() throws {
-        let policy = HorrorNarrativePolicy()
+        let policy = narrativePolicy()
         let plan = policy.plan(
             for: try transition(),
             context: context(signals: [.suspense, .impact])
@@ -20,7 +20,7 @@ final class ReactionPolicyTests: XCTestCase {
     }
 
     func testStrictHorrorPolicyRejectsValenceOnlyAnalyzer() throws {
-        let policy: any QualiaReactionPolicy = HorrorNarrativePolicy()
+        let policy: any QualiaReactionPolicy = narrativePolicy()
 
         XCTAssertThrowsError(
             try policy.validate(
@@ -74,7 +74,7 @@ final class ReactionPolicyTests: XCTestCase {
         )
 
         XCTAssertThrowsError(
-            try HorrorNarrativePolicy().validate(
+            try narrativePolicy().validate(
                 analyzerCapabilities: capabilities(signals: [.suspense]),
                 hapticCapabilities: transientOnly
             )
@@ -85,7 +85,7 @@ final class ReactionPolicyTests: XCTestCase {
             )
         }
 
-        let plan = HorrorNarrativePolicy().plan(
+        let plan = narrativePolicy().plan(
             for: try transition(
                 currentSignals: [.suspense: 0.9],
                 currentPhase: .active,
@@ -102,7 +102,7 @@ final class ReactionPolicyTests: XCTestCase {
         let renderer = RecordingHapticRenderer()
         try renderer.prepare()
         let owner = try HapticOwnerID(rawValue: "session-pure-planning")
-        let plan = HorrorNarrativePolicy().plan(
+        let plan = narrativePolicy().plan(
             for: try transition(currentSignals: [.suspense: 0.9], currentPhase: .active),
             context: context(signals: [.suspense], effectScope: .owned(owner))
         )
@@ -206,7 +206,7 @@ final class ReactionPolicyTests: XCTestCase {
             XCTAssertThrowsError(try QualiaHapticPreferences(intensityScale: invalid))
         }
         XCTAssertThrowsError(
-            try HorrorNarrativePolicy.Configuration(
+            try HeartbeatPolicyConfiguration(
                 startThreshold: 0.4,
                 stopThreshold: 0.4
             )
@@ -217,7 +217,7 @@ final class ReactionPolicyTests: XCTestCase {
             )
         }
         XCTAssertThrowsError(
-            try HorrorNarrativePolicy.Configuration(ambientCycleDuration: .zero)
+            try HeartbeatPolicyConfiguration(maximumDuration: .zero)
         ) { error in
             XCTAssertEqual(
                 error as? QualiaReactionConfigurationError,
@@ -235,7 +235,7 @@ final class ReactionPolicyTests: XCTestCase {
 
 extension ReactionPolicyTests {
     func testHorrorPolicyStartsUpdatesAndStopsStableOwnedAmbientEffect() throws {
-        let policy = HorrorNarrativePolicy()
+        let policy = narrativePolicy()
         let owner = try HapticOwnerID(rawValue: "session-hysteresis")
         var state = QualiaReactionState.empty
 
@@ -263,7 +263,7 @@ extension ReactionPolicyTests {
             context: context(signals: [.suspense], state: state, effectScope: .owned(owner))
         )
         state = update.nextState
-        let stop = policy.plan(
+        let resolving = policy.plan(
             for: try transition(
                 previousSignals: [.suspense: 0.62],
                 currentSignals: [.suspense: 0.39],
@@ -271,6 +271,12 @@ extension ReactionPolicyTests {
                 currentPhase: .resolving
             ),
             context: context(signals: [.suspense], state: state, effectScope: .owned(owner))
+        )
+
+        let stop = policy.plan(
+            for: try transition(currentSignals: [.suspense: 0.39]),
+            context: context(signals: [.suspense], instant: .seconds(2),
+                             state: resolving.nextState, effectScope: .owned(owner))
         )
 
         guard case let .start(startID, _, .ambient) = try XCTUnwrap(start.hapticCommands.first),
@@ -287,7 +293,7 @@ extension ReactionPolicyTests {
     }
 
     func testHysteresisDoesNotFlapAcrossStartThreshold() throws {
-        let policy = HorrorNarrativePolicy()
+        let policy = narrativePolicy()
         var state = QualiaReactionState.empty
         let start = policy.plan(
             for: try transition(currentSignals: [.suspense: 0.72], currentPhase: .active),
@@ -312,7 +318,7 @@ extension ReactionPolicyTests {
     }
 
     func testDisabledHapticsStopsKnownAmbientAndClearsLogicalState() throws {
-        let policy = HorrorNarrativePolicy()
+        let policy = narrativePolicy()
         let id = try HapticEffectID(
             rawValue: policy.configuration.effectName,
             scope: .global
@@ -439,7 +445,7 @@ extension ReactionPolicyTests {
     }
 
     func testAccumulatedNarrativeStateDoesNotBorrowAnalyzerConfidence() throws {
-        let policy = HorrorNarrativePolicy()
+        let policy = narrativePolicy()
         let plan = policy.plan(
             for: try transition(
                 currentSignals: [.suspense: 0.9],
@@ -449,12 +455,12 @@ extension ReactionPolicyTests {
             context: context(signals: [.suspense])
         )
 
-        XCTAssertEqual(plan.hapticCommands.count, 1)
-        XCTAssertNil(plan.rationale?.facts.first(where: { $0.key.contains("confidence") }))
+        XCTAssertTrue(plan.hapticCommands.isEmpty)
+        XCTAssertEqual(plan.rationale?.ruleIdentifier, "missing-heartbeat-evidence")
     }
 
     func testThreatAndUrgencyUseVersionedNormalizationWeights() throws {
-        let policy = HorrorNarrativePolicy()
+        let policy = narrativePolicy()
         let threatPlan = policy.plan(
             for: try transition(currentSignals: [.threat: 1], currentPhase: .active),
             context: context(signals: [.suspense, .threat])
@@ -474,7 +480,7 @@ extension ReactionPolicyTests {
     }
 
     func testUnadvertisedSignalsCannotInfluenceNarrativeTension() throws {
-        let plan = HorrorNarrativePolicy().plan(
+        let plan = narrativePolicy().plan(
             for: try transition(
                 currentSignals: [.suspense: 0.1, .threat: 1],
                 currentPhase: .active
@@ -491,7 +497,7 @@ extension ReactionPolicyTests {
     }
 
     func testFixedInputsProduceIdenticalPlanAndRationale() throws {
-        let policy = HorrorNarrativePolicy()
+        let policy = narrativePolicy()
         let owner = try HapticOwnerID(rawValue: "session-deterministic")
         let transition = try transition(
             currentSignals: [.suspense: 0.9, .threat: 0.7],
@@ -511,7 +517,7 @@ extension ReactionPolicyTests {
     }
 
     func testUnavailableHapticsProduceExplicitNoOp() throws {
-        let plan = HorrorNarrativePolicy().plan(
+        let plan = narrativePolicy().plan(
             for: try transition(currentSignals: [.suspense: 0.9], currentPhase: .active),
             context: context(signals: [.suspense], haptics: .unavailable)
         )

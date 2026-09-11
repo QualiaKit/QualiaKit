@@ -59,7 +59,7 @@ package enum HapticCommandSemantics {
     package static func effectsRetainedAfterReset(
         _ activeEffects: [HapticEffectID: HapticActiveEffect]
     ) -> [HapticEffectID: HapticActiveEffect] {
-        activeEffects.filter { $0.key.scope == .global }
+        activeEffects.filter { $0.key.scope == .global && $0.value.pattern.playbackDuration == nil }
     }
 
     package static func nextActiveEffects(

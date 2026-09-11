@@ -70,6 +70,7 @@ public final class RecordingHapticRenderer: HapticRendering {
     private let now: @MainActor () -> Duration
     private var nextFailure: HapticError?
     private var sequence: UInt64 = 0
+    private var deadlines: [HapticEffectID: Duration] = [:]
 
     public init(
         capabilities: HapticCapabilities = .full,
@@ -99,6 +100,7 @@ public final class RecordingHapticRenderer: HapticRendering {
 
     public func execute(_ command: HapticCommand) throws {
         let timestamp = now()
+        expireEffects()
         guard lifecycleState == .ready else {
             let error = HapticError.invalidLifecycleState
             record(command, at: timestamp, result: .failure(error))
@@ -110,11 +112,19 @@ public final class RecordingHapticRenderer: HapticRendering {
         }
 
         do {
+            let previous = activeEffects
             activeEffects = try HapticCommandSemantics.nextActiveEffects(
                 after: command,
                 current: activeEffects,
                 capabilities: capabilities
             )
+            switch command {
+            case let .start(id, pattern, _) where previous[id] == nil,
+                 let .replace(id, pattern, _):
+                deadlines[id] = pattern.playbackDuration.map { timestamp + $0 }
+            default: break
+            }
+            deadlines = deadlines.filter { activeEffects[$0.key] != nil }
             record(command, at: timestamp, result: .success)
         } catch let error as HapticError {
             record(command, at: timestamp, result: .failure(error))
@@ -127,6 +137,7 @@ public final class RecordingHapticRenderer: HapticRendering {
         guard lifecycleState != .suspended else { return }
         lifecycleState = .suspending
         lastLifecycleError = nil
+        deadlines.removeAll(keepingCapacity: true)
         activeEffects.removeAll(keepingCapacity: true)
         lifecycleState = .suspended
     }
@@ -155,6 +166,7 @@ public final class RecordingHapticRenderer: HapticRendering {
 
     public func simulateEngineInterruption() {
         lifecycleHistory.append(.engineInterruption)
+        deadlines.removeAll(keepingCapacity: true)
         activeEffects.removeAll(keepingCapacity: true)
         lastLifecycleError = .engineInterrupted
         switch lifecycleState {
@@ -168,6 +180,7 @@ public final class RecordingHapticRenderer: HapticRendering {
     public func simulateEngineReset() {
         guard lifecycleState != .suspending,
               lifecycleState != .suspended else {
+            deadlines.removeAll(keepingCapacity: true)
             activeEffects.removeAll(keepingCapacity: true)
             lastLifecycleError = .engineReset
             lifecycleHistory.append(.engineReset(.suppressedWhileSuspended))
@@ -175,6 +188,7 @@ public final class RecordingHapticRenderer: HapticRendering {
         }
 
         guard lifecycleState == .ready else {
+            deadlines.removeAll(keepingCapacity: true)
             activeEffects.removeAll(keepingCapacity: true)
             lifecycleState = .idle
             lastLifecycleError = .engineReset
@@ -184,6 +198,7 @@ public final class RecordingHapticRenderer: HapticRendering {
 
         let retainedEffects = HapticCommandSemantics.effectsRetainedAfterReset(activeEffects)
         activeEffects = retainedEffects
+        deadlines = deadlines.filter { activeEffects[$0.key] != nil }
         lifecycleState = .recovering
         lastLifecycleError = .engineReset
         let failure = consumeFailure()
@@ -196,10 +211,21 @@ public final class RecordingHapticRenderer: HapticRendering {
             return
         }
 
+        deadlines.removeAll(keepingCapacity: true)
         activeEffects.removeAll(keepingCapacity: true)
         lifecycleState = .idle
         lastLifecycleError = failure
         lifecycleHistory.append(.engineReset(.failure(failure)))
+    }
+
+    /// Advances deterministic physical completion using the injected clock,
+    /// without manufacturing a policy command or a new observation.
+    public func expireEffects() {
+        let instant = now()
+        for (id, deadline) in deadlines where instant >= deadline {
+            activeEffects.removeValue(forKey: id)
+            deadlines.removeValue(forKey: id)
+        }
     }
 
     public func failNext(with error: HapticError = .injectedFailure) {

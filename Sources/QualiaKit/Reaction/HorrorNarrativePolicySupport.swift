@@ -26,25 +26,6 @@ extension HorrorNarrativePolicy {
         return nil
     }
 
-    func shouldReplace(
-        appliedState: QualiaAppliedAmbientState,
-        tension: Float,
-        intensityScale: Float
-    ) -> Bool {
-        if appliedState.intensityScale != intensityScale {
-            return true
-        }
-        if abs(tension - appliedState.normalizedValue) >= configuration.minimumUpdateDelta {
-            return true
-        }
-
-        let expectedAppliedPattern = makeAmbientPattern(
-            tension: appliedState.normalizedValue,
-            intensityScale: appliedState.intensityScale
-        )
-        return expectedAppliedPattern != appliedState.pattern
-    }
-
     func tension(
         signals: [QualiaSignal: Float],
         supportedSignals: Set<QualiaSignal>
@@ -80,36 +61,6 @@ extension HorrorNarrativePolicy {
                 }
                 return left.1.value < right.1.value
             }
-    }
-
-    func makeAmbientPattern(
-        tension: Float,
-        intensityScale: Float
-    ) -> HapticPattern {
-        let intensity = (
-            configuration.minimumAmbientIntensity
-                + (configuration.maximumAmbientIntensity
-                    - configuration.minimumAmbientIntensity) * tension
-        ) * intensityScale
-
-        do {
-            return try HapticPattern(
-                duration: configuration.ambientCycleDuration,
-                events: [
-                    .continuous(
-                        at: .zero,
-                        duration: configuration.ambientCycleDuration,
-                        intensity: HapticValue(intensity),
-                        sharpness: HapticValue(0.2)
-                    )
-                ],
-                looping: .loop(period: configuration.ambientCycleDuration)
-            )
-        } catch {
-            preconditionFailure(
-                "Validated HorrorNarrativePolicy produced an invalid ambient pattern: \(error)"
-            )
-        }
     }
 
     func makeAccentPattern(
@@ -173,6 +124,7 @@ extension HorrorNarrativePolicy {
             fact("continuous-effects-enabled", context.preferences.continuousEffectsEnabled),
             fact("intensity-scale", context.preferences.intensityScale),
             fact("threshold-curve-version", "horror-tension-v1"),
+            fact("heartbeat-version", HeartbeatPolicyConfiguration.version),
         ]
     }
 

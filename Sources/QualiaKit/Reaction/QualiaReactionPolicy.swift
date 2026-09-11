@@ -109,6 +109,7 @@ public struct QualiaAppliedAmbientState: Hashable, Sendable {
 /// post-command `activeEffects` instead of assuming execution was atomic.
 public struct QualiaReactionState: Hashable, Sendable {
     public let activeAmbientEffects: [HapticEffectID: QualiaAppliedAmbientState]
+    var heartbeats: [HapticEffectID: HeartbeatState] = [:]
 
     public var activeEffects: Set<HapticEffectID> {
         Set(activeAmbientEffects.keys)
@@ -134,19 +135,21 @@ public struct QualiaReactionState: Hashable, Sendable {
     public func applying(_ appliedState: QualiaAppliedAmbientState) -> Self {
         var effects = activeAmbientEffects
         effects[appliedState.effectID] = appliedState
-        return Self(validatedAmbientEffects: effects)
+        return Self(validatedAmbientEffects: effects, heartbeats: heartbeats)
     }
 
     public func removingEffect(_ effectID: HapticEffectID) -> Self {
         var effects = activeAmbientEffects
         effects.removeValue(forKey: effectID)
-        return Self(validatedAmbientEffects: effects)
+        return Self(validatedAmbientEffects: effects, heartbeats: heartbeats)
     }
 
     init(
-        validatedAmbientEffects: [HapticEffectID: QualiaAppliedAmbientState]
+        validatedAmbientEffects: [HapticEffectID: QualiaAppliedAmbientState],
+        heartbeats: [HapticEffectID: HeartbeatState] = [:]
     ) {
         self.activeAmbientEffects = validatedAmbientEffects
+        self.heartbeats = heartbeats
     }
 }
 
@@ -258,7 +261,21 @@ public struct QualiaReactionPlan: Hashable, Sendable {
             }
         }
 
-        return QualiaReactionState(validatedAmbientEffects: reconciled)
+        var heartbeats = nextState.heartbeats
+        for (id, previous) in previousState.heartbeats where heartbeats[id] == nil {
+            heartbeats[id] = previous
+        }
+        for id in heartbeats.keys {
+            // An unrelated accent failure after a successful ambient command
+            // preserves the proposed lifecycle. A missing/unchanged failed
+            // ambient command suppresses retries until the owner resets.
+            let proposed = nextState.activeAmbientEffects[id]
+            let applied = reconciled[id]
+            if proposed != applied || (proposed == nil && heartbeats[id]?.phase == .running) {
+                heartbeats[id]?.phase = .failed
+            }
+        }
+        return QualiaReactionState(validatedAmbientEffects: reconciled, heartbeats: heartbeats)
     }
 }
 

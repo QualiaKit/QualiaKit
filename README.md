@@ -10,6 +10,14 @@ QualiaKit analyzes the sentiment of text as users type and plays haptic feedback
 
 If you need better accuracy, there's an optional `QualiaBert` module that runs a BERT model through CoreML instead.
 
+## Adaptive heartbeat preview
+
+The `QualiaKit` product includes a model-independent adaptive heartbeat for
+narrative scenes: fresh confidence gates, finite double-beat playback, cooldown,
+independent accents, and scoped lifecycle execution. See the
+[heartbeat integration and migration guide](Documentation/Heartbeat.md).
+Defaults remain provisional until physical-device release calibration.
+
 ## Installation
 
 Add the package to your `Package.swift`:
