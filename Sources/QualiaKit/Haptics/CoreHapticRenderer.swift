@@ -114,7 +114,7 @@ public final class CoreHapticRenderer: HapticRendering {
                 activeEffects = nextEffects
                 return
             }
-            activePlayers[id] = try makeAndStartPlayer(pattern: pattern)
+            activePlayers[id] = try makeAndStartPlayer(pattern: pattern, effectID: id)
             activeEffects = nextEffects
 
         case let .replace(id, pattern, _):
@@ -122,6 +122,7 @@ public final class CoreHapticRenderer: HapticRendering {
                 throw HapticError.invalidLifecycleState
             }
             let replacement = try makePlayer(pattern: pattern)
+            installCompletion(for: replacement, effectID: id)
             do {
                 try previous.stop()
             } catch {
@@ -312,14 +313,27 @@ public final class CoreHapticRenderer: HapticRendering {
     }
 
     private func makeAndStartPlayer(
-        pattern: HapticPattern
+        pattern: HapticPattern,
+        effectID: HapticEffectID? = nil
     ) throws -> any HapticRuntimePlayer {
         let player = try makePlayer(pattern: pattern)
+        if let effectID { installCompletion(for: player, effectID: effectID) }
         do {
             try player.start()
             return player
         } catch {
             throw cleanupAfterFailedStart(player, startError: error)
+        }
+    }
+
+    private func installCompletion(for player: any HapticRuntimePlayer, effectID: HapticEffectID) {
+        player.completionHandler = { [weak self, weak player] in
+            Task { @MainActor [weak self, weak player] in
+                guard let self, let player, let active = self.activePlayers[effectID],
+                      active === player else { return }
+                self.activePlayers.removeValue(forKey: effectID)
+                self.activeEffects.removeValue(forKey: effectID)
+            }
         }
     }
 

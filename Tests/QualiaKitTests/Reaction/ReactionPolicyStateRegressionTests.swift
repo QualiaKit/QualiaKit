@@ -4,7 +4,7 @@ import QualiaTesting
 
 extension ReactionPolicyTests {
     func testIntensityScaleChangeReplacesAppliedAmbientAtStableTension() throws {
-        let policy = HorrorNarrativePolicy()
+        let policy = narrativePolicy()
         let initialState = try activeState(
             policy: policy,
             tension: 0.8,
@@ -38,105 +38,37 @@ extension ReactionPolicyTests {
         XCTAssertNotEqual(proposed.pattern, previous.pattern)
     }
 
-    func testFailedReplaceKeepsComparisonAgainstLastAppliedTension() throws {
-        let policy = HorrorNarrativePolicy()
-        let appliedState = try activeState(policy: policy, tension: 0.8)
-        let failedPlan = policy.plan(
-            for: try transition(
-                previousSignals: [.suspense: 0.8],
-                currentSignals: [.suspense: 0.9],
-                previousPhase: .active,
-                currentPhase: .active
-            ),
-            context: context(signals: [.suspense], state: appliedState)
-        )
-        XCTAssertEqual(failedPlan.hapticCommands.count, 1)
-
-        // The session deliberately does not commit failedPlan.nextState after
-        // renderer failure. Semantic state may still advance independently.
-        let reconciliation = policy.plan(
-            for: try transition(
-                previousSignals: [.suspense: 0.9],
-                currentSignals: [.suspense: 0.92],
-                previousPhase: .active,
-                currentPhase: .active
-            ),
-            context: context(signals: [.suspense], state: appliedState)
-        )
-
-        guard case let .replace(effectID, _, .ambient) = try XCTUnwrap(
-            reconciliation.hapticCommands.first
-        ) else {
-            return XCTFail("Expected reconciliation against applied tension 0.8")
-        }
-        XCTAssertEqual(
-            reconciliation.nextState.appliedAmbientState(for: effectID)?.normalizedValue,
-            0.92
-        )
-    }
-
-    func testSuccessfulRetryCommitsAppliedSnapshotAndStopsFurtherReplace() throws {
-        let policy = HorrorNarrativePolicy()
+    func testFailedReplaceRetainsAppliedPatternAndSuppressesAutomaticRetry() throws {
+        let policy = narrativePolicy()
         let renderer = RecordingHapticRenderer()
         try renderer.prepare()
-
         let start = policy.plan(
-            for: try transition(currentSignals: [.suspense: 0.8], currentPhase: .active),
+            for: try transition(currentSignals: [.suspense: 0.8]),
             context: context(signals: [.suspense])
         )
         try execute(start, on: renderer)
-        let appliedState = start.nextState
-
         let failed = policy.plan(
-            for: try transition(
-                previousSignals: [.suspense: 0.8],
-                currentSignals: [.suspense: 0.9],
-                previousPhase: .active,
-                currentPhase: .active
-            ),
-            context: context(signals: [.suspense], state: appliedState)
+            for: try transition(currentSignals: [.suspense: 0.9]),
+            context: context(signals: [.suspense], state: start.nextState)
         )
         renderer.failNext()
-        XCTAssertThrowsError(try renderer.execute(XCTUnwrap(failed.hapticCommands.first)))
-        let stateAfterFailure = failed.reconciledStateAfterFailure(
-            from: appliedState,
-            rendererActiveEffects: renderer.activeEffects
+        XCTAssertThrowsError(try execute(failed, on: renderer))
+        let reconciled = failed.reconciledStateAfterFailure(
+            from: start.nextState, rendererActiveEffects: renderer.activeEffects
         )
-        XCTAssertEqual(stateAfterFailure, appliedState)
-
-        let retry = policy.plan(
-            for: try transition(
-                previousSignals: [.suspense: 0.9],
-                currentSignals: [.suspense: 0.92],
-                previousPhase: .active,
-                currentPhase: .active
-            ),
-            context: context(signals: [.suspense], state: stateAfterFailure)
-        )
-        try execute(retry, on: renderer)
-        let reconciledState = retry.nextState
-
-        let stable = policy.plan(
-            for: try transition(
-                previousSignals: [.suspense: 0.92],
-                currentSignals: [.suspense: 0.94],
-                previousPhase: .active,
-                currentPhase: .active
-            ),
-            context: context(signals: [.suspense], state: reconciledState)
-        )
-
-        XCTAssertTrue(stable.hapticCommands.isEmpty)
-        XCTAssertEqual(stable.rationale?.ruleIdentifier, "ambient-stable")
-        let effectID = try XCTUnwrap(reconciledState.activeEffects.first)
-        XCTAssertEqual(
-            renderer.activeEffects[effectID]?.pattern,
-            reconciledState.appliedAmbientState(for: effectID)?.pattern
-        )
+        XCTAssertEqual(reconciled.activeAmbientEffects, start.nextState.activeAmbientEffects)
+        for time in [2, 5, 10] {
+            let retry = policy.plan(
+                for: try transition(currentSignals: [.suspense: 0.99]),
+                context: context(signals: [.suspense], instant: .seconds(time), state: reconciled)
+            )
+            XCTAssertTrue(retry.hapticCommands.isEmpty)
+            XCTAssertEqual(retry.rationale?.ruleIdentifier, "heartbeat-execution-failed")
+        }
     }
 
     func testFailureAfterAppliedReplaceKeepsProposedSnapshot() throws {
-        let policy = HorrorNarrativePolicy()
+        let policy = narrativePolicy()
         let renderer = RecordingHapticRenderer()
         let previousState = try activeState(policy: policy, tension: 0.8)
         let impact = try QualiaScore(value: 0.95, confidence: 0.9)
@@ -173,16 +105,16 @@ extension ReactionPolicyTests {
         XCTAssertEqual(reconciled, plan.nextState)
     }
 
-    func testPartialReplaceFailureRestartsAboveUpdateDelta() throws {
-        try assertPartialReplaceFailureRestarts(nextTension: 0.92)
+    func testPartialReplaceFailureSuppressesRetryAboveUpdateDelta() throws {
+        try assertPartialReplaceFailureSuppressesRetry(nextTension: 0.92)
     }
 
-    func testPartialReplaceFailureRestartsInsideUpdateDelta() throws {
-        try assertPartialReplaceFailureRestarts(nextTension: 0.82)
+    func testPartialReplaceFailureSuppressesRetryInsideUpdateDelta() throws {
+        try assertPartialReplaceFailureSuppressesRetry(nextTension: 0.82)
     }
 
     func testIndependentOwnersDoNotShareOrStopEachOthersAmbientEffect() throws {
-        let policy = HorrorNarrativePolicy()
+        let policy = narrativePolicy()
         let renderer = RecordingHapticRenderer()
         let ownerA = try HapticOwnerID(rawValue: "session-a")
         let ownerB = try HapticOwnerID(rawValue: "session-b")
@@ -213,6 +145,7 @@ extension ReactionPolicyTests {
             ),
             context: context(
                 signals: [.suspense],
+                preferences: .disabled,
                 state: startA.nextState,
                 effectScope: .owned(ownerA)
             )
@@ -245,7 +178,7 @@ extension ReactionPolicyTests {
         }
     }
 
-    private func assertPartialReplaceFailureRestarts(
+    private func assertPartialReplaceFailureSuppressesRetry(
         nextTension: Float,
         file: StaticString = #filePath,
         line: UInt = #line
@@ -265,26 +198,9 @@ extension ReactionPolicyTests {
             )
         )
 
-        guard case let .start(effectID, pattern, .ambient) = try XCTUnwrap(
-            recovery.hapticCommands.first,
-            file: file,
-            line: line
-        ) else {
-            return XCTFail(
-                "Expected missing physical effect to restart at tension \(nextTension)",
-                file: file,
-                line: line
-            )
-        }
-
-        try execute(recovery, on: fixture.renderer)
-        XCTAssertEqual(fixture.renderer.activeEffects[effectID]?.pattern, pattern)
-        XCTAssertEqual(
-            recovery.nextState.appliedAmbientState(for: effectID)?.pattern,
-            pattern,
-            file: file,
-            line: line
-        )
+        XCTAssertTrue(recovery.hapticCommands.isEmpty, file: file, line: line)
+        XCTAssertEqual(recovery.rationale?.ruleIdentifier, "heartbeat-execution-failed", file: file, line: line)
+        XCTAssertTrue(fixture.renderer.activeEffects.isEmpty, file: file, line: line)
     }
 
     private func makePartialReplaceFailure(
@@ -293,7 +209,7 @@ extension ReactionPolicyTests {
     ) throws -> PartialReplaceFailureFixture {
         let backend = ReplacementStartFailingEngine()
         let renderer = CoreHapticRenderer(backend: backend)
-        let policy = HorrorNarrativePolicy()
+        let policy = narrativePolicy()
         let owner = try HapticOwnerID(rawValue: "partial-replace-session")
         let effectScope = HapticEffectScope.owned(owner)
         try renderer.prepare()

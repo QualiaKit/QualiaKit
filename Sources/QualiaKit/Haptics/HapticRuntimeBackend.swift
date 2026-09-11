@@ -89,7 +89,7 @@ package final class CoreHapticsRuntimeEngine: HapticRuntimeEngine {
                 player.loopEnabled = true
                 player.loopEnd = period.timeInterval
             }
-            return CoreHapticsRuntimePlayer(player: player)
+            return CoreHapticsRuntimePlayer(player: player, engine: engine, playbackDuration: pattern.playbackDuration)
         } catch {
             throw HapticError.playerCreationFailed
         }
@@ -188,13 +188,22 @@ private final class CoreHapticsRuntimePlayer: HapticRuntimePlayer {
 
     private let player: CHHapticAdvancedPatternPlayer
 
-    init(player: CHHapticAdvancedPatternPlayer) {
+    private let engine: CHHapticEngine
+    private let playbackDuration: Duration?
+
+    init(player: CHHapticAdvancedPatternPlayer, engine: CHHapticEngine, playbackDuration: Duration?) {
         self.player = player
+        self.engine = engine
+        self.playbackDuration = playbackDuration
     }
 
     func start() throws {
         do {
-            try player.start(atTime: CHHapticTimeImmediate)
+            let startTime = engine.currentTime
+            try player.start(atTime: startTime)
+            if let playbackDuration {
+                try player.stop(atTime: startTime + playbackDuration.timeInterval)
+            }
         } catch {
             throw HapticError.playerStartFailed
         }
