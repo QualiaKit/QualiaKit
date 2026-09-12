@@ -38,10 +38,15 @@ public final class CoreHapticRenderer: HapticRendering {
         let player: any HapticRuntimePlayer
     }
 
+    private struct PendingCleanupPlayer: Sendable {
+        let effectID: HapticEffectID?
+        let player: any HapticRuntimePlayer
+    }
+
     private let backend: any HapticRuntimeEngine
     private var activePlayers: [HapticEffectID: any HapticRuntimePlayer] = [:]
     private var oneShotPlayers: [UInt64: OneShotPlayer] = [:]
-    private var pendingCleanupPlayers: [UInt64: any HapticRuntimePlayer] = [:]
+    private var pendingCleanupPlayers: [UInt64: PendingCleanupPlayer] = [:]
     private var nextOneShotID: UInt64 = 0
     private var nextCleanupID: UInt64 = 0
     private var suspensionWaiters: [CheckedContinuation<Void, Never>] = []
@@ -133,7 +138,7 @@ public final class CoreHapticRenderer: HapticRendering {
             do {
                 try replacement.start()
             } catch {
-                throw cleanupAfterFailedStart(replacement, startError: error)
+                throw cleanupAfterFailedStart(replacement, effectID: id, startError: error)
             }
             activePlayers[id] = replacement
             activeEffects = nextEffects
@@ -147,6 +152,24 @@ public final class CoreHapticRenderer: HapticRendering {
         case .stopAll:
             try stopAllPlayers()
         }
+    }
+
+    public func stopEffects(ownedBy owner: HapticOwnerID) throws {
+        // activeEffects is an applied-state snapshot, not a complete inventory
+        // of physical players. Pending rollback players retain their owner.
+        let ids = Set(activePlayers.keys).union(activeEffects.keys)
+            .filter { $0.scope == .owned(owner) }
+            .sorted { $0.orderingKey < $1.orderingKey }
+        var firstFailure: HapticError?
+        for id in ids {
+            do { try stopEffect(id) } catch {
+                if firstFailure == nil { firstFailure = typed(error, fallback: .playerStopFailed) }
+            }
+        }
+        do { try stopPendingCleanupPlayers(ownedBy: owner) } catch {
+            if firstFailure == nil { firstFailure = typed(error, fallback: .playerStopFailed) }
+        }
+        if let firstFailure { throw firstFailure }
     }
 
     public func suspend() async {
@@ -275,7 +298,7 @@ public final class CoreHapticRenderer: HapticRendering {
         do {
             try backend.start()
             for effect in effectsToRestore {
-                activePlayers[effect.id] = try makeAndStartPlayer(pattern: effect.pattern)
+                activePlayers[effect.id] = try makeAndStartPlayer(pattern: effect.pattern, effectID: effect.id)
             }
             lifecycleState = .ready
             lastLifecycleError = nil
@@ -308,21 +331,21 @@ public final class CoreHapticRenderer: HapticRendering {
             try player.start()
         } catch {
             oneShotPlayers.removeValue(forKey: identifier)
-            throw cleanupAfterFailedStart(player, startError: error)
+            throw cleanupAfterFailedStart(player, effectID: nil, startError: error)
         }
     }
 
     private func makeAndStartPlayer(
         pattern: HapticPattern,
-        effectID: HapticEffectID? = nil
+        effectID: HapticEffectID
     ) throws -> any HapticRuntimePlayer {
         let player = try makePlayer(pattern: pattern)
-        if let effectID { installCompletion(for: player, effectID: effectID) }
+        installCompletion(for: player, effectID: effectID)
         do {
             try player.start()
             return player
         } catch {
-            throw cleanupAfterFailedStart(player, startError: error)
+            throw cleanupAfterFailedStart(player, effectID: effectID, startError: error)
         }
     }
 
@@ -429,20 +452,21 @@ public final class CoreHapticRenderer: HapticRendering {
         activeEffects.removeAll(keepingCapacity: true)
     }
 
-    private func retainForCleanup(_ player: any HapticRuntimePlayer) {
+    private func retainForCleanup(_ player: any HapticRuntimePlayer, effectID: HapticEffectID?) {
         precondition(nextCleanupID < .max, "CoreHapticRenderer cleanup ID overflow")
         nextCleanupID += 1
-        pendingCleanupPlayers[nextCleanupID] = player
+        pendingCleanupPlayers[nextCleanupID] = PendingCleanupPlayer(effectID: effectID, player: player)
     }
 
     private func cleanupAfterFailedStart(
         _ player: any HapticRuntimePlayer,
+        effectID: HapticEffectID?,
         startError: Error
     ) -> HapticError {
         do {
             try player.stop()
         } catch {
-            retainForCleanup(player)
+            retainForCleanup(player, effectID: effectID)
         }
         return typed(startError, fallback: .playerStartFailed)
     }
@@ -463,23 +487,24 @@ public final class CoreHapticRenderer: HapticRendering {
     }
 
     private func moveTrackedPlayersToPendingCleanup() {
-        for player in activePlayers.values {
-            retainForCleanup(player)
+        for (effectID, player) in activePlayers {
+            retainForCleanup(player, effectID: effectID)
         }
         for record in oneShotPlayers.values {
-            retainForCleanup(record.player)
+            retainForCleanup(record.player, effectID: nil)
         }
         activePlayers.removeAll(keepingCapacity: true)
         oneShotPlayers.removeAll(keepingCapacity: true)
         activeEffects.removeAll(keepingCapacity: true)
     }
 
-    private func stopPendingCleanupPlayers() throws {
+    private func stopPendingCleanupPlayers(ownedBy owner: HapticOwnerID? = nil) throws {
         var firstFailure: HapticError?
         for id in pendingCleanupPlayers.keys.sorted() {
-            guard let player = pendingCleanupPlayers[id] else { continue }
+            guard let record = pendingCleanupPlayers[id] else { continue }
+            if let owner, record.effectID?.scope != .owned(owner) { continue }
             do {
-                try player.stop()
+                try record.player.stop()
                 pendingCleanupPlayers.removeValue(forKey: id)
             } catch {
                 if firstFailure == nil {

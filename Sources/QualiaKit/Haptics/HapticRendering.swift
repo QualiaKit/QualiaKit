@@ -36,6 +36,10 @@ public protocol HapticRendering: AnyObject {
     var activeEffects: [HapticEffectID: HapticActiveEffect] { get }
     func prepare() throws
     func execute(_ command: HapticCommand) throws
+    /// Stops this owner's active effects and any players retained after failed
+    /// rollback, even if they are absent from activeEffects. Must throw while
+    /// any owned cleanup remains incomplete; must not stop another owner.
+    func stopEffects(ownedBy owner: HapticOwnerID) throws
     func suspend() async
     func resume() async throws
 }
@@ -51,6 +55,7 @@ public final class NoOpHapticRenderer: HapticRendering {
 
     public func prepare() throws {}
     public func execute(_ command: HapticCommand) throws {}
+    public func stopEffects(ownedBy owner: HapticOwnerID) throws {}
     public func suspend() async {}
     public func resume() async throws {}
 }

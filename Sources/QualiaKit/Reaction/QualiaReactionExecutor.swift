@@ -86,15 +86,11 @@ public final class QualiaReactionExecutor {
     /// scene reset and renderer interruption/reset, before accepting new work.
     public func reset() throws {
         invalidateRequests()
-        let ids = renderer.activeEffects.keys.filter { $0.scope == .owned(owner) }
-            .sorted { $0.orderingKey < $1.orderingKey }
-        var firstFailure: Error?
-        for id in ids {
-            do { try renderer.execute(.stop(id: id)) } catch { if firstFailure == nil { firstFailure = error } }
-        }
-        if let firstFailure {
+        do {
+            try renderer.stopEffects(ownedBy: owner)
+        } catch {
             for id in state.heartbeats.keys { state.heartbeats[id]?.phase = .failed }
-            throw firstFailure
+            throw error
         }
         state = .empty
     }
