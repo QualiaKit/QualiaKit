@@ -99,8 +99,9 @@ runs synchronous resolution/windowing off MainActor and propagates cancellation
 around each stage and before returning. It cannot preempt a synchronous detector
 already executing, but its result cannot escape after cancellation. Direct
 `resolve(for:)` and `window(_:)` are synchronous; their caller owns scheduling.
-The host still owns analyzer output validation, request ordering and lifecycle
-until the session integration in 0010.
+For accepted-fragment sequences, [QualiaSession](Session.md) now owns analyzer
+output validation, request ordering, bounded retained history and lifecycle.
+Hosts using the low-level preparer directly still own those responsibilities.
 
 ## Diagnostics and privacy
 
@@ -127,7 +128,7 @@ resolvers, windows and sinks are responsible for honoring the same privacy contr
 | AC-0005-004, generic bounds/current priority/Unicode/diagnostics | Exact count/byte boundaries, newest suffix, oversize rejection, text-free event payloads |
 | Concurrent preparation and cancellation | Shared preparer requests; cancellation before/during detection; off-main execution |
 | AC-0005-002, **model token** current-text priority | **Pending** model/tokenizer integration; generic-window tests do not complete this criterion |
-| AC-0005-003 / QK-CTX-006, **`QualiaSession.reset()`** privacy | **Pending** real session implementation and memory/lifecycle tests in 0010; stateless preparer reuse is not a reset test |
+| AC-0005-003 / QK-CTX-006, **`QualiaSession.reset()`** privacy | **Covered by 0010 session tests:** reset releases the session's retained-context storage, clears counts/state, and the next analyzer input has no previous history; late inference cannot repopulate it. Stateless preparer reuse alone is not this evidence. |
 | Russian model migration, exact tokenizer parity, Core ML `pair`/`formatted` | **Pending**; outside this stage |
 | Flagship room-language source, accepted/live-preview ownership, legacy pipeline migration | **Pending** host/session and legacy migration scopes |
 
@@ -136,5 +137,6 @@ The existing model contract, legacy `Qualia`/`QualiaBert`, and the separate
 `QualiaCoreML` package keep their existing integration paths.
 
 Verification: `swift build`, `swift test --filter ContextAndLanguageTests`,
+`swift test --filter SessionOrchestrationTests` for the real-session reset criterion,
 `swift test`, strict-concurrency `QualiaKit` build, and iOS Simulator build.
 The existing protected model evidence verification remains applicable.

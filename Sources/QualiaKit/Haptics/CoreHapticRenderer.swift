@@ -35,11 +35,13 @@ public final class CoreHapticRenderer: HapticRendering {
 
     private struct OneShotPlayer: Sendable {
         let channel: HapticChannel
+        let owner: HapticOwnerID?
         let player: any HapticRuntimePlayer
     }
 
     private struct PendingCleanupPlayer: Sendable {
         let effectID: HapticEffectID?
+        let owner: HapticOwnerID?
         let player: any HapticRuntimePlayer
     }
 
@@ -93,6 +95,15 @@ public final class CoreHapticRenderer: HapticRendering {
     }
 
     public func execute(_ command: HapticCommand) throws {
+        try execute(command, oneShotOwner: nil)
+    }
+
+    public func execute(_ command: HapticCommand, ownedBy owner: HapticOwnerID) throws {
+        try HapticCommandSemantics.validateOwnership(command, owner: owner)
+        try execute(command, oneShotOwner: owner)
+    }
+
+    private func execute(_ command: HapticCommand, oneShotOwner: HapticOwnerID?) throws {
         guard lifecycleState == .ready else {
             throw HapticError.invalidLifecycleState
         }
@@ -112,7 +123,7 @@ public final class CoreHapticRenderer: HapticRendering {
 
         switch command {
         case let .play(pattern, channel):
-            try playOneShot(pattern: pattern, channel: channel)
+            try playOneShot(pattern: pattern, channel: channel, owner: oneShotOwner)
 
         case let .start(id, pattern, _):
             guard activePlayers[id] == nil else {
@@ -163,6 +174,11 @@ public final class CoreHapticRenderer: HapticRendering {
         var firstFailure: HapticError?
         for id in ids {
             do { try stopEffect(id) } catch {
+                if firstFailure == nil { firstFailure = typed(error, fallback: .playerStopFailed) }
+            }
+        }
+        for id in oneShotPlayers.keys.sorted() where oneShotPlayers[id]?.owner == owner {
+            do { try stopOneShot(id) } catch {
                 if firstFailure == nil { firstFailure = typed(error, fallback: .playerStopFailed) }
             }
         }
@@ -316,7 +332,7 @@ public final class CoreHapticRenderer: HapticRendering {
         }
     }
 
-    private func playOneShot(pattern: HapticPattern, channel: HapticChannel) throws {
+    private func playOneShot(pattern: HapticPattern, channel: HapticChannel, owner: HapticOwnerID?) throws {
         let player = try makePlayer(pattern: pattern)
         precondition(nextOneShotID < .max, "CoreHapticRenderer one-shot ID overflow")
         nextOneShotID += 1
@@ -326,12 +342,12 @@ public final class CoreHapticRenderer: HapticRendering {
                 self?.oneShotPlayers.removeValue(forKey: identifier)
             }
         }
-        oneShotPlayers[identifier] = OneShotPlayer(channel: channel, player: player)
+        oneShotPlayers[identifier] = OneShotPlayer(channel: channel, owner: owner, player: player)
         do {
             try player.start()
         } catch {
             oneShotPlayers.removeValue(forKey: identifier)
-            throw cleanupAfterFailedStart(player, effectID: nil, startError: error)
+            throw cleanupAfterFailedStart(player, effectID: nil, owner: owner, startError: error)
         }
     }
 
@@ -452,21 +468,22 @@ public final class CoreHapticRenderer: HapticRendering {
         activeEffects.removeAll(keepingCapacity: true)
     }
 
-    private func retainForCleanup(_ player: any HapticRuntimePlayer, effectID: HapticEffectID?) {
+    private func retainForCleanup(_ player: any HapticRuntimePlayer, effectID: HapticEffectID?, owner: HapticOwnerID? = nil) {
         precondition(nextCleanupID < .max, "CoreHapticRenderer cleanup ID overflow")
         nextCleanupID += 1
-        pendingCleanupPlayers[nextCleanupID] = PendingCleanupPlayer(effectID: effectID, player: player)
+        pendingCleanupPlayers[nextCleanupID] = PendingCleanupPlayer(effectID: effectID, owner: owner, player: player)
     }
 
     private func cleanupAfterFailedStart(
         _ player: any HapticRuntimePlayer,
         effectID: HapticEffectID?,
+        owner: HapticOwnerID? = nil,
         startError: Error
     ) -> HapticError {
         do {
             try player.stop()
         } catch {
-            retainForCleanup(player, effectID: effectID)
+            retainForCleanup(player, effectID: effectID, owner: owner)
         }
         return typed(startError, fallback: .playerStartFailed)
     }
@@ -491,7 +508,7 @@ public final class CoreHapticRenderer: HapticRendering {
             retainForCleanup(player, effectID: effectID)
         }
         for record in oneShotPlayers.values {
-            retainForCleanup(record.player, effectID: nil)
+            retainForCleanup(record.player, effectID: nil, owner: record.owner)
         }
         activePlayers.removeAll(keepingCapacity: true)
         oneShotPlayers.removeAll(keepingCapacity: true)
@@ -502,7 +519,7 @@ public final class CoreHapticRenderer: HapticRendering {
         var firstFailure: HapticError?
         for id in pendingCleanupPlayers.keys.sorted() {
             guard let record = pendingCleanupPlayers[id] else { continue }
-            if let owner, record.effectID?.scope != .owned(owner) { continue }
+            if let owner, record.effectID?.scope != .owned(owner), record.owner != owner { continue }
             do {
                 try record.player.stop()
                 pendingCleanupPlayers.removeValue(forKey: id)

@@ -36,12 +36,25 @@ public protocol HapticRendering: AnyObject {
     var activeEffects: [HapticEffectID: HapticActiveEffect] { get }
     func prepare() throws
     func execute(_ command: HapticCommand) throws
+    /// Session envelope. One-shots must retain this owner through completion
+    /// and failed rollback so stopEffects(ownedBy:) can clean up every player.
+    func execute(_ command: HapticCommand, ownedBy owner: HapticOwnerID) throws
     /// Stops this owner's active effects and any players retained after failed
     /// rollback, even if they are absent from activeEffects. Must throw while
     /// any owned cleanup remains incomplete; must not stop another owner.
     func stopEffects(ownedBy owner: HapticOwnerID) throws
     func suspend() async
     func resume() async throws
+}
+
+public extension HapticRendering {
+    /// Older custom renderers remain usable for owned ambient commands. They
+    /// must implement the envelope before accepting session-owned one-shots.
+    func execute(_ command: HapticCommand, ownedBy owner: HapticOwnerID) throws {
+        try HapticCommandSemantics.validateOwnership(command, owner: owner)
+        if case .play = command { throw HapticError.ownershipConflict }
+        try execute(command)
+    }
 }
 
 /// An explicitly selected no-op renderer. It advertises no physical support
@@ -55,12 +68,25 @@ public final class NoOpHapticRenderer: HapticRendering {
 
     public func prepare() throws {}
     public func execute(_ command: HapticCommand) throws {}
+    public func execute(_ command: HapticCommand, ownedBy owner: HapticOwnerID) throws {
+        try HapticCommandSemantics.validateOwnership(command, owner: owner)
+    }
     public func stopEffects(ownedBy owner: HapticOwnerID) throws {}
     public func suspend() async {}
     public func resume() async throws {}
 }
 
 package enum HapticCommandSemantics {
+    package static func validateOwnership(_ command: HapticCommand, owner: HapticOwnerID) throws {
+        switch command {
+        case let .start(id, _, _), let .replace(id, _, _), let .stop(id):
+            guard id.scope == .owned(owner) else { throw HapticError.ownershipConflict }
+        case let .play(_, channel):
+            guard channel == .accent else { throw HapticError.ownershipConflict }
+        case .stopAll, .stopChannel:
+            throw HapticError.ownershipConflict
+        }
+    }
     package static func effectsRetainedAfterReset(
         _ activeEffects: [HapticEffectID: HapticActiveEffect]
     ) -> [HapticEffectID: HapticActiveEffect] {

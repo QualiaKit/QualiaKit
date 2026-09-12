@@ -26,8 +26,16 @@ Defaults remain provisional until physical-device release calibration.
 
 For model-independent language policies and bounded history in the `QualiaKit`
 product, see [Language and context preparation](Documentation/ContextAndLanguage.md).
-This is the first stage of spec 0005; session reset and model token/template
-integration remain pending.
+Generic preparation is integrated into the model-independent session below;
+model token/template integration remains pending.
+
+## Session orchestration preview
+
+`QualiaSession` owns accepted history, scene state, request ordering and scoped
+effect lifecycle. It rejects late results at the MainActor dispatch boundary and
+provides `process`, throwing `reset`/`suspend`/`resume`, and a structured response.
+See [session integration, arbitration and lifecycle](Documentation/Session.md).
+The first rollout is tested with controlled analyzers and recording renderers.
 
 ## Installation
 
