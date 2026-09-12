@@ -22,6 +22,13 @@ Defaults remain provisional until physical-device release calibration.
 
 `Packages/QualiaCoreML` provides the first stage of spec 0004: validated local manifests, an explicitly bounded tokenizer/input/output profile and real Core ML fixture inference. See [the runtime contract and stage boundary](Documentation/CoreMLRuntime.md). The current Russian model and `QualiaBert` remain on their existing path pending approved evidence and parity.
 
+## Language and context preview
+
+For model-independent language policies and bounded history in the `QualiaKit`
+product, see [Language and context preparation](Documentation/ContextAndLanguage.md).
+This is the first stage of spec 0005; session reset and model token/template
+integration remain pending.
+
 ## Installation
 
 Add the package to your `Package.swift`:
