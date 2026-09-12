@@ -46,9 +46,12 @@ def verify():
         actual = read(folder / 'golden.json')
         reference = [expected(case, manifest['tokenizer']['maxSequenceLength'], runtime['inputRoles'],
                               runtime['transform'] == 'none', runtime['classification'] == 'independent') for case in cases()]
+        assert len(actual) == len(reference), folder.name
         for observed, oracle in zip(actual, reference):
+            assert observed.keys() == oracle.keys(), folder.name
             for field in observed:
                 if field in ('raw', 'scores'):
+                    assert len(observed[field]) == len(oracle[field]), (folder.name, field)
                     assert all(math.isclose(a, b, rel_tol=0, abs_tol=1e-14)
                                for a, b in zip(observed[field], oracle[field])), (folder.name, field)
                 else:
