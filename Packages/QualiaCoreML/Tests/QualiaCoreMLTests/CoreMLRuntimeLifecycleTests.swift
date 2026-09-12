@@ -19,7 +19,7 @@ extension CoreMLRuntimeTests {
             return results
         }
         XCTAssertEqual(Set(results.map(\.inputID)), Set(requests.map(\.id)))
-        let references = try golden("exclusive-logits-v1")
+        let references = try golden("exclusive-logits-v2")
         for result in results {
             let index = Int(result.inputID.rawValue.dropFirst(5))!
             let expected = references[index.isMultiple(of: 2) ? 0 : 1]
@@ -88,7 +88,7 @@ extension CoreMLRuntimeTests {
             runtime["compiledFrom"] = ["source": runtime["model"]!, "compiler": "local-test-toolchain", "evidence": "Compiled in this test from the checksum-pinned source"]
             runtime["model"] = ["path": "pinned.mlmodelc", "format": "mlmodelc", "files": files]
             document["runtime"] = runtime
-            document["contractVersion"] = "exclusive-logits-local-compiled-v1"
+            document["contractVersion"] = "exclusive-logits-local-compiled-v2"
         }
         let probe = RuntimeProbe()
         let analyzer = try await CoreMLQualiaAnalyzer(source: FileQualiaModelSource(directory: fixture), configuration: .init(diagnostics: { probe.record($0) }))

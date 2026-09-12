@@ -5,7 +5,7 @@ import QualiaKit
 @testable import QualiaCoreML
 
 final class CoreMLRuntimeTests: XCTestCase {
-    let fixtures = ["exclusive-logits-v1", "exclusive-probabilities-v1", "independent-logits-v1"]
+    let fixtures = ["exclusive-logits-v2", "exclusive-probabilities-v2", "independent-logits-v2"]
 
     struct Golden: Decodable {
         let id: String
@@ -17,11 +17,11 @@ final class CoreMLRuntimeTests: XCTestCase {
         let scores: [Double]
     }
 
-    func directory(_ name: String = "exclusive-logits-v1") -> URL {
+    func directory(_ name: String = "exclusive-logits-v2") -> URL {
         Bundle.module.bundleURL.appendingPathComponent("Resources/CoreML/" + name)
     }
 
-    func contract(_ name: String = "exclusive-logits-v1") throws -> ValidatedContract {
+    func contract(_ name: String = "exclusive-logits-v2") throws -> ValidatedContract {
         try QualiaModelManifest.decode(Data(contentsOf: directory(name).appendingPathComponent("manifest.json"))).validateForExecution()
     }
 
@@ -33,7 +33,7 @@ final class CoreMLRuntimeTests: XCTestCase {
         try QualiaInput(id: .init(rawValue: id), text: text, language: .init(rawValue: "en"))
     }
 
-    func copyFixture(_ name: String = "exclusive-logits-v1") throws -> URL {
+    func copyFixture(_ name: String = "exclusive-logits-v2") throws -> URL {
         let destination = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.copyItem(at: directory(name), to: destination)
         addTeardownBlock { try? FileManager.default.removeItem(at: destination) }
@@ -176,7 +176,7 @@ final class CoreMLRuntimeTests: XCTestCase {
     }
 
     func testIndependentProbabilitiesAreNotForcedToSumToOne() throws {
-        let fixture = try copyFixture("independent-logits-v1")
+        let fixture = try copyFixture("independent-logits-v2")
         try edit(fixture) { document in
             var runtime = document["runtime"] as! [String: Any]
             runtime["transform"] = "none"
@@ -235,7 +235,7 @@ final class CoreMLRuntimeTests: XCTestCase {
 
     // AC-0004-002: unchanged probabilities, including endpoints and nonuniform distributions.
     func testTransformsAndInvalidOutputs() throws {
-        let probabilities = try contract("exclusive-probabilities-v1")
+        let probabilities = try contract("exclusive-probabilities-v2")
         for vector: [Double] in [[0, 0.25, 0.75], [1, 0, 0]] {
             let result = try RuntimeOutputAdapter.scores(Dictionary(uniqueKeysWithValues: vector.enumerated().map { ("LABEL_\($0)", $1) }), contract: probabilities)
             for (index, value) in vector.enumerated() {
@@ -246,7 +246,7 @@ final class CoreMLRuntimeTests: XCTestCase {
         let stable = try RuntimeOutputAdapter.scores(["LABEL_0": 1000, "LABEL_1": 999, "LABEL_2": -1000], contract: exclusive)
         XCTAssertEqual(Double(stable["com.qualiakit.fixture.component0"]!.value), 0.7310585786300049, accuracy: 1e-6)
         XCTAssertEqual(stable["com.qualiakit.fixture.component2"]?.value, 0)
-        let independent = try contract("independent-logits-v1")
+        let independent = try contract("independent-logits-v2")
         let saturated = try RuntimeOutputAdapter.scores(["LABEL_0": 1000, "LABEL_1": -1000, "LABEL_2": 0], contract: independent)
         XCTAssertEqual(saturated["com.qualiakit.fixture.component0"]?.value, 1)
         XCTAssertEqual(saturated["com.qualiakit.fixture.component1"]?.value, 0)
@@ -269,7 +269,7 @@ final class CoreMLRuntimeTests: XCTestCase {
     }
 
     func testBundledSourceAndLanguageContextContract() async throws {
-        let source = try BundledQualiaModelSource(bundle: .module, subdirectory: "CoreML/exclusive-logits-v1")
+        let source = try BundledQualiaModelSource(bundle: .module, subdirectory: "CoreML/exclusive-logits-v2")
         let analyzer = try await CoreMLQualiaAnalyzer(source: source)
         let requests = [
             try QualiaInput(id: .init(rawValue: "undetermined"), text: "quiet"),

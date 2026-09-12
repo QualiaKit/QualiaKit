@@ -4,15 +4,15 @@
     "consumersMustRejectUnsupportedVersions": true,
     "v1Additions": "optional-only-with-preserved-meaning"
   },
-  "contractVersion": "exclusive-logits-v1",
+  "contractVersion": "exclusive-probabilities-v2",
   "fixture": {
-    "calibrationSha256": "90250852782d2c3e9e94aa5160d3155eaaa2a60dfd74fa2ea108853432bd0e7e",
-    "caseCount": 10,
-    "corpusSha256": "4a23e323c73c581e5c830a36bc1222f9347fabcf349feb25afffbd5014d5e14b",
-    "directory": "Packages/QualiaCoreML/Tests/QualiaCoreMLTests/Resources/CoreML/exclusive-logits-v1",
-    "goldenSha256": "d5ac5dbeb30c64c263fb0f78938d922834f13b902424a439786fa3f1cd1e0d48",
+    "calibrationSha256": "c264230f73fee24b303f3afa5c4abbe092c8a79cd7bcbb5b7cea420ccfca2819",
+    "caseCount": 16,
+    "corpusSha256": "e6c590c993346b927ef6a7456525aa24e479a54f59bdff036112a3b130e5189d",
+    "directory": "Packages/QualiaCoreML/Tests/QualiaCoreMLTests/Resources/CoreML/exclusive-probabilities-v2",
+    "goldenSha256": "964cbd117a551b8cbee3cf9cb39fef45ae291661d0b2f951f8b7a913de555c60",
     "immutable": true,
-    "version": "exclusive-logits-v1"
+    "version": "exclusive-probabilities-v2"
   },
   "floatingPointTolerance": {
     "absoluteByField": {
@@ -25,18 +25,25 @@
     "holdoutProcessCount": 1
   },
   "inputs": {
-    "pieces": {
-      "dataType": "Int32",
+    "presence": {
+      "dataType": "Float32",
       "required": true,
       "shape": [
-        8
+        6
       ]
     },
-    "visible": {
-      "dataType": "Int32",
+    "segments": {
+      "dataType": "Float32",
+      "required": false,
+      "shape": [
+        6
+      ]
+    },
+    "words": {
+      "dataType": "Float32",
       "required": true,
       "shape": [
-        8
+        6
       ]
     }
   },
@@ -50,9 +57,9 @@
       }
     },
     "componentSha256": {
-      "model.mlmodel": "4f8422f2f80b29f5cc4ef561f18c09daf3faaefc5ded4b47af3802ec565686da"
+      "model.mlmodel": "e74c08d7ad73d1dc7f77d4fdc5e9c5420cbdf9d70b1f982c6a911772b571e18b"
     },
-    "identifier": "com.qualiakit.fixture.exclusive-logits-v1",
+    "identifier": "com.qualiakit.fixture.exclusive-probabilities-v2",
     "identityBasis": "SHA256 of the single model.mlmodel source artifact",
     "languages": [
       "en"
@@ -62,7 +69,7 @@
       "status": "verified",
       "value": "MIT"
     },
-    "packageIdentitySha256": "4f8422f2f80b29f5cc4ef561f18c09daf3faaefc5ded4b47af3802ec565686da",
+    "packageIdentitySha256": "e74c08d7ad73d1dc7f77d4fdc5e9c5420cbdf9d70b1f982c6a911772b571e18b",
     "redistribution": {
       "allowed": true,
       "reason": "Repository-authored synthetic fixture; MIT",
@@ -73,14 +80,14 @@
       "status": "verified",
       "value": "exclusive"
     },
-    "version": "sha256-4f8422f2f80b29f5cc4ef561f18c09daf3faaefc5ded4b47af3802ec565686da"
+    "version": "sha256-e74c08d7ad73d1dc7f77d4fdc5e9c5420cbdf9d70b1f982c6a911772b571e18b"
   },
   "outputs": {
     "classLabel": "String",
     "kind": {
       "evidence": "Tools/CoreMLFixtures/generate.py and reference.py; public synthetic arithmetic fixture, not a trained language model",
       "status": "verified",
-      "value": "logits"
+      "value": "mutually-exclusive-probabilities"
     },
     "labels": [
       {
@@ -117,7 +124,7 @@
         }
       }
     ],
-    "scores": "energies",
+    "scores": "distribution",
     "scoresType": "Dictionary<String,Double>"
   },
   "ownership": {
@@ -164,9 +171,9 @@
       "evidence": "Tools/CoreMLFixtures/generate.py and reference.py; public synthetic arithmetic fixture, not a trained language model",
       "status": "verified",
       "value": {
-        "artifactSha256": "34a2414bcbc00fe5bd7af413f79a32cacd4234390bab512ee318abb9bcac526c",
+        "artifactSha256": "b19c8e88b75988017a768a01658305ac6074b681ef7ee536cf956215ce8c03e9",
         "identifier": "QualiaKit/QualiaKit/Tools/CoreMLFixtures/generate.py",
-        "revision": "exclusive-logits-v1"
+        "revision": "exclusive-probabilities-v2"
       }
     },
     "trainingConfiguration": {
@@ -174,8 +181,8 @@
       "status": "verified",
       "value": {
         "environmentLockSha256": "32b7019036ac8e47835554b827740d54300de5d05521f05ff1216eba1ed6ac98",
-        "exportArtifactSha256": "34a2414bcbc00fe5bd7af413f79a32cacd4234390bab512ee318abb9bcac526c",
-        "trainingArtifactSha256": "34a2414bcbc00fe5bd7af413f79a32cacd4234390bab512ee318abb9bcac526c"
+        "exportArtifactSha256": "b19c8e88b75988017a768a01658305ac6074b681ef7ee536cf956215ce8c03e9",
+        "trainingArtifactSha256": "b19c8e88b75988017a768a01658305ac6074b681ef7ee536cf956215ce8c03e9"
       }
     }
   },
@@ -187,20 +194,21 @@
     }
   ],
   "runtime": {
-    "classLabelFeature": "selected",
+    "classLabelFeature": "chosen",
     "classification": "exclusive",
     "confidence": "unavailable",
     "inputRoles": {
-      "pieces": "tokenIDs",
-      "visible": "attentionMask"
+      "presence": "attentionMask",
+      "segments": "tokenTypeIDs",
+      "words": "tokenIDs"
     },
     "model": {
       "format": "mlmodel",
       "path": "model.mlmodel",
-      "sha256": "4f8422f2f80b29f5cc4ef561f18c09daf3faaefc5ded4b47af3802ec565686da"
+      "sha256": "e74c08d7ad73d1dc7f77d4fdc5e9c5420cbdf9d70b1f982c6a911772b571e18b"
     },
     "padding": "right",
-    "transform": "softmax",
+    "transform": "none",
     "truncation": "right-preserve-sep",
     "version": 1
   },
@@ -225,7 +233,7 @@
       }
     },
     "lowercase": true,
-    "maxSequenceLength": 8,
+    "maxSequenceLength": 6,
     "reconstructionBoundary": "Tokenizer is defined by this public fixture contract; no training or BERT parity claim",
     "specialTokens": {
       "cls": {
@@ -258,7 +266,7 @@
     "type": "qualia-ascii-whitespace-v1",
     "unicodeNormalization": "none",
     "vocabulary": "vocab.txt",
-    "vocabularyLineCount": 12,
-    "vocabularySha256": "993161389e874ea44c207a57c9e0fea1d735cd5ce41003874642ed3dfda169c1"
+    "vocabularyLineCount": 15,
+    "vocabularySha256": "78ac8fd84406629eac4a2452e668fb135cda74f6cc1537ccc944aca390cbb6d1"
   }
 }
