@@ -1,0 +1,257 @@
+{
+  "compatibility": {
+    "breakingChangesRequireSchemaIncrement": true,
+    "consumersMustRejectUnsupportedVersions": true,
+    "v1Additions": "optional-only-with-preserved-meaning"
+  },
+  "contractVersion": "independent-logits-v1",
+  "fixture": {
+    "calibrationSha256": "90250852782d2c3e9e94aa5160d3155eaaa2a60dfd74fa2ea108853432bd0e7e",
+    "caseCount": 10,
+    "corpusSha256": "4a23e323c73c581e5c830a36bc1222f9347fabcf349feb25afffbd5014d5e14b",
+    "directory": "Packages/QualiaCoreML/Tests/QualiaCoreMLTests/Resources/CoreML/independent-logits-v1",
+    "goldenSha256": "3173b24a985e8f9c8c442a08178fa8f63c7d84f04a5ef9ed7d58905fa3d42cc9",
+    "immutable": true,
+    "version": "independent-logits-v1"
+  },
+  "floatingPointTolerance": {
+    "absoluteByField": {
+      "rawScores": 1e-06,
+      "signals": 1e-06
+    },
+    "calibrationProcessCount": 1,
+    "comparison": "absolute",
+    "derivation": "1e-6 Float32 arithmetic comparison budget against independent analytical reference; tested in normal CI, not production calibration",
+    "holdoutProcessCount": 1
+  },
+  "inputs": {
+    "symbols": {
+      "dataType": "Double",
+      "required": true,
+      "shape": [
+        1,
+        8
+      ]
+    }
+  },
+  "model": {
+    "architectureFamily": {
+      "evidence": "Tools/CoreMLFixtures/generate.py and reference.py; public synthetic arithmetic fixture, not a trained language model",
+      "status": "verified",
+      "value": {
+        "family": "synthetic-affine-classifier",
+        "version": "1"
+      }
+    },
+    "componentSha256": {
+      "model.mlmodel": "95045174a323afa25b3298c6b3786a6ddf6f77c2f5c9d5cce12a4c4c8b095a1e"
+    },
+    "identifier": "com.qualiakit.fixture.independent-logits-v1",
+    "identityBasis": "SHA256 of the single model.mlmodel source artifact",
+    "languages": [
+      "en"
+    ],
+    "license": {
+      "evidence": "Tools/CoreMLFixtures/generate.py and reference.py; public synthetic arithmetic fixture, not a trained language model",
+      "status": "verified",
+      "value": "MIT"
+    },
+    "packageIdentitySha256": "95045174a323afa25b3298c6b3786a6ddf6f77c2f5c9d5cce12a4c4c8b095a1e",
+    "redistribution": {
+      "allowed": true,
+      "reason": "Repository-authored synthetic fixture; MIT",
+      "status": "allowed"
+    },
+    "task": {
+      "evidence": "Tools/CoreMLFixtures/generate.py and reference.py; public synthetic arithmetic fixture, not a trained language model",
+      "status": "verified",
+      "value": "independent"
+    },
+    "version": "sha256-95045174a323afa25b3298c6b3786a6ddf6f77c2f5c9d5cce12a4c4c8b095a1e"
+  },
+  "outputs": {
+    "classLabel": "String",
+    "kind": {
+      "evidence": "Tools/CoreMLFixtures/generate.py and reference.py; public synthetic arithmetic fixture, not a trained language model",
+      "status": "verified",
+      "value": "logits"
+    },
+    "labels": [
+      {
+        "name": "LABEL_0",
+        "productSignal": "com.qualiakit.fixture.component0",
+        "semanticMeaning": {
+          "evidence": "Tools/CoreMLFixtures/generate.py and reference.py; public synthetic arithmetic fixture, not a trained language model",
+          "status": "verified",
+          "value": {
+            "canonicalMeaning": "Synthetic arithmetic component 0"
+          }
+        }
+      },
+      {
+        "name": "LABEL_1",
+        "productSignal": "com.qualiakit.fixture.component1",
+        "semanticMeaning": {
+          "evidence": "Tools/CoreMLFixtures/generate.py and reference.py; public synthetic arithmetic fixture, not a trained language model",
+          "status": "verified",
+          "value": {
+            "canonicalMeaning": "Synthetic arithmetic component 1"
+          }
+        }
+      },
+      {
+        "name": "LABEL_2",
+        "productSignal": "com.qualiakit.fixture.component2",
+        "semanticMeaning": {
+          "evidence": "Tools/CoreMLFixtures/generate.py and reference.py; public synthetic arithmetic fixture, not a trained language model",
+          "status": "verified",
+          "value": {
+            "canonicalMeaning": "Synthetic arithmetic component 2"
+          }
+        }
+      }
+    ],
+    "scores": "energies",
+    "scoresType": "Dictionary<String,Double>"
+  },
+  "ownership": {
+    "contract": "QualiaKit contributors",
+    "modelEvidence": "Tools/CoreMLFixtures"
+  },
+  "provenance": {
+    "classBalance": {
+      "evidence": "Tools/CoreMLFixtures/generate.py and reference.py; public synthetic arithmetic fixture, not a trained language model",
+      "status": "verified",
+      "value": {
+        "countsByLabel": {
+          "LABEL_0": 0,
+          "LABEL_1": 0,
+          "LABEL_2": 0
+        },
+        "split": "no-training-examples"
+      }
+    },
+    "dataset": {
+      "evidence": "Tools/CoreMLFixtures/generate.py and reference.py; public synthetic arithmetic fixture, not a trained language model",
+      "status": "verified",
+      "value": {
+        "identifier": "synthetic-arithmetic-no-training-dataset",
+        "license": "MIT",
+        "version": "1"
+      }
+    },
+    "domain": {
+      "evidence": "Tools/CoreMLFixtures/generate.py and reference.py; public synthetic arithmetic fixture, not a trained language model",
+      "status": "verified",
+      "value": [
+        "runtime-integration-tests-only"
+      ]
+    },
+    "exportMetadata": {
+      "conversionDate": "2026-09-12",
+      "coremltools": "8.3.0",
+      "sourceDialect": "NeuralNetworkBuilder",
+      "sourceFramework": "hand-authored arithmetic",
+      "status": "verified-from-coreml-metadata"
+    },
+    "source": {
+      "evidence": "Tools/CoreMLFixtures/generate.py and reference.py; public synthetic arithmetic fixture, not a trained language model",
+      "status": "verified",
+      "value": {
+        "artifactSha256": "34a2414bcbc00fe5bd7af413f79a32cacd4234390bab512ee318abb9bcac526c",
+        "identifier": "QualiaKit/QualiaKit/Tools/CoreMLFixtures/generate.py",
+        "revision": "independent-logits-v1"
+      }
+    },
+    "trainingConfiguration": {
+      "evidence": "Tools/CoreMLFixtures/generate.py and reference.py; public synthetic arithmetic fixture, not a trained language model",
+      "status": "verified",
+      "value": {
+        "environmentLockSha256": "32b7019036ac8e47835554b827740d54300de5d05521f05ff1216eba1ed6ac98",
+        "exportArtifactSha256": "34a2414bcbc00fe5bd7af413f79a32cacd4234390bab512ee318abb9bcac526c",
+        "trainingArtifactSha256": "34a2414bcbc00fe5bd7af413f79a32cacd4234390bab512ee318abb9bcac526c"
+      }
+    }
+  },
+  "releaseRisks": [
+    {
+      "field": "quality",
+      "releaseImpact": "Must not be used to infer sentiment or narrative signals",
+      "status": "fixture-only"
+    }
+  ],
+  "runtime": {
+    "classLabelFeature": "selected",
+    "classification": "independent",
+    "confidence": "unavailable",
+    "inputRoles": {
+      "symbols": "tokenIDs"
+    },
+    "model": {
+      "format": "mlmodel",
+      "path": "model.mlmodel",
+      "sha256": "95045174a323afa25b3298c6b3786a6ddf6f77c2f5c9d5cce12a4c4c8b095a1e"
+    },
+    "padding": "right",
+    "transform": "sigmoid",
+    "truncation": "right-preserve-sep",
+    "version": 1
+  },
+  "runtimeRefactorGate": {
+    "conditions": {
+      "labelSemantics": "resolved",
+      "outputKind": "resolved",
+      "provenance": "resolved",
+      "tokenizerTrainingParity": "resolved"
+    },
+    "rule": "blocked-if-any-condition-is-unresolved",
+    "status": "open"
+  },
+  "schemaVersion": 1,
+  "tokenizer": {
+    "contextPairSupport": {
+      "evidence": "Tools/CoreMLFixtures/generate.py and reference.py; public synthetic arithmetic fixture, not a trained language model",
+      "status": "verified",
+      "value": {
+        "mode": "singleText",
+        "template": "[CLS] text [SEP]"
+      }
+    },
+    "lowercase": true,
+    "maxSequenceLength": 8,
+    "reconstructionBoundary": "Tokenizer is defined by this public fixture contract; no training or BERT parity claim",
+    "specialTokens": {
+      "cls": {
+        "id": 2,
+        "token": "[CLS]"
+      },
+      "pad": {
+        "id": 0,
+        "token": "[PAD]"
+      },
+      "sep": {
+        "id": 3,
+        "token": "[SEP]"
+      },
+      "unk": {
+        "id": 1,
+        "token": "[UNK]"
+      }
+    },
+    "trainingIdentity": {
+      "evidence": "Tools/CoreMLFixtures/generate.py and reference.py; public synthetic arithmetic fixture, not a trained language model",
+      "status": "verified",
+      "value": "qualia-ascii-whitespace-v1"
+    },
+    "trainingVersion": {
+      "evidence": "Tools/CoreMLFixtures/generate.py and reference.py; public synthetic arithmetic fixture, not a trained language model",
+      "status": "verified",
+      "value": "1"
+    },
+    "type": "qualia-ascii-whitespace-v1",
+    "unicodeNormalization": "none",
+    "vocabulary": "vocab.txt",
+    "vocabularyLineCount": 12,
+    "vocabularySha256": "993161389e874ea44c207a57c9e0fea1d735cd5ce41003874642ed3dfda169c1"
+  }
+}

@@ -18,6 +18,10 @@ independent accents, and scoped lifecycle execution. See the
 [heartbeat integration and migration guide](Documentation/Heartbeat.md).
 Defaults remain provisional until physical-device release calibration.
 
+## Manifest-driven Core ML preview
+
+`Packages/QualiaCoreML` provides the first stage of spec 0004: validated local manifests, an explicitly bounded tokenizer/input/output profile and real Core ML fixture inference. See [the runtime contract and stage boundary](Documentation/CoreMLRuntime.md). The current Russian model and `QualiaBert` remain on their existing path pending approved evidence and parity.
+
 ## Installation
 
 Add the package to your `Package.swift`:

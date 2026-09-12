@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qualiakit.dev/schemas/model-execution-v1.json",
+  "title": "Optional runtime extension to model-contract-v1 (execution profile 1)",
+  "description": "Apply to the runtime property after validating the unchanged base model-contract-v1 schema. An absent extension is a valid audit document but is not executable by QualiaCoreML.",
+  "type": "object",
+  "required": ["version", "model", "inputRoles", "classLabelFeature", "classification", "transform", "confidence", "truncation", "padding"],
+  "properties": {
+    "version": {"const": 1},
+    "model": {"$ref": "#/$defs/asset"},
+    "compiledFrom": {
+      "type": "object",
+      "required": ["source", "compiler", "evidence"],
+      "properties": {
+        "source": {"$ref": "#/$defs/asset"},
+        "compiler": {"type": "string", "minLength": 1},
+        "evidence": {"type": "string", "minLength": 1}
+      }
+    },
+    "inputRoles": {
+      "type": "object", "minProperties": 1,
+      "additionalProperties": {"enum": ["tokenIDs", "attentionMask", "tokenTypeIDs"]}
+    },
+    "classLabelFeature": {"type": "string", "minLength": 1},
+    "classification": {"enum": ["exclusive", "independent"]},
+    "transform": {"enum": ["none", "softmax", "sigmoid"]},
+    "confidence": {"const": "unavailable"},
+    "truncation": {"const": "right-preserve-sep"},
+    "padding": {"const": "right"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "asset": {
+      "type": "object",
+      "required": ["path", "format"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "format": {"enum": ["mlmodel", "mlmodelc"]},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "files": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/sha256"}}
+      },
+      "oneOf": [
+        {"required": ["sha256"], "properties": {"format": {"const": "mlmodel"}}},
+        {"required": ["files"], "properties": {"format": {"const": "mlmodelc"}}}
+      ]
+    }
+  },
+  "additionalProperties": true
+}
