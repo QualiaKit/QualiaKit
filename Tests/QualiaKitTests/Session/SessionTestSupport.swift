@@ -41,21 +41,28 @@ actor SessionFixtureAnalyzer: QualiaAnalyzing {
         let id = input.id.rawValue
         return try await withTaskCancellationHandler {
             try await withCheckedThrowingContinuation { continuation in
-                if !ignoresCancellation && (Task.isCancelled || cancellations.contains(id)) {
-                    continuation.resume(throwing: CancellationError())
-                    return
-                }
-                inputs.append(input)
-                pending[id] = (input, continuation)
-                counts[id, default: 0] += 1
-                for (count, expectation) in expectations[id] ?? [] where counts[id, default: 0] >= count {
-                    expectation.fulfill()
-                }
-                expectations[id] = (expectations[id] ?? []).filter { counts[id, default: 0] < $0.0 }
+                install(input, continuation: continuation)
             }
         } onCancel: {
             Task { await self.cancel(id) }
         }
+    }
+
+    // Keep dictionary mutation in a synchronous actor method: Swift 5.9
+    // otherwise diagnoses its inout access inside the continuation closure.
+    private func install(_ input: QualiaInput, continuation: CheckedContinuation<QualiaObservation, Error>) {
+        let id = input.id.rawValue
+        if !ignoresCancellation && (Task.isCancelled || cancellations.contains(id)) {
+            continuation.resume(throwing: CancellationError())
+            return
+        }
+        inputs.append(input)
+        pending[id] = (input, continuation)
+        counts[id, default: 0] += 1
+        for (count, expectation) in expectations[id] ?? [] where counts[id, default: 0] >= count {
+            expectation.fulfill()
+        }
+        expectations[id] = (expectations[id] ?? []).filter { counts[id, default: 0] < $0.0 }
     }
 
     func invocation(_ id: String, count: Int = 1) -> XCTestExpectation {
@@ -102,7 +109,10 @@ actor SessionDispatchBarrier {
         reached.insert(generation)
         expectations.removeValue(forKey: generation)?.fulfill()
         guard held.contains(generation), !released.contains(generation) else { return }
-        await withCheckedContinuation { continuations[generation] = $0 }
+        await withCheckedContinuation { park($0, generation: generation) }
+    }
+    private func park(_ continuation: CheckedContinuation<Void, Never>, generation: UInt64) {
+        continuations[generation] = continuation
     }
     func arrival(_ generation: UInt64) -> XCTestExpectation {
         let expectation = XCTestExpectation(description: "MainActor dispatch \(generation)")
