@@ -17,6 +17,10 @@ public enum QualiaError: Error, Hashable, Sendable {
     case analyzerUnavailable(identity: QualiaAnalyzerIdentity)
     case invalidAnalyzerOutput(identity: QualiaAnalyzerIdentity)
     case incompatibleFallbackCapabilities
+    case invalidLanguageConfiguration
+    case invalidContextConfiguration
+    case currentTextExceedsContextBounds
+    case contextSizeOverflow
 }
 
 enum QualiaDomainValidation {
