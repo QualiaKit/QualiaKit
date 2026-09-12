@@ -4,17 +4,19 @@ import Foundation
 /// Intentionally small, fully specified tokenizer, unrelated to the frozen BERT reconstruction.
 struct RuntimeTokenizer: Sendable {
     let configuration: QualiaModelManifest.Tokenizer
-    let vocabulary: [String: Int]
+    // UTF-8 keys preserve the exact scalar identity required by this contract.
+    let vocabulary: [Data: Int]
 
     init(configuration: QualiaModelManifest.Tokenizer, data: Data) throws {
         guard let text = String(data: data, encoding: .utf8) else { throw CoreMLRuntimeError.invalidVocabulary }
         var tokens = text.components(separatedBy: "\n")
         if tokens.last == "" { tokens.removeLast() }
+        let keys = tokens.map { Data($0.utf8) }
         guard tokens.count == configuration.vocabularyLineCount,
               !tokens.contains(where: { $0.isEmpty || $0.contains("\r") }),
-              Set(tokens).count == tokens.count else { throw CoreMLRuntimeError.invalidVocabulary }
+              Set(keys).count == tokens.count else { throw CoreMLRuntimeError.invalidVocabulary }
         for special in configuration.specialTokens.values {
-            guard tokens.indices.contains(special.id), tokens[special.id] == special.token else {
+            guard keys.indices.contains(special.id), keys[special.id] == Data(special.token.utf8) else {
                 throw CoreMLRuntimeError.invalidVocabulary
             }
         }
@@ -22,7 +24,7 @@ struct RuntimeTokenizer: Sendable {
             throw CoreMLRuntimeError.invalidVocabulary
         }
         self.configuration = configuration
-        vocabulary = Dictionary(uniqueKeysWithValues: tokens.enumerated().map { ($1, $0) })
+        vocabulary = Dictionary(uniqueKeysWithValues: keys.enumerated().map { ($1, $0) })
     }
 
     func prepare(_ text: String) throws -> PreparedText {
@@ -44,7 +46,7 @@ struct RuntimeTokenizer: Sendable {
               let unk = configuration.specialTokens["unk"]?.id else {
             throw CoreMLRuntimeError.invalidVocabulary
         }
-        let content = words.prefix(contentLimit).map { vocabulary[String($0)] ?? unk }
+        let content = words.prefix(contentLimit).map { vocabulary[Data($0.utf8)] ?? unk }
         let count = content.count + 2
         let ids = [cls] + content + [sep] + Array(repeating: pad, count: configuration.maxSequenceLength - count)
         try Task.checkCancellation()

@@ -15,6 +15,13 @@ def cases():
         {'id': 'combining-mark-after-space', 'text': 'quiet \u0301 storm', 'content': [4, 1, 5]},
         {'id': 'truncated', 'text': 'quiet storm rises falls quiet storm rises falls quiet', 'content': [4, 5, 6, 7, 4, 5, 6, 7, 4]},
         {'id': 'exact-boundary', 'text': 'quiet storm rises falls', 'content': [4, 5, 6, 7]},
+        # Exact scalar identity: composed-only, decomposed-only, and two distinct entries.
+        {'id': 'unicode-composed-present', 'text': 'caf\u00e9', 'content': [8]},
+        {'id': 'unicode-decomposed-absent', 'text': 'cafe\u0301', 'content': [1]},
+        {'id': 'unicode-decomposed-present', 'text': 'nai\u0308ve', 'content': [14]},
+        {'id': 'unicode-composed-absent', 'text': 'na\u00efve', 'content': [1]},
+        {'id': 'unicode-distinct-entries', 'text': 'r\u00e9sum\u00e9 re\u0301sume\u0301', 'content': [12, 13]},
+        {'id': 'unicode-ascii-folding-distinct-entries', 'text': 'R\u00e9SUM\u00e9 RE\u0301SUME\u0301', 'content': [12, 13]},
     ]
 
 

@@ -18,7 +18,8 @@ from coremltools.models.neural_network import NeuralNetworkBuilder
 
 ROOT = Path(__file__).resolve().parents[2]
 DEST = ROOT / 'Packages/QualiaCoreML/Tests/QualiaCoreMLTests/Resources/CoreML'
-VOCAB = ['[PAD]', '[UNK]', '[CLS]', '[SEP]', 'quiet', 'storm', 'rises', 'falls', 'café', 'CAFÉ', '🙂', 'storm!']
+VOCAB = ['[PAD]', '[UNK]', '[CLS]', '[SEP]', 'quiet', 'storm', 'rises', 'falls', 'café', 'CAFÉ', '🙂', 'storm!',
+         'r\u00e9sum\u00e9', 're\u0301sume\u0301', 'nai\u0308ve']
 EVIDENCE = 'Tools/CoreMLFixtures/generate.py and reference.py; public synthetic arithmetic fixture, not a trained language model'
 
 
@@ -148,9 +149,9 @@ if __name__ == '__main__':
     temporary = tempfile.TemporaryDirectory()
     if not args.write:
         DEST = Path(temporary.name)
-    generate('exclusive-logits-v1', 8, {'pieces': 'tokenIDs', 'visible': 'attentionMask'}, 'Int32')
-    generate('exclusive-probabilities-v1', 6, {'words': 'tokenIDs', 'presence': 'attentionMask', 'segments': 'tokenTypeIDs'}, 'Float32', probability=True)
-    generate('independent-logits-v1', 8, {'symbols': 'tokenIDs'}, 'Double', independent=True, rank_two=True)
+    generate('exclusive-logits-v2', 8, {'pieces': 'tokenIDs', 'visible': 'attentionMask'}, 'Int32')
+    generate('exclusive-probabilities-v2', 6, {'words': 'tokenIDs', 'presence': 'attentionMask', 'segments': 'tokenTypeIDs'}, 'Float32', probability=True)
+    generate('independent-logits-v2', 8, {'symbols': 'tokenIDs'}, 'Double', independent=True, rank_two=True)
     if not args.write:
         for generated in sorted(DEST.rglob('*')):
             if generated.is_file():
