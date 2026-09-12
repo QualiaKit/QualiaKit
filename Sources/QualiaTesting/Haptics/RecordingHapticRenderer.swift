@@ -37,6 +37,7 @@ public enum HapticResetRecoveryResult: Hashable, Sendable {
 public enum HapticRecordingLifecycleEvent: Hashable, Sendable {
     case prepare
     case suspend
+    case stopOwnedEffects(HapticOwnerID)
     case resume
     case engineInterruption
     case engineReset(HapticResetRecoveryResult)
@@ -130,6 +131,20 @@ public final class RecordingHapticRenderer: HapticRendering {
             record(command, at: timestamp, result: .failure(error))
             throw error
         }
+    }
+
+    public func stopEffects(ownedBy owner: HapticOwnerID) throws {
+        lifecycleHistory.append(.stopOwnedEffects(owner))
+        expireEffects()
+        let ids = activeEffects.keys.filter { $0.scope == .owned(owner) }
+            .sorted { $0.orderingKey < $1.orderingKey }
+        var firstFailure: Error?
+        for id in ids {
+            do { try execute(.stop(id: id)) } catch {
+                if firstFailure == nil { firstFailure = error }
+            }
+        }
+        if let firstFailure { throw firstFailure }
     }
 
     public func suspend() async {

@@ -61,7 +61,11 @@ private struct HeartbeatPlanner {
                 let wasResolving = heartbeat.phase == .resolving
                 heartbeat.phase = .cooldown
                 heartbeat.cooldownUntil = heartbeat.deadline + config.cooldown
-                return finish(wasResolving ? "heartbeat-resolved" : "heartbeat-maximum-duration")
+                let completionRule = wasResolving ? "heartbeat-resolved" : "heartbeat-maximum-duration"
+                facts.append(policy.fact("heartbeat-completion", completionRule))
+                if context.instant < heartbeat.cooldownUntil { return finish(completionRule) }
+                // A single observation may arrive after both deadlines. Fall
+                // through to idle and qualify it as a new segment now.
             }
         }
         if heartbeat.phase == .cooldown {

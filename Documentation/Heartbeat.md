@@ -34,8 +34,10 @@ below the defaults can be evaluated with a custom configuration.
 Running playback compares parameters with the last successfully applied
 pattern. It does not recreate players for insignificant changes. Replacements
 carry only the original segment's remaining duration. Resolution is irreversible
-until cooldown finishes. Disable, background and reset stop immediately rather
-than waiting for the update interval or resolution tail. Accents remain one-shot
+until cooldown finishes. A later observation advances all elapsed deadlines in
+one evaluation: if the segment and its cooldown have both ended, fresh evidence
+can start a new segment immediately, without an extra observation. Disable,
+background and reset stop immediately rather than waiting for the update interval or resolution tail. Accents remain one-shot
 commands on the independent accent channel.
 
 `HeartbeatParameters` validates BPM in `55...120`, second-beat ratio in
@@ -99,6 +101,14 @@ evidence is required. Reset before replacing a policy/configuration or owner.
 Callers using pure `plan` directly must serialize generation validation and
 command dispatch themselves. Commit `nextState` after successful execution and
 use `reconciledStateAfterFailure` with the renderer snapshot after failure.
+Custom `HapticRendering` implementations must implement
+`stopEffects(ownedBy:)`. It must cover active and pending-rollback players,
+including those absent from `activeEffects`, and throw until all of the owner's
+cleanup succeeds. It must never stop another owner's players. The executor
+uses this operation for reset, suspend and disabling preferences; it clears
+state only on success. `RecordingHapticRenderer` records the owner stop as a
+lifecycle event as well as the resulting commands.
+
 Keep this reaction state opaque: reconstructing it from `activeAmbientEffects`
 alone discards heartbeat timing, and the policy safely stops such restored
 playback rather than assuming a new segment.
@@ -107,8 +117,11 @@ playback rather than assuming a new segment.
 
 A failed start or replacement latches heartbeat suppression until explicit
 reset, including failures that removed the old player. If the old pattern is
-still physically playing, its original scheduled stop remains in force. A
-successful ambient command followed by a failed accent retains the applied
+still physically playing, its original scheduled stop remains in force. A new
+player can also start physically and then fail while scheduling its deadline;
+if rollback fails, its pending-cleanup record retains the effect ID and owner.
+An owner reset must stop that player, rather than assuming the deadline exists.
+A successful ambient command followed by a failed accent retains the applied
 ambient state. No automatic vibration retry is performed. Execution errors
 remain visible as thrown typed renderer errors; the recording renderer also
 records command outcomes and timestamps.
