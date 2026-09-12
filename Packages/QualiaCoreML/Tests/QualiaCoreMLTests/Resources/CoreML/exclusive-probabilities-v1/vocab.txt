@@ -1,0 +1,12 @@
+[PAD]
+[UNK]
+[CLS]
+[SEP]
+quiet
+storm
+rises
+falls
+café
+CAFÉ
+🙂
+storm!

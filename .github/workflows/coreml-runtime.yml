@@ -1,0 +1,47 @@
+name: Core ML runtime
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  public-runtime:
+    name: Public Core ML runtime
+    runs-on: macos-14
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Select supported Xcode
+        run: sudo xcode-select -s /Applications/Xcode_15.2.app/Contents/Developer
+
+      - name: Install fixture verifier Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Verify public fixture schemas, identities and references
+        run: python3 Tools/CoreMLFixtures/verify.py
+
+      - name: Build runtime with strict concurrency
+        run: |
+          swift build --package-path Packages/QualiaCoreML \
+            --target QualiaCoreML \
+            -Xswiftc -strict-concurrency=complete \
+            -Xswiftc -warnings-as-errors
+
+      - name: Test actual Core ML inference and lifecycle without protected assets
+        run: swift test --package-path Packages/QualiaCoreML --filter CoreMLRuntimeTests
+
+      - name: Build runtime for iOS Simulator
+        working-directory: Packages/QualiaCoreML
+        run: |
+          xcodebuild build \
+            -scheme QualiaCoreML \
+            -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.2' \
+            -skipPackagePluginValidation \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
