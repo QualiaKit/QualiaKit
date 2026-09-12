@@ -53,9 +53,14 @@ explicitly global effects.
 
 ## Host integration and lifecycle
 
-`QualiaReactionExecutor` is a narrow MainActor execution boundary. Full analyzer,
-context and reducer orchestration remain the responsibility of the host until
-spec 0010. Use one executor and one stable `HapticOwnerID` per session. A shared
+For accepted-fragment processing, prefer the model-independent
+[QualiaSession](Session.md), which integrates preparation, analyzer validation,
+state reduction and this executor. The lower-level API below remains available
+for hosts that intentionally own the entire orchestration boundary.
+
+`QualiaReactionExecutor` is a narrow MainActor execution boundary. When using it
+directly, analyzer, context and reducer orchestration remain host responsibilities.
+Use one executor and one stable `HapticOwnerID` per session. A shared
 renderer is supported; owner lifecycle stops do not stop another owner's effects.
 
 ```swift

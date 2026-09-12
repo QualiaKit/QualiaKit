@@ -1,7 +1,7 @@
 import Foundation
 
-/// A scoped execution boundary for hosts until full analyzer/session
-/// orchestration is installed. Capture a request token before asynchronous
+/// A scoped execution boundary used by QualiaSession and by hosts that provide
+/// their own orchestration. Capture a request token before asynchronous
 /// analysis, then submit its successful transition. Lifecycle invalidation
 /// and command dispatch are serialized on MainActor without suspension points.
 @MainActor
@@ -46,6 +46,22 @@ public final class QualiaReactionExecutor {
         at instant: Duration,
         request: Request
     ) throws -> QualiaReactionPlan? {
+        guard let result = try executeRecording(for: transition, policy: policy,
+            analyzerCapabilities: analyzerCapabilities, at: instant, request: request) else { return nil }
+        if let failure = result.underlyingFailure { throw failure }
+        return result.plan
+    }
+
+    /// Session uses the same planning/reconciliation path while retaining a
+    /// semantic response when a renderer command fails.
+    package func executeRecording(
+        for transition: QualiaSceneTransition,
+        policy: any QualiaReactionPolicy,
+        analyzerCapabilities: QualiaAnalyzerCapabilities,
+        at instant: Duration,
+        request: Request,
+        executeCommand: (@MainActor (HapticCommand) throws -> Void)? = nil
+    ) throws -> (plan: QualiaReactionPlan, execution: QualiaExecutionSummary, underlyingFailure: Error?)? {
         guard request.executor == identity, request.generation == generation,
               !isSuspended else { return nil }
         invalidateRequests()
@@ -72,14 +88,23 @@ public final class QualiaReactionExecutor {
               plan.nextState.activeEffects.allSatisfy({ $0.scope == .owned(owner) }) else {
             throw HapticError.ownershipConflict
         }
-        do {
-            for command in plan.hapticCommands { try renderer.execute(command) }
-            state = plan.nextState
-        } catch {
-            state = plan.reconciledStateAfterFailure(from: state, rendererActiveEffects: renderer.activeEffects)
-            throw error
+        var entries: [QualiaCommandExecution] = []
+        for command in plan.hapticCommands {
+            do {
+                if let executeCommand { try executeCommand(command) }
+                else { try renderer.execute(command, ownedBy: owner) }
+                entries.append(QualiaCommandExecution(command: command, outcome: .succeeded))
+            } catch {
+                let failure = error as? HapticError ?? .invalidCommand
+                entries.append(QualiaCommandExecution(command: command, outcome: .failed(failure)))
+                state = plan.reconciledStateAfterFailure(from: state, rendererActiveEffects: renderer.activeEffects)
+                return (plan, QualiaExecutionSummary(plannedCommandCount: plan.hapticCommands.count,
+                                                    commands: entries, reactionState: state), error)
+            }
         }
-        return plan
+        state = plan.nextState
+        return (plan, QualiaExecutionSummary(plannedCommandCount: plan.hapticCommands.count,
+                                            commands: entries, reactionState: state), nil)
     }
 
     /// Invalidates queued work and stops only this owner's effects. Call for

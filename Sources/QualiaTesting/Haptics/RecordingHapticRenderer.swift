@@ -11,19 +11,22 @@ public struct HapticRecordingEntry: Hashable, Sendable {
     public let command: HapticCommand
     public let result: HapticRecordingResult
     public let activeEffects: [HapticActiveEffect]
+    public let owner: HapticOwnerID?
 
     public init(
         sequence: UInt64,
         timestamp: Duration,
         command: HapticCommand,
         result: HapticRecordingResult,
-        activeEffects: [HapticActiveEffect] = []
+        activeEffects: [HapticActiveEffect] = [],
+        owner: HapticOwnerID? = nil
     ) {
         self.sequence = sequence
         self.timestamp = timestamp
         self.command = command
         self.result = result
         self.activeEffects = activeEffects
+        self.owner = owner
     }
 }
 
@@ -72,6 +75,7 @@ public final class RecordingHapticRenderer: HapticRendering {
     private var nextFailure: HapticError?
     private var sequence: UInt64 = 0
     private var deadlines: [HapticEffectID: Duration] = [:]
+    private var recordingOwner: HapticOwnerID?
 
     public init(
         capabilities: HapticCapabilities = .full,
@@ -131,6 +135,13 @@ public final class RecordingHapticRenderer: HapticRendering {
             record(command, at: timestamp, result: .failure(error))
             throw error
         }
+    }
+
+    public func execute(_ command: HapticCommand, ownedBy owner: HapticOwnerID) throws {
+        try HapticCommandSemantics.validateOwnership(command, owner: owner)
+        recordingOwner = owner
+        defer { recordingOwner = nil }
+        try execute(command)
     }
 
     public func stopEffects(ownedBy owner: HapticOwnerID) throws {
@@ -285,7 +296,8 @@ public final class RecordingHapticRenderer: HapticRendering {
                 timestamp: timestamp,
                 command: command,
                 result: result,
-                activeEffects: activeEffects.values.sorted(by: Self.effectOrder)
+                activeEffects: activeEffects.values.sorted(by: Self.effectOrder),
+                owner: recordingOwner
             )
         )
     }
