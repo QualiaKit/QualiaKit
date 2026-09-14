@@ -13,27 +13,88 @@ final class SessionContext: Sendable {
     init(_ fragments: [QualiaContextFragment]) { self.fragments = fragments }
 }
 
-/// The sole cross-actor synchronization point. The session owns semantic state;
+/// A request's cancellation/commit boundary. This lock only protects the signal:
+/// it is never held while invoking renderer code or cancelling another task.
+/// Once commit is claimed, synchronous cancellation from a renderer callback
+/// cannot roll it back or wait for the gate that is executing that callback.
+final class SessionCancellation: @unchecked Sendable {
+    private enum State { case pending, cancelled, committing }
+    private let lock = NSLock()
+    private var state = State.pending
+
+    var isCancelled: Bool {
+        lock.lock()
+        defer { lock.unlock() }
+        return state == .cancelled
+    }
+
+    func cancel() {
+        lock.lock()
+        defer { lock.unlock() }
+        if state == .pending { state = .cancelled }
+    }
+
+    func beginCommit() -> Bool {
+        lock.lock()
+        defer { lock.unlock() }
+        guard state == .pending else { return false }
+        state = .committing
+        return true
+    }
+}
+
+/// Cross-actor admission and state synchronization. The session owns semantic state;
 /// MainActor leaves one committed receipt for the actor to absorb before its
-/// next operation. begin() atomically drains that receipt AND invalidates older
-/// work, so a dispatch cannot slip between draining state and starting a request.
+/// next operation. Admission checks that receipt before invalidating older work,
+/// so a rejected duplicate cannot supersede an unrelated request in flight.
 /// No lock is held across await. Only synchronous pure reduction/policy and one
 /// renderer command batch run inside commit(); diagnostic callbacks run outside.
 final class SessionCommitGate: @unchecked Sendable {
+    struct Request: Sendable {
+        let generation: UInt64
+        let cancellation: SessionCancellation
+        let receipt: SessionCommit?
+    }
+
     private let lock = NSLock()
     private var generation: UInt64 = 0
-    private var cancelled = false
-    private var committedGeneration: UInt64?
+    private var cancellation = SessionCancellation()
     private var receipt: SessionCommit?
 
-    func begin() -> (generation: UInt64, receipt: SessionCommit?) {
+    func begin() -> Request {
         lock.lock()
         defer { lock.unlock() }
+        return advance()
+    }
+
+    func begin(accepting id: QualiaInputID, lastAcceptedID: QualiaInputID?, context: SessionContext?) throws -> Request {
+        lock.lock()
+        defer { lock.unlock() }
+        // An unabsorbed receipt replaces the actor's entire accepted state,
+        // including nil context when the retained window has become empty.
+        let acceptedID: QualiaInputID?
+        let acceptedContext: SessionContext?
+        if let receipt {
+            acceptedID = receipt.acceptedID
+            acceptedContext = receipt.context
+        } else {
+            acceptedID = lastAcceptedID
+            acceptedContext = context
+        }
+        guard acceptedID != id,
+              !(acceptedContext?.fragments.contains(where: { $0.id == id }) ?? false) else {
+            throw QualiaSessionError.duplicateInput
+        }
+        return advance()
+    }
+
+    /// Called only while holding the gate lock, after successful admission.
+    private func advance() -> Request {
         precondition(generation < .max, "Session generation overflow")
         generation += 1
-        cancelled = false
+        cancellation = SessionCancellation()
         defer { receipt = nil }
-        return (generation, receipt)
+        return Request(generation: generation, cancellation: cancellation, receipt: receipt)
     }
 
     func takeReceipt() -> SessionCommit? {
@@ -46,24 +107,17 @@ final class SessionCommitGate: @unchecked Sendable {
     func isCurrent(_ expected: UInt64) -> Bool {
         lock.lock()
         defer { lock.unlock() }
-        return generation == expected && !cancelled
-    }
-
-    func cancel(_ expected: UInt64) {
-        lock.lock()
-        defer { lock.unlock() }
-        if generation == expected, committedGeneration != expected { cancelled = true }
+        return generation == expected && !cancellation.isCancelled
     }
 
     func commit(_ expected: UInt64, _ body: () throws -> SessionCommit) throws -> QualiaResponse {
         lock.lock()
         defer { lock.unlock() }
-        guard generation == expected, !cancelled, committedGeneration != expected else {
+        guard generation == expected, cancellation.beginCommit() else {
             throw CancellationError()
         }
         let result = try body()
         receipt = result
-        committedGeneration = expected
         return result.response
     }
 
