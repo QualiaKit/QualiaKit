@@ -47,16 +47,12 @@ public actor QualiaSession {
         guard !cleanupRequired else { throw QualiaSessionError.cleanupRequired }
         guard !suspended else { throw QualiaSessionError.suspended }
         guard input.context.isEmpty else { throw QualiaSessionError.externalContextNotSupported }
-        let request = gate.begin()
+        let request = try gate.begin(accepting: input.id, lastAcceptedID: lastAcceptedID, context: contextStorage)
         absorb(request.receipt)
         currentWork?.cancel()
         currentWork = nil
         workGeneration = nil
         let generation = request.generation
-        guard lastAcceptedID != input.id,
-              !(contextStorage?.fragments.contains(where: { $0.id == input.id }) ?? false) else {
-            throw QualiaSessionError.duplicateInput
-        }
         let fullInput = try QualiaInput(id: input.id, text: input.text,
                                        context: contextStorage?.fragments ?? [], language: input.language)
         let dependencies = self.dependencies
@@ -67,6 +63,7 @@ public actor QualiaSession {
         currentWork = worker
         workGeneration = generation
         let gate = self.gate
+        let cancellation = request.cancellation
         return try await withTaskCancellationHandler {
             var reachedDispatch = false
             do {
@@ -102,7 +99,7 @@ public actor QualiaSession {
                 throw error
             }
         } onCancel: {
-            gate.cancel(generation)
+            cancellation.cancel()
             worker.cancel()
         }
     }

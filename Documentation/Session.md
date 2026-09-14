@@ -83,14 +83,22 @@ or instant fail with typed session errors.
 
 A small lock-protected gate connects the session actor to MainActor. It never
 holds a lock across await. MainActor leaves one immutable commit receipt; the
-actor absorbs it before its next state read or operation. Starting another
-generation atomically drains any committed receipt and invalidates old work.
+actor absorbs it before its next state read or admitted operation. Admission
+checks the latest accepted ID and context under the gate lock, using an
+unabsorbed receipt when present. Only successful admission drains that receipt,
+starts another generation and invalidates old work.
 This prevents both gaps: an old result waiting for MainActor cannot mutate state,
 and a command batch already committed cannot be forgotten if the actor receives
 the next request before the prior `process` returns.
 
-Cancellation or reset **before** that commit prevents state/context mutation and
-all commands. Cancellation **after** commit cannot undo an accepted event;
+Each request has a separate cancellation signal. Claiming commit and cancelling
+a pending request are mutually exclusive transitions under that signal's lock,
+which is released before reduction, policy or renderer code runs. The cancellation
+handler never acquires the gate lock, including when a renderer synchronously
+calls the process task's `cancel()` from inside its command callback.
+
+Cancellation or reset **before** commit is claimed prevents state/context mutation
+and all commands. Cancellation **once commit is claimed** cannot undo an accepted event;
 `process` returns that committed response, even if its return was delayed.
 Similarly, a pre-reset committed response can arrive after reset; it never
 reinstalls that response's state or effects. Hosts must use their own UI/navigation
@@ -117,7 +125,9 @@ execution fails. Analyzer failure, cancellation and rejected dispatch never appe
 There is no second model-token count or context-template implementation here.
 
 An ID matching the last accepted event or an event still in bounded history
-throws `duplicateInput`. In-flight revisions of an unaccepted ID can supersede
+throws `duplicateInput` without invalidating or cancelling another request in
+flight. This also applies to events committed on MainActor whose response has
+not yet returned to the session actor. In-flight revisions of an unaccepted ID can supersede
 each other. Deduplication is bounded: an ID older than the retained window may
 be accepted again; with zero history only the last accepted ID is remembered.
 Reset clears this memory and permits reuse. Global deduplication and preview/edit
@@ -189,8 +199,9 @@ diagnostic export/versioning framework remains its own integration scope.
 | AC-0010-002: reset during work | Preparation, inference, before dispatch and after commit/before return; semantic reset, scoped cleanup, no restart |
 | AC-0010-003: independent sessions | Shared fixture analyzer and recording renderer; A reset preserves B state, context and effects; explicit conflict policy |
 | AC-0005-003 / QK-CTX-006 | Real `QualiaSession.reset()` releases retained storage (weak lifetime assertion), clears counts/state and sends no old context to subsequent inference |
+| Duplicate admission | Repeating A while B runs leaves B able to commit with either analyzer cancellation behavior; unabsorbed receipts and evicted IDs use the latest accepted window |
 | Physical rollback cleanup | Injected Core Haptics backend starts playback then fails start/rollback; owner-only reset clears ambient and accent pending cleanup, preserving the other owner's player |
-| Failure and cancellation semantics | Typed analyzer/reducer/configuration/clock errors, caller cancellation, partial renderer batch failure, cleanup retry, concurrent lifecycle requests |
+| Failure and cancellation semantics | Typed analyzer/reducer/configuration/clock errors, cancellation before dispatch and synchronously inside renderer execution, partial renderer batch failure, cleanup retry, concurrent lifecycle requests |
 | Memory/privacy | No idle session retain cycle; bounded Unicode history; diagnostics schema excludes text/IDs |
 
 Core ML attachment after parity, Russian model migration, new tokenizers,
