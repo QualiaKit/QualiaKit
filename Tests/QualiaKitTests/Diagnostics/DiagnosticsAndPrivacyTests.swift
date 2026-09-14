@@ -131,7 +131,7 @@ final class DiagnosticsAndPrivacyTests: XCTestCase {
         XCTAssertFalse(String(reflecting: diagnostics.events).contains("PRIVATE_POLICY"))
     }
 
-    func testReplacementCannotExtendPhysicalMaximumDuration() throws {
+    func testReplacementCannotExtendMaximumDurationWhileCompletionIsPending() throws {
         let renderer = RecordingHapticRenderer()
         try renderer.prepare()
         let executor = QualiaReactionExecutor(renderer: renderer, owner: try .init(rawValue: "owner"),
@@ -146,6 +146,51 @@ final class DiagnosticsAndPrivacyTests: XCTestCase {
             }
         }
         XCTAssertTrue(renderer.activeEffects.isEmpty)
+    }
+
+    func testCustomEffectPhysicalCompletionStartsNewSegmentAndPreservesAccents() throws {
+        for completionTime in [3, 4] {
+            let clock = SessionTestClock()
+            let renderer = RecordingHapticRenderer(now: { clock.now })
+            try renderer.prepare()
+            let executor = QualiaReactionExecutor(renderer: renderer, owner: try .init(rawValue: "owner"),
+                preferences: try .init(maximumContinuousDuration: .seconds(3)))
+            let fixture = SessionFixtureAnalyzer()
+            let transition = QualiaSceneTransitionForPrivacy.make()
+            func process() throws -> QualiaExecutionSummary {
+                let result = try XCTUnwrap(executor.executeRecording(for: transition,
+                    policy: UnrestrictedPrivacyPolicy(), analyzerCapabilities: fixture.capabilities,
+                    at: clock.now, request: executor.beginRequest()))
+                return result.execution
+            }
+
+            XCTAssertEqual(try process().commands.map { $0.command.diagnosticKind }, [.start, .play])
+            XCTAssertEqual(renderer.activeEffects.values.first?.pattern.playbackDuration, .seconds(3))
+            clock.set(.seconds(1))
+            XCTAssertEqual(try process().commands.map { $0.command.diagnosticKind }, [.replace, .play])
+            XCTAssertEqual(renderer.activeEffects.values.first?.pattern.playbackDuration, .seconds(2))
+
+            // Both the physical player and executor advance against this clock.
+            // Completion happens without a stop command or another observation.
+            clock.set(.seconds(completionTime))
+            renderer.expireEffects()
+            XCTAssertTrue(renderer.activeEffects.isEmpty)
+            XCTAssertEqual(executor.state.activeEffects.count, 1)
+
+            let next = try process()
+            XCTAssertNil(next.failure)
+            XCTAssertFalse(next.suppressions.contains(.rendererFailure))
+            XCTAssertEqual(next.commands.map { $0.command.diagnosticKind }, [.start, .play])
+            XCTAssertEqual(renderer.activeEffects.values.first?.pattern.playbackDuration, .seconds(3))
+            XCTAssertEqual(executor.state.activeEffects, Set(renderer.activeEffects.keys))
+
+            clock.set(.seconds(completionTime + 1))
+            let update = try process()
+            XCTAssertNil(update.failure)
+            XCTAssertFalse(update.suppressions.contains(.rendererFailure))
+            XCTAssertEqual(update.commands.map { $0.command.diagnosticKind }, [.replace, .play])
+            XCTAssertEqual(renderer.activeEffects.values.first?.pattern.playbackDuration, .seconds(2))
+        }
     }
 
     func testCustomPolicyCannotRetryVibrationAfterRendererFailure() throws {

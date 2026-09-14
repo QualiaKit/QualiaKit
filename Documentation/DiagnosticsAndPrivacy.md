@@ -157,6 +157,9 @@ allowing transient accents. Built-in policies multiply their mapping by the
 intensity scale; final validation also caps custom event/curve intensity at that
 scale. Replacement cannot extend the original physical deadline. Native Core
 Haptics schedules the stop on its player, independently of another observation.
+After a custom ambient segment physically completes at its deadline, the
+executor removes its applied state before planning the next observation. A new
+segment can start without an invalid replacement or suppression of accents.
 The recording renderer tests descriptors; it does not emulate time passing.
 
 Call `suspend` for background/navigation/interruption and `reset` when leaving
