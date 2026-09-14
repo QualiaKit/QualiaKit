@@ -81,6 +81,17 @@ public final class QualiaReactionExecutor {
                 state.heartbeats[id]?.phase = .failed
             }
         }
+        // A custom policy may only track applied ambient state, with no
+        // heartbeat lifecycle. Remove a physically completed segment before
+        // planning, while its deadline still distinguishes expiry from loss.
+        // Heartbeat expiry/cooldown remains owned by its specialized policy.
+        for (id, deadline) in effectDeadlines {
+            if renderer.activeEffects[id] == nil, state.heartbeats[id] == nil,
+               instant >= deadline {
+                state = state.removingEffect(id)
+            }
+        }
+        effectDeadlines = effectDeadlines.filter { renderer.activeEffects[$0.key] != nil }
         let clock = ContinuousClock()
         let planningStarted = measureTiming ? clock.now : nil
         let proposed = policy.plan(for: transition, context: QualiaReactionContext(
@@ -96,7 +107,6 @@ public final class QualiaReactionExecutor {
               proposed.nextState.activeEffects.allSatisfy({ $0.scope == .owned(owner) }) else {
             throw HapticError.ownershipConflict
         }
-        effectDeadlines = effectDeadlines.filter { renderer.activeEffects[$0.key] != nil }
         let safe = try QualiaHapticSafety.apply(proposed, preferences: preferences,
             capabilities: renderer.capabilities, at: instant, deadlines: effectDeadlines,
             playbackFailed: playbackFailed, previous: state)
