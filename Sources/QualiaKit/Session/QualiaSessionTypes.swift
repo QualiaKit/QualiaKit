@@ -49,6 +49,8 @@ public struct QualiaExecutionSummary: Hashable, Sendable {
     public let plannedCommandCount: Int
     public let commands: [QualiaCommandExecution]
     public let reactionState: QualiaReactionState
+    public var suppressions: [QualiaDiagnosticEvent.Suppression] = []
+    public var timing: QualiaExecutionTiming? = nil
     public var failure: HapticError? {
         for entry in commands {
             if case .failed(let error) = entry.outcome { return error }
@@ -62,30 +64,6 @@ public struct QualiaResponse: Sendable {
     public let transition: QualiaSceneTransition
     public let reaction: QualiaReactionPlan
     public let execution: QualiaExecutionSummary
-}
-
-/// Session diagnostics intentionally contain no input/owner IDs, raw language
-/// values, text, arbitrary error strings, or custom policy rationale.
-public enum QualiaSessionDiagnostic: Hashable, Sendable {
-    public enum Stage: Hashable, Sendable { case preparation, analysis, dispatch }
-    public enum LifecycleEvent: Hashable, Sendable { case created, reset, suspended, resumed, cleanupFailed }
-    public static let runtimeVersion = "qualia-session-v1"
-    case lifecycle(LifecycleEvent)
-    case started(generation: UInt64)
-    case failed(generation: UInt64, stage: Stage)
-    case discarded(generation: UInt64, stage: Stage)
-    case completed(generation: UInt64, revision: UInt64, attemptedCommands: Int, rendererFailure: HapticError?)
-    case preparation(QualiaPreparationDiagnostic)
-}
-
-public protocol QualiaDiagnosticsSink: Sendable {
-    /// May be called concurrently. Must not synchronously wait on the session.
-    func record(_ event: QualiaSessionDiagnostic)
-}
-
-public struct NoOpQualiaDiagnosticsSink: QualiaDiagnosticsSink {
-    public init() {}
-    public func record(_ event: QualiaSessionDiagnostic) {}
 }
 
 public struct QualiaSessionDependencies: Sendable {
@@ -114,5 +92,23 @@ public struct QualiaSessionDependencies: Sendable {
         self.reactionPolicy = reactionPolicy
         self.diagnostics = diagnostics
         self.clock = clock
+    }
+}
+
+public struct QualiaExecutionTiming: Hashable, Sendable {
+    public let stateAndPolicy: Duration
+    public let dispatch: Duration
+}
+
+extension HapticCommand {
+    var diagnosticKind: QualiaDiagnosticEvent.CommandKind {
+        switch self {
+        case .play: return .play
+        case .start: return .start
+        case .replace: return .replace
+        case .stop: return .stop
+        case .stopAll: return .stopAll
+        case .stopChannel: return .stopChannel
+        }
     }
 }

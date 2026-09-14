@@ -9,6 +9,9 @@ public enum HorrorNarrativeCompatibilityMode: String, Hashable, Sendable {
 /// Built-in narrative policy for accumulated suspense/threat/urgency and
 /// transition-local impact/shock accents.
 public struct HorrorNarrativePolicy: QualiaReactionPolicy, Sendable {
+    public var diagnosticIdentity: QualiaDiagnosticIdentity? {
+        .init(identifier: Self.identifier, version: Self.version)
+    }
     public static let identifier = "qualia.horror-narrative"
     public static let version = "1.0.0-beta.3"
 

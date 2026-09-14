@@ -19,16 +19,22 @@ public struct QualiaHapticPreferences: Hashable, Sendable {
     public let enabled: Bool
     public let continuousEffectsEnabled: Bool
     public let intensityScale: Float
+    public let maximumContinuousDuration: Duration
 
     public init(
         enabled: Bool = true,
         continuousEffectsEnabled: Bool = true,
-        intensityScale: Float = 1
+        intensityScale: Float = 1,
+        maximumContinuousDuration: Duration = .seconds(30)
     ) throws {
         guard intensityScale.isFinite, (0...1).contains(intensityScale) else {
             throw QualiaReactionConfigurationError.invalidIntensityScale
         }
 
+        guard maximumContinuousDuration > .zero, maximumContinuousDuration <= .seconds(3600) else {
+            throw QualiaError.invalidConfiguration(reason: .maximumDuration)
+        }
+        self.maximumContinuousDuration = maximumContinuousDuration
         self.enabled = enabled
         self.continuousEffectsEnabled = continuousEffectsEnabled
         self.intensityScale = intensityScale
@@ -282,6 +288,7 @@ public struct QualiaReactionPlan: Hashable, Sendable {
 /// A pure mapping from a validated scene transition to declarative reactions.
 /// Implementations must not retain or invoke a haptic renderer.
 public protocol QualiaReactionPolicy: Sendable {
+    var diagnosticIdentity: QualiaDiagnosticIdentity? { get }
     /// Validates installation-time analyzer and renderer compatibility.
     /// Policies without required capabilities may use the default no-op.
     func validate(
@@ -296,6 +303,7 @@ public protocol QualiaReactionPolicy: Sendable {
 }
 
 public extension QualiaReactionPolicy {
+    var diagnosticIdentity: QualiaDiagnosticIdentity? { nil }
     func validate(
         analyzerCapabilities: QualiaAnalyzerCapabilities,
         hapticCapabilities: HapticCapabilities
@@ -342,5 +350,14 @@ extension QualiaReactionRationale {
 extension Float {
     var reactionFactValue: String {
         String(format: "%.4f", locale: Locale(identifier: "en_US_POSIX"), self)
+    }
+}
+
+extension QualiaReactionConfigurationError: QualiaErrorConvertible {
+    public var qualiaError: QualiaError {
+        switch self {
+        case .hapticsUnavailable, .unsupportedHapticFeature: return .hapticsUnavailable
+        default: return .invalidConfiguration(reason: .configuration)
+        }
     }
 }

@@ -10,13 +10,16 @@ public enum QualiaRendererArbitration: Hashable, Sendable {
 @MainActor
 public final class QualiaSessionRenderer {
     public let arbitration: QualiaRendererArbitration
+    public var capabilities: HapticCapabilities { renderer.capabilities }
     private let renderer: any HapticRendering
+    private let afterStop: (@Sendable (UInt64) async -> Void)?
     private let beforeDispatch: (@Sendable (UInt64) async -> Void)?
     private let afterDispatch: (@Sendable (UInt64) async -> Void)?
 
     public init(renderer: any HapticRendering, arbitration: QualiaRendererArbitration) {
         self.renderer = renderer
         self.arbitration = arbitration
+        afterStop = nil
         beforeDispatch = nil
         afterDispatch = nil
     }
@@ -25,9 +28,11 @@ public final class QualiaSessionRenderer {
     // acquiring the final gate. Production has no suspension inside dispatch.
     init(renderer: any HapticRendering, arbitration: QualiaRendererArbitration,
          beforeDispatch: (@Sendable (UInt64) async -> Void)? = nil,
-         afterDispatch: (@Sendable (UInt64) async -> Void)?) {
+         afterDispatch: (@Sendable (UInt64) async -> Void)?,
+         afterStop: (@Sendable (UInt64) async -> Void)? = nil) {
         self.renderer = renderer
         self.arbitration = arbitration
+        self.afterStop = afterStop
         self.beforeDispatch = beforeDispatch
         self.afterDispatch = afterDispatch
     }
@@ -50,10 +55,13 @@ public final class QualiaSessionRenderer {
         dependencies: QualiaSessionDependencies, executor: QualiaReactionExecutor
     ) async throws -> QualiaResponse {
         if let beforeDispatch { await beforeDispatch(generation) }
+        let measureTiming = dependencies.diagnostics.isEnabled
         let response = try gate.commit(generation) {
             let instant = dependencies.clock.now
             guard instant >= previous.updatedAt else { throw QualiaSessionError.nonMonotonicClock }
             guard previous.revision < .max else { throw QualiaSessionError.invalidReducerOutput }
+            let clock = ContinuousClock()
+            let reductionStarted = measureTiming ? clock.now : nil
             let transition = dependencies.stateReducer.reduce(state: previous, observation: observation, at: instant)
             guard transition.previous == previous, transition.current.updatedAt == instant else {
                 throw QualiaSessionError.invalidReducerOutput
@@ -62,6 +70,8 @@ public final class QualiaSessionRenderer {
                 for: transition, policy: dependencies.reactionPolicy,
                 analyzerCapabilities: dependencies.analyzer.capabilities,
                 at: instant, request: executor.beginRequest(),
+                measureTiming: measureTiming,
+                reductionDuration: reductionStarted.map { $0.duration(to: clock.now) } ?? .zero,
                 executeCommand: { command in
                     if self.arbitration == .exclusiveAmbient {
                         switch command {
@@ -86,8 +96,17 @@ public final class QualiaSessionRenderer {
         return response
     }
 
-    func stop(generation: UInt64, gate: SessionCommitGate, executor: QualiaReactionExecutor) throws {
+    func updatePreferences(_ preferences: QualiaHapticPreferences, generation: UInt64,
+                           gate: SessionCommitGate, executor: QualiaReactionExecutor, resumePlayback: Bool) throws {
+        try gate.lifecycle(generation) {
+            try executor.updatePreferences(preferences)
+            if resumePlayback { executor.resume() }
+        }
+    }
+
+    func stop(generation: UInt64, gate: SessionCommitGate, executor: QualiaReactionExecutor) async throws {
         try gate.lifecycle(generation) { try executor.suspend() }
+        if let afterStop { await afterStop(generation) }
     }
 
     func resume(generation: UInt64, gate: SessionCommitGate, executor: QualiaReactionExecutor) throws {

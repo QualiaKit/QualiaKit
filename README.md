@@ -1,159 +1,50 @@
 # QualiaKit
 
-![Platform](https://img.shields.io/badge/platform-iOS%2016%2B%20%7C%20macOS%2013%2B-lightgrey)
-![Language](https://img.shields.io/badge/Swift-5.9-orange)
-![License](https://img.shields.io/badge/license-MIT-blue)
+QualiaKit is an on-device semantic-to-haptics runtime for interactive fiction,
+narrative apps and rich text experiences. A session connects a text analyzer,
+temporal scene state, a reaction policy and an injected haptic renderer.
+Semantic signals describe content and a desired reader experience; they do not
+measure a person's emotion or mental state.
 
-![QualiaKit Demo](qualia-demo.gif)
-
-QualiaKit analyzes the sentiment of text as users type and plays haptic feedback that matches the emotional tone. Everything runs on-device using Apple's `NLTagger` by default, so there's nothing to configure and no data leaves the phone.
-
-If you need better accuracy, there's an optional `QualiaBert` module that runs a BERT model through CoreML instead.
-
-## Adaptive heartbeat preview
-
-The `QualiaKit` product includes a model-independent adaptive heartbeat for
-narrative scenes: fresh confidence gates, finite double-beat playback, cooldown,
-independent accents, and scoped lifecycle execution. See the
-[heartbeat integration and migration guide](Documentation/Heartbeat.md).
-Defaults remain provisional until physical-device release calibration.
-
-## Manifest-driven Core ML preview
-
-`Packages/QualiaCoreML` provides the first stage of spec 0004: validated local manifests, an explicitly bounded tokenizer/input/output profile and real Core ML fixture inference. See [the runtime contract and stage boundary](Documentation/CoreMLRuntime.md). The current Russian model and `QualiaBert` remain on their existing path pending approved evidence and parity.
-
-## Language and context preview
-
-For model-independent language policies and bounded history in the `QualiaKit`
-product, see [Language and context preparation](Documentation/ContextAndLanguage.md).
-Generic preparation is integrated into the model-independent session below;
-model token/template integration remains pending.
-
-## Session orchestration preview
-
-`QualiaSession` owns accepted history, scene state, request ordering and scoped
-effect lifecycle. It rejects late results at the MainActor dispatch boundary and
-provides `process`, throwing `reset`/`suspend`/`resume`, and a structured response.
-See [session integration, arbitration and lifecycle](Documentation/Session.md).
-The first rollout is tested with controlled analyzers and recording renderers.
+Requires Swift 5.9, iOS 16+ or macOS 13+. Haptic playback requires compatible
+hardware; analysis-only sessions can use an explicit no-op renderer.
 
 ## Installation
 
-Add the package to your `Package.swift`:
-
 ```swift
-dependencies: [
-    .package(url: "https://github.com/QualiaKit/QualiaKit.git")
-]
+.package(url: "https://github.com/QualiaKit/QualiaKit.git", branch: "main")
+
+// Target dependency:
+.product(name: "QualiaKit", package: "QualiaKit")
 ```
 
-Then add `Qualia` to your target. This uses Apple's built-in NLP and doesn't bundle any extra models.
+The 2.0 API is under development. Pin a reviewed revision for an application.
+`QualiaTesting` provides recording renderers and bounded diagnostic fixtures.
+The optional local manifest-driven model adapter is in `Packages/QualiaCoreML`.
+The older `Qualia` and `QualiaBert` products are legacy APIs.
 
-```swift
-.target(
-    name: "YourApp",
-    dependencies: [
-        .product(name: "Qualia", package: "QualiaKit")
-    ]
-)
-```
+## Start here
 
-If you want the BERT-based provider, add `QualiaBert` as well:
+Open `Examples/QualiaExample/QualiaExample.xcodeproj`. It uses the local package,
+Apple's on-device English sentiment baseline, explicit accepted text and haptic
+controls. No model download, diagnostics opt-in or network connection is required.
+The baseline exposes valence only; it does not claim narrative suspense or fear.
 
-```swift
-.target(
-    name: "YourApp",
-    dependencies: [
-        .product(name: "Qualia", package: "QualiaKit"),
-        .product(name: "QualiaBert", package: "QualiaKit")
-    ]
-)
-```
+For narrative analyzers declaring the required capabilities, the runtime provides
+an adaptive heartbeat with confidence gates, bounded duration, independent
+accents and owner-scoped reset. Physical-device calibration is still required.
 
-## Usage
+- [Programmatic session, ordering and lifecycle](Documentation/Session.md)
+- [Diagnostics, privacy, safety and accessibility](Documentation/DiagnosticsAndPrivacy.md)
+- [Adaptive heartbeat and migration](Documentation/Heartbeat.md)
+- [Language and bounded context](Documentation/ContextAndLanguage.md)
+- [Optional Core ML runtime and current limitations](Documentation/CoreMLRuntime.md)
 
-### SwiftUI
+Diagnostics default to no-op. The 2.0 products contain no network or analytics
+transport. Host-provided analyzers and sinks have their own privacy boundaries.
+QualiaKit must not be used for health diagnosis, real-fear measurement,
+mental-state inference, people scoring or decisions about people.
 
-The simplest integration is a single view modifier. It watches the bound text and triggers haptics automatically:
-
-```swift
-import SwiftUI
-import Qualia
-
-struct ContentView: View {
-    @State private var text = ""
-
-    var body: some View {
-        TextField("Type something...", text: $text)
-            .qualiaFeedback(trigger: $text)
-    }
-}
-```
-
-### Programmatic API
-
-You can also use `QualiaClient` directly when you need more control or aren't in a SwiftUI context:
-
-```swift
-import Qualia
-
-let client = QualiaClient()
-
-// Analyze without triggering haptics
-let (emotion, score) = await client.analyze("I am absolutely furious!")
-print(emotion) // .negative
-
-// Analyze and trigger haptics
-let (emotion, score) = await client.analyzeAndFeel("This is wonderful news.")
-```
-
-### Using BERT
-
-You'll need to provide your own CoreML model file or download a compatible one.
-
-```swift
-import Qualia
-import QualiaBert
-
-let provider = try BertProvider(
-    vocabURL: Bundle.main.url(forResource: "bert-vocab", withExtension: "txt")!,
-    modelURL: Bundle.main.url(forResource: "sentiment-model", withExtension: "mlmodelc")!
-)
-
-let client = QualiaClient(provider: provider)
-let (emotion, score) = await client.analyzeAndFeel("This is absolutely amazing!")
-```
-
-## Configuration
-
-You can adjust haptic behavior through `QualiaConfiguration`:
-
-```swift
-let config = QualiaConfiguration(
-    autoPlayHaptics: true,
-    hapticIntensity: 0.7,   // Scale vibration strength
-    hapticDelay: 0.1        // Debounce time
-)
-
-let client = QualiaClient(config: config)
-```
-
-## Custom providers
-
-QualiaKit isn't tied to any specific model. Conform to `SentimentProvider` to plug in whatever backend you want — an API call, a TFLite model, your own heuristics, anything:
-
-```swift
-import Qualia
-
-struct GPTProvider: SentimentProvider {
-    func analyzeSentiment(_ text: String, language: NLLanguage) async throws -> Double {
-        return await myCustomAnalyzer.predict(text) // Returns -1.0 to 1.0
-    }
-}
-
-let client = QualiaClient(provider: GPTProvider())
-```
-
-## License
-
-MIT. See [LICENSE](LICENSE) for details.
+Repository code is MIT; see [LICENSE](LICENSE). The repository license does not
+grant rights to external models or training data. The current Russian model is
+not approved for redistribution; see [its model card](Models/current/MODEL_CARD.md).

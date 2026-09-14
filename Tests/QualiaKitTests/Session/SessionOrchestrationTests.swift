@@ -313,7 +313,7 @@ final class SessionOrchestrationTests: XCTestCase {
                 try await fixture.complete(id, outputID: "foreign")
             }
             do { _ = try await task.value; XCTFail("Expected analyzer error") }
-            catch { XCTAssertEqual(error as? QualiaError, expected) }
+            catch { XCTAssertEqual(error as? QualiaError, QualiaError.redacted(expected, stage: .analysis)) }
             let after = await session.snapshot
             XCTAssertEqual(after.scene, before.scene)
             XCTAssertEqual(after.retainedFragments, before.retainedFragments)
@@ -393,7 +393,7 @@ final class SessionOrchestrationTests: XCTestCase {
         let renderer = RecordingHapticRenderer()
         let session = try await makeSession(fixture, clock, renderer)
         do { _ = try await session.process(sessionInput("a")); XCTFail("Expected unsupported language") }
-        catch { XCTAssertEqual(error as? QualiaError, try .unsupportedLanguage(.init(rawValue: "en"))) }
+        catch { XCTAssertEqual(error as? QualiaError, .unsupportedLanguageIdentifier(.init(metadata: "en"))) }
         let external = try QualiaInput(id: .init(rawValue: "b"), text: "current",
             context: [.init(id: .init(rawValue: "history"), text: "external")], language: .init(rawValue: "ru"))
         do { _ = try await session.process(external); XCTFail("Expected explicit context rejection") }
@@ -427,7 +427,7 @@ final class SessionOrchestrationTests: XCTestCase {
         do {
             _ = try await makeSession(fixture, SessionTestClock(), renderer)
             XCTFail("Expected setup mismatch")
-        } catch { XCTAssertNotNil(error as? QualiaReactionConfigurationError) }
+        } catch { XCTAssertEqual(error as? QualiaError, .invalidConfiguration(reason: .configuration)) }
         XCTAssertTrue(renderer.lifecycleHistory.isEmpty)
     }
 

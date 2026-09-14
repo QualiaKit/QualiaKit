@@ -198,3 +198,14 @@ private extension Array where Element == HapticParameterCurve {
         }
     }
 }
+
+extension HapticError: QualiaErrorConvertible {
+    public var qualiaError: QualiaError {
+        switch self {
+        case .hapticsUnavailable, .unsupportedFeature: return .hapticsUnavailable
+        case .invalidHapticValue, .invalidHapticCurve, .invalidHapticPattern:
+            return .invalidHapticPattern(reason: .pattern)
+        default: return .hapticExecutionFailed(reason: .renderer)
+        }
+    }
+}

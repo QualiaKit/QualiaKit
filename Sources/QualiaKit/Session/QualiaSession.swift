@@ -4,6 +4,7 @@ import Foundation
 /// cancelled and also guarded against cancellation-ignoring implementations.
 /// Call reset/suspend explicitly when leaving a room; deinit is not lifecycle.
 public actor QualiaSession {
+    public nonisolated let diagnosticID = UUID()
     public nonisolated let owner: HapticOwnerID
     private let dependencies: QualiaSessionDependencies
     private let renderer: QualiaSessionRenderer
@@ -25,8 +26,28 @@ public actor QualiaSession {
         self.dependencies = dependencies
         self.renderer = renderer
         scene = .initial(at: dependencies.clock.now)
-        executor = try await renderer.makeExecutor(owner: owner, dependencies: dependencies, preferences: preferences)
-        dependencies.diagnostics.record(.lifecycle(.created))
+        dependencies.diagnostics.emit(.correlated(session: diagnosticID, generation: 0, event: .installed(
+            analyzer: dependencies.analyzer.diagnosticIdentity, policy: dependencies.reactionPolicy.diagnosticIdentity,
+            runtime: .init(identifier: "com.qualiakit.runtime", version: QualiaDiagnosticEvent.runtimeVersion))))
+        if dependencies.diagnostics.isEnabled {
+            let capabilities = await renderer.capabilities
+            dependencies.diagnostics.emit(.correlated(session: diagnosticID, generation: 0,
+                event: .capability(capabilities)))
+        }
+        do {
+            executor = try await renderer.makeExecutor(owner: owner, dependencies: dependencies, preferences: preferences)
+        } catch {
+            dependencies.diagnostics.emit(.correlated(session: diagnosticID, generation: 0,
+                event: .failure(stage: .dispatch, error: .redacted(error, stage: .dispatch))))
+            // Preserve closed configuration categories for existing policy clients.
+            if let error = error as? QualiaReactionConfigurationError {
+                if case .missingAnalyzerSignal = error { throw QualiaError.invalidConfiguration(reason: .configuration) }
+                throw error
+            }
+            throw redactedRuntimeError(error, stage: .dispatch)
+        }
+        dependencies.diagnostics.emit(.lifecycle(.created))
+        dependencies.diagnostics.emit(.correlated(session: diagnosticID, generation: 0, event: .lifecycle(.created)))
     }
 
     public var snapshot: QualiaSessionSnapshot {
@@ -56,9 +77,11 @@ public actor QualiaSession {
         let fullInput = try QualiaInput(id: input.id, text: input.text,
                                        context: contextStorage?.fragments ?? [], language: input.language)
         let dependencies = self.dependencies
-        dependencies.diagnostics.record(.started(generation: generation))
+        dependencies.diagnostics.emit(.started(generation: generation))
+        emit(.started, generation: generation)
+        let diagnosticID = self.diagnosticID
         let worker = Task.detached {
-            try await Self.prepareAndAnalyze(fullInput, dependencies: dependencies, generation: generation)
+            try await Self.prepareAndAnalyze(fullInput, dependencies: dependencies, generation: generation, diagnosticID: diagnosticID)
         }
         currentWork = worker
         workGeneration = generation
@@ -77,26 +100,35 @@ public actor QualiaSession {
                 )
                 absorb(gate.takeReceipt())
                 finishWork(generation)
-                dependencies.diagnostics.record(.completed(
+                dependencies.diagnostics.emit(.completed(
                     generation: generation, revision: response.transition.current.revision,
                     attemptedCommands: response.execution.commands.count, rendererFailure: response.execution.failure
                 ))
+                emit(.completed(revision: response.transition.current.revision,
+                    attemptedCommands: response.execution.commands.count, rendererFailure: response.execution.failure),
+                    generation: generation)
+                recordResponse(response, generation: generation)
                 // Cancellation after the atomic commit cannot undo accepted
                 // state/playback; return the committed response in that case.
                 return response
             } catch {
                 absorb(gate.takeReceipt())
                 finishWork(generation)
-                if !gate.isCurrent(generation) || error is CancellationError {
-                    if reachedDispatch {
-                        dependencies.diagnostics.record(.discarded(generation: generation, stage: .dispatch))
-                    }
+                if !gate.isCurrent(generation) || error is CancellationError || error is AnalysisCancellation {
+                    let stage: QualiaDiagnosticEvent.Stage = (error as? AnalysisCancellation)?.stage
+                        ?? (reachedDispatch ? .dispatch : .analysis)
+                    let cancelled = Task.isCancelled || gate.isCurrent(generation)
+                    dependencies.diagnostics.emit(cancelled
+                        ? .cancelled(generation: generation, stage: stage)
+                        : .discarded(generation: generation, stage: stage))
+                    emit(cancelled ? .cancelled(stage) : .discarded(stage), generation: generation)
                     throw CancellationError()
                 }
                 if reachedDispatch {
-                    dependencies.diagnostics.record(.failed(generation: generation, stage: .dispatch))
+                    dependencies.diagnostics.emit(.failed(generation: generation, stage: .dispatch))
+                    emit(.failure(stage: .dispatch, error: .redacted(error, stage: .dispatch)), generation: generation)
                 }
-                throw error
+                throw redactedRuntimeError(error, stage: reachedDispatch ? .dispatch : .analysis)
             }
         } onCancel: {
             cancellation.cancel()
@@ -116,7 +148,8 @@ public actor QualiaSession {
             try await renderer.stop(generation: generation, gate: gate, executor: executor)
             if !suspended { try await renderer.enable(generation: generation, gate: gate, executor: executor) }
             try completeLifecycle(generation)
-            dependencies.diagnostics.record(.lifecycle(.reset))
+            dependencies.diagnostics.emit(.lifecycle(.reset))
+            emit(.lifecycle(.reset), generation: generation)
         } catch { try failLifecycle(generation, error: error) }
     }
 
@@ -128,7 +161,8 @@ public actor QualiaSession {
         do {
             try await renderer.stop(generation: generation, gate: gate, executor: executor)
             try completeLifecycle(generation)
-            dependencies.diagnostics.record(.lifecycle(.suspended))
+            dependencies.diagnostics.emit(.lifecycle(.suspended))
+            emit(.lifecycle(.suspended), generation: generation)
         } catch { try failLifecycle(generation, error: error) }
     }
 
@@ -140,7 +174,8 @@ public actor QualiaSession {
             try await renderer.resume(generation: generation, gate: gate, executor: executor)
             try completeLifecycle(generation)
             suspended = false
-            dependencies.diagnostics.record(.lifecycle(.resumed))
+            dependencies.diagnostics.emit(.lifecycle(.resumed))
+            emit(.lifecycle(.resumed), generation: generation)
         } catch { try failLifecycle(generation, error: error) }
     }
 
@@ -165,8 +200,60 @@ public actor QualiaSession {
         guard gate.isCurrent(generation) else { throw CancellationError() }
         transitioning = false
         cleanupRequired = true
-        dependencies.diagnostics.record(.lifecycle(.cleanupFailed))
-        throw error
+        dependencies.diagnostics.emit(.lifecycle(.cleanupFailed))
+        emit(.lifecycle(.cleanupFailed), generation: generation)
+        emit(.failure(stage: .dispatch, error: .redacted(error, stage: .dispatch)), generation: generation)
+        throw redactedRuntimeError(error, stage: .dispatch)
+    }
+
+    /// Applies an immutable snapshot and invalidates pending analysis. Any change
+    /// stops owned playback immediately; fresh input is needed to start again.
+    /// Semantic state/history and suspension are preserved. Failed cleanup blocks
+    /// processing until an explicit lifecycle recovery succeeds.
+    public func updateHapticPreferences(_ preferences: QualiaHapticPreferences) async throws {
+        let generation = beginLifecycle()
+        do {
+            try await renderer.updatePreferences(preferences, generation: generation, gate: gate, executor: executor,
+                                                 resumePlayback: !suspended)
+            try completeLifecycle(generation)
+            let reason: QualiaDiagnosticEvent.Suppression?
+            if !preferences.enabled { reason = .disabled }
+            else if preferences.intensityScale == 0 { reason = .zeroIntensity }
+            else if !preferences.continuousEffectsEnabled { reason = .continuousDisabled }
+            else { reason = nil }
+            if let reason { emit(.suppressed(reason), generation: generation) }
+        } catch { try failLifecycle(generation, error: error) }
+    }
+
+    public var hapticCapabilities: HapticCapabilities { get async { await renderer.capabilities } }
+
+    private func emit(_ event: @autoclosure () -> QualiaDiagnosticEvent.CorrelatedEvent, generation: UInt64) {
+        dependencies.diagnostics.emit(.correlated(session: diagnosticID, generation: generation, event: event()))
+    }
+
+    private func recordResponse(_ response: QualiaResponse, generation: UInt64) {
+        guard dependencies.diagnostics.isEnabled else { return }
+        emit(.analyzer(.init(identifier: response.observation.analyzer.identifier,
+                             version: response.observation.analyzer.version)), generation: generation)
+        emit(.observation(signalCount: response.observation.signals.count,
+                          hasValence: response.observation.dimensions.valence != nil), generation: generation)
+        emit(.transition(previous: response.transition.previous.revision,
+                         current: response.transition.current.revision), generation: generation)
+        if let rationale = response.reaction.rationale {
+            emit(.policy(identity: .init(identifier: rationale.policyIdentifier, version: rationale.policyVersion),
+                         rule: .init(metadata: rationale.ruleIdentifier),
+                         commandCount: response.reaction.hapticCommands.count), generation: generation)
+        }
+        for entry in response.execution.commands {
+            let failure: HapticError?
+            if case .failed(let error) = entry.outcome { failure = error } else { failure = nil }
+            emit(.command(entry.command.diagnosticKind, failure: failure), generation: generation)
+        }
+        for reason in response.execution.suppressions { emit(.suppressed(reason), generation: generation) }
+        if let timing = response.execution.timing {
+            emit(.timing(.stateAndPolicy, timing.stateAndPolicy), generation: generation)
+            emit(.timing(.dispatch, timing.dispatch), generation: generation)
+        }
     }
 
     private func absorb(_ receipt: SessionCommit?) {
@@ -183,30 +270,61 @@ public actor QualiaSession {
         }
     }
 
+    private struct AnalysisCancellation: Error, Sendable {
+        let stage: QualiaDiagnosticEvent.Stage
+    }
+
     private struct PreparedAnalysis: Sendable {
         let observation: QualiaObservation
         let context: SessionContext?
     }
 
     private static func prepareAndAnalyze(
-        _ input: QualiaInput, dependencies: QualiaSessionDependencies, generation: UInt64
+        _ input: QualiaInput, dependencies: QualiaSessionDependencies, generation: UInt64, diagnosticID: UUID
     ) async throws -> PreparedAnalysis {
         var stage: QualiaSessionDiagnostic.Stage = .preparation
+        let clock = ContinuousClock()
+        let start = dependencies.diagnostics.isEnabled ? clock.now : nil
         do {
+            let recordPreparation: (@Sendable (QualiaPreparationDiagnostic) -> Void)?
+            if dependencies.diagnostics.isEnabled {
+                recordPreparation = { event in
+                    dependencies.diagnostics.emit(.preparation(event))
+                    dependencies.diagnostics.emit(.correlated(session: diagnosticID, generation: generation,
+                        event: .preparation(event)))
+                }
+            } else { recordPreparation = nil }
             let preparer = QualiaInputPreparer(
-                languageResolver: dependencies.languageResolver, contextWindow: dependencies.contextWindow,
-                diagnostics: { dependencies.diagnostics.record(.preparation($0)) }
+                languageResolver: dependencies.languageResolver,
+                contextWindow: dependencies.contextWindow.recordingDiagnostics(recordPreparation),
+                diagnostics: recordPreparation
             )
             let prepared = try await preparer.prepare(input, for: dependencies.analyzer.capabilities)
+            let analysisStart = start.map { _ in clock.now }
+            if let start, let analysisStart {
+                dependencies.diagnostics.emit(.correlated(session: diagnosticID, generation: generation,
+                    event: .timing(.preparation, start.duration(to: analysisStart))))
+                if let language = prepared.language {
+                    dependencies.diagnostics.emit(.correlated(session: diagnosticID, generation: generation,
+                        event: .language(.init(metadata: language.rawValue))))
+                }
+            }
             stage = .analysis
             let observation = try await QualiaAnalyzerContract.analyze(dependencies.analyzer, input: prepared)
+            if let analysisStart {
+                dependencies.diagnostics.emit(.correlated(session: diagnosticID, generation: generation,
+                    event: .timing(.inference, analysisStart.duration(to: clock.now))))
+            }
             let fragments = Array((prepared.context + [QualiaContextFragment(id: prepared.id, text: prepared.text)])
                 .suffix(dependencies.contextWindow.configuration.maximumFragments))
             return PreparedAnalysis(observation: observation, context: fragments.isEmpty ? nil : SessionContext(fragments))
         } catch {
-            dependencies.diagnostics.record(error is CancellationError
-                ? .discarded(generation: generation, stage: stage) : .failed(generation: generation, stage: stage))
-            throw error
+            if error is CancellationError { throw AnalysisCancellation(stage: stage) }
+            let safe = QualiaError.redacted(error, stage: stage)
+            dependencies.diagnostics.emit(.failed(generation: generation, stage: stage))
+            dependencies.diagnostics.emit(.correlated(session: diagnosticID, generation: generation,
+                event: .failure(stage: stage, error: .redacted(safe, stage: stage))))
+            throw safe
         }
     }
 }

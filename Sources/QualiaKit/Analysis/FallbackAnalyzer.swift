@@ -6,6 +6,10 @@
 public struct FallbackAnalyzer: QualiaAnalyzing {
     public let capabilities: QualiaAnalyzerCapabilities
 
+    public var diagnosticIdentity: QualiaDiagnosticIdentity? {
+        .init(identifier: "com.qualiakit.fallback", version: "1")
+    }
+    private let diagnostics: any QualiaDiagnosticsSink
     private let primary: any QualiaAnalyzing
     private let fallback: any QualiaAnalyzing
     private let causes: Set<QualiaFallbackCause>
@@ -13,7 +17,8 @@ public struct FallbackAnalyzer: QualiaAnalyzing {
     public init(
         primary: any QualiaAnalyzing,
         fallback: any QualiaAnalyzing,
-        causes: Set<QualiaFallbackCause>
+        causes: Set<QualiaFallbackCause>,
+        diagnostics: any QualiaDiagnosticsSink = NoOpQualiaDiagnosticsSink()
     ) throws {
         guard primary.capabilities.dimensions == fallback.capabilities.dimensions,
               primary.capabilities.signals == fallback.capabilities.signals,
@@ -21,6 +26,7 @@ public struct FallbackAnalyzer: QualiaAnalyzing {
             throw QualiaError.incompatibleFallbackCapabilities
         }
 
+        self.diagnostics = diagnostics
         self.primary = primary
         self.fallback = fallback
         self.causes = causes
@@ -54,20 +60,21 @@ public struct FallbackAnalyzer: QualiaAnalyzing {
             guard let cause = Self.fallbackCause(for: error), causes.contains(cause) else {
                 throw error
             }
+            diagnostics.emit(.fallbackSelected(cause: cause, analyzer: fallback.diagnosticIdentity))
             return try await QualiaAnalyzerContract.analyze(fallback, input: input)
         }
     }
 
     private static func fallbackCause(for error: any Error) -> QualiaFallbackCause? {
-        guard let error = error as? QualiaError else {
+        guard let error = (error as? QualiaErrorConvertible)?.qualiaError ?? (error as? QualiaError) else {
             return nil
         }
         switch error {
         case .languageUndetermined:
             return .languageUndetermined
-        case .unsupportedLanguage:
+        case .unsupportedLanguage, .unsupportedLanguageIdentifier:
             return .unsupportedLanguage
-        case .analyzerUnavailable:
+        case .analyzerUnavailable, .modelUnavailable:
             return .analyzerUnavailable
         default:
             return nil

@@ -277,3 +277,22 @@ struct ValidatedContract: Sendable {
 extension String {
     var isBlank: Bool { allSatisfy(\.isWhitespace) }
 }
+
+extension CoreMLRuntimeError: QualiaErrorConvertible {
+    public var qualiaError: QualiaError {
+        switch self {
+        case .invalidManifest, .unsupportedSchemaVersion, .unresolvedEvidence, .invalidAssetPath, .checksumMismatch:
+            return .invalidModelManifest(reason: .manifestContract)
+        case .unsupportedExecutionContract, .unsupportedTemplate, .incompatibleModel, .compilationFailed:
+            return .incompatibleModel(reason: .modelContract)
+        case .unsupportedTokenizer, .invalidVocabulary, .inputPreparationFailed:
+            return .tokenizationFailed(reason: .tokenizerContract)
+        case .missingAsset, .modelLoadFailed:
+            return .modelUnavailable(identifier: .init(metadata: "local-model"))
+        case .invalidSemanticMapping, .missingOutput, .unexpectedLabels, .invalidNumericOutput:
+            return .invalidModelOutput(reason: .modelOutput)
+        case .predictionFailed:
+            return .inferenceFailed(reason: .adapterFailure)
+        }
+    }
+}

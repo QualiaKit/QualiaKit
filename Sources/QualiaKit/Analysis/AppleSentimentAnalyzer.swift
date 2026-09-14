@@ -21,6 +21,10 @@ public struct AppleSentimentAnalyzer: QualiaAnalyzing {
     )
     private let sentimentScorer: @Sendable (String) async throws -> Float
 
+    public var diagnosticIdentity: QualiaDiagnosticIdentity? {
+        .init(identifier: Self.identity.identifier, version: Self.identity.version)
+    }
+
     public init() {
         sentimentScorer = { text in
             try await Self.sentimentScore(for: text)

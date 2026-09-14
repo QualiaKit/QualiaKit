@@ -95,7 +95,7 @@ actor SessionFixtureAnalyzer: QualiaAnalyzing {
         continuation.resume(returning: observation)
     }
 
-    func fail(_ id: String, with error: QualiaError) { pending.removeValue(forKey: id)?.1.resume(throwing: error) }
+    func fail(_ id: String, with error: any Error) { pending.removeValue(forKey: id)?.1.resume(throwing: error) }
 }
 
 actor SessionDispatchBarrier {

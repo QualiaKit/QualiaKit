@@ -118,7 +118,7 @@ private struct HeartbeatPlanner {
         }
         heartbeat.phase = .running
         heartbeat.startedAt = context.instant
-        heartbeat.deadline = context.instant + config.maximumDuration
+        heartbeat.deadline = context.instant + min(config.maximumDuration, context.preferences.maximumContinuousDuration)
         apply(parameters: heartbeatParameters(tension: tension, scale: scale), starting: true)
         return finish("ambient-start")
     }
