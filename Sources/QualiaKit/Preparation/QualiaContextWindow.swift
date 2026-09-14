@@ -37,6 +37,15 @@ public struct QualiaContextWindow: QualiaContextWindowing {
         self.diagnostics = diagnostics
     }
 
+    /// Session adds its sink without discarding a caller's existing callback.
+    func recordingDiagnostics(_ additional: (@Sendable (QualiaPreparationDiagnostic) -> Void)?) -> Self {
+        guard let additional else { return self }
+        return Self(configuration: configuration, diagnostics: { event in
+            diagnostics?(event)
+            additional(event)
+        })
+    }
+
     public func window(_ input: QualiaInput) throws -> QualiaInput {
         let currentCharacters = input.text.count
         let currentBytes = input.text.utf8.count

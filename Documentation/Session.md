@@ -149,6 +149,9 @@ the caller; that analyzer's privacy/cancellation contract still applies.
   allows new processing. Resume after a long pause does not replay effects;
   the next fresh observation advances reduction against the monotonic clock.
   Repeating resume on an active session is a no-op.
+- `updateHapticPreferences(_:) async throws` applies an immutable snapshot,
+  invalidates pending work and stops owned players, preserving history and
+  suspension. New playback requires a fresh accepted observation.
 - Cleanup failure is observable and leaves `cleanupRequired`; process is blocked
   until a successful reset/resume retry. Lifecycle transitions reject process
   with `lifecycleTransitionInProgress`. Concurrent lifecycle requests use the
@@ -184,12 +187,14 @@ are rejected before any command or semantic commit.
 
 Optional `QualiaDiagnosticsSink` events carry lifecycle, generation, failure or
 discard stage, revision, command counts and typed haptic failure. Reuse the sink
-on language resolver and context window to collect their detailed 0005 events.
+on a language resolver for its detailed 0005 events. Session context-window
+events are wired automatically; an existing window callback is preserved.
 The default sink does nothing. Session events contain no arbitrary strings,
 text, input/owner IDs or custom error descriptions. Runtime profile is
-`QualiaSessionDiagnostic.runtimeVersion`; analyzer identity and policy version/
-configuration rationale remain available in the structured response. A general
-diagnostic export/versioning framework remains its own integration scope.
+`QualiaDiagnosticEvent.runtimeVersion`; redacted analyzer/model/policy identities
+are also traced through the injected sink. The unified schema, safe error mapping
+and runtime preference updates are now
+defined in [Diagnostics, privacy and accessibility (0012)](DiagnosticsAndPrivacy.md).
 
 `swift test --filter SessionOrchestrationTests` covers:
 

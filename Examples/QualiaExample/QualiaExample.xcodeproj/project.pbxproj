@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3A3DE50A2EDCF608004B3BCA /* Qualia in Frameworks */ = {isa = PBXBuildFile; productRef = 3A3DE5092EDCF608004B3BCA /* Qualia */; };
-		3A3DE50C2EDCF608004B3BCA /* QualiaBert in Frameworks */ = {isa = PBXBuildFile; productRef = 3A3DE50B2EDCF608004B3BCA /* QualiaBert */; };
+		3A3DE50A2EDCF608004B3BCA /* QualiaKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3A3DE5092EDCF608004B3BCA /* QualiaKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,8 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3A3DE50C2EDCF608004B3BCA /* QualiaBert in Frameworks */,
-				3A3DE50A2EDCF608004B3BCA /* Qualia in Frameworks */,
+				3A3DE50A2EDCF608004B3BCA /* QualiaKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,15 +64,13 @@
 			buildRules = (
 			);
 			dependencies = (
-				3A3DE50E2EDCF6CD004B3BCA /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				3A3DE4FC2EDCF5DC004B3BCA /* QualiaExample */,
 			);
 			name = QualiaExample;
 			packageProductDependencies = (
-				3A3DE5092EDCF608004B3BCA /* Qualia */,
-				3A3DE50B2EDCF608004B3BCA /* QualiaBert */,
+				3A3DE5092EDCF608004B3BCA /* QualiaKit */,
 			);
 			productName = QualiaExample;
 			productReference = 3A3DE4FA2EDCF5DC004B3BCA /* QualiaExample.app */;
@@ -105,7 +101,7 @@
 			mainGroup = 3A3DE4F12EDCF5DC004B3BCA;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				3A3DE5082EDCF608004B3BCA /* XCRemoteSwiftPackageReference "QualiaKit" */,
+				3A3DE5082EDCF608004B3BCA /* XCLocalSwiftPackageReference "QualiaKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3A3DE4FB2EDCF5DC004B3BCA /* Products */;
@@ -138,10 +134,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		3A3DE50E2EDCF6CD004B3BCA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 3A3DE50D2EDCF6CD004B3BCA /* Qualia */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -353,32 +345,18 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		3A3DE5082EDCF608004B3BCA /* XCRemoteSwiftPackageReference "QualiaKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/QualiaKit/QualiaKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		3A3DE5082EDCF608004B3BCA /* XCLocalSwiftPackageReference "QualiaKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../..";
 		};
-/* End XCRemoteSwiftPackageReference section */
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3A3DE5092EDCF608004B3BCA /* Qualia */ = {
+		3A3DE5092EDCF608004B3BCA /* QualiaKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3A3DE5082EDCF608004B3BCA /* XCRemoteSwiftPackageReference "QualiaKit" */;
-			productName = Qualia;
-		};
-		3A3DE50B2EDCF608004B3BCA /* QualiaBert */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3A3DE5082EDCF608004B3BCA /* XCRemoteSwiftPackageReference "QualiaKit" */;
-			productName = QualiaBert;
-		};
-		3A3DE50D2EDCF6CD004B3BCA /* Qualia */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3A3DE5082EDCF608004B3BCA /* XCRemoteSwiftPackageReference "QualiaKit" */;
-			productName = Qualia;
+			package = 3A3DE5082EDCF608004B3BCA /* XCLocalSwiftPackageReference "QualiaKit" */;
+			productName = QualiaKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

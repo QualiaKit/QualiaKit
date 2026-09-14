@@ -1,6 +1,9 @@
 /// A deliberately named baseline preview of the standard valence dimension.
 /// It is not a narrative or emotion policy.
 public struct SentimentPulsePolicy: QualiaReactionPolicy, Sendable {
+    public var diagnosticIdentity: QualiaDiagnosticIdentity? {
+        .init(identifier: Self.identifier, version: Self.version)
+    }
     public static let identifier = "qualia.sentiment-pulse-preview"
     public static let version = "1.0.0"
 

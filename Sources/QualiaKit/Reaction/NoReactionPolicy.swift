@@ -3,6 +3,9 @@ public struct NoReactionPolicy: QualiaReactionPolicy, Sendable {
     public static let identifier = "qualia.no-reaction"
     public static let version = "1.0.0"
 
+    public var diagnosticIdentity: QualiaDiagnosticIdentity? {
+        .init(identifier: Self.identifier, version: Self.version)
+    }
     public init() {}
 
     public func plan(

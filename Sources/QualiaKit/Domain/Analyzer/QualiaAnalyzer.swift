@@ -58,6 +58,7 @@ public struct QualiaAnalyzerCapabilities: Hashable, Sendable {
 /// to the request and advertised capabilities.
 public protocol QualiaAnalyzing: Sendable {
     var capabilities: QualiaAnalyzerCapabilities { get }
+    var diagnosticIdentity: QualiaDiagnosticIdentity? { get }
 
     func analyze(_ input: QualiaInput) async throws -> QualiaObservation
 }
@@ -67,4 +68,8 @@ public enum QualiaFallbackCause: Hashable, Sendable {
     case languageUndetermined
     case unsupportedLanguage
     case analyzerUnavailable
+}
+
+public extension QualiaAnalyzing {
+    var diagnosticIdentity: QualiaDiagnosticIdentity? { nil }
 }

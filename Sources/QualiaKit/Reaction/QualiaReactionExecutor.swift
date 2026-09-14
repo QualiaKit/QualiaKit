@@ -18,6 +18,9 @@ public final class QualiaReactionExecutor {
     private let renderer: any HapticRendering
     private let identity = UUID()
     private var generation: UInt64 = 0
+    private var playbackFailed = false
+    private var cleanupRequired = false
+    private var effectDeadlines: [HapticEffectID: Duration] = [:]
 
     public init(
         renderer: any HapticRendering,
@@ -60,10 +63,13 @@ public final class QualiaReactionExecutor {
         analyzerCapabilities: QualiaAnalyzerCapabilities,
         at instant: Duration,
         request: Request,
+        measureTiming: Bool = false,
+        reductionDuration: Duration = .zero,
         executeCommand: (@MainActor (HapticCommand) throws -> Void)? = nil
     ) throws -> (plan: QualiaReactionPlan, execution: QualiaExecutionSummary, underlyingFailure: Error?)? {
         guard request.executor == identity, request.generation == generation,
               !isSuspended else { return nil }
+        guard !cleanupRequired else { throw HapticError.invalidLifecycleState }
         invalidateRequests()
         // Detect interruption or natural completion before planning. The
         // policy deadline handles natural expiry; unexpected loss latches
@@ -75,7 +81,9 @@ public final class QualiaReactionExecutor {
                 state.heartbeats[id]?.phase = .failed
             }
         }
-        let plan = policy.plan(for: transition, context: QualiaReactionContext(
+        let clock = ContinuousClock()
+        let planningStarted = measureTiming ? clock.now : nil
+        let proposed = policy.plan(for: transition, context: QualiaReactionContext(
             analyzerCapabilities: analyzerCapabilities,
             hapticCapabilities: renderer.capabilities,
             preferences: preferences,
@@ -84,9 +92,25 @@ public final class QualiaReactionExecutor {
             state: state
         ))
         // This executor is scoped even when given a custom policy.
-        guard plan.hapticCommands.allSatisfy(isOwned),
-              plan.nextState.activeEffects.allSatisfy({ $0.scope == .owned(owner) }) else {
+        guard proposed.hapticCommands.allSatisfy(isOwned),
+              proposed.nextState.activeEffects.allSatisfy({ $0.scope == .owned(owner) }) else {
             throw HapticError.ownershipConflict
+        }
+        effectDeadlines = effectDeadlines.filter { renderer.activeEffects[$0.key] != nil }
+        let safe = try QualiaHapticSafety.apply(proposed, preferences: preferences,
+            capabilities: renderer.capabilities, at: instant, deadlines: effectDeadlines,
+            playbackFailed: playbackFailed, previous: state)
+        let plan = safe.plan
+        let dispatchStarted = planningStarted.map { _ in clock.now }
+        func summary(_ entries: [QualiaCommandExecution]) -> QualiaExecutionSummary {
+            var result = QualiaExecutionSummary(plannedCommandCount: plan.hapticCommands.count,
+                                                commands: entries, reactionState: state)
+            result.suppressions = safe.suppressions
+            if let planningStarted, let dispatchStarted {
+                result.timing = .init(stateAndPolicy: reductionDuration + planningStarted.duration(to: dispatchStarted),
+                                     dispatch: dispatchStarted.duration(to: clock.now))
+            }
+            return result
         }
         var entries: [QualiaCommandExecution] = []
         for command in plan.hapticCommands {
@@ -94,17 +118,21 @@ public final class QualiaReactionExecutor {
                 if let executeCommand { try executeCommand(command) }
                 else { try renderer.execute(command, ownedBy: owner) }
                 entries.append(QualiaCommandExecution(command: command, outcome: .succeeded))
+                switch command {
+                case let .start(id, _, _), let .replace(id, _, _): effectDeadlines[id] = safe.deadlines[id]
+                case let .stop(id): effectDeadlines.removeValue(forKey: id)
+                default: break
+                }
             } catch {
+                playbackFailed = true
                 let failure = error as? HapticError ?? .invalidCommand
                 entries.append(QualiaCommandExecution(command: command, outcome: .failed(failure)))
                 state = plan.reconciledStateAfterFailure(from: state, rendererActiveEffects: renderer.activeEffects)
-                return (plan, QualiaExecutionSummary(plannedCommandCount: plan.hapticCommands.count,
-                                                    commands: entries, reactionState: state), error)
+                return (plan, summary(entries), failure)
             }
         }
         state = plan.nextState
-        return (plan, QualiaExecutionSummary(plannedCommandCount: plan.hapticCommands.count,
-                                            commands: entries, reactionState: state), nil)
+        return (plan, summary(entries), nil)
     }
 
     /// Invalidates queued work and stops only this owner's effects. Call for
@@ -114,10 +142,15 @@ public final class QualiaReactionExecutor {
         do {
             try renderer.stopEffects(ownedBy: owner)
         } catch {
+            cleanupRequired = true
+            playbackFailed = true
             for id in state.heartbeats.keys { state.heartbeats[id]?.phase = .failed }
-            throw error
+            throw redactedRuntimeError(error, stage: .dispatch)
         }
         state = .empty
+        playbackFailed = false
+        cleanupRequired = false
+        effectDeadlines.removeAll(keepingCapacity: true)
     }
 
     /// Host background/interruption hook. Other owners may share the renderer.
@@ -136,9 +169,9 @@ public final class QualiaReactionExecutor {
     public func updatePreferences(_ preferences: QualiaHapticPreferences) throws {
         self.preferences = preferences
         invalidateRequests()
-        if !preferences.enabled || !preferences.continuousEffectsEnabled || preferences.intensityScale == 0 {
-            try reset()
-        }
+        // Stop on every update, including intensity/duration reductions. Leaving
+        // an already-playing descriptor unchanged would violate the new snapshot.
+        try reset()
     }
 
     private func invalidateRequests() {

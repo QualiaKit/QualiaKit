@@ -16,10 +16,13 @@ public struct CoreMLAnalyzerConfiguration: Sendable {
     }
 
     public let computeUnits: ComputeUnits
+    public let diagnosticsSink: any QualiaDiagnosticsSink
     /// Called synchronously on the worker. Keep this callback short; it never receives text or token IDs.
     public let diagnostics: (@Sendable (CoreMLRuntimeEvent) -> Void)?
 
-    public init(computeUnits: ComputeUnits = .cpuOnly, diagnostics: (@Sendable (CoreMLRuntimeEvent) -> Void)? = nil) {
+    public init(computeUnits: ComputeUnits = .cpuOnly, diagnostics: (@Sendable (CoreMLRuntimeEvent) -> Void)? = nil,
+                diagnosticsSink: any QualiaDiagnosticsSink = NoOpQualiaDiagnosticsSink()) {
+        self.diagnosticsSink = diagnosticsSink
         self.computeUnits = computeUnits
         self.diagnostics = diagnostics
     }
@@ -31,9 +34,9 @@ public struct CoreMLRuntimeEvent: Sendable {
     }
 
     public let stage: Stage
-    public let modelIdentifier: String
-    public let modelVersion: String
-    public let contractVersion: String
+    public let modelIdentifier: QualiaDiagnosticFingerprint
+    public let modelVersion: QualiaDiagnosticFingerprint
+    public let contractVersion: QualiaDiagnosticFingerprint
     public let sourceKind: QualiaResolvedModel.SourceKind
     public let computeUnits: CoreMLAnalyzerConfiguration.ComputeUnits
     public let durationSeconds: Double
@@ -44,6 +47,9 @@ public struct CoreMLRuntimeEvent: Sendable {
 /// A local, manifest-selected text classifier. The first execution profile is documented in
 /// `Documentation/CoreMLRuntime.md`; unsupported contracts fail at initialization.
 public struct CoreMLQualiaAnalyzer: QualiaAnalyzing {
+    public var diagnosticIdentity: QualiaDiagnosticIdentity? {
+        .init(identifier: identity.identifier, version: identity.version)
+    }
     public let capabilities: QualiaAnalyzerCapabilities
     public let identity: QualiaAnalyzerIdentity
     public let modelVersion: String
@@ -107,7 +113,7 @@ private actor CoreMLWorker {
 
     func load() throws -> ValidatedContract {
         try Task.checkCancellation()
-        let started = ProcessInfo.processInfo.systemUptime
+        let started = ContinuousClock.now
         var retained = false
         defer { if !retained { LocalAssets.removeSnapshot(snapshot) } }
         do {
@@ -121,7 +127,7 @@ private actor CoreMLWorker {
             try Task.checkCancellation()
             let compiledURL: URL
             if contract.execution.model.format == "mlmodel" {
-                let compilationStarted = ProcessInfo.processInfo.systemUptime
+                let compilationStarted = ContinuousClock.now
                 do {
                     let temporary = try MLModel.compileModel(at: modelURL)
                     defer { try? FileManager.default.removeItem(at: temporary) }
@@ -161,17 +167,17 @@ private actor CoreMLWorker {
         guard let state, let language = input.language else { throw CoreMLRuntimeError.modelLoadFailed }
         let contract = state.contract
         do {
-            let tokenizationStarted = ProcessInfo.processInfo.systemUptime
+            let tokenizationStarted = ContinuousClock.now
             let prepared = try state.tokenizer.prepare(input.text)
             emit(.tokenized, contract: contract, since: tokenizationStarted, text: prepared)
             try Task.checkCancellation()
-            let preparationStarted = ProcessInfo.processInfo.systemUptime
+            let preparationStarted = ContinuousClock.now
             let features: MLDictionaryFeatureProvider
             do { features = try RuntimeInputBuilder.build(prepared, contract: contract) }
             catch { throw CoreMLRuntimeError.inputPreparationFailed }
             emit(.prepared, contract: contract, since: preparationStarted, text: prepared)
             try Task.checkCancellation()
-            let predictionStarted = ProcessInfo.processInfo.systemUptime
+            let predictionStarted = ContinuousClock.now
             emit(.predictionStarted, contract: contract, since: predictionStarted)
             try Task.checkCancellation()
             let output: any MLFeatureProvider
@@ -185,7 +191,7 @@ private actor CoreMLWorker {
             }
             emit(.predicted, contract: contract, since: predictionStarted)
             try Task.checkCancellation()
-            let transformationStarted = ProcessInfo.processInfo.systemUptime
+            let transformationStarted = ContinuousClock.now
             let raw = try RuntimeOutputAdapter.extract(output, contract: contract)
             let scores = try RuntimeOutputAdapter.scores(raw, contract: contract)
             let observation = QualiaObservation(inputID: input.id, signals: scores, language: language, analyzer: contract.identity)
@@ -198,13 +204,30 @@ private actor CoreMLWorker {
         }
     }
 
-    private func emit(_ stage: CoreMLRuntimeEvent.Stage, contract: ValidatedContract, since start: Double, text: PreparedText? = nil) {
+    private func emit(_ stage: CoreMLRuntimeEvent.Stage, contract: ValidatedContract, since start: ContinuousClock.Instant, text: PreparedText? = nil) {
+        guard configuration.diagnostics != nil || configuration.diagnosticsSink.isEnabled else { return }
+        let elapsed = start.duration(to: .now)
+        let model = QualiaDiagnosticIdentity(identifier: contract.manifest.model.identifier,
+                                             version: contract.manifest.model.version)
+        let contractID = QualiaDiagnosticFingerprint(metadata: contract.manifest.contractVersion)
         configuration.diagnostics?(.init(
-            stage: stage, modelIdentifier: contract.manifest.model.identifier,
-            modelVersion: contract.manifest.model.version, contractVersion: contract.manifest.contractVersion,
+            stage: stage, modelIdentifier: model.identifier,
+            modelVersion: model.version, contractVersion: contractID,
             sourceKind: source.sourceKind, computeUnits: configuration.computeUnits,
-            durationSeconds: ProcessInfo.processInfo.systemUptime - start,
+            durationSeconds: Double(elapsed.components.seconds) + Double(elapsed.components.attoseconds) / 1e18,
             tokenCount: text?.tokenCount, truncatedTokenCount: text?.truncatedCount
         ))
+        let sharedStage: QualiaDiagnosticEvent.ModelStage
+        switch stage {
+        case .compiled: sharedStage = .compiled
+        case .loaded: sharedStage = .loaded
+        case .tokenized: sharedStage = .tokenized
+        case .prepared: sharedStage = .prepared
+        case .predictionStarted: sharedStage = .predictionStarted
+        case .predicted: sharedStage = .predicted
+        case .transformed: sharedStage = .transformed
+        }
+        configuration.diagnosticsSink.emit(.model(stage: sharedStage, identity: model, contract: contractID,
+            duration: elapsed, tokenCount: text?.tokenCount, truncatedTokenCount: text?.truncatedCount))
     }
 }
