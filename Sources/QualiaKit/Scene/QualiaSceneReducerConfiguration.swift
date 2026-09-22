@@ -136,6 +136,27 @@ public struct QualiaSceneReducerConfiguration: Sendable {
             phase: phase
         )
     }()
+
+    /// Retains the standard valence dimension for the explicitly named
+    /// sentiment-preview policy. It does not infer narrative signals.
+    public static let sentimentPreview: Self = {
+        do {
+            let valence = try QualiaContinuousSignalConfiguration(
+                smoothingHalfLife: .milliseconds(250),
+                missingDataPolicy: .preserve,
+                trendEpsilon: 0.025
+            )
+            let phase = try QualiaScenePhaseConfiguration(
+                signals: [],
+                idleThreshold: 0.1,
+                buildingThreshold: 0.35,
+                activeThreshold: 0.7
+            )
+            return try Self(signals: [:], valence: valence, phase: phase)
+        } catch {
+            preconditionFailure("Invalid built-in sentiment preview scene: \(error)")
+        }
+    }()
 }
 
 public extension QualiaSignal {

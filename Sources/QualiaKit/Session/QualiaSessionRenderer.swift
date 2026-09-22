@@ -9,7 +9,7 @@ public enum QualiaRendererArbitration: Hashable, Sendable {
 
 @MainActor
 public final class QualiaSessionRenderer {
-    public let arbitration: QualiaRendererArbitration
+    public nonisolated let arbitration: QualiaRendererArbitration
     public var capabilities: HapticCapabilities { renderer.capabilities }
     private let renderer: any HapticRendering
     private let afterStop: (@Sendable (UInt64) async -> Void)?

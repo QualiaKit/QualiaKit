@@ -1,4 +1,4 @@
-public enum QualiaLanguagePolicy: Sendable {
+public enum QualiaLanguagePolicy: Hashable, Sendable {
     case requireExplicit
     /// Detect current text even if the input contains an explicit language.
     case detect(allowed: Set<QualiaLanguage>)
