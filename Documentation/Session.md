@@ -209,7 +209,8 @@ defined in [Diagnostics, privacy and accessibility (0012)](DiagnosticsAndPrivacy
 | Failure and cancellation semantics | Typed analyzer/reducer/configuration/clock errors, cancellation before dispatch and synchronously inside renderer execution, partial renderer batch failure, cleanup retry, concurrent lifecycle requests |
 | Memory/privacy | No idle session retain cycle; bounded Unicode history; diagnostics schema excludes text/IDs |
 
-Core ML attachment after parity, Russian model migration, new tokenizers,
-`pair`/`formatted`, UI lifecycle adapters and legacy migration are not part of this
-rollout. AC-0005-002 (exact **model-token** current-text priority) remains open.
+Core ML attachment after parity, Russian model migration, new tokenizers and
+`pair`/`formatted` are not part of this rollout. SwiftUI lifecycle adapters and
+legacy migration are covered by [SwiftUI integration](SwiftUIIntegration.md).
+AC-0005-002 (exact **model-token** current-text priority) remains open.
 Physical calibration remains the release gate from 0009/0015.

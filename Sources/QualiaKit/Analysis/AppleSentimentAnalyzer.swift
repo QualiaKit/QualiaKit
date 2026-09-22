@@ -7,6 +7,9 @@ import NaturalLanguage
 /// are allowed. It maps Apple's `-1...1` sentiment score to `0...1` valence and
 /// does not emit signals or confidence.
 public struct AppleSentimentAnalyzer: QualiaAnalyzing {
+    public static let identifier = "com.qualiakit.apple-sentiment"
+    public static let version = "1"
+
     public let capabilities = QualiaAnalyzerCapabilities(
         languages: [QualiaLanguage(validatedRawValue: "en")],
         dimensions: [.valence],
@@ -16,8 +19,8 @@ public struct AppleSentimentAnalyzer: QualiaAnalyzing {
     )
 
     private static let identity = QualiaAnalyzerIdentity(
-        validatedIdentifier: "com.qualiakit.apple-sentiment",
-        version: "1"
+        validatedIdentifier: identifier,
+        version: version
     )
     private let sentimentScorer: @Sendable (String) async throws -> Float
 

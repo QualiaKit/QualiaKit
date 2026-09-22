@@ -26,8 +26,9 @@ The older `Qualia` and `QualiaBert` products are legacy APIs.
 ## Start here
 
 Open `Examples/QualiaExample/QualiaExample.xcodeproj`. It uses the local package,
-Apple's on-device English sentiment baseline, explicit accepted text and haptic
-controls. No model download, diagnostics opt-in or network connection is required.
+Apple's on-device English sentiment baseline, stable accepted LivingStory events,
+an isolated debounced draft session, redacted debug state and accessibility
+controls. No model download or network connection is required.
 The baseline exposes valence only; it does not claim narrative suspense or fear.
 
 For narrative analyzers declaring the required capabilities, the runtime provides
@@ -35,6 +36,7 @@ an adaptive heartbeat with confidence gates, bounded duration, independent
 accents and owner-scoped reset. Physical-device calibration is still required.
 
 - [Programmatic session, ordering and lifecycle](Documentation/Session.md)
+- [Programmatic and SwiftUI integration](Documentation/SwiftUIIntegration.md)
 - [Diagnostics, privacy, safety and accessibility](Documentation/DiagnosticsAndPrivacy.md)
 - [Adaptive heartbeat and migration](Documentation/Heartbeat.md)
 - [Language and bounded context](Documentation/ContextAndLanguage.md)
