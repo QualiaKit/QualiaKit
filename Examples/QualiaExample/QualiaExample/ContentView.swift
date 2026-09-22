@@ -1,152 +1,197 @@
-import Combine
-import Foundation
 import QualiaKit
 import SwiftUI
 
-/// Programmatic session example; no custom text heuristics or raw-text logging.
+/// LivingStory uses accepted events for production state and an isolated,
+/// opt-in session for draft preview. It contains no analyzer heuristics.
 struct ContentView: View {
-    @StateObject private var model = ExampleModel()
+    @StateObject private var model = LivingStoryModel()
     @Environment(\.scenePhase) private var scenePhase
-    @State private var text = ""
-    @State private var enabled = true
-    @State private var continuous = true
+    @State private var hapticsEnabled = true
+    @State private var continuousEffectsEnabled = true
     @State private var intensity = 0.5
     @State private var maximumDuration = 10.0
 
     var body: some View {
-        NavigationStack {
-            Form {
-                Section("On-device text preview") {
-                    TextField("One paragraph in English", text: $text, axis: .vertical)
-                    Button("Analyze accepted text") { model.process(text) }
-                        .disabled(!model.ready || text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+        Group {
+            if let storySession = model.storySession,
+               let previewSession = model.previewSession {
+                LivingStoryView(
+                    model: model,
+                    storySession: storySession,
+                    previewSession: previewSession,
+                    hapticsEnabled: $hapticsEnabled,
+                    continuousEffectsEnabled: $continuousEffectsEnabled,
+                    intensity: $intensity,
+                    maximumDuration: $maximumDuration
+                )
+            } else {
+                VStack(spacing: 12) {
+                    ProgressView()
+                    Label("Preparing LivingStory", systemImage: "waveform")
                     Text(model.status)
-                        .accessibilityLabel("Analysis status: \(model.status)")
-                    Text("This describes text tone, not your feelings or health.")
                         .font(.footnote)
                 }
-                Section("Haptic preferences") {
-                    Toggle("Enable haptics", isOn: $enabled)
-                    Toggle("Allow continuous effects", isOn: $continuous)
-                    Slider(value: $intensity, in: 0...1) { Text("Intensity") }
-                    Text("Intensity: \(Int(intensity * 100))%")
-                    Stepper("Maximum continuous duration: \(Int(maximumDuration)) seconds",
-                            value: $maximumDuration, in: 1...30)
-                    Text(model.capability)
-                        .font(.footnote)
-                    Text("This Apple sentiment preview uses brief accents. The continuous settings also apply when a narrative policy is installed.")
-                        .font(.footnote)
-                }
-                Button("Reset and stop effects") { model.reset() }
+                .padding()
             }
-            .navigationTitle("QualiaKit Preview")
         }
-        .task { await model.start(preferences: preferences, active: scenePhase == .active) }
-        .onChange(of: preferences) { value in model.update(value) }
-        .onChange(of: scenePhase) { value in model.setActive(value == .active) }
-        .onDisappear { model.reset() }
+        .task {
+            await model.start(
+                preferences: preferences,
+                active: scenePhase == .active
+            )
+        }
+        .task(id: preferences) { model.updatePreferences(preferences) }
+        .task(id: scenePhase) { model.setActive(scenePhase == .active) }
+        .onDisappear { model.leaveStory() }
     }
 
     private var preferences: QualiaHapticPreferences {
-        // Controls constrain these to validated ranges.
-        try! .init(enabled: enabled, continuousEffectsEnabled: continuous, intensityScale: Float(intensity),
-                   maximumContinuousDuration: .seconds(maximumDuration))
+        do {
+            return try .init(
+                enabled: hapticsEnabled,
+                continuousEffectsEnabled: continuousEffectsEnabled,
+                intensityScale: Float(intensity),
+                maximumContinuousDuration: .seconds(maximumDuration)
+            )
+        } catch {
+            preconditionFailure("LivingStory controls produced invalid preferences")
+        }
     }
 }
 
-@MainActor
-private final class ExampleModel: ObservableObject {
-    @Published private(set) var ready = false
-    @Published private(set) var status = "Ready for one English paragraph."
-    @Published private(set) var capability = "Checking haptic support…"
-    private var session: QualiaSession?
-    private var active = true
-    private var revision = 0
-    private var desiredPreferences = QualiaHapticPreferences.default
+private struct LivingStoryView: View {
+    @ObservedObject var model: LivingStoryModel
+    let storySession: QualiaSession
+    let previewSession: QualiaSession
+    @Binding var hapticsEnabled: Bool
+    @Binding var continuousEffectsEnabled: Bool
+    @Binding var intensity: Double
+    @Binding var maximumDuration: Double
+    @State private var draft = ""
+    @State private var showDebug = true
 
-    func start(preferences: QualiaHapticPreferences, active: Bool) async {
-        guard session == nil else { return }
-        self.active = active
-        desiredPreferences = preferences
-        let physical = CoreHapticRenderer()
-        let supportsHaptics = physical.capabilities.supportsHaptics
-        capability = supportsHaptics ? "Haptic hardware available." : "Haptic hardware unavailable; analysis remains available."
-        do {
-            let renderer: any HapticRendering = supportsHaptics ? physical : NoOpHapticRenderer()
-            let policy: any QualiaReactionPolicy = supportsHaptics ? SentimentPulsePolicy() : NoReactionPolicy()
-            let dependencies = QualiaSessionDependencies(analyzer: AppleSentimentAnalyzer(),
-                languageResolver: try QualiaLanguageResolver(policy: .requireExplicit, minimumConfidence: 0.8),
-                contextWindow: .init(configuration: try .init(maximumFragments: 0, maximumCharacters: 4000,
-                                                              maximumUTF8Bytes: 16000)),
-                stateReducer: QualiaSceneReducer(), reactionPolicy: policy, clock: QualiaContinuousClock())
-            let created = try await QualiaSession(dependencies: dependencies,
-                renderer: .init(renderer: renderer, arbitration: .independentOwners), preferences: preferences)
-            session = created
-            if desiredPreferences != preferences { try await created.updateHapticPreferences(desiredPreferences) }
-            if !self.active { try await created.suspend() }
-            ready = self.active
-        } catch { status = "The session could not be prepared." }
-    }
-
-    func process(_ text: String) {
-        guard let session, ready else { return }
-        revision += 1
-        let request = revision
-        Task {
-            do {
-                let response = try await session.process(.init(id: .init(rawValue: UUID().uuidString), text: text,
-                                                               language: .init(rawValue: "en")))
-                guard revision == request else { return }
-                if let valence = response.observation.dimensions.valence {
-                    status = "Text valence: \(Int(valence.value * 100)) / 100."
-                }
-                if response.execution.failure != nil { status += " Haptic playback failed; reset to retry." }
-            } catch is CancellationError { }
-            catch { if revision == request { status = "Analysis unavailable. Enter one English paragraph and try again." } }
+    var body: some View {
+        NavigationStack {
+            Form {
+                storySection
+                previewSection
+                capabilitySection
+                hapticSection
+#if DEBUG
+                debugSection
+#endif
+                lifecycleSection
+            }
+            .navigationTitle("LivingStory")
+        }
+        .background {
+            if let event = model.acceptedEvent {
+                Color.clear
+                    .frame(width: 0, height: 0)
+                    .qualiaReaction(
+                        eventID: event.id,
+                        input: event.input,
+                        session: storySession,
+                        onResult: model.consumeStoryResult
+                    )
+            }
         }
     }
 
-    func update(_ preferences: QualiaHapticPreferences) {
-        desiredPreferences = preferences
-        guard let session else { return }
-        revision += 1
-        let request = revision
-        ready = false
-        Task {
-            do {
-                try await session.updateHapticPreferences(preferences)
-                if revision == request { ready = active }
-            } catch is CancellationError { }
-            catch { status = "Could not stop playback. Reset before continuing." }
+    private var storySection: some View {
+        Section("Accepted story events") {
+            ForEach(model.visibleFragments) { fragment in
+                Text(fragment.text)
+                    .accessibilityLabel("Accepted story fragment: \(fragment.text)")
+            }
+            Button(model.hasNextFragment ? "Accept next fragment" : "Story complete") {
+                model.acceptNextFragment()
+            }
+            .disabled(!model.ready || !model.hasNextFragment)
+            Text(model.status)
+                .font(.footnote)
+                .accessibilityLabel("Story analysis status: \(model.status)")
         }
     }
 
-    func setActive(_ active: Bool) {
-        self.active = active
-        revision += 1
-        ready = false
-        guard let session else { return }
-        let request = revision
-        Task {
-            do {
-                if active { try await session.resume() } else { try await session.suspend() }
-                if revision == request { ready = active }
-            } catch is CancellationError { }
-            catch { status = "Haptic cleanup required. Reset before continuing." }
+    private var previewSection: some View {
+        Section("Opt-in isolated draft preview") {
+            TextField("Try one English paragraph", text: $draft, axis: .vertical)
+                .qualiaLiveReaction(
+                    text: $draft,
+                    debounce: .milliseconds(350),
+                    minimumCharacters: 3,
+                    session: previewSession,
+                    onResult: model.consumePreviewResult
+                )
+            Text(model.previewStatus)
+                .font(.footnote)
+                .accessibilityLabel("Draft preview status: \(model.previewStatus)")
+            Text("Draft text is analyzed after debounce in a separate analysis-only session; it never advances the accepted story scene.")
+                .font(.caption)
         }
     }
 
-    func reset() {
-        guard let session else { return }
-        revision += 1
-        let request = revision
-        ready = false
-        Task {
-            do {
-                try await session.reset()
-                if revision == request { ready = active; status = "Context cleared and owned effects stopped." }
-            } catch is CancellationError { }
-            catch { status = "Cleanup failed. Try reset again." }
+    private var capabilitySection: some View {
+        Section("Capabilities") {
+            Label(model.analyzerCapability, systemImage: "brain.head.profile")
+            Label(model.hapticCapability, systemImage: "hand.tap")
         }
+    }
+
+    private var hapticSection: some View {
+        Section("Haptic accessibility") {
+            Toggle("Enable haptics", isOn: $hapticsEnabled)
+            Toggle("Allow continuous effects", isOn: $continuousEffectsEnabled)
+            Slider(value: $intensity, in: 0...1) {
+                Text("Haptic intensity")
+            }
+            Text("Intensity: \(Int(intensity * 100))%")
+                .accessibilityLabel("Haptic intensity \(Int(intensity * 100)) percent")
+            Stepper(
+                "Maximum continuous duration: \(Int(maximumDuration)) seconds",
+                value: $maximumDuration,
+                in: 1...30
+            )
+        }
+    }
+
+#if DEBUG
+    private var debugSection: some View {
+        Section("Redacted diagnostics") {
+            Toggle("Show debug details", isOn: $showDebug)
+            if showDebug {
+                DebugRow(label: "Language", value: model.debug.language)
+                DebugRow(label: "Observation", value: model.debug.observation)
+                DebugRow(label: "Scene", value: model.debug.scene)
+                DebugRow(label: "Policy", value: model.debug.policy)
+                DebugRow(label: "Haptic plan", value: model.debug.haptics)
+                DebugRow(label: "Error", value: model.debug.error)
+                DebugRow(label: "Diagnostic events", value: model.diagnosticSummary)
+            }
+        }
+    }
+#endif
+
+    private var lifecycleSection: some View {
+        Section {
+            Button("Reset story and stop owned effects") {
+                draft = ""
+                model.resetStory()
+            }
+            .disabled(!model.hasSessions)
+        } footer: {
+            Text("Leaving resets both sessions. Backgrounding suspends them; returning resumes without replaying an old effect.")
+        }
+    }
+}
+
+private struct DebugRow: View {
+    let label: String
+    let value: String
+
+    var body: some View {
+        LabeledContent(label, value: value)
+            .font(.caption.monospaced())
     }
 }

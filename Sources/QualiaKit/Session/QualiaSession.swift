@@ -6,6 +6,12 @@ import Foundation
 public actor QualiaSession {
     public nonisolated let diagnosticID = UUID()
     public nonisolated let owner: HapticOwnerID
+    /// Stable analyzer capabilities available to UI before processing starts.
+    public nonisolated let analyzerCapabilities: QualiaAnalyzerCapabilities
+    /// Privacy-safe analyzer identity suitable for capability/debug UI.
+    public nonisolated let analyzerDiagnosticIdentity: QualiaDiagnosticIdentity?
+    /// Physical arbitration chosen when the session was constructed.
+    public nonisolated let rendererArbitration: QualiaRendererArbitration
     private let dependencies: QualiaSessionDependencies
     private let renderer: QualiaSessionRenderer
     private let executor: QualiaReactionExecutor
@@ -23,6 +29,9 @@ public actor QualiaSession {
                 preferences: QualiaHapticPreferences = .default) async throws {
         let owner = try HapticOwnerID(rawValue: UUID().uuidString)
         self.owner = owner
+        analyzerCapabilities = dependencies.analyzer.capabilities
+        analyzerDiagnosticIdentity = dependencies.analyzer.diagnosticIdentity
+        rendererArbitration = renderer.arbitration
         self.dependencies = dependencies
         self.renderer = renderer
         scene = .initial(at: dependencies.clock.now)
