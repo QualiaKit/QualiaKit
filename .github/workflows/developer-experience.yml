@@ -47,10 +47,14 @@ jobs:
       - name: Compile and audit all public DocC products
         if: matrix.xcode == '26.6'
         run: python3 Tools/DeveloperExperience/build_docs.py --output "$RUNNER_TEMP/qualia-docs"
+      - name: Package DocC archives without changing symbol filenames
+        if: matrix.xcode == '26.6'
+        # DocC uses colons in symbol routes; artifact uploads reject those filenames.
+        run: tar -czf "$RUNNER_TEMP/qualia-developer-documentation.tar.gz" -C "$RUNNER_TEMP/qualia-docs" .
       - name: Save DocC archives and coverage audit
         if: matrix.xcode == '26.6'
         uses: actions/upload-artifact@v4
         with:
           name: qualia-developer-documentation
-          path: ${{ runner.temp }}/qualia-docs
+          path: ${{ runner.temp }}/qualia-developer-documentation.tar.gz
           if-no-files-found: error
