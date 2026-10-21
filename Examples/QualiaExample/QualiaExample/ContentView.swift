@@ -4,8 +4,10 @@ import SwiftUI
 /// LivingStory uses accepted events for production state and an isolated,
 /// opt-in session for draft preview. It contains no analyzer heuristics.
 struct ContentView: View {
-    @StateObject private var model = LivingStoryModel()
+    @StateObject private var model: LivingStoryModel
+    init(narrative: Bool = false) { _model = StateObject(wrappedValue: LivingStoryModel(narrative: narrative)) }
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var hapticsEnabled = true
     @State private var continuousEffectsEnabled = true
     @State private var intensity = 0.5
@@ -27,7 +29,7 @@ struct ContentView: View {
             } else {
                 VStack(spacing: 12) {
                     ProgressView()
-                    Label("Preparing LivingStory", systemImage: "waveform")
+                    Label("Preparing \(model.title)", systemImage: "waveform")
                     Text(model.status)
                         .font(.footnote)
                 }
@@ -49,7 +51,7 @@ struct ContentView: View {
         do {
             return try .init(
                 enabled: hapticsEnabled,
-                continuousEffectsEnabled: continuousEffectsEnabled,
+                continuousEffectsEnabled: continuousEffectsEnabled && !reduceMotion,
                 intensityScale: Float(intensity),
                 maximumContinuousDuration: .seconds(maximumDuration)
             )
@@ -82,7 +84,7 @@ private struct LivingStoryView: View {
 #endif
                 lifecycleSection
             }
-            .navigationTitle("LivingStory")
+            .navigationTitle(model.title)
         }
         .background {
             if let event = model.acceptedEvent {
@@ -100,6 +102,7 @@ private struct LivingStoryView: View {
 
     private var storySection: some View {
         Section("Accepted story events") {
+            Text(model.explanation).font(.caption)
             ForEach(model.visibleFragments) { fragment in
                 Text(fragment.text)
                     .accessibilityLabel("Accepted story fragment: \(fragment.text)")
