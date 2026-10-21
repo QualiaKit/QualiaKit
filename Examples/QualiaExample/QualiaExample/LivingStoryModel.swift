@@ -1,9 +1,18 @@
 import Combine
 import Foundation
 import QualiaKit
+import QualiaExamples
 
 @MainActor
 final class LivingStoryModel: ObservableObject {
+    let narrative: Bool
+    init(narrative: Bool = false) { self.narrative = narrative }
+    var title: String { narrative ? "LivingStory · scripted" : "SentimentPreview" }
+    var explanation: String {
+        narrative
+            ? "Authored signals drive start, update and accent. Reset stops the heartbeat. The text is not classified by a narrative model."
+            : "Apple's on-device English valence baseline. It does not detect suspense, threat or reader emotion."
+    }
     private struct SessionBundle {
         let story: QualiaSession
         let preview: QualiaSession
@@ -22,7 +31,11 @@ final class LivingStoryModel: ObservableObject {
     @Published private(set) var debug = LivingStoryDebugState()
     @Published private(set) var diagnosticSummary = "disabled in release builds"
 
-    private static let script = [
+    private var script: [StoryFragment] { narrative ? [
+        StoryFragment(id: "build", text: "The hallway grows quiet. A distant rhythm starts."),
+        StoryFragment(id: "impact", text: "A door slams. The rhythm accelerates with a separate accent."),
+    ] : Self.previewScript }
+    private static let previewScript = [
         StoryFragment(id: "arrival", text: "The old observatory was quiet and beautiful under the stars."),
         StoryFragment(id: "warning", text: "A terrible warning flashed across the abandoned control panel."),
         StoryFragment(id: "relief", text: "The signal was harmless, and the room felt calm again."),
@@ -30,15 +43,18 @@ final class LivingStoryModel: ObservableObject {
 
     private let diagnostics = LivingStoryDiagnostics()
     private var active = true
+    private var visible = false
+    private var starting = false
+    private var lifecycleTask: Task<Void, Never>?
     private var desiredPreferences = QualiaHapticPreferences.default
     private var lifecycleRevision = 0
 
     var visibleFragments: ArraySlice<StoryFragment> {
-        Self.script.prefix(nextFragmentIndex)
+        script.prefix(nextFragmentIndex)
     }
 
     var hasNextFragment: Bool {
-        nextFragmentIndex < Self.script.count
+        nextFragmentIndex < script.count
     }
 
     var hasSessions: Bool {
@@ -46,26 +62,31 @@ final class LivingStoryModel: ObservableObject {
     }
 
     func start(preferences: QualiaHapticPreferences, active: Bool) async {
-        guard storySession == nil, previewSession == nil else { return }
+        visible = true
         self.active = active
         desiredPreferences = preferences
+        if hasSessions { setActive(active); return }
+        guard !starting else { return }
+        starting = true
+        defer { starting = false }
 
         do {
             let sessions = try await makeSessions(preferences: preferences)
-            try await prepareInitialLifecycle(
-                story: sessions.story,
-                preview: sessions.preview,
-                initialPreferences: preferences
-            )
             storySession = sessions.story
             previewSession = sessions.preview
             analyzerCapability = analyzerDescription(sessions.story.analyzerCapabilities)
             hapticCapability = sessions.hapticsAvailable
-                ? "Haptic hardware available; sentiment pulses enabled."
+                ? (narrative ? "Continuous haptics available; scripted heartbeat enabled." : "Haptic hardware available; sentiment pulses enabled.")
                 : "Haptic hardware unavailable; story analysis remains enabled."
-            ready = active
-            status = "Ready to accept the first stable story event."
-            refreshDiagnostics()
+            performLifecycle {
+                try await sessions.story.updateHapticPreferences(self.desiredPreferences)
+                if !self.active || !self.visible {
+                    try await sessions.story.suspend()
+                    try await sessions.preview.suspend()
+                }
+            } success: {
+                self.status = "Ready to accept the first stable story event."
+            }
         } catch {
             status = "Session setup failed: \(safeError(error))"
             debug = .failure(safeError(error))
@@ -75,7 +96,7 @@ final class LivingStoryModel: ObservableObject {
 
     func acceptNextFragment() {
         guard ready, hasNextFragment else { return }
-        let fragment = Self.script[nextFragmentIndex]
+        let fragment = script[nextFragmentIndex]
         do {
             let input = try QualiaInput(
                 id: QualiaInputID(rawValue: fragment.id),
@@ -83,8 +104,9 @@ final class LivingStoryModel: ObservableObject {
                 language: QualiaLanguage(rawValue: "en")
             )
             nextFragmentIndex += 1
+            ready = false
             acceptedEvent = AcceptedStoryEvent(id: fragment.id, input: input)
-            status = "Processing accepted event \(nextFragmentIndex) of \(Self.script.count)…"
+            status = "Processing accepted event \(nextFragmentIndex) of \(script.count)…"
         } catch {
             status = "Script configuration failed: \(safeError(error))"
             debug = .failure(safeError(error))
@@ -94,9 +116,11 @@ final class LivingStoryModel: ObservableObject {
     func consumeStoryResult(_ result: Result<QualiaResponse, any Error>) {
         switch result {
         case .success(let response):
+            ready = active && visible && lifecycleTask == nil
             let valence = response.observation.dimensions.valence?.value
-            status = valence.map { "Accepted story valence: \(Int(($0 * 100).rounded()))%." }
-                ?? "Accepted story event produced no valence."
+            status = narrative ? "Scripted scene applied. Next fragment updates the rhythm; Reset stops it."
+                : (valence.map { "Accepted story valence: \(Int(($0 * 100).rounded()))%." } ?? "Accepted story event produced no valence.")
+            if let failure = response.execution.failure { status = "Rendering failed: \(safeError(failure))" }
             debug = .response(response, languageSource: "explicit")
         case .failure(let error) where error is CancellationError:
             return
@@ -124,80 +148,80 @@ final class LivingStoryModel: ObservableObject {
     func updatePreferences(_ preferences: QualiaHapticPreferences) {
         desiredPreferences = preferences
         guard let storySession else { return }
-        lifecycleRevision += 1
-        let request = lifecycleRevision
-        ready = false
-        Task {
-            do {
-                try await storySession.updateHapticPreferences(preferences)
-                if request == lifecycleRevision { ready = active }
-            } catch is CancellationError {
-                return
-            } catch {
-                status = "Haptic preference update failed: \(safeError(error))"
-            }
-            refreshDiagnostics()
-        }
+        performLifecycle { try await storySession.updateHapticPreferences(preferences) }
     }
 
     func setActive(_ active: Bool) {
         self.active = active
         guard let storySession, let previewSession else { return }
-        lifecycleRevision += 1
-        let request = lifecycleRevision
-        ready = false
-        Task {
-            do {
-                if active {
-                    try await storySession.resume()
-                    try await previewSession.resume()
-                } else {
-                    try await storySession.suspend()
-                    try await previewSession.suspend()
-                }
-                if request == lifecycleRevision { ready = active }
-            } catch is CancellationError {
-                return
-            } catch {
-                status = "Lifecycle transition failed: \(safeError(error))"
+        let shouldResume = active && visible
+        performLifecycle {
+            if shouldResume {
+                try await storySession.resume()
+                try await previewSession.resume()
+            } else {
+                try await storySession.suspend()
+                try await previewSession.suspend()
             }
-            refreshDiagnostics()
         }
     }
 
     func resetStory() {
         guard let storySession, let previewSession else { return }
-        lifecycleRevision += 1
-        let request = lifecycleRevision
-        ready = false
-        acceptedEvent = nil
-        Task {
-            do {
-                try await storySession.reset()
-                try await previewSession.reset()
-                if request == lifecycleRevision {
-                    nextFragmentIndex = 0
-                    ready = active
-                    status = "Story reset; owned effects stopped."
-                    previewStatus = "Type three or more characters to preview."
-                    debug = LivingStoryDebugState()
-                }
-            } catch is CancellationError {
-                return
-            } catch {
-                status = "Reset failed: \(safeError(error))"
-            }
-            refreshDiagnostics()
+        clearStoryDisplay()
+        performLifecycle {
+            try await storySession.reset()
+            try await previewSession.reset()
+        } success: {
+            self.status = "Story reset; owned effects stopped."
         }
     }
 
     func leaveStory() {
+        visible = false
         ready = false
-        acceptedEvent = nil
+        clearStoryDisplay()
         guard let storySession, let previewSession else { return }
-        Task {
-            try? await storySession.reset()
-            try? await previewSession.reset()
+        performLifecycle {
+            try await storySession.reset()
+            try await previewSession.reset()
+        }
+    }
+
+    private func clearStoryDisplay() {
+        acceptedEvent = nil
+        nextFragmentIndex = 0
+        previewStatus = "Type three or more characters to preview."
+        debug = LivingStoryDebugState()
+    }
+
+    /// Serialize host lifecycle work across rapid tab/scene/preference changes.
+    /// A later transition cannot re-enable input before an earlier stop completes.
+    private func performLifecycle(
+        _ operation: @escaping @MainActor () async throws -> Void,
+        success: @escaping @MainActor () -> Void = {}
+    ) {
+        lifecycleRevision += 1
+        let request = lifecycleRevision
+        let previous = lifecycleTask
+        ready = false
+        lifecycleTask = Task {
+            await previous?.value
+            do {
+                try await operation()
+                success()
+                if request == lifecycleRevision {
+                    lifecycleTask = nil
+                    ready = active && visible
+                }
+            } catch {
+                if request == lifecycleRevision {
+                    lifecycleTask = nil
+                    ready = false
+                    status = "Lifecycle operation failed; reset to retry: \(safeError(error))"
+                }
+            }
+            refreshDiagnostics()
         }
     }
 
@@ -205,12 +229,13 @@ final class LivingStoryModel: ObservableObject {
         preferences: QualiaHapticPreferences
     ) async throws -> SessionBundle {
         let physicalRenderer = CoreHapticRenderer()
-        let supportsHaptics = physicalRenderer.capabilities.supportsHaptics
+        let supportsHaptics = physicalRenderer.capabilities.supportsHaptics &&
+            (!narrative || physicalRenderer.capabilities.supportsContinuousHaptics)
         let configurations = try makeConfigurations(
             preferences: preferences,
             supportsHaptics: supportsHaptics
         )
-        let analyzer = AppleSentimentAnalyzer()
+        let analyzer: any QualiaAnalyzing = narrative ? try LivingStory.analyzer() : AppleSentimentAnalyzer()
         let storyRenderer: any HapticRendering = supportsHaptics
             ? physicalRenderer
             : NoOpHapticRenderer()
@@ -221,7 +246,7 @@ final class LivingStoryModel: ObservableObject {
         )
         do {
             let preview = try await QualiaSession.configured(
-                analyzer: analyzer,
+                analyzer: AppleSentimentAnalyzer(),
                 renderer: NoOpHapticRenderer(),
                 configuration: configurations.preview
             )
@@ -231,7 +256,7 @@ final class LivingStoryModel: ObservableObject {
                 hapticsAvailable: supportsHaptics
             )
         } catch {
-            try? await story.reset()
+            try await story.reset()
             throw error
         }
     }
@@ -255,8 +280,7 @@ final class LivingStoryModel: ObservableObject {
             minimumConfidence: 0.45
         )
         let reaction: QualiaReactionConfiguration = supportsHaptics
-            ? .sentimentPreview(.default)
-            : .noReaction
+            ? (narrative ? try LivingStory.configuration().reaction : .sentimentPreview(.default)) : .noReaction
 #if DEBUG
         let diagnosticConfiguration = QualiaDiagnosticsConfiguration(sink: diagnostics)
 #else
@@ -265,7 +289,7 @@ final class LivingStoryModel: ObservableObject {
         let story = QualiaSessionConfiguration(
             language: explicitLanguage,
             context: context,
-            sceneState: .sentimentPreview,
+            sceneState: narrative ? .narrative : .sentimentPreview,
             reaction: reaction,
             haptics: .init(preferences: preferences, arbitration: .independentOwners),
             diagnostics: diagnosticConfiguration
@@ -281,21 +305,8 @@ final class LivingStoryModel: ObservableObject {
         return (story, preview)
     }
 
-    private func prepareInitialLifecycle(
-        story: QualiaSession,
-        preview: QualiaSession,
-        initialPreferences: QualiaHapticPreferences
-    ) async throws {
-        if desiredPreferences != initialPreferences {
-            try await story.updateHapticPreferences(desiredPreferences)
-        }
-        if !active {
-            try await story.suspend()
-            try await preview.suspend()
-        }
-    }
-
     private func analyzerDescription(_ capabilities: QualiaAnalyzerCapabilities) -> String {
+        if narrative { return "Fixed authored observations · en · suspense, threat, impact · no text inference" }
         let languages = capabilities.languages.map(\.rawValue).sorted().joined(separator: ", ")
         let dimensions = capabilities.dimensions.contains(.valence) ? "valence" : "no standard dimensions"
         return "\(AppleSentimentAnalyzer.identifier) v\(AppleSentimentAnalyzer.version) · \(languages) · \(dimensions) · on-device"
