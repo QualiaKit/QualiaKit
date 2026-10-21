@@ -1,0 +1,3593 @@
+{
+  "automaticStatus" : "not-started",
+  "benchmarks" : [
+
+  ],
+  "commands" : [
+
+  ],
+  "errors" : [
+
+  ],
+  "humanAssessment" : {
+
+  },
+  "metadata" : {
+    "analyzer" : "Recovered RuBERT; diagnostic raw classes with provisional interpretation",
+    "concurrency" : "1",
+    "configuration" : "Release",
+    "device" : "iPhone18,1",
+    "energy" : "CPU\/thermal trace only in-app; watt\/joule requires external Instruments",
+    "hapticInput" : "none: Russian inference measurements do not generate haptics",
+    "heartbeat" : "heartbeat-candidate-v1",
+    "lowPowerMode" : "false",
+    "method" : "RuBERT: 35 source parity cases; cpuOnly and all; 3 text lengths each 5 warmups\/30 samples; optional 300s load at up to 10Hz; nearest rank",
+    "os" : "26.6",
+    "osBuild" : "Version 26.6 (Build 23G71)",
+    "physicalDevice" : "true",
+    "policy" : "1.0.0-beta.3",
+    "reduceMotionAtStart" : "false",
+    "runtime" : "qualia-runtime-v2",
+    "russianPhase" : "RuBERT: скорость (all, длина 40)",
+    "russianProgress" : "0.0",
+    "sourceSHA256" : "f1b30065a2d919f376ae82e54e0a4046b13383e5e3d60fb0b534005c02ebe998",
+    "tactileConfiguration" : "thresholds 0.5\/0.25; BPM 60...120; scales A=0.5 B=0.75 C=1; 3s rhythm +3s acceleration +2s accent; 12s hard limit"
+  },
+  "runID" : "EBE83626-72D8-4B89-A0AD-CC0819506182",
+  "russian" : {
+    "assetManifestSHA256" : "880529f974f32b4cac4b281af2505f6ed2126ce7d55ecc4097ffa278bfeb5b5c",
+    "mappingStatus" : "Empirical hypothesis: 0 negative, 1 neutral, 2 positive, 3 skip, 4 speech. Author mapping unavailable. Diagnostics are not semantic accuracy or narrative signals.",
+    "model" : "sismetanin\/rubert-ru-sentiment-rusentiment@f3d755e",
+    "modes" : [
+      {
+        "computeUnits" : "cpuOnly",
+        "initializationMilliseconds" : 516.033458,
+        "measurements" : [
+          {
+            "maximum" : 9.248458,
+            "milliseconds" : [
+              8.779583,
+              8.840417,
+              9.113083,
+              8.990167,
+              9.079292,
+              9.213458,
+              8.987917,
+              8.862833,
+              9.074083,
+              9.081083,
+              9.05775,
+              9.163875,
+              9.057125,
+              9.186958,
+              9.0755,
+              9.030209,
+              9.091125,
+              8.893292,
+              9.145916,
+              8.994459,
+              8.99075,
+              9.105292,
+              9.130959,
+              9.145334,
+              8.947541,
+              9.18875,
+              9.248458,
+              9.034833,
+              9.087625,
+              8.954792
+            ],
+            "name" : "ru-1-predicted",
+            "p50" : 9.074083,
+            "p95" : 9.213458
+          },
+          {
+            "maximum" : 0.034875,
+            "milliseconds" : [
+              0.029459,
+              0.031125,
+              0.029792,
+              0.031792,
+              0.029333,
+              0.029209,
+              0.03225,
+              0.030292,
+              0.033125,
+              0.029583,
+              0.029459,
+              0.029209,
+              0.029958,
+              0.032667,
+              0.029333,
+              0.030666,
+              0.0295,
+              0.029167,
+              0.034875,
+              0.030958,
+              0.030125,
+              0.029917,
+              0.032791,
+              0.029708,
+              0.030125,
+              0.030208,
+              0.033,
+              0.032542,
+              0.031709,
+              0.033375
+            ],
+            "name" : "ru-1-prepared",
+            "p50" : 0.030125,
+            "p95" : 0.033375
+          },
+          {
+            "maximum" : 0.037167,
+            "milliseconds" : [
+              0.036708,
+              0.037167,
+              0.036333,
+              0.033833,
+              0.036917,
+              0.034958,
+              0.033541,
+              0.032916,
+              0.032792,
+              0.032625,
+              0.034166,
+              0.033375,
+              0.03575,
+              0.032375,
+              0.032542,
+              0.032875,
+              0.033875,
+              0.032625,
+              0.032625,
+              0.035167,
+              0.032709,
+              0.0355,
+              0.032667,
+              0.032292,
+              0.032334,
+              0.034042,
+              0.032959,
+              0.033333,
+              0.032333,
+              0.035666
+            ],
+            "name" : "ru-1-tokenized",
+            "p50" : 0.033333,
+            "p95" : 0.036917
+          },
+          {
+            "maximum" : 9.324667,
+            "milliseconds" : [
+              8.857208,
+              8.920542,
+              9.192125,
+              9.067208,
+              9.158,
+              9.289125,
+              9.065208,
+              8.9375,
+              9.150875,
+              9.15425,
+              9.132083,
+              9.237917,
+              9.13425,
+              9.262917,
+              9.147917,
+              9.104,
+              9.165625,
+              8.966084,
+              9.2245,
+              9.071,
+              9.065542,
+              9.181375,
+              9.207458,
+              9.217625,
+              9.021542,
+              9.263625,
+              9.324667,
+              9.111458,
+              9.162,
+              9.034583
+            ],
+            "name" : "ru-1-total",
+            "p50" : 9.147917,
+            "p95" : 9.289125
+          },
+          {
+            "maximum" : 0.012917,
+            "milliseconds" : [
+              0.011458,
+              0.011833,
+              0.012917,
+              0.011416,
+              0.012458,
+              0.0115,
+              0.0115,
+              0.011459,
+              0.010875,
+              0.010959,
+              0.010708,
+              0.011458,
+              0.011417,
+              0.010917,
+              0.010542,
+              0.01025,
+              0.011125,
+              0.011,
+              0.011084,
+              0.010416,
+              0.011958,
+              0.010666,
+              0.011041,
+              0.010291,
+              0.011542,
+              0.010625,
+              0.01025,
+              0.01075,
+              0.010333,
+              0.01075
+            ],
+            "name" : "ru-1-transformed",
+            "p50" : 0.011,
+            "p95" : 0.012458
+          },
+          {
+            "maximum" : 9.423792,
+            "milliseconds" : [
+              9.153334,
+              9.042584,
+              9.138417,
+              9.059583,
+              9.102959,
+              9.045125,
+              8.865542,
+              9.120958,
+              9.411125,
+              9.423792,
+              9.177625,
+              9.01325,
+              9.026792,
+              9.04775,
+              9.092417,
+              8.983,
+              8.996125,
+              9.01975,
+              8.76325,
+              9.065542,
+              9.058291,
+              9.0935,
+              8.896458,
+              9.147209,
+              9.035166,
+              9.122209,
+              8.908542,
+              9.07325,
+              9.09375,
+              9.183
+            ],
+            "name" : "ru-8-predicted",
+            "p50" : 9.059583,
+            "p95" : 9.411125
+          },
+          {
+            "maximum" : 0.037708,
+            "milliseconds" : [
+              0.030041,
+              0.029291,
+              0.029083,
+              0.030084,
+              0.02875,
+              0.0315,
+              0.029167,
+              0.028875,
+              0.029083,
+              0.033833,
+              0.030541,
+              0.032291,
+              0.029125,
+              0.029833,
+              0.032917,
+              0.02925,
+              0.031708,
+              0.029208,
+              0.028792,
+              0.037708,
+              0.032167,
+              0.029625,
+              0.029833,
+              0.029791,
+              0.031917,
+              0.032416,
+              0.029292,
+              0.0325,
+              0.03075,
+              0.030458
+            ],
+            "name" : "ru-8-prepared",
+            "p50" : 0.029833,
+            "p95" : 0.033833
+          },
+          {
+            "maximum" : 0.245875,
+            "milliseconds" : [
+              0.217417,
+              0.207167,
+              0.21525,
+              0.218791,
+              0.212291,
+              0.216375,
+              0.216583,
+              0.217333,
+              0.243042,
+              0.232292,
+              0.245875,
+              0.227542,
+              0.219958,
+              0.209625,
+              0.22275,
+              0.208542,
+              0.234125,
+              0.206,
+              0.219333,
+              0.224083,
+              0.226958,
+              0.214625,
+              0.221,
+              0.2155,
+              0.224125,
+              0.214125,
+              0.206416,
+              0.219417,
+              0.220333,
+              0.216584
+            ],
+            "name" : "ru-8-tokenized",
+            "p50" : 0.217417,
+            "p95" : 0.243042
+          },
+          {
+            "maximum" : 9.700917,
+            "milliseconds" : [
+              9.411375,
+              9.29125,
+              9.394583,
+              9.319541,
+              9.354333,
+              9.3035,
+              9.121708,
+              9.378208,
+              9.697875,
+              9.700917,
+              9.465416,
+              9.284542,
+              9.286708,
+              9.297416,
+              9.358292,
+              9.231917,
+              9.273042,
+              9.266375,
+              9.022208,
+              9.339291,
+              9.328833,
+              9.34875,
+              9.159083,
+              9.403375,
+              9.302375,
+              9.379166,
+              9.154958,
+              9.3365,
+              9.355583,
+              9.440625
+            ],
+            "name" : "ru-8-total",
+            "p50" : 9.328833,
+            "p95" : 9.697875
+          },
+          {
+            "maximum" : 0.014625,
+            "milliseconds" : [
+              0.010583,
+              0.012208,
+              0.011833,
+              0.011083,
+              0.010333,
+              0.0105,
+              0.010416,
+              0.011042,
+              0.014625,
+              0.011,
+              0.011375,
+              0.011459,
+              0.010833,
+              0.010208,
+              0.010208,
+              0.011125,
+              0.011084,
+              0.011417,
+              0.010833,
+              0.011958,
+              0.011417,
+              0.011,
+              0.011792,
+              0.010875,
+              0.011167,
+              0.010416,
+              0.010708,
+              0.011333,
+              0.01075,
+              0.010583
+            ],
+            "name" : "ru-8-transformed",
+            "p50" : 0.011,
+            "p95" : 0.012208
+          },
+          {
+            "maximum" : 9.199292,
+            "milliseconds" : [
+              9.199292,
+              8.975083,
+              8.893,
+              9.072209,
+              9.150917,
+              9.000833,
+              8.966875,
+              9.071584,
+              9.1185,
+              8.940334,
+              9.122834,
+              9.051375,
+              9.101542,
+              9.195,
+              9.15575,
+              9.090542,
+              8.933167,
+              9.028167,
+              9.010792,
+              9.097166,
+              9.000833,
+              8.937375,
+              9.08025,
+              8.980666,
+              9.118334,
+              9.174708,
+              9.024083,
+              9.040959,
+              9.08175,
+              9.046958
+            ],
+            "name" : "ru-40-predicted",
+            "p50" : 9.051375,
+            "p95" : 9.195
+          },
+          {
+            "maximum" : 0.036334,
+            "milliseconds" : [
+              0.03075,
+              0.029667,
+              0.029125,
+              0.029166,
+              0.032583,
+              0.029917,
+              0.02975,
+              0.030041,
+              0.034042,
+              0.031,
+              0.030041,
+              0.036334,
+              0.028625,
+              0.032333,
+              0.029667,
+              0.032208,
+              0.029208,
+              0.030458,
+              0.029083,
+              0.032042,
+              0.034625,
+              0.029792,
+              0.031875,
+              0.029709,
+              0.02975,
+              0.031667,
+              0.029208,
+              0.029541,
+              0.031125,
+              0.031375
+            ],
+            "name" : "ru-40-prepared",
+            "p50" : 0.030041,
+            "p95" : 0.034625
+          },
+          {
+            "maximum" : 1.020083,
+            "milliseconds" : [
+              1.019583,
+              0.99875,
+              1.020083,
+              0.998209,
+              1.004,
+              1.014,
+              0.986416,
+              0.980167,
+              1.002333,
+              1.002083,
+              0.995584,
+              0.998833,
+              0.97575,
+              1.002917,
+              1.0015,
+              1.001833,
+              0.987584,
+              1.000792,
+              0.992667,
+              1.012667,
+              1.008584,
+              1.003916,
+              1.014208,
+              0.998,
+              0.9885,
+              0.993,
+              0.992125,
+              1.005292,
+              0.998833,
+              1.003667
+            ],
+            "name" : "ru-40-tokenized",
+            "p50" : 1.000792,
+            "p95" : 1.019583
+          },
+          {
+            "maximum" : 10.26075,
+            "milliseconds" : [
+              10.26075,
+              10.014,
+              9.953416,
+              10.111042,
+              10.198333,
+              10.05575,
+              9.9945,
+              10.094,
+              10.172708,
+              9.989125,
+              10.162792,
+              10.097042,
+              10.119083,
+              10.243083,
+              10.199333,
+              10.134958,
+              9.963042,
+              10.069667,
+              10.043125,
+              10.152959,
+              10.057084,
+              9.9815,
+              10.139583,
+              10.018875,
+              10.148125,
+              10.210084,
+              10.058708,
+              10.086417,
+              10.123708,
+              10.091959
+            ],
+            "name" : "ru-40-total",
+            "p50" : 10.094,
+            "p95" : 10.243083
+          },
+          {
+            "maximum" : 0.017833,
+            "milliseconds" : [
+              0.011125,
+              0.0105,
+              0.011208,
+              0.011458,
+              0.010833,
+              0.011,
+              0.011459,
+              0.012208,
+              0.017833,
+              0.015708,
+              0.014333,
+              0.0105,
+              0.013166,
+              0.012833,
+              0.012416,
+              0.010375,
+              0.013083,
+              0.01025,
+              0.010583,
+              0.011084,
+              0.013042,
+              0.010417,
+              0.01325,
+              0.0105,
+              0.011541,
+              0.010709,
+              0.013292,
+              0.010625,
+              0.012,
+              0.009959
+            ],
+            "name" : "ru-40-transformed",
+            "p50" : 0.011208,
+            "p95" : 0.015708
+          }
+        ],
+        "parity" : [
+          {
+            "expectedLabel" : "LABEL_0",
+            "group" : "negative",
+            "id" : "negative-1",
+            "maximumLogitDifference" : 0.013789176940917969,
+            "maximumProbabilityDifference" : 0.0003422239460839638,
+            "prediction" : {
+              "label" : "LABEL_0",
+              "logits" : [
+                4.29296875,
+                -0.40283203125,
+                -1.0458984375,
+                -0.344482421875,
+                -1.720703125
+              ],
+              "probabilities" : [
+                0.9745996947524888,
+                0.008901555492958155,
+                0.004679351957427642,
+                0.009436410321926412,
+                0.002382987475199117
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 19.336375,
+                "prepared" : 0.058292,
+                "tokenized" : 0.035833,
+                "total" : 19.477,
+                "transformed" : 0.0465
+              },
+              "tokenCount" : 15,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_0",
+            "group" : "negative",
+            "id" : "negative-2",
+            "maximumLogitDifference" : 0.005082607269287109,
+            "maximumProbabilityDifference" : 0.00039728992458964996,
+            "prediction" : {
+              "label" : "LABEL_0",
+              "logits" : [
+                3.716796875,
+                -0.8369140625,
+                -0.44580078125,
+                0.11968994140625,
+                -1.9306640625
+              ],
+              "probabilities" : [
+                0.9460518870171257,
+                0.009960093697213863,
+                0.01472725354823826,
+                0.025924552245251007,
+                0.0033362134921713204
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.326083,
+                "prepared" : 0.036875,
+                "tokenized" : 0.029167,
+                "total" : 9.4115,
+                "transformed" : 0.019375
+              },
+              "tokenCount" : 12,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_0",
+            "group" : "negative",
+            "id" : "negative-3",
+            "maximumLogitDifference" : 0.005809187889099121,
+            "maximumProbabilityDifference" : 0.00020585816314278027,
+            "prediction" : {
+              "label" : "LABEL_0",
+              "logits" : [
+                4.01953125,
+                0.36474609375,
+                -0.49609375,
+                -0.39013671875,
+                -2.623046875
+              ],
+              "probabilities" : [
+                0.9521391103390647,
+                0.024629034031316683,
+                0.0104133240875326,
+                0.011577264056418448,
+                0.0012412674856674486
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.213208,
+                "prepared" : 0.035667,
+                "tokenized" : 0.025458,
+                "total" : 9.296458,
+                "transformed" : 0.022125
+              },
+              "tokenCount" : 11,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_0",
+            "group" : "negative",
+            "id" : "negative-4",
+            "maximumLogitDifference" : 0.013773977756500244,
+            "maximumProbabilityDifference" : 0.0001600598684602765,
+            "prediction" : {
+              "label" : "LABEL_0",
+              "logits" : [
+                4.140625,
+                -0.37939453125,
+                -1.23046875,
+                -0.128173828125,
+                -1.6513671875
+              ],
+              "probabilities" : [
+                0.9684401446833738,
+                0.010545161694834854,
+                0.004502320492447053,
+                0.013556794364004842,
+                0.0029555787653394706
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.110834,
+                "prepared" : 0.037333,
+                "tokenized" : 0.03675,
+                "total" : 9.200458,
+                "transformed" : 0.015541
+              },
+              "tokenCount" : 18,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_0",
+            "group" : "negative",
+            "id" : "negative-5",
+            "maximumLogitDifference" : 0.016758441925048828,
+            "maximumProbabilityDifference" : 0.001390188251458313,
+            "prediction" : {
+              "label" : "LABEL_0",
+              "logits" : [
+                3.20703125,
+                -0.2490234375,
+                0.2437744140625,
+                0.041961669921875,
+                -2.9453125
+              ],
+              "probabilities" : [
+                0.8868832516097472,
+                0.027984720491927403,
+                0.04580789774375969,
+                0.03743641043702262,
+                0.0018877197175431325
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 8.946167,
+                "prepared" : 0.031667,
+                "tokenized" : 0.023375,
+                "total" : 9.014625,
+                "transformed" : 0.013416
+              },
+              "tokenCount" : 14,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "neutral",
+            "id" : "neutral-1",
+            "maximumLogitDifference" : 0.008698105812072754,
+            "maximumProbabilityDifference" : 0.0001449116474692147,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -1.515625,
+                4.5625,
+                -0.755859375,
+                -0.350830078125,
+                -1.955078125
+              ],
+              "probabilities" : [
+                0.002256328064743727,
+                0.9842340670988822,
+                0.004823522001019789,
+                0.0072321304709265155,
+                0.001453952364427511
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 8.977792,
+                "prepared" : 0.042083,
+                "tokenized" : 0.019792,
+                "total" : 9.053958,
+                "transformed" : 0.014291
+              },
+              "tokenCount" : 9,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "neutral",
+            "id" : "neutral-2",
+            "maximumLogitDifference" : 0.007226705551147461,
+            "maximumProbabilityDifference" : 0.00018698325950861072,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -1.0771484375,
+                3.638671875,
+                -1.1904296875,
+                0.7265625,
+                -1.607421875
+              ],
+              "probabilities" : [
+                0.008315739624962737,
+                0.92887146600743,
+                0.007425119726768402,
+                0.05049432717868098,
+                0.004893347462157867
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 8.982375,
+                "prepared" : 0.039042,
+                "tokenized" : 0.019583,
+                "total" : 9.053917,
+                "transformed" : 0.012917
+              },
+              "tokenCount" : 11,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "neutral",
+            "id" : "neutral-3",
+            "maximumLogitDifference" : 0.012090682983398438,
+            "maximumProbabilityDifference" : 0.00016459551162062436,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -1.3525390625,
+                4.875,
+                -1.1015625,
+                -0.35546875,
+                -1.728515625
+              ],
+              "probabilities" : [
+                0.0019524016450478438,
+                0.9889060084083359,
+                0.0025093827086983458,
+                0.0052916522945042534,
+                0.0013405549434137708
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 8.995792,
+                "prepared" : 0.030791,
+                "tokenized" : 0.02525,
+                "total" : 9.067458,
+                "transformed" : 0.015625
+              },
+              "tokenCount" : 11,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "neutral",
+            "id" : "neutral-4",
+            "maximumLogitDifference" : 0.01329582929611206,
+            "maximumProbabilityDifference" : 0.0003188333522992984,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -1.4658203125,
+                3.951171875,
+                0.603515625,
+                0.044403076171875,
+                -3.060546875
+              ],
+              "probabilities" : [
+                0.004186710374756076,
+                0.9428502795312967,
+                0.03315691359030628,
+                0.01895634494005378,
+                0.000849751563587013
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 8.9885,
+                "prepared" : 0.033375,
+                "tokenized" : 0.02125,
+                "total" : 9.055875,
+                "transformed" : 0.01275
+              },
+              "tokenCount" : 11,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "neutral",
+            "id" : "neutral-5",
+            "maximumLogitDifference" : 0.01675581932067871,
+            "maximumProbabilityDifference" : 0.00048680906693898685,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -1.025390625,
+                4.3046875,
+                -0.94775390625,
+                0.6103515625,
+                -2.603515625
+              ],
+              "probabilities" : [
+                0.004675640074754713,
+                0.965305076429708,
+                0.005053104397043735,
+                0.02400130623330918,
+                0.0009648728651844724
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.022875,
+                "prepared" : 0.029792,
+                "tokenized" : 0.027458,
+                "total" : 9.092333,
+                "transformed" : 0.012208
+              },
+              "tokenCount" : 11,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_2",
+            "group" : "positive",
+            "id" : "positive-1",
+            "maximumLogitDifference" : 0.01370096206665039,
+            "maximumProbabilityDifference" : 5.139906385720483e-05,
+            "prediction" : {
+              "label" : "LABEL_2",
+              "logits" : [
+                -1.1513671875,
+                -2.3671875,
+                4.56640625,
+                -0.9296875,
+                -0.58349609375
+              ],
+              "probabilities" : [
+                0.003241113570939026,
+                0.0009608823068113127,
+                0.9860335722804929,
+                0.004045465616321995,
+                0.0057189662254347184
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.191667,
+                "prepared" : 0.032792,
+                "tokenized" : 0.0235,
+                "total" : 9.260042,
+                "transformed" : 0.012083
+              },
+              "tokenCount" : 13,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_2",
+            "group" : "positive",
+            "id" : "positive-2",
+            "maximumLogitDifference" : 0.021077632904052734,
+            "maximumProbabilityDifference" : 0.0003988372340228974,
+            "prediction" : {
+              "label" : "LABEL_2",
+              "logits" : [
+                -0.68017578125,
+                -1.4970703125,
+                4.3125,
+                -0.55126953125,
+                -1.9404296875
+              ],
+              "probabilities" : [
+                0.006658096067027793,
+                0.002941557010611088,
+                0.9809380905972307,
+                0.007574140032290356,
+                0.0018881162928401853
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.041833,
+                "prepared" : 0.034584,
+                "tokenized" : 0.026333,
+                "total" : 9.116917,
+                "transformed" : 0.014167
+              },
+              "tokenCount" : 13,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_2",
+            "group" : "positive",
+            "id" : "positive-3",
+            "maximumLogitDifference" : 0.003962427377700806,
+            "maximumProbabilityDifference" : 5.854415810124802e-05,
+            "prediction" : {
+              "label" : "LABEL_2",
+              "logits" : [
+                -1.5458984375,
+                -1.4462890625,
+                4.1640625,
+                -1.44921875,
+                -0.26171875
+              ],
+              "probabilities" : [
+                0.0032396299791134803,
+                0.0035789465391628675,
+                0.9779123621881942,
+                0.0035684766884079753,
+                0.011700584605121578
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.040084,
+                "prepared" : 0.030791,
+                "tokenized" : 0.037667,
+                "total" : 9.119917,
+                "transformed" : 0.011375
+              },
+              "tokenCount" : 16,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_2",
+            "group" : "positive",
+            "id" : "positive-4",
+            "maximumLogitDifference" : 0.008093118667602539,
+            "maximumProbabilityDifference" : 3.0270247829755625e-05,
+            "prediction" : {
+              "label" : "LABEL_2",
+              "logits" : [
+                -0.8564453125,
+                -1.75390625,
+                4.5078125,
+                -1.138671875,
+                -1.0048828125
+              ],
+              "probabilities" : [
+                0.004615603742767243,
+                0.001881335211677507,
+                0.9860435221431535,
+                0.0034806397696156084,
+                0.003978899132786218
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.096875,
+                "prepared" : 0.033792,
+                "tokenized" : 0.026708,
+                "total" : 9.169166,
+                "transformed" : 0.011791
+              },
+              "tokenCount" : 12,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_2",
+            "group" : "positive",
+            "id" : "positive-5",
+            "maximumLogitDifference" : 0.01975393295288086,
+            "maximumProbabilityDifference" : 0.00022671766767423662,
+            "prediction" : {
+              "label" : "LABEL_2",
+              "logits" : [
+                -1.255859375,
+                -1.56640625,
+                4.625,
+                -1.30859375,
+                -0.95556640625
+              ],
+              "probabilities" : [
+                0.002761295921178852,
+                0.0020241568251196684,
+                0.9888666419141644,
+                0.002619453560145092,
+                0.003728451779392043
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.048333,
+                "prepared" : 0.033459,
+                "tokenized" : 0.025208,
+                "total" : 9.118542,
+                "transformed" : 0.011542
+              },
+              "tokenCount" : 14,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_4",
+            "group" : "speech",
+            "id" : "speech-1",
+            "maximumLogitDifference" : 0.018396854400634766,
+            "maximumProbabilityDifference" : 0.00010686966820239174,
+            "prediction" : {
+              "label" : "LABEL_4",
+              "logits" : [
+                -1.58203125,
+                -2.224609375,
+                -1.2392578125,
+                -0.91748046875,
+                5.20703125
+              ],
+              "probabilities" : [
+                0.0011198722482618827,
+                0.0005889797299608381,
+                0.0015777314943113245,
+                0.0021766029813334834,
+                0.9945368135461324
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 8.958708,
+                "prepared" : 0.030208,
+                "tokenized" : 0.032959,
+                "total" : 9.033292,
+                "transformed" : 0.011417
+              },
+              "tokenCount" : 16,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_4",
+            "group" : "speech",
+            "id" : "speech-2",
+            "maximumLogitDifference" : 0.020624160766601562,
+            "maximumProbabilityDifference" : 0.00013961491463199138,
+            "prediction" : {
+              "label" : "LABEL_4",
+              "logits" : [
+                -1.583984375,
+                -2.388671875,
+                -0.978515625,
+                -1.068359375,
+                5.140625
+              ],
+              "probabilities" : [
+                0.0011938863224649197,
+                0.0005339389903243684,
+                0.0021873320367947133,
+                0.001999383340211166,
+                0.9940854593102048
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.019792,
+                "prepared" : 0.029666,
+                "tokenized" : 0.026084,
+                "total" : 9.085959,
+                "transformed" : 0.010417
+              },
+              "tokenCount" : 14,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_4",
+            "group" : "speech",
+            "id" : "speech-3",
+            "maximumLogitDifference" : 0.037850379943847656,
+            "maximumProbabilityDifference" : 0.00039670927853741045,
+            "prediction" : {
+              "label" : "LABEL_4",
+              "logits" : [
+                -1.8076171875,
+                -2.294921875,
+                -0.495849609375,
+                -1.1025390625,
+                4.75
+              ],
+              "probabilities" : [
+                0.0014046091967576605,
+                0.0008628231141069091,
+                0.005214935344792661,
+                0.0028429357621501256,
+                0.9896746965821926
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 8.925125,
+                "prepared" : 0.032583,
+                "tokenized" : 0.01625,
+                "total" : 8.986833,
+                "transformed" : 0.012875
+              },
+              "tokenCount" : 9,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_4",
+            "group" : "speech",
+            "id" : "speech-4",
+            "maximumLogitDifference" : 0.024469375610351562,
+            "maximumProbabilityDifference" : 0.0001814733208554964,
+            "prediction" : {
+              "label" : "LABEL_4",
+              "logits" : [
+                -1.69140625,
+                -2.005859375,
+                -1.25390625,
+                -0.88330078125,
+                4.93359375
+              ],
+              "probabilities" : [
+                0.0013171293335049892,
+                0.0009617521479808023,
+                0.002040009818952309,
+                0.0029551815576698104,
+                0.992725927141892
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.011333,
+                "prepared" : 0.030292,
+                "tokenized" : 0.016291,
+                "total" : 9.07025,
+                "transformed" : 0.012334
+              },
+              "tokenCount" : 8,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_4",
+            "group" : "speech",
+            "id" : "speech-5",
+            "maximumLogitDifference" : 0.007674217224121094,
+            "maximumProbabilityDifference" : 4.4857363881600776e-05,
+            "prediction" : {
+              "label" : "LABEL_4",
+              "logits" : [
+                -1.560546875,
+                -2.330078125,
+                -1.322265625,
+                -0.875,
+                5.17578125
+              ],
+              "probabilities" : [
+                0.0011803883819969517,
+                0.0005467914949976922,
+                0.001497990842026421,
+                0.0023429021515302788,
+                0.9944319271294486
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.088417,
+                "prepared" : 0.029458,
+                "tokenized" : 0.025083,
+                "total" : 9.154625,
+                "transformed" : 0.011667
+              },
+              "tokenCount" : 13,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_3",
+            "group" : "skip",
+            "id" : "skip-1",
+            "maximumLogitDifference" : 0.02288222312927246,
+            "maximumProbabilityDifference" : 0.0023712722618838417,
+            "prediction" : {
+              "label" : "LABEL_3",
+              "logits" : [
+                0.470947265625,
+                -0.84375,
+                0.06793212890625,
+                2.58203125,
+                -2.689453125
+              ],
+              "probabilities" : [
+                0.09769008425572988,
+                0.026235220358696593,
+                0.0652864770615216,
+                0.8066453032197781,
+                0.004142915104273837
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.00425,
+                "prepared" : 0.03175,
+                "tokenized" : 0.020125,
+                "total" : 9.06875,
+                "transformed" : 0.012625
+              },
+              "tokenCount" : 11,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "skip",
+            "id" : "skip-2",
+            "maximumLogitDifference" : 0.019212722778320312,
+            "maximumProbabilityDifference" : 0.0020824950872553316,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -0.876953125,
+                3.2265625,
+                -0.33837890625,
+                0.81103515625,
+                -2.30078125
+              ],
+              "probabilities" : [
+                0.014510473988064748,
+                0.8786497531215931,
+                0.02486459617701625,
+                0.07848119279982459,
+                0.0034939839135012373
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.037875,
+                "prepared" : 0.031083,
+                "tokenized" : 0.0265,
+                "total" : 9.107167,
+                "transformed" : 0.011709
+              },
+              "tokenCount" : 15,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "skip",
+            "id" : "skip-3",
+            "maximumLogitDifference" : 0.01103520393371582,
+            "maximumProbabilityDifference" : 0.003022871505466096,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -0.931640625,
+                1.94921875,
+                0.8388671875,
+                1.4404296875,
+                -2.96875
+              ],
+              "probabilities" : [
+                0.02812671182589299,
+                0.501487708982926,
+                0.16521167592360944,
+                0.3015060360680462,
+                0.003667867199525328
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.031625,
+                "prepared" : 0.029291,
+                "tokenized" : 0.030084,
+                "total" : 9.1015,
+                "transformed" : 0.0105
+              },
+              "tokenCount" : 18,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "skip",
+            "id" : "skip-4",
+            "maximumLogitDifference" : 0.008664965629577637,
+            "maximumProbabilityDifference" : 0.00017830720271660994,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -1.646484375,
+                3.2265625,
+                -0.72021484375,
+                1.1767578125,
+                -1.6787109375
+              ],
+              "probabilities" : [
+                0.00657707438757161,
+                0.859745916370523,
+                0.01660758561531621,
+                0.11070092681742154,
+                0.0063684968091676656
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.127542,
+                "prepared" : 0.030083,
+                "tokenized" : 0.016708,
+                "total" : 9.185541,
+                "transformed" : 0.011208
+              },
+              "tokenCount" : 14,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "skip",
+            "id" : "skip-5",
+            "maximumLogitDifference" : 0.010157346725463867,
+            "maximumProbabilityDifference" : 7.785285135186726e-05,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -1.705078125,
+                4.97265625,
+                -1.0126953125,
+                -0.43603515625,
+                -1.6181640625
+              ],
+              "probabilities" : [
+                0.0012466283146932756,
+                0.990467380927063,
+                0.0024913515918214882,
+                0.004434813342133795,
+                0.0013598258242884386
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.21875,
+                "prepared" : 0.029334,
+                "tokenized" : 0.032958,
+                "total" : 9.292208,
+                "transformed" : 0.011166
+              },
+              "tokenCount" : 20,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "exploratory",
+            "id" : "narrative-1",
+            "maximumLogitDifference" : 0.02634263038635254,
+            "maximumProbabilityDifference" : 0.00568032687756817,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                1.71484375,
+                2.970703125,
+                -1.9755859375,
+                0.86669921875,
+                -2.716796875
+              ],
+              "probabilities" : [
+                0.20096789455968525,
+                0.7055689804241643,
+                0.005016414719516565,
+                0.08605620553317964,
+                0.002390504763454436
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 8.985,
+                "prepared" : 0.035917,
+                "tokenized" : 0.028083,
+                "total" : 9.060125,
+                "transformed" : 0.011125
+              },
+              "tokenCount" : 13,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_0",
+            "group" : "exploratory",
+            "id" : "narrative-2",
+            "maximumLogitDifference" : 0.008808545768260956,
+            "maximumProbabilityDifference" : 0.0001666750991613647,
+            "prediction" : {
+              "label" : "LABEL_0",
+              "logits" : [
+                3.662109375,
+                -1.00390625,
+                -0.2127685546875,
+                0.0760498046875,
+                -2.064453125
+              ],
+              "probabilities" : [
+                0.9423897269058175,
+                0.008867592037865031,
+                0.01956106248018141,
+                0.02611106945677253,
+                0.0030705491193634897
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.083917,
+                "prepared" : 0.029791,
+                "tokenized" : 0.021417,
+                "total" : 9.146667,
+                "transformed" : 0.011542
+              },
+              "tokenCount" : 11,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "exploratory",
+            "id" : "narrative-3",
+            "maximumLogitDifference" : 0.029303789138793945,
+            "maximumProbabilityDifference" : 0.006850102264762015,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                1.6005859375,
+                2.845703125,
+                -2.2421875,
+                0.9345703125,
+                -2.26171875
+              ],
+              "probabilities" : [
+                0.1988250685249782,
+                0.6905874229328484,
+                0.004261630987792409,
+                0.10214667397141378,
+                0.004179203582967306
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.038209,
+                "prepared" : 0.029708,
+                "tokenized" : 0.054083,
+                "total" : 9.133125,
+                "transformed" : 0.011125
+              },
+              "tokenCount" : 22,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_2",
+            "group" : "boundary",
+            "id" : "negation",
+            "maximumLogitDifference" : 0.03602337837219238,
+            "maximumProbabilityDifference" : 0.014597284236519625,
+            "prediction" : {
+              "label" : "LABEL_2",
+              "logits" : [
+                1.53515625,
+                0.370849609375,
+                2.044921875,
+                -0.039520263671875,
+                -3.841796875
+              ],
+              "probabilities" : [
+                0.31360385027145743,
+                0.09788799583571937,
+                0.5221193444952635,
+                0.0649393691567883,
+                0.001449440240771388
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 8.998208,
+                "prepared" : 0.031625,
+                "tokenized" : 0.021917,
+                "total" : 9.062959,
+                "transformed" : 0.011209
+              },
+              "tokenCount" : 13,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "boundary",
+            "id" : "unicode",
+            "maximumLogitDifference" : 0.01377725601196289,
+            "maximumProbabilityDifference" : 0.0012916989333616735,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -1.9091796875,
+                3.92578125,
+                -1.4619140625,
+                1.2275390625,
+                -1.861328125
+              ],
+              "probabilities" : [
+                0.002712286614646272,
+                0.9277413589024435,
+                0.00424209679174357,
+                0.06245902853630023,
+                0.0028452291548665422
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.041375,
+                "prepared" : 0.033833,
+                "tokenized" : 0.031375,
+                "total" : 9.11775,
+                "transformed" : 0.011167
+              },
+              "tokenCount" : 20,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_4",
+            "group" : "boundary",
+            "id" : "special",
+            "maximumLogitDifference" : 0.00887763500213623,
+            "maximumProbabilityDifference" : 0.00034798398409063847,
+            "prediction" : {
+              "label" : "LABEL_4",
+              "logits" : [
+                -1.7255859375,
+                -1.103515625,
+                -1.47265625,
+                0.056976318359375,
+                3.517578125
+              ],
+              "probabilities" : [
+                0.005015959407457249,
+                0.009343631826554242,
+                0.006459516037456344,
+                0.029820228338830666,
+                0.9493606643897016
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.106583,
+                "prepared" : 0.029458,
+                "tokenized" : 0.0175,
+                "total" : 9.164708,
+                "transformed" : 0.011167
+              },
+              "tokenCount" : 9,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_4",
+            "group" : "boundary",
+            "id" : "controls",
+            "maximumLogitDifference" : 0.0093994140625,
+            "maximumProbabilityDifference" : 7.630382799171144e-05,
+            "prediction" : {
+              "label" : "LABEL_4",
+              "logits" : [
+                -1.5625,
+                -1.361328125,
+                -1.515625,
+                0.130615234375,
+                3.330078125
+              ],
+              "probabilities" : [
+                0.007042054998144742,
+                0.00861127082026071,
+                0.007380010273761944,
+                0.03828335724618576,
+                0.9386833066616469
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.116,
+                "prepared" : 0.029583,
+                "tokenized" : 0.011792,
+                "total" : 9.168625,
+                "transformed" : 0.01125
+              },
+              "tokenCount" : 6,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "boundary",
+            "id" : "empty",
+            "maximumLogitDifference" : 0.012338042259216309,
+            "maximumProbabilityDifference" : 5.767295991275165e-05,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -0.916015625,
+                4.0703125,
+                -1.2978515625,
+                0.448486328125,
+                -1.94140625
+              ],
+              "probabilities" : [
+                0.006563707590297981,
+                0.9609128804374735,
+                0.004480432971803981,
+                0.02568886367299559,
+                0.00235411532742922
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 9.0265,
+                "prepared" : 0.034709,
+                "tokenized" : 0.00025,
+                "total" : 9.072084,
+                "transformed" : 0.010625
+              },
+              "tokenCount" : 2,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_3",
+            "group" : "boundary",
+            "id" : "long-word",
+            "maximumLogitDifference" : 0.02875971794128418,
+            "maximumProbabilityDifference" : 0.004132930124764289,
+            "prediction" : {
+              "label" : "LABEL_3",
+              "logits" : [
+                -1.435546875,
+                0.97802734375,
+                -0.0244293212890625,
+                2.57421875,
+                -2.330078125
+              ],
+              "probabilities" : [
+                0.013924258597754764,
+                0.15558726448547225,
+                0.057096915479293915,
+                0.7676993359635743,
+                0.005692225473904789
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 8.621667,
+                "prepared" : 0.03025,
+                "tokenized" : 0.0525,
+                "total" : 8.716334,
+                "transformed" : 0.011917
+              },
+              "tokenCount" : 3,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "boundary",
+            "id" : "truncation",
+            "maximumLogitDifference" : 0.003050684928894043,
+            "maximumProbabilityDifference" : 0.0001785666099067551,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -1.1240234375,
+                3.283203125,
+                -1.548828125,
+                1.0576171875,
+                -1.5654296875
+              ],
+              "probabilities" : [
+                0.01072967464511277,
+                0.8802797869878062,
+                0.007016107286890103,
+                0.09507384060401622,
+                0.006900590476174774
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 8.8035,
+                "prepared" : 0.030875,
+                "tokenized" : 0.63525,
+                "total" : 9.481167,
+                "transformed" : 0.011542
+              },
+              "tokenCount" : 128,
+              "truncated" : true
+            },
+            "tokenizerMatches" : true
+          }
+        ],
+        "physicalFootprintBytes" : 47907904,
+        "processCPUSeconds" : 1.5751879999999998
+      },
+      {
+        "computeUnits" : "all",
+        "initializationMilliseconds" : 2290.024792,
+        "measurements" : [
+          {
+            "maximum" : 4.530667,
+            "milliseconds" : [
+              4.268834,
+              4.530667,
+              4.063,
+              4.295375,
+              4.2925,
+              4.286875,
+              4.210583,
+              4.225,
+              4.243292,
+              4.20975,
+              4.200959,
+              3.748875,
+              4.195417,
+              4.250875,
+              4.362667,
+              4.186416,
+              4.213334,
+              4.353417,
+              4.183208,
+              4.2935,
+              4.301,
+              4.227375,
+              4.259417,
+              4.271167,
+              4.251917,
+              4.139833,
+              4.1145,
+              4.253208,
+              4.3695,
+              4.170458
+            ],
+            "name" : "ru-1-predicted",
+            "p50" : 4.243292,
+            "p95" : 4.3695
+          },
+          {
+            "maximum" : 0.032459,
+            "milliseconds" : [
+              0.030333,
+              0.029792,
+              0.029166,
+              0.028625,
+              0.029167,
+              0.029208,
+              0.028625,
+              0.028667,
+              0.028625,
+              0.028583,
+              0.02975,
+              0.028708,
+              0.032125,
+              0.032167,
+              0.029166,
+              0.028792,
+              0.0285,
+              0.028708,
+              0.028959,
+              0.029125,
+              0.028917,
+              0.028292,
+              0.029292,
+              0.028833,
+              0.029042,
+              0.028792,
+              0.02825,
+              0.028292,
+              0.028958,
+              0.032459
+            ],
+            "name" : "ru-1-prepared",
+            "p50" : 0.028917,
+            "p95" : 0.032167
+          },
+          {
+            "maximum" : 0.032875,
+            "milliseconds" : [
+              0.032875,
+              0.03025,
+              0.030542,
+              0.030292,
+              0.030542,
+              0.030084,
+              0.031542,
+              0.031041,
+              0.030708,
+              0.030583,
+              0.030125,
+              0.03025,
+              0.030416,
+              0.030541,
+              0.030584,
+              0.03,
+              0.030583,
+              0.030625,
+              0.030416,
+              0.030125,
+              0.03,
+              0.030333,
+              0.030625,
+              0.030209,
+              0.030166,
+              0.03025,
+              0.030708,
+              0.030541,
+              0.030542,
+              0.03025
+            ],
+            "name" : "ru-1-tokenized",
+            "p50" : 0.030416,
+            "p95" : 0.031542
+          },
+          {
+            "maximum" : 4.596334,
+            "milliseconds" : [
+              4.337792,
+              4.596334,
+              4.128167,
+              4.360667,
+              4.357834,
+              4.353167,
+              4.277375,
+              4.291083,
+              4.308375,
+              4.275333,
+              4.266417,
+              3.814125,
+              4.264541,
+              4.319416,
+              4.429125,
+              4.251,
+              4.27875,
+              4.419042,
+              4.249208,
+              4.358334,
+              4.365708,
+              4.292417,
+              4.325667,
+              4.335792,
+              4.316916,
+              4.2045,
+              4.17925,
+              4.317625,
+              4.435542,
+              4.239417
+            ],
+            "name" : "ru-1-total",
+            "p50" : 4.308375,
+            "p95" : 4.435542
+          },
+          {
+            "maximum" : 0.007,
+            "milliseconds" : [
+              0.00575,
+              0.005625,
+              0.005459,
+              0.006375,
+              0.005625,
+              0.007,
+              0.006625,
+              0.006375,
+              0.00575,
+              0.006417,
+              0.005583,
+              0.006292,
+              0.006583,
+              0.005833,
+              0.006708,
+              0.005792,
+              0.006333,
+              0.006292,
+              0.006625,
+              0.005584,
+              0.005791,
+              0.006417,
+              0.006333,
+              0.005583,
+              0.005791,
+              0.005625,
+              0.005792,
+              0.005584,
+              0.006542,
+              0.00625
+            ],
+            "name" : "ru-1-transformed",
+            "p50" : 0.005833,
+            "p95" : 0.006708
+          },
+          {
+            "maximum" : 4.609167,
+            "milliseconds" : [
+              4.309583,
+              4.374209,
+              4.569208,
+              4.300958,
+              4.546208,
+              4.466708,
+              4.346208,
+              4.477208,
+              4.463875,
+              4.005042,
+              4.283458,
+              4.538959,
+              4.497959,
+              4.528625,
+              4.296,
+              4.575875,
+              4.4795,
+              4.382417,
+              4.46025,
+              4.582083,
+              4.345667,
+              4.348666,
+              4.544417,
+              4.609167,
+              4.503667,
+              4.519917,
+              4.518625,
+              4.417125,
+              4.330875,
+              4.495083
+            ],
+            "name" : "ru-8-predicted",
+            "p50" : 4.466708,
+            "p95" : 4.582083
+          },
+          {
+            "maximum" : 0.031167,
+            "milliseconds" : [
+              0.029375,
+              0.02925,
+              0.029542,
+              0.029459,
+              0.028459,
+              0.029042,
+              0.031167,
+              0.02875,
+              0.029,
+              0.028708,
+              0.028875,
+              0.028125,
+              0.028208,
+              0.0285,
+              0.029083,
+              0.028042,
+              0.0285,
+              0.028292,
+              0.029958,
+              0.028375,
+              0.02875,
+              0.028584,
+              0.029416,
+              0.02925,
+              0.029792,
+              0.028625,
+              0.028875,
+              0.030042,
+              0.028292,
+              0.028792
+            ],
+            "name" : "ru-8-prepared",
+            "p50" : 0.028792,
+            "p95" : 0.030042
+          },
+          {
+            "maximum" : 0.22125,
+            "milliseconds" : [
+              0.218167,
+              0.219208,
+              0.218666,
+              0.219583,
+              0.2175,
+              0.211166,
+              0.220166,
+              0.210417,
+              0.210416,
+              0.210792,
+              0.211125,
+              0.216583,
+              0.214667,
+              0.219542,
+              0.211042,
+              0.208291,
+              0.211042,
+              0.208083,
+              0.22125,
+              0.204125,
+              0.208125,
+              0.219875,
+              0.221042,
+              0.213375,
+              0.21825,
+              0.204791,
+              0.218167,
+              0.213,
+              0.211708,
+              0.204583
+            ],
+            "name" : "ru-8-tokenized",
+            "p50" : 0.213,
+            "p95" : 0.221042
+          },
+          {
+            "maximum" : 4.857917,
+            "milliseconds" : [
+              4.563583,
+              4.628875,
+              4.823541,
+              4.556417,
+              4.798667,
+              4.713083,
+              4.60325,
+              4.721958,
+              4.709916,
+              4.250459,
+              4.529792,
+              4.790208,
+              4.747125,
+              4.782917,
+              4.541917,
+              4.832916,
+              4.72475,
+              4.625167,
+              4.71725,
+              4.820958,
+              4.588584,
+              4.603375,
+              4.801333,
+              4.857917,
+              4.757792,
+              4.7595,
+              4.77175,
+              4.666542,
+              4.576417,
+              4.734708
+            ],
+            "name" : "ru-8-total",
+            "p50" : 4.71725,
+            "p95" : 4.832916
+          },
+          {
+            "maximum" : 0.020708,
+            "milliseconds" : [
+              0.006458,
+              0.006208,
+              0.006125,
+              0.006417,
+              0.0065,
+              0.006167,
+              0.005709,
+              0.005583,
+              0.006625,
+              0.005917,
+              0.006334,
+              0.006541,
+              0.006291,
+              0.00625,
+              0.005792,
+              0.020708,
+              0.005708,
+              0.006375,
+              0.005792,
+              0.006375,
+              0.006042,
+              0.00625,
+              0.006458,
+              0.006125,
+              0.006083,
+              0.006167,
+              0.006083,
+              0.006375,
+              0.005542,
+              0.00625
+            ],
+            "name" : "ru-8-transformed",
+            "p50" : 0.006208,
+            "p95" : 0.006625
+          },
+          {
+            "maximum" : 4.797291,
+            "milliseconds" : [
+              4.512209,
+              4.441625,
+              4.375833,
+              4.493708,
+              4.447083,
+              4.402625,
+              4.362541,
+              4.524042,
+              4.378291,
+              4.466541,
+              4.419125,
+              4.372459,
+              4.385792,
+              4.797291,
+              4.109916,
+              4.43325,
+              4.365708,
+              4.202167,
+              4.196834,
+              4.289375,
+              4.277625,
+              4.447541,
+              4.360833,
+              4.336375,
+              4.179209,
+              4.325667,
+              4.263125,
+              4.379417,
+              4.266,
+              4.432584
+            ],
+            "name" : "ru-40-predicted",
+            "p50" : 4.375833,
+            "p95" : 4.524042
+          },
+          {
+            "maximum" : 0.030875,
+            "milliseconds" : [
+              0.029208,
+              0.028125,
+              0.029625,
+              0.029083,
+              0.028625,
+              0.029125,
+              0.029375,
+              0.02875,
+              0.028959,
+              0.030084,
+              0.028459,
+              0.029625,
+              0.028958,
+              0.028959,
+              0.029459,
+              0.029375,
+              0.029042,
+              0.029333,
+              0.028958,
+              0.028667,
+              0.029709,
+              0.028542,
+              0.029,
+              0.029458,
+              0.029,
+              0.030875,
+              0.028875,
+              0.0295,
+              0.029667,
+              0.02875
+            ],
+            "name" : "ru-40-prepared",
+            "p50" : 0.029042,
+            "p95" : 0.030084
+          },
+          {
+            "maximum" : 1.003459,
+            "milliseconds" : [
+              0.984083,
+              0.983334,
+              0.992958,
+              0.995334,
+              0.991375,
+              0.98275,
+              1.003459,
+              0.996166,
+              0.977291,
+              0.974958,
+              0.958625,
+              0.961291,
+              0.975917,
+              0.971958,
+              0.970583,
+              0.970208,
+              0.963958,
+              0.970375,
+              0.96175,
+              0.95975,
+              0.960583,
+              0.970167,
+              0.961667,
+              0.975542,
+              0.958375,
+              0.972125,
+              0.958375,
+              0.965292,
+              0.95975,
+              0.978041
+            ],
+            "name" : "ru-40-tokenized",
+            "p50" : 0.970583,
+            "p95" : 0.996166
+          },
+          {
+            "maximum" : 5.804792,
+            "milliseconds" : [
+              5.532125,
+              5.459792,
+              5.404208,
+              5.523834,
+              5.472708,
+              5.420916,
+              5.402,
+              5.554875,
+              5.390916,
+              5.477833,
+              5.412625,
+              5.369,
+              5.396209,
+              5.804792,
+              5.116375,
+              5.439333,
+              5.364541,
+              5.208417,
+              5.193208,
+              5.283333,
+              5.2735,
+              5.451875,
+              5.358292,
+              5.347792,
+              5.172334,
+              5.334333,
+              5.256667,
+              5.380625,
+              5.261,
+              5.444916
+            ],
+            "name" : "ru-40-total",
+            "p50" : 5.390916,
+            "p95" : 5.554875
+          },
+          {
+            "maximum" : 0.006792,
+            "milliseconds" : [
+              0.006625,
+              0.006708,
+              0.005792,
+              0.005709,
+              0.005625,
+              0.006416,
+              0.006625,
+              0.005917,
+              0.006375,
+              0.00625,
+              0.006416,
+              0.005625,
+              0.005542,
+              0.006584,
+              0.006417,
+              0.0065,
+              0.005833,
+              0.006542,
+              0.005666,
+              0.005541,
+              0.005583,
+              0.005625,
+              0.006792,
+              0.006417,
+              0.00575,
+              0.005666,
+              0.006292,
+              0.006416,
+              0.005583,
+              0.005541
+            ],
+            "name" : "ru-40-transformed",
+            "p50" : 0.005917,
+            "p95" : 0.006708
+          }
+        ],
+        "parity" : [
+          {
+            "expectedLabel" : "LABEL_0",
+            "group" : "negative",
+            "id" : "negative-1",
+            "maximumLogitDifference" : 0.005742073059082031,
+            "maximumProbabilityDifference" : 0.00018484265196816452,
+            "prediction" : {
+              "label" : "LABEL_0",
+              "logits" : [
+                4.2734375,
+                -0.3974609375,
+                -1.0439453125,
+                -0.349853515625,
+                -1.70703125
+              ],
+              "probabilities" : [
+                0.9740726281544366,
+                0.009121072813764602,
+                0.0047783870640299144,
+                0.009565805877918035,
+                0.00246210608985085
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 33.817959,
+                "prepared" : 0.039791,
+                "tokenized" : 0.034375,
+                "total" : 33.920916,
+                "transformed" : 0.028791
+              },
+              "tokenCount" : 15,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_0",
+            "group" : "negative",
+            "id" : "negative-2",
+            "maximumLogitDifference" : 0.005082607269287109,
+            "maximumProbabilityDifference" : 0.0003308454724914034,
+            "prediction" : {
+              "label" : "LABEL_0",
+              "logits" : [
+                3.716796875,
+                -0.83642578125,
+                -0.447265625,
+                0.11737060546875,
+                -1.9287109375
+              ],
+              "probabilities" : [
+                0.946118331469224,
+                0.009965658084760588,
+                0.014706729047063336,
+                0.025866310725588645,
+                0.0033429706733635665
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 7.4135,
+                "prepared" : 0.037167,
+                "tokenized" : 0.030125,
+                "total" : 7.502708,
+                "transformed" : 0.021916
+              },
+              "tokenCount" : 12,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_0",
+            "group" : "negative",
+            "id" : "negative-3",
+            "maximumLogitDifference" : 0.004221916198730469,
+            "maximumProbabilityDifference" : 0.00029083937233598256,
+            "prediction" : {
+              "label" : "LABEL_0",
+              "logits" : [
+                4.015625,
+                0.3623046875,
+                -0.49560546875,
+                -0.39404296875,
+                -2.62109375
+              ],
+              "probabilities" : [
+                0.9520541291298715,
+                0.024662936718931616,
+                0.010458252950587391,
+                0.011576230751633486,
+                0.0012484504489759245
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 5.981125,
+                "prepared" : 0.032583,
+                "tokenized" : 0.02625,
+                "total" : 6.054041,
+                "transformed" : 0.014083
+              },
+              "tokenCount" : 11,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_0",
+            "group" : "negative",
+            "id" : "negative-4",
+            "maximumLogitDifference" : 0.006433963775634766,
+            "maximumProbabilityDifference" : 0.00023829358050841964,
+            "prediction" : {
+              "label" : "LABEL_0",
+              "logits" : [
+                4.1328125,
+                -0.364990234375,
+                -1.232421875,
+                -0.1318359375,
+                -1.654296875
+              ],
+              "probabilities" : [
+                0.9681165908872942,
+                0.010778460998594254,
+                0.00452726565985651,
+                0.013608629147241497,
+                0.002969053307013539
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 5.612292,
+                "prepared" : 0.036375,
+                "tokenized" : 0.03975,
+                "total" : 5.704708,
+                "transformed" : 0.016291
+              },
+              "tokenCount" : 18,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_0",
+            "group" : "negative",
+            "id" : "negative-5",
+            "maximumLogitDifference" : 0.0117950439453125,
+            "maximumProbabilityDifference" : 0.0016790326973097347,
+            "prediction" : {
+              "label" : "LABEL_0",
+              "logits" : [
+                3.185546875,
+                -0.254150390625,
+                0.260986328125,
+                0.052032470703125,
+                -2.96484375
+              ],
+              "probabilities" : [
+                0.8838140306609792,
+                0.02834779933592725,
+                0.04745045533332625,
+                0.038502849966345724,
+                0.0018848647034214827
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 5.39125,
+                "prepared" : 0.034,
+                "tokenized" : 0.026292,
+                "total" : 5.465375,
+                "transformed" : 0.013833
+              },
+              "tokenCount" : 14,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "neutral",
+            "id" : "neutral-1",
+            "maximumLogitDifference" : 0.004531383514404297,
+            "maximumProbabilityDifference" : 9.22135843720584e-05,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -1.5107421875,
+                4.56640625,
+                -0.748046875,
+                -0.354736328125,
+                -1.9638671875
+              ],
+              "probabilities" : [
+                0.0022586535131876528,
+                0.9842867651619793,
+                0.004842660005170038,
+                0.0071762337959079495,
+                0.001435687523755153
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.652,
+                "prepared" : 0.032709,
+                "tokenized" : 0.022833,
+                "total" : 4.717792,
+                "transformed" : 0.01025
+              },
+              "tokenCount" : 9,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "neutral",
+            "id" : "neutral-2",
+            "maximumLogitDifference" : 0.0061075687408447266,
+            "maximumProbabilityDifference" : 0.00014445639229415663,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -1.076171875,
+                3.64453125,
+                -1.1787109375,
+                0.7255859375,
+                -1.603515625
+              ],
+              "probabilities" : [
+                0.008278135204486432,
+                0.9291970732906637,
+                0.007471372100096982,
+                0.05016790796397169,
+                0.004885511440781148
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.340542,
+                "prepared" : 0.035583,
+                "tokenized" : 0.027875,
+                "total" : 4.413,
+                "transformed" : 0.009
+              },
+              "tokenCount" : 11,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "neutral",
+            "id" : "neutral-3",
+            "maximumLogitDifference" : 0.0074405670166015625,
+            "maximumProbabilityDifference" : 9.548508422152491e-05,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -1.349609375,
+                4.85546875,
+                -1.091796875,
+                -0.3544921875,
+                -1.72265625
+              ],
+              "probabilities" : [
+                0.001996225469579591,
+                0.9886459278124937,
+                0.002583307700396894,
+                0.0053998723787217736,
+                0.0013746666388080927
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.401333,
+                "prepared" : 0.034292,
+                "tokenized" : 0.029458,
+                "total" : 4.472083,
+                "transformed" : 0.007
+              },
+              "tokenCount" : 11,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "neutral",
+            "id" : "neutral-4",
+            "maximumLogitDifference" : 0.01502448320388794,
+            "maximumProbabilityDifference" : 0.000943790242878384,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -1.4619140625,
+                3.943359375,
+                0.6318359375,
+                0.035919189453125,
+                -3.0625
+              ],
+              "probabilities" : [
+                0.004230724583335745,
+                0.941662294775638,
+                0.034333559079999194,
+                0.018919753341849945,
+                0.0008536682191772145
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.283625,
+                "prepared" : 0.032084,
+                "tokenized" : 0.022583,
+                "total" : 4.345208,
+                "transformed" : 0.006916
+              },
+              "tokenCount" : 11,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "neutral",
+            "id" : "neutral-5",
+            "maximumLogitDifference" : 0.00775909423828125,
+            "maximumProbabilityDifference" : 0.00015578762906520716,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -1.009765625,
+                4.296875,
+                -0.95458984375,
+                0.62451171875,
+                -2.59375
+              ],
+              "probabilities" : [
+                0.004783333331833798,
+                0.9646624797337038,
+                0.005054674377506145,
+                0.02451818278975684,
+                0.0009813297671995122
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.106916,
+                "prepared" : 0.029042,
+                "tokenized" : 0.027333,
+                "total" : 4.169458,
+                "transformed" : 0.006167
+              },
+              "tokenCount" : 11,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_2",
+            "group" : "positive",
+            "id" : "positive-1",
+            "maximumLogitDifference" : 0.005888462066650391,
+            "maximumProbabilityDifference" : 7.747729204421461e-05,
+            "prediction" : {
+              "label" : "LABEL_2",
+              "logits" : [
+                -1.1435546875,
+                -2.375,
+                4.55859375,
+                -0.9248046875,
+                -0.58642578125
+              ],
+              "probabilities" : [
+                0.0032917233925611787,
+                0.0009607567177709055,
+                0.9859046959245915,
+                0.004096615951246414,
+                0.00574620801382986
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.041458,
+                "prepared" : 0.029959,
+                "tokenized" : 0.023375,
+                "total" : 4.101084,
+                "transformed" : 0.006292
+              },
+              "tokenCount" : 13,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_2",
+            "group" : "positive",
+            "id" : "positive-2",
+            "maximumLogitDifference" : 0.005452632904052734,
+            "maximumProbabilityDifference" : 0.00011165955366643221,
+            "prediction" : {
+              "label" : "LABEL_2",
+              "logits" : [
+                -0.6845703125,
+                -1.4912109375,
+                4.328125,
+                -0.55126953125,
+                -1.9326171875
+              ],
+              "probabilities" : [
+                0.0065280400449251545,
+                0.002913823472904309,
+                0.9812252682775872,
+                0.007458896889382788,
+                0.0018739713152007365
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.290083,
+                "prepared" : 0.029417,
+                "tokenized" : 0.02625,
+                "total" : 4.351958,
+                "transformed" : 0.006208
+              },
+              "tokenCount" : 13,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_2",
+            "group" : "positive",
+            "id" : "positive-3",
+            "maximumLogitDifference" : 0.004639625549316406,
+            "maximumProbabilityDifference" : 0.00014350364205961696,
+            "prediction" : {
+              "label" : "LABEL_2",
+              "logits" : [
+                -1.5400390625,
+                -1.44140625,
+                4.16015625,
+                -1.4521484375,
+                -0.263916015625
+              ],
+              "probabilities" : [
+                0.0032711377563281285,
+                0.0036102270843117986,
+                0.9778274027042358,
+                0.0035716529045274263,
+                0.011719579550596718
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.303292,
+                "prepared" : 0.03,
+                "tokenized" : 0.033292,
+                "total" : 4.372834,
+                "transformed" : 0.00625
+              },
+              "tokenCount" : 16,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_2",
+            "group" : "positive",
+            "id" : "positive-4",
+            "maximumLogitDifference" : 0.006555318832397461,
+            "maximumProbabilityDifference" : 7.242203184432139e-05,
+            "prediction" : {
+              "label" : "LABEL_2",
+              "logits" : [
+                -0.84814453125,
+                -1.7392578125,
+                4.50390625,
+                -1.1357421875,
+                -1.01171875
+              ],
+              "probabilities" : [
+                0.004671805255222245,
+                0.00191636905804518,
+                0.9859408298634794,
+                0.003504149735942762,
+                0.003966846087310428
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.404458,
+                "prepared" : 0.028667,
+                "tokenized" : 0.02675,
+                "total" : 4.465834,
+                "transformed" : 0.005959
+              },
+              "tokenCount" : 12,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_2",
+            "group" : "positive",
+            "id" : "positive-5",
+            "maximumLogitDifference" : 0.004128932952880859,
+            "maximumProbabilityDifference" : 4.198431300339589e-05,
+            "prediction" : {
+              "label" : "LABEL_2",
+              "logits" : [
+                -1.2548828125,
+                -1.56640625,
+                4.640625,
+                -1.3095703125,
+                -0.95947265625
+              ],
+              "probabilities" : [
+                0.002721650409387946,
+                0.0019931474590052134,
+                0.9890513752688352,
+                0.002576806816729898,
+                0.0036570200460416995
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.168916,
+                "prepared" : 0.028834,
+                "tokenized" : 0.025291,
+                "total" : 4.229083,
+                "transformed" : 0.006042
+              },
+              "tokenCount" : 14,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_4",
+            "group" : "speech",
+            "id" : "speech-1",
+            "maximumLogitDifference" : 0.008946895599365234,
+            "maximumProbabilityDifference" : 5.8369581644290847e-05,
+            "prediction" : {
+              "label" : "LABEL_4",
+              "logits" : [
+                -1.5751953125,
+                -2.234375,
+                -1.2314453125,
+                -0.91748046875,
+                5.1796875
+              ],
+              "probabilities" : [
+                0.0011586182617925429,
+                0.0005993248268294508,
+                0.001633913637320217,
+                0.002236568977772138,
+                0.9943715742962858
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.284083,
+                "prepared" : 0.028625,
+                "tokenized" : 0.033208,
+                "total" : 4.351875,
+                "transformed" : 0.005959
+              },
+              "tokenCount" : 16,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_4",
+            "group" : "speech",
+            "id" : "speech-2",
+            "maximumLogitDifference" : 0.0075244903564453125,
+            "maximumProbabilityDifference" : 5.229181042831765e-05,
+            "prediction" : {
+              "label" : "LABEL_4",
+              "logits" : [
+                -1.583984375,
+                -2.384765625,
+                -0.96923828125,
+                -1.0654296875,
+                5.11328125
+              ],
+              "probabilities" : [
+                0.001226745203391823,
+                0.0005507816851552788,
+                0.002268481306719573,
+                0.002060439219588978,
+                0.9938935525851444
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.11825,
+                "prepared" : 0.029667,
+                "tokenized" : 0.025917,
+                "total" : 4.17975,
+                "transformed" : 0.005916
+              },
+              "tokenCount" : 14,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_4",
+            "group" : "speech",
+            "id" : "speech-3",
+            "maximumLogitDifference" : 0.0034842491149902344,
+            "maximumProbabilityDifference" : 3.0259897513706946e-05,
+            "prediction" : {
+              "label" : "LABEL_4",
+              "logits" : [
+                -1.8134765625,
+                -2.30859375,
+                -0.490966796875,
+                -1.09765625,
+                4.7109375
+              ],
+              "probabilities" : [
+                0.0014514030662472394,
+                0.000884629410361443,
+                0.005446866483119978,
+                0.0029693736341297513,
+                0.9892477274061415
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.296833,
+                "prepared" : 0.029417,
+                "tokenized" : 0.016,
+                "total" : 4.348333,
+                "transformed" : 0.006083
+              },
+              "tokenCount" : 9,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_4",
+            "group" : "speech",
+            "id" : "speech-4",
+            "maximumLogitDifference" : 0.004985332489013672,
+            "maximumProbabilityDifference" : 2.8432659430754903e-05,
+            "prediction" : {
+              "label" : "LABEL_4",
+              "logits" : [
+                -1.6943359375,
+                -2.001953125,
+                -1.2470703125,
+                -0.884765625,
+                4.90625
+              ],
+              "probabilities" : [
+                0.0013493961784347007,
+                0.0009920716263315183,
+                0.00211049568597138,
+                0.0030320153476567423,
+                0.9925160211616058
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.230875,
+                "prepared" : 0.028792,
+                "tokenized" : 0.016583,
+                "total" : 4.282083,
+                "transformed" : 0.005833
+              },
+              "tokenCount" : 8,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_4",
+            "group" : "speech",
+            "id" : "speech-5",
+            "maximumLogitDifference" : 0.007950782775878906,
+            "maximumProbabilityDifference" : 5.483397585093197e-05,
+            "prediction" : {
+              "label" : "LABEL_4",
+              "logits" : [
+                -1.5576171875,
+                -2.32421875,
+                -1.3154296875,
+                -0.876953125,
+                5.16015625
+              ],
+              "probabilities" : [
+                0.0012023740225379515,
+                0.0005586100646765683,
+                0.0015318642451222335,
+                0.0023749158779470844,
+                0.9943322357897161
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.261791,
+                "prepared" : 0.029209,
+                "tokenized" : 0.024916,
+                "total" : 4.321708,
+                "transformed" : 0.005792
+              },
+              "tokenCount" : 13,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_3",
+            "group" : "skip",
+            "id" : "skip-1",
+            "maximumLogitDifference" : 0.011699080467224121,
+            "maximumProbabilityDifference" : 0.0006839898826273005,
+            "prediction" : {
+              "label" : "LABEL_3",
+              "logits" : [
+                0.489990234375,
+                -0.8310546875,
+                0.0640869140625,
+                2.57421875,
+                -2.685546875
+              ],
+              "probabilities" : [
+                0.09999804942735256,
+                0.026685110700562998,
+                0.06531667475165215,
+                0.8038230803883704,
+                0.004177084732061855
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.178209,
+                "prepared" : 0.029041,
+                "tokenized" : 0.020584,
+                "total" : 4.233625,
+                "transformed" : 0.005791
+              },
+              "tokenCount" : 11,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "skip",
+            "id" : "skip-2",
+            "maximumLogitDifference" : 0.009178638458251953,
+            "maximumProbabilityDifference" : 0.00019378951207855988,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -0.86962890625,
+                3.20703125,
+                -0.330810546875,
+                0.80712890625,
+                -2.3125
+              ],
+              "probabilities" : [
+                0.014870622702590387,
+                0.8765973739695367,
+                0.025487955198194072,
+                0.07953088593424915,
+                0.003513162195429615
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.303792,
+                "prepared" : 0.029458,
+                "tokenized" : 0.026292,
+                "total" : 4.36525,
+                "transformed" : 0.005708
+              },
+              "tokenCount" : 15,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "skip",
+            "id" : "skip-3",
+            "maximumLogitDifference" : 0.00419926643371582,
+            "maximumProbabilityDifference" : 0.0009937602599521256,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -0.9306640625,
+                1.9560546875,
+                0.8349609375,
+                1.4404296875,
+                -2.974609375
+              ],
+              "probabilities" : [
+                0.028075529712494558,
+                0.50351682022844,
+                0.16410777362001974,
+                0.3006636259849361,
+                0.0036362504541093284
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.240208,
+                "prepared" : 0.029209,
+                "tokenized" : 0.029791,
+                "total" : 4.304875,
+                "transformed" : 0.005667
+              },
+              "tokenCount" : 18,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "skip",
+            "id" : "skip-4",
+            "maximumLogitDifference" : 0.00793910026550293,
+            "maximumProbabilityDifference" : 0.0011063120691600925,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -1.6484375,
+                3.232421875,
+                -0.716796875,
+                1.1708984375,
+                -1.6875
+              ],
+              "probabilities" : [
+                0.006535524506362086,
+                0.8610150465705211,
+                0.016591545028370284,
+                0.10957273140041608,
+                0.006285152494330354
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.294708,
+                "prepared" : 0.029625,
+                "tokenized" : 0.0165,
+                "total" : 4.34675,
+                "transformed" : 0.005917
+              },
+              "tokenCount" : 14,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "skip",
+            "id" : "skip-5",
+            "maximumLogitDifference" : 0.007388114929199219,
+            "maximumProbabilityDifference" : 8.794263732070373e-05,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -1.7041015625,
+                4.97265625,
+                -1.01953125,
+                -0.431396484375,
+                -1.6142578125
+              ],
+              "probabilities" : [
+                0.001247833608111224,
+                0.9904572911410942,
+                0.002474353739880802,
+                0.0044553873854475436,
+                0.0013651341254661796
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.408666,
+                "prepared" : 0.029334,
+                "tokenized" : 0.033166,
+                "total" : 4.47675,
+                "transformed" : 0.005584
+              },
+              "tokenCount" : 20,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "exploratory",
+            "id" : "narrative-1",
+            "maximumLogitDifference" : 0.004598855972290039,
+            "maximumProbabilityDifference" : 0.00024088409067260508,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                1.7412109375,
+                2.9609375,
+                -1.98828125,
+                0.859375,
+                -2.740234375
+              ],
+              "probabilities" : [
+                0.2067993201741515,
+                0.7002766125473231,
+                0.004964222394303626,
+                0.08561948774161329,
+                0.0023403571426082077
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.27525,
+                "prepared" : 0.031667,
+                "tokenized" : 0.028166,
+                "total" : 4.340833,
+                "transformed" : 0.00575
+              },
+              "tokenCount" : 13,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_0",
+            "group" : "exploratory",
+            "id" : "narrative-2",
+            "maximumLogitDifference" : 0.0055619776248931885,
+            "maximumProbabilityDifference" : 0.0003701687441881596,
+            "prediction" : {
+              "label" : "LABEL_0",
+              "logits" : [
+                3.654296875,
+                -1.005859375,
+                -0.203369140625,
+                0.06561279296875,
+                -2.060546875
+              ],
+              "probabilities" : [
+                0.9420510931939196,
+                0.008916497942557184,
+                0.01989350897856432,
+                0.02603327246632726,
+                0.0031056274186318563
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.265458,
+                "prepared" : 0.029834,
+                "tokenized" : 0.021208,
+                "total" : 4.322208,
+                "transformed" : 0.005708
+              },
+              "tokenCount" : 11,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "exploratory",
+            "id" : "narrative-3",
+            "maximumLogitDifference" : 0.011494636535644531,
+            "maximumProbabilityDifference" : 0.0004363736499981147,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                1.6083984375,
+                2.8203125,
+                -2.236328125,
+                0.93359375,
+                -2.265625
+              ],
+              "probabilities" : [
+                0.20361073838024282,
+                0.6841136702018766,
+                0.004355691859838009,
+                0.10368996471957848,
+                0.0042299348384640355
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.2955,
+                "prepared" : 0.029375,
+                "tokenized" : 0.048292,
+                "total" : 4.37875,
+                "transformed" : 0.005583
+              },
+              "tokenCount" : 22,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_2",
+            "group" : "boundary",
+            "id" : "negation",
+            "maximumLogitDifference" : 0.016710996627807617,
+            "maximumProbabilityDifference" : 0.005684260859994628,
+            "prediction" : {
+              "label" : "LABEL_2",
+              "logits" : [
+                1.482421875,
+                0.34619140625,
+                2.0859375,
+                -0.04705810546875,
+                -3.8203125
+              ],
+              "probabilities" : [
+                0.2966312401573816,
+                0.09522659699501497,
+                0.5424008895917778,
+                0.06426465372162976,
+                0.0014766195341957482
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.246667,
+                "prepared" : 0.029375,
+                "tokenized" : 0.022375,
+                "total" : 4.303959,
+                "transformed" : 0.005542
+              },
+              "tokenCount" : 13,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "boundary",
+            "id" : "unicode",
+            "maximumLogitDifference" : 0.007970809936523438,
+            "maximumProbabilityDifference" : 0.0005767372801874782,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -1.9248046875,
+                3.92578125,
+                -1.4453125,
+                1.21484375,
+                -1.865234375
+              ],
+              "probabilities" : [
+                0.002672294319617598,
+                0.9284563205556177,
+                0.004316433949303334,
+                0.06171863039722471,
+                0.0028363207782367626
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.116666,
+                "prepared" : 0.029292,
+                "tokenized" : 0.03125,
+                "total" : 4.183333,
+                "transformed" : 0.006125
+              },
+              "tokenCount" : 20,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_4",
+            "group" : "boundary",
+            "id" : "special",
+            "maximumLogitDifference" : 0.0038176774978637695,
+            "maximumProbabilityDifference" : 0.00020327510783391123,
+            "prediction" : {
+              "label" : "LABEL_4",
+              "logits" : [
+                -1.728515625,
+                -1.0908203125,
+                -1.478515625,
+                0.05419921875,
+                3.505859375
+              ],
+              "probabilities" : [
+                0.005057300996193529,
+                0.009568995662680721,
+                0.0064937030189527265,
+                0.030070595024396105,
+                0.948809405297777
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.394958,
+                "prepared" : 0.029125,
+                "tokenized" : 0.018042,
+                "total" : 4.44775,
+                "transformed" : 0.005625
+              },
+              "tokenCount" : 9,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_4",
+            "group" : "boundary",
+            "id" : "controls",
+            "maximumLogitDifference" : 0.008916378021240234,
+            "maximumProbabilityDifference" : 0.0007599210455729866,
+            "prediction" : {
+              "label" : "LABEL_4",
+              "logits" : [
+                -1.5732421875,
+                -1.361328125,
+                -1.513671875,
+                0.12237548828125,
+                3.3359375
+              ],
+              "probabilities" : [
+                0.0069311776584529815,
+                0.008567224326123031,
+                0.007356616023168365,
+                0.03777499632341327,
+                0.9393699856688423
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 3.914208,
+                "prepared" : 0.029459,
+                "tokenized" : 0.012083,
+                "total" : 3.961458,
+                "transformed" : 0.005708
+              },
+              "tokenCount" : 6,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "boundary",
+            "id" : "empty",
+            "maximumLogitDifference" : 0.005438327789306641,
+            "maximumProbabilityDifference" : 0.00011624175395552605,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -0.90283203125,
+                4.0703125,
+                -1.302734375,
+                0.45166015625,
+                -1.9482421875
+              ],
+              "probabilities" : [
+                0.006649943250184919,
+                0.9607871074079929,
+                0.004458025598403858,
+                0.025767152151295655,
+                0.0023377715921224667
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.41025,
+                "prepared" : 0.029708,
+                "tokenized" : 0.000333,
+                "total" : 4.445833,
+                "transformed" : 0.005542
+              },
+              "tokenCount" : 2,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_3",
+            "group" : "boundary",
+            "id" : "long-word",
+            "maximumLogitDifference" : 0.009360872209072113,
+            "maximumProbabilityDifference" : 0.002360572398267924,
+            "prediction" : {
+              "label" : "LABEL_3",
+              "logits" : [
+                -1.4296875,
+                0.9990234375,
+                -0.043304443359375,
+                2.578125,
+                -2.322265625
+              ],
+              "probabilities" : [
+                0.013931346403075646,
+                0.15804066534989747,
+                0.05573032842359697,
+                0.7665914027038363,
+                0.0057062571195936294
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.354083,
+                "prepared" : 0.028917,
+                "tokenized" : 0.051666,
+                "total" : 4.4405,
+                "transformed" : 0.005834
+              },
+              "tokenCount" : 3,
+              "truncated" : false
+            },
+            "tokenizerMatches" : true
+          },
+          {
+            "expectedLabel" : "LABEL_1",
+            "group" : "boundary",
+            "id" : "truncation",
+            "maximumLogitDifference" : 0.00605463981628418,
+            "maximumProbabilityDifference" : 0.0004227791886191046,
+            "prediction" : {
+              "label" : "LABEL_1",
+              "logits" : [
+                -1.1220703125,
+                3.27734375,
+                -1.5478515625,
+                1.056640625,
+                -1.5654296875
+              ],
+              "probabilities" : [
+                0.010806931600460035,
+                0.879718355443308,
+                0.00705972778299614,
+                0.09547826983614317,
+                0.0069367153370925505
+              ],
+              "stagesMilliseconds" : {
+                "predicted" : 4.734917,
+                "prepared" : 0.036667,
+                "tokenized" : 0.8015,
+                "total" : 5.579,
+                "transformed" : 0.005916
+              },
+              "tokenCount" : 128,
+              "truncated" : true
+            },
+            "tokenizerMatches" : true
+          }
+        ],
+        "physicalFootprintBytes" : 239682720,
+        "processCPUSeconds" : 0.12446299999999999
+      }
+    ]
+  },
+  "russianStatus" : "completed",
+  "schemaVersion" : 2,
+  "startedAt" : "2026-10-21T10:24:22Z",
+  "technicalChecks" : {
+
+  },
+  "trials" : [
+
+  ]
+}

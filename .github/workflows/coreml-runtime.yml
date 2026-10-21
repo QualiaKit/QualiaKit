@@ -32,8 +32,8 @@ jobs:
             -Xswiftc -strict-concurrency=complete \
             -Xswiftc -warnings-as-errors
 
-      - name: Test actual Core ML inference and lifecycle without protected assets
-        run: swift test --package-path Packages/QualiaCoreML --filter CoreMLRuntimeTests
+      - name: Test all Core ML inference, lifecycle and diagnostics suites without protected assets
+        run: swift test --package-path Packages/QualiaCoreML
 
       - name: Build runtime for iOS Simulator
         working-directory: Packages/QualiaCoreML

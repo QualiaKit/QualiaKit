@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-21T09:20:15.427932+00:00",
+  "provenance": "Direct answers from the device holder in this task; app buttons alone combine indistinct and absent sensation.",
+  "runID": "D8F58BCC-65B1-45E4-876A-2E2E8F2DCB71",
+  "sequenceResponse": "спокойное сердцебиение не различимо, остальное норм",
+  "backgroundResponse": "Сразу прекратилось и не возобновилось",
+  "observations": {
+    "calmHeartbeatDistinguishable": "failed",
+    "laterSequenceStages": "reported-normal",
+    "backgroundStopsAndDoesNotReplay": "passed",
+    "overallComfort": "not-separately-confirmed",
+    "narrativeAlignment": "not-assessed"
+  },
+  "configuration": {
+    "intensityScale": 0.5,
+    "heartbeatStartThreshold": 0.5,
+    "heartbeatStopThreshold": 0.25,
+    "minimumBPM": 60,
+    "maximumBPM": 120,
+    "manualMaximumDurationSeconds": 8
+  },
+  "assessment": "The calm phase needs perceptual calibration at these test settings; automated renderer success does not resolve this finding."
+}

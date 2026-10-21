@@ -1,0 +1,12 @@
+[PAD]
+[UNK]
+[CLS]
+[SEP]
+quiet
+storm
+rise
+##s
+ёж
+не
+тень
+🙂

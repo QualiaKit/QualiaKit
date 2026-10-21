@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "status": "verified-measurements",
+  "errors": [],
+  "runID": "EBE83626-72D8-4B89-A0AD-CC0819506182",
+  "modes": [
+    {
+      "computeUnits": "cpuOnly",
+      "cases": 35,
+      "sameArgmax": 35,
+      "maximumLogitDifference": 0.037850379943847656,
+      "maximumProbabilityDifference": 0.014597284236519625,
+      "initializationMilliseconds": 516.033458,
+      "latencyMilliseconds": {
+        "ru-1-total": {
+          "p50": 9.147917,
+          "p95": 9.289125,
+          "maximum": 9.324667
+        },
+        "ru-8-total": {
+          "p50": 9.328833,
+          "p95": 9.697875,
+          "maximum": 9.700917
+        },
+        "ru-40-total": {
+          "p50": 10.094,
+          "p95": 10.243083,
+          "maximum": 10.26075
+        }
+      },
+      "physicalFootprintMiB": 45.68853759765625
+    },
+    {
+      "computeUnits": "all",
+      "cases": 35,
+      "sameArgmax": 35,
+      "maximumLogitDifference": 0.016710996627807617,
+      "maximumProbabilityDifference": 0.005684260859994628,
+      "initializationMilliseconds": 2290.024792,
+      "latencyMilliseconds": {
+        "ru-1-total": {
+          "p50": 4.308375,
+          "p95": 4.435542,
+          "maximum": 4.596334
+        },
+        "ru-8-total": {
+          "p50": 4.71725,
+          "p95": 4.832916,
+          "maximum": 4.857917
+        },
+        "ru-40-total": {
+          "p50": 5.390916,
+          "p95": 5.554875,
+          "maximum": 5.804792
+        }
+      },
+      "physicalFootprintMiB": 228.57925415039062
+    }
+  ],
+  "sustained": null,
+  "limits": [
+    "Raw differences and argmax agreement are diagnostic results, not a calibrated universal tolerance.",
+    "Labels are empirical hypotheses, not author-confirmed.",
+    "These probes are not independent semantic accuracy data.",
+    "Core ML all selects its own backend; no claim that ANE alone executed the model.",
+    "Process CPU/memory/thermal are not isolated model energy or watts."
+  ]
+}

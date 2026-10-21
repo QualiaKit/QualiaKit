@@ -1,0 +1,121 @@
+{
+  "baselines": {
+    "apple-analysis-1952-utf8-bytes": [
+      {
+        "maximum": 1.177208,
+        "p50": 1.1305,
+        "p95": 1.147916,
+        "samples": 200
+      },
+      {
+        "maximum": 1.196375,
+        "p50": 1.123334,
+        "p95": 1.143583,
+        "samples": 200
+      },
+      {
+        "maximum": 1.158542,
+        "p50": 1.119666,
+        "p95": 1.141791,
+        "samples": 200
+      }
+    ],
+    "apple-analysis-488-utf8-bytes": [
+      {
+        "maximum": 1.137292,
+        "p50": 1.096708,
+        "p95": 1.117042,
+        "samples": 200
+      },
+      {
+        "maximum": 1.112959,
+        "p50": 1.086583,
+        "p95": 1.1055,
+        "samples": 200
+      },
+      {
+        "maximum": 1.165916,
+        "p50": 1.084667,
+        "p95": 1.1095,
+        "samples": 200
+      }
+    ],
+    "apple-analysis-49-utf8-bytes": [
+      {
+        "maximum": 1.113833,
+        "p50": 1.072166,
+        "p95": 1.09125,
+        "samples": 200
+      },
+      {
+        "maximum": 1.089583,
+        "p50": 1.058333,
+        "p95": 1.074667,
+        "samples": 200
+      },
+      {
+        "maximum": 1.098416,
+        "p50": 1.057166,
+        "p95": 1.07625,
+        "samples": 200
+      }
+    ],
+    "bounded-context-window": [
+      {
+        "maximum": 0.0085,
+        "p50": 0.001833,
+        "p95": 0.001875,
+        "samples": 1000
+      },
+      {
+        "maximum": 0.007375,
+        "p50": 0.001833,
+        "p95": 0.001834,
+        "samples": 1000
+      },
+      {
+        "maximum": 0.007416,
+        "p50": 0.001833,
+        "p95": 0.001834,
+        "samples": 1000
+      }
+    ],
+    "scene-and-narrative-policy-no-renderer": [
+      {
+        "maximum": 0.1105,
+        "p50": 0.045167,
+        "p95": 0.067417,
+        "samples": 1000
+      },
+      {
+        "maximum": 0.089583,
+        "p50": 0.044916,
+        "p95": 0.066958,
+        "samples": 1000
+      },
+      {
+        "maximum": 0.090708,
+        "p50": 0.044917,
+        "p95": 0.067083,
+        "samples": 1000
+      }
+    ]
+  },
+  "blockers": [
+    "Sustained run missing",
+    "Preferred variant must be distinguishable and comfortable",
+    "System Reduce Motion test required"
+  ],
+  "limitations": [
+    "No narrative semantic qualification",
+    "Public arithmetic Core ML fixture only",
+    "CPU/thermal workload is not watt/joule evidence",
+    "One holder/device; no population experience claim"
+  ],
+  "recordedErrors": [],
+  "reportSHA256": "e54f45e42c8688df19c3a763a3bc638558243552abfc4949c067ca5fe90a1d95",
+  "runID": "30ECE646-3524-4E4C-87F4-9418AE02FCBB",
+  "schemaVersion": 2,
+  "sourceSHA256": "2ee73811382bb876fe646b66d5957ee314e0c668f37673502b63ec9f8707025b",
+  "status": "incomplete"
+}

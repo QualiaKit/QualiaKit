@@ -1,4 +1,5 @@
 import XCTest
+import QualiaTesting
 @testable import QualiaKit
 
 final class AnalysisRuntimeTests: XCTestCase {
@@ -680,6 +681,7 @@ private actor TestAnalyzer: QualiaAnalyzing {
     private let behavior: Behavior
     private(set) var invocationCount = 0
     private var invocationWaiters: [CheckedContinuation<Void, Never>] = []
+    private let clock = TestQualiaClock()
 
     init(capabilities: QualiaAnalyzerCapabilities, behavior: Behavior) {
         self.capabilities = capabilities
@@ -707,11 +709,11 @@ private actor TestAnalyzer: QualiaAnalyzing {
         case let .fail(error):
             throw error
         case .waitForCancellation:
-            try await Task.sleep(nanoseconds: 60_000_000_000)
+            try await clock.sleep(for: .seconds(60))
             throw CancellationError()
         case let .replaceCancellation(error):
             do {
-                try await Task.sleep(nanoseconds: 60_000_000_000)
+                try await clock.sleep(for: .seconds(60))
             } catch {
                 throw error
             }

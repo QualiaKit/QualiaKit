@@ -1,0 +1,34 @@
+{
+  "cases": [
+    {
+      "automaticStatus": "running",
+      "launches": 2,
+      "russianStatus": null,
+      "status": "passed"
+    },
+    {
+      "automaticStatus": "completed",
+      "launches": 2,
+      "russianStatus": null,
+      "status": "passed"
+    },
+    {
+      "automaticStatus": "not-started",
+      "launches": 2,
+      "russianStatus": "running",
+      "status": "passed"
+    }
+  ],
+  "physicalEvidence": false,
+  "status": "passed",
+  "previousBuildRegression": "Reproduced: saved command trace erased during restore",
+  "evaluationUnitTests": 26,
+  "sourceSHA256": "2ee73811382bb876fe646b66d5957ee314e0c668f37673502b63ec9f8707025b",
+  "physicalQuickRun": {
+    "status": "completed",
+    "technicalChecksPassed": 11,
+    "successfulCommands": 16,
+    "wholeReportPreservedAfterRestart": true,
+    "runID": "30ECE646-3524-4E4C-87F4-9418AE02FCBB"
+  }
+}

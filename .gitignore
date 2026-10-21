@@ -70,3 +70,10 @@ fastlane/test_output
 # redistributed until model and dataset licensing is proven.
 RuBSentimentModel.mlpackage/
 LocalArtifacts/
+
+# Local Python evaluation caches.
+__pycache__/
+*.pyc
+
+# Generated per-build device harness identity (embedded by the runner).
+Examples/QualiaExample/QualiaExample/DeviceEvaluationAssets.bundle/build-identity.json

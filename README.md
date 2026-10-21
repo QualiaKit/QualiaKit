@@ -41,6 +41,7 @@ accents and owner-scoped reset. Physical-device calibration is still required.
 - [Adaptive heartbeat and migration](Documentation/Heartbeat.md)
 - [Language and bounded context](Documentation/ContextAndLanguage.md)
 - [Optional Core ML runtime and current limitations](Documentation/CoreMLRuntime.md)
+- [Deterministic testing, parity and evaluation evidence](Documentation/TestingAndEvaluation.md)
 
 Diagnostics default to no-op. The 2.0 products contain no network or analytics
 transport. Host-provided analyzers and sinks have their own privacy boundaries.

@@ -1,0 +1,41 @@
+name: Testing and evaluation
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic-runtime:
+    runs-on: macos-14
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select supported Xcode
+        run: sudo xcode-select -s /Applications/Xcode_15.2.app/Contents/Developer
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Build public testing API with strict concurrency
+        run: swift build --target QualiaTesting -Xswiftc -strict-concurrency=complete -Xswiftc -warnings-as-errors
+      - name: Verify immutable independently authored fixtures
+        run: python3 Tools/TestingFixtures/generate.py
+      - name: Validate regression provenance
+        run: python3 Evaluation/scripts/evidence.py regression Tests/Fixtures/Regression/session-lifecycle-v1.json
+      - name: Test clocks and controlled analyzers
+        run: swift test --filter TestingPrimitivesTests
+      - name: Run specification acceptance criteria and evidence rejection tests
+        run: swift test --filter TestingAndEvaluationTests
+      - name: Run heartbeat state and session race suites
+        run: swift test --filter 'HeartbeatEffectTests|SessionOrchestrationTests|SessionAdmissionTests|SessionRendererLifecycleTests'
+
+      - name: Audit reachable heartbeat regions
+        shell: bash
+        run: |
+          swift test --enable-code-coverage --filter HeartbeatEffectTests
+          coverage_path=$(swift test --show-codecov-path)
+          python3 Tools/TestingFixtures/heartbeat_coverage.py "$coverage_path"

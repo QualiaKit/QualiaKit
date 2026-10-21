@@ -151,7 +151,7 @@ public final class RecordingHapticRenderer: HapticRendering {
             .sorted { $0.orderingKey < $1.orderingKey }
         var firstFailure: Error?
         for id in ids {
-            do { try execute(.stop(id: id)) } catch {
+            do { try execute(.stop(id: id), ownedBy: owner) } catch {
                 if firstFailure == nil { firstFailure = error }
             }
         }
