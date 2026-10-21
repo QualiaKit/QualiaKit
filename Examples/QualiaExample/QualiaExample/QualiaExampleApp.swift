@@ -7,7 +7,10 @@ struct QualiaExampleApp: App {
 #if QUALIA_DEVICE_EVALUATION
             DeviceEvaluationView()
 #else
-            ContentView()
+            TabView {
+                ContentView().tabItem { Label("SentimentPreview", systemImage: "text.bubble") }
+                ContentView(narrative: true).tabItem { Label("LivingStory", systemImage: "waveform.path.ecg") }
+            }
 #endif
         }
     }

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3A3DE50A2EDCF608004B3BCA /* QualiaKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3A3DE5092EDCF608004B3BCA /* QualiaKit */; };
 		DA1300010000000000000001 /* QualiaCoreML in Frameworks */ = {isa = PBXBuildFile; productRef = DA1300010000000000000003 /* QualiaCoreML */; };
+		DA1400010000000000000001 /* QualiaExamples in Frameworks */ = {isa = PBXBuildFile; productRef = DA1400010000000000000003 /* QualiaExamples */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 			files = (
 				3A3DE50A2EDCF608004B3BCA /* QualiaKit in Frameworks */,
 				DA1300010000000000000001 /* QualiaCoreML in Frameworks */,
+				DA1400010000000000000001 /* QualiaExamples in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +77,7 @@
 			packageProductDependencies = (
 				3A3DE5092EDCF608004B3BCA /* QualiaKit */,
 				DA1300010000000000000003 /* QualiaCoreML */,
+				DA1400010000000000000003 /* QualiaExamples */,
 			);
 			productName = QualiaExample;
 			productReference = 3A3DE4FA2EDCF5DC004B3BCA /* QualiaExample.app */;
@@ -107,6 +110,7 @@
 			packageReferences = (
 				3A3DE5082EDCF608004B3BCA /* XCLocalSwiftPackageReference "QualiaKit" */,
 				DA1300010000000000000002 /* XCLocalSwiftPackageReference "QualiaCoreML" */,
+				DA1400010000000000000002 /* XCLocalSwiftPackageReference "DeveloperExperience" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3A3DE4FB2EDCF5DC004B3BCA /* Products */;
@@ -374,6 +378,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../../Packages/QualiaCoreML";
 		};
+		DA1400010000000000000002 /* XCLocalSwiftPackageReference "DeveloperExperience" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../DeveloperExperience";
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -386,6 +394,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DA1300010000000000000002 /* XCLocalSwiftPackageReference "QualiaCoreML" */;
 			productName = QualiaCoreML;
+		};
+		DA1400010000000000000003 /* QualiaExamples */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA1400010000000000000002 /* XCLocalSwiftPackageReference "DeveloperExperience" */;
+			productName = QualiaExamples;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

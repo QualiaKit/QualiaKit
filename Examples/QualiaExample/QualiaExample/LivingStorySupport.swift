@@ -20,34 +20,14 @@ struct LivingStoryDebugState {
     var error = "none"
 
     static func response(_ response: QualiaResponse, languageSource: String) -> Self {
-        let signalSummary = response.observation.signals
-            .sorted { $0.key.rawValue < $1.key.rawValue }
-            .map { "\($0.key.rawValue)=\(percent($0.value.value))" }
-            .joined(separator: ", ")
-        let valence = response.observation.dimensions.valence
-            .map { "valence=\(percent($0.value))" }
-        let observation = ([valence].compactMap { $0 } + [signalSummary].filter { !$0.isEmpty })
-            .joined(separator: ", ")
-        let trends = response.transition.current.trends
-            .sorted { $0.key.rawValue < $1.key.rawValue }
-            .map { "\($0.key.rawValue)=\(String(describing: $0.value))" }
-            .joined(separator: ", ")
-        let phase = String(describing: response.transition.current.phase)
-        let rule = response.reaction.rationale?.ruleIdentifier ?? "no rationale"
-        let facts = response.reaction.rationale?.facts ?? []
-        let bpm = facts.first(where: { $0.key == "bpm" })?.value
-        let command = response.reaction.hapticCommands.first.map(commandSummary) ?? "no command"
-        let haptics = bpm.map { "\(command), \($0) BPM" } ?? command
-        let executionError = response.execution.failure.map { String(describing: $0) } ?? "none"
-
-        return Self(
-            language: "\(response.observation.language.rawValue) · \(languageSource)",
-            observation: observation.isEmpty ? "no signal scores" : observation,
-            scene: "\(phase) · revision \(response.transition.current.revision)" +
-                (trends.isEmpty ? "" : " · \(trends)"),
-            policy: rule,
-            haptics: haptics,
-            error: executionError
+        Self(
+            language: "resolved · " + languageSource,
+            observation: "\(response.observation.signals.count) signals; valence " +
+                (response.observation.dimensions.valence == nil ? "absent" : "present") + "; scores omitted",
+            scene: "revision \(response.transition.previous.revision) → \(response.transition.current.revision)",
+            policy: "planned commands: \(response.reaction.hapticCommands.count)",
+            haptics: response.reaction.hapticCommands.map(commandSummary).joined(separator: ", "),
+            error: response.execution.failure.map { String(describing: $0) } ?? "none"
         )
     }
 
@@ -57,20 +37,16 @@ struct LivingStoryDebugState {
         return state
     }
 
-    nonisolated private static func percent(_ value: Float) -> String {
-        "\(Int((value * 100).rounded()))%"
-    }
-
     nonisolated private static func commandSummary(_ command: HapticCommand) -> String {
         switch command {
         case .play(_, let channel):
             return "play · \(channelName(channel))"
-        case .start(let id, _, let channel):
-            return "start \(id.rawValue) · \(channelName(channel))"
-        case .replace(let id, _, let channel):
-            return "replace \(id.rawValue) · \(channelName(channel))"
-        case .stop(let id):
-            return "stop \(id.rawValue)"
+        case .start(_, _, let channel):
+            return "start · \(channelName(channel))"
+        case .replace(_, _, let channel):
+            return "replace · \(channelName(channel))"
+        case .stop:
+            return "stop owned effect"
         case .stopChannel(let channel):
             return "stop · \(channelName(channel))"
         case .stopAll:
@@ -89,33 +65,25 @@ struct LivingStoryDebugState {
 final class LivingStoryDiagnostics: QualiaDiagnosticsSink, @unchecked Sendable {
     private let lock = NSLock()
     private var count = 0
-    private var latest = "none"
+    private var recent: [QualiaDiagnosticEvent] = []
 
     var summary: String {
         lock.lock()
-        defer { lock.unlock() }
-        return "\(count) events · latest: \(latest)"
+        let snapshot = recent
+        let total = count
+        lock.unlock()
+        do {
+            let report = try QualiaDecisionReport(events: snapshot, maximumEvents: 24)
+            return "\(total) events; showing last \(report.lines.count)\n" + report.text
+        } catch { return "Diagnostic report configuration failed" }
     }
 
     func record(_ event: QualiaDiagnosticEvent) {
         lock.lock()
         defer { lock.unlock() }
         count += 1
-        latest = category(of: event)
+        if recent.count == 256 { recent.removeFirst() }
+        recent.append(event)
     }
 
-    private func category(of event: QualiaDiagnosticEvent) -> String {
-        switch event {
-        case .fallbackSelected: return "fallback selected"
-        case .model: return "model lifecycle"
-        case .lifecycle: return "session lifecycle"
-        case .started: return "request started"
-        case .failed: return "request failed"
-        case .discarded: return "stale result discarded"
-        case .cancelled: return "request cancelled"
-        case .completed: return "request completed"
-        case .preparation: return "input prepared"
-        case .correlated: return "correlated runtime event"
-        }
-    }
 }
