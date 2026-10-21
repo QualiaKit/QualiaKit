@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "tools": {
+    "Tools/RuSentimentAudit/audit.py": "8dd844f84d9d095323d9e7c6fb87aecf41a3ff429a455134c1c951466cf14a0e",
+    "Tools/RuSentimentAudit/check_tokenizer.swift": "23d2dc909bdf9faf229270d08e2400d0a596a0aff021713b55feaf08de254c5e",
+    "Tools/RuSentimentAudit/prepare_device.py": "63de9982f57c4a8fd128b9fe511af319fa5a97444fddf9b491b49ce01f9cd021"
+  },
+  "validation": {
+    "tokenizerSourceParityCases": 35,
+    "tokenizerAdditionalUnicodeCases": 10,
+    "pythonEvaluationTests": 25,
+    "pythonEvaluationFailures": 0,
+    "physicalReleaseBuild": "passed",
+    "immutableLegacyContract": "unchanged",
+    "normalExampleSimulatorBuild": "passed, no private model in product"
+  },
+  "limitations": [
+    "Numeric label meanings are empirical hypotheses, not author-confirmed.",
+    "Source cache contains the named checkpoint, with content-addressed safetensors hash verified; online hash retrieval timed out.",
+    "All probes are diagnostic, not independent semantic accuracy measurements."
+  ]
+}

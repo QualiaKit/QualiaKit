@@ -1,0 +1,310 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "id": "negative-1",
+      "sourceLabel": "LABEL_0",
+      "coreMLLabel": "LABEL_0",
+      "maxLogitDelta": 0.013789176940917969,
+      "maxSoftmaxDelta": 0.00032679439518190634
+    },
+    {
+      "id": "negative-2",
+      "sourceLabel": "LABEL_0",
+      "coreMLLabel": "LABEL_0",
+      "maxLogitDelta": 0.007732033729553223,
+      "maxSoftmaxDelta": 0.00016608291701054878
+    },
+    {
+      "id": "negative-3",
+      "sourceLabel": "LABEL_0",
+      "coreMLLabel": "LABEL_0",
+      "maxLogitDelta": 0.005826473236083984,
+      "maxSoftmaxDelta": 5.6287463823578854e-05
+    },
+    {
+      "id": "negative-4",
+      "sourceLabel": "LABEL_0",
+      "coreMLLabel": "LABEL_0",
+      "maxLogitDelta": 0.006205618381500244,
+      "maxSoftmaxDelta": 8.38464307989506e-05
+    },
+    {
+      "id": "negative-5",
+      "sourceLabel": "LABEL_0",
+      "coreMLLabel": "LABEL_0",
+      "maxLogitDelta": 0.00915074348449707,
+      "maxSoftmaxDelta": 0.0003279911989103601
+    },
+    {
+      "id": "neutral-1",
+      "sourceLabel": "LABEL_1",
+      "coreMLLabel": "LABEL_1",
+      "maxLogitDelta": 0.010651230812072754,
+      "maxSoftmaxDelta": 0.00012158963911634846
+    },
+    {
+      "id": "neutral-2",
+      "sourceLabel": "LABEL_1",
+      "coreMLLabel": "LABEL_1",
+      "maxLogitDelta": 0.01699233055114746,
+      "maxSoftmaxDelta": 0.0005747467643165693
+    },
+    {
+      "id": "neutral-3",
+      "sourceLabel": "LABEL_1",
+      "coreMLLabel": "LABEL_1",
+      "maxLogitDelta": 0.027715682983398438,
+      "maxSoftmaxDelta": 0.00031298145213642936
+    },
+    {
+      "id": "neutral-4",
+      "sourceLabel": "LABEL_1",
+      "coreMLLabel": "LABEL_1",
+      "maxLogitDelta": 0.02104496955871582,
+      "maxSoftmaxDelta": 0.001191083640163182
+    },
+    {
+      "id": "neutral-5",
+      "sourceLabel": "LABEL_1",
+      "coreMLLabel": "LABEL_1",
+      "maxLogitDelta": 0.01361846923828125,
+      "maxSoftmaxDelta": 0.00024401675053298266
+    },
+    {
+      "id": "positive-1",
+      "sourceLabel": "LABEL_2",
+      "coreMLLabel": "LABEL_2",
+      "maxLogitDelta": 0.01174783706665039,
+      "maxSoftmaxDelta": 6.854661742605739e-05
+    },
+    {
+      "id": "positive-2",
+      "sourceLabel": "LABEL_2",
+      "coreMLLabel": "LABEL_2",
+      "maxLogitDelta": 0.017171382904052734,
+      "maxSoftmaxDelta": 0.0003286991322425381
+    },
+    {
+      "id": "positive-3",
+      "sourceLabel": "LABEL_2",
+      "coreMLLabel": "LABEL_2",
+      "maxLogitDelta": 0.008732885122299194,
+      "maxSoftmaxDelta": 0.0001675440580376497
+    },
+    {
+      "id": "positive-4",
+      "sourceLabel": "LABEL_2",
+      "coreMLLabel": "LABEL_2",
+      "maxLogitDelta": 0.006154060363769531,
+      "maxSoftmaxDelta": 4.592304168238304e-05
+    },
+    {
+      "id": "positive-5",
+      "sourceLabel": "LABEL_2",
+      "coreMLLabel": "LABEL_2",
+      "maxLogitDelta": 0.004128932952880859,
+      "maxSoftmaxDelta": 3.853415411869676e-05
+    },
+    {
+      "id": "speech-1",
+      "sourceLabel": "LABEL_4",
+      "coreMLLabel": "LABEL_4",
+      "maxLogitDelta": 0.008097410202026367,
+      "maxSoftmaxDelta": 5.3969610559811976e-05
+    },
+    {
+      "id": "speech-2",
+      "sourceLabel": "LABEL_4",
+      "coreMLLabel": "LABEL_4",
+      "maxLogitDelta": 0.016717910766601562,
+      "maxSoftmaxDelta": 0.00011076167309664875
+    },
+    {
+      "id": "speech-3",
+      "sourceLabel": "LABEL_4",
+      "coreMLLabel": "LABEL_4",
+      "maxLogitDelta": 0.045662879943847656,
+      "maxSoftmaxDelta": 0.00047689103517356557
+    },
+    {
+      "id": "speech-4",
+      "sourceLabel": "LABEL_4",
+      "coreMLLabel": "LABEL_4",
+      "maxLogitDelta": 0.024469375610351562,
+      "maxSoftmaxDelta": 0.00017804689461053957
+    },
+    {
+      "id": "speech-5",
+      "sourceLabel": "LABEL_4",
+      "coreMLLabel": "LABEL_4",
+      "maxLogitDelta": 0.005581974983215332,
+      "maxSoftmaxDelta": 1.2943549411725819e-05
+    },
+    {
+      "id": "skip-1",
+      "sourceLabel": "LABEL_3",
+      "coreMLLabel": "LABEL_3",
+      "maxLogitDelta": 0.03289198875427246,
+      "maxSoftmaxDelta": 0.0036158847988951165
+    },
+    {
+      "id": "skip-2",
+      "sourceLabel": "LABEL_1",
+      "coreMLLabel": "LABEL_1",
+      "maxLogitDelta": 0.015306472778320312,
+      "maxSoftmaxDelta": 0.00195585656788555
+    },
+    {
+      "id": "skip-3",
+      "sourceLabel": "LABEL_1",
+      "coreMLLabel": "LABEL_1",
+      "maxLogitDelta": 0.016101956367492676,
+      "maxSoftmaxDelta": 0.0033269261455565746
+    },
+    {
+      "id": "skip-4",
+      "sourceLabel": "LABEL_1",
+      "coreMLLabel": "LABEL_1",
+      "maxLogitDelta": 0.008913159370422363,
+      "maxSoftmaxDelta": 0.000647121342400081
+    },
+    {
+      "id": "skip-5",
+      "sourceLabel": "LABEL_1",
+      "coreMLLabel": "LABEL_1",
+      "maxLogitDelta": 0.008204221725463867,
+      "maxSoftmaxDelta": 1.9987918831509965e-05
+    },
+    {
+      "id": "narrative-1",
+      "sourceLabel": "LABEL_1",
+      "coreMLLabel": "LABEL_1",
+      "maxLogitDelta": 0.01818394660949707,
+      "maxSoftmaxDelta": 0.0030318720113883257
+    },
+    {
+      "id": "narrative-2",
+      "sourceLabel": "LABEL_0",
+      "coreMLLabel": "LABEL_0",
+      "maxLogitDelta": 0.005273103713989258,
+      "maxSoftmaxDelta": 0.0001823169040943151
+    },
+    {
+      "id": "narrative-3",
+      "sourceLabel": "LABEL_1",
+      "coreMLLabel": "LABEL_1",
+      "maxLogitDelta": 0.017585039138793945,
+      "maxSoftmaxDelta": 0.004459761735099321
+    },
+    {
+      "id": "negation",
+      "sourceLabel": "LABEL_2",
+      "coreMLLabel": "LABEL_2",
+      "maxLogitDelta": 0.017911911010742188,
+      "maxSoftmaxDelta": 0.0021736281434756033
+    },
+    {
+      "id": "unicode",
+      "sourceLabel": "LABEL_1",
+      "coreMLLabel": "LABEL_1",
+      "maxLogitDelta": 0.015783309936523438,
+      "maxSoftmaxDelta": 0.001835730834370719
+    },
+    {
+      "id": "special",
+      "sourceLabel": "LABEL_4",
+      "coreMLLabel": "LABEL_4",
+      "maxLogitDelta": 0.019639968872070312,
+      "maxSoftmaxDelta": 0.0010351918294333462
+    },
+    {
+      "id": "controls",
+      "sourceLabel": "LABEL_4",
+      "coreMLLabel": "LABEL_4",
+      "maxLogitDelta": 0.0093994140625,
+      "maxSoftmaxDelta": 0.0005711619750971009
+    },
+    {
+      "id": "empty",
+      "sourceLabel": "LABEL_1",
+      "coreMLLabel": "LABEL_1",
+      "maxLogitDelta": 0.014779448509216309,
+      "maxSoftmaxDelta": 0.0004184125794387539
+    },
+    {
+      "id": "long-word",
+      "sourceLabel": "LABEL_3",
+      "coreMLLabel": "LABEL_3",
+      "maxLogitDelta": 0.01215815544128418,
+      "maxSoftmaxDelta": 0.0019422810425557824
+    },
+    {
+      "id": "truncation",
+      "sourceLabel": "LABEL_1",
+      "coreMLLabel": "LABEL_1",
+      "maxLogitDelta": 0.00672459602355957,
+      "maxSoftmaxDelta": 0.0005093766657997961
+    }
+  ],
+  "sameArgmax": 35,
+  "maximumLogitDifference": 0.045662879943847656,
+  "maximumProbabilityDifference": 0.004459761735099321,
+  "tokenizerExactMatches": 35,
+  "purpose": "Cross-framework diagnostic evidence; not calibrated model accuracy or official legacy parity",
+  "sourceFiles": {
+    "identity.json": "00bbb53389ded0f68aaf074f158439d94af647ed1476bf8fb78e40def65217e6",
+    "reference.json": "325fbed0c75f137b44d65ba402488d5e26d4b7d0fa7ac3caf91c8c2cc33d658e",
+    "coreml.json": "f861476288870375d7d19a14e5a5fbac8df80b1a6618a6f29b99983a57a52c72"
+  },
+  "labelInterpretation": {
+    "status": "empirically-inferred-not-author-confirmed",
+    "mapping": {
+      "LABEL_0": "negative",
+      "LABEL_1": "neutral",
+      "LABEL_2": "positive",
+      "LABEL_3": "skip (weaker evidence)",
+      "LABEL_4": "speech act"
+    },
+    "authorIssue": "https://github.com/sismetanin/sentiment-analysis-in-russian/issues/5",
+    "probeGroupArgmaxCounts": {
+      "negative": {
+        "LABEL_0": 5,
+        "LABEL_1": 0,
+        "LABEL_2": 0,
+        "LABEL_3": 0,
+        "LABEL_4": 0
+      },
+      "neutral": {
+        "LABEL_0": 0,
+        "LABEL_1": 5,
+        "LABEL_2": 0,
+        "LABEL_3": 0,
+        "LABEL_4": 0
+      },
+      "positive": {
+        "LABEL_0": 0,
+        "LABEL_1": 0,
+        "LABEL_2": 5,
+        "LABEL_3": 0,
+        "LABEL_4": 0
+      },
+      "speech": {
+        "LABEL_0": 0,
+        "LABEL_1": 0,
+        "LABEL_2": 0,
+        "LABEL_3": 0,
+        "LABEL_4": 5
+      },
+      "skip": {
+        "LABEL_0": 0,
+        "LABEL_1": 4,
+        "LABEL_2": 0,
+        "LABEL_3": 1,
+        "LABEL_4": 0
+      }
+    }
+  },
+  "additionalUnicodeTokenizerExactMatches": 10,
+  "tokenizerBoundarySHA256": "beef32af56d51674d89e6a9abe92a0920c1c560c57de553cff156b1f58a7972b"
+}

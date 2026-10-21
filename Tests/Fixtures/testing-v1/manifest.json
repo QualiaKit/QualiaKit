@@ -1,0 +1,14 @@
+{
+  "files": {
+    "session.json": "cce72beb9a5947947fbf4591419e53926501d2489e96b40956280b44bf2ff909",
+    "tokenizer.json": "a849942183ee916cec5d7a6b88d449ed27b586f17cd6fd09c31b6eaf137ea947",
+    "vocab.txt": "15a4051b65a69e804854f4ab0f4c243f6affa545ed8bbdfa056e39babea6caf9"
+  },
+  "generatorSHA256": "9618187d26bfe4f5f6c7ada8ace1c4187fd33098ba2d380d1054aec8783f732a",
+  "license": "MIT",
+  "regenerationCommand": "python3 Tools/TestingFixtures/generate.py --write",
+  "schemaVersion": 1,
+  "seed": null,
+  "verificationCommand": "python3 Tools/TestingFixtures/generate.py",
+  "version": "testing-v1"
+}

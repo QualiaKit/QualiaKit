@@ -1,0 +1,33 @@
+{
+  "acceptanceTests": {
+    "executed": 4,
+    "failures": 0
+  },
+  "checksums": {
+    "device-build.json": "5494ab251889842b1532d6eba2f2fcca752477ebdcc158958b76311f096e5a12",
+    "simulator-build.json": "121ac2805055ba2d3cf21da5773770e39471acf4f1100601031e390140cb4b2b",
+    "simulator-raw.json": "18d4bd209c4df7426233976903e8763acb44147c902c12c54230ae536a90d2ae",
+    "simulator-summary.json": "9fbff7d1139eae1959d23508efce76a057212e366e7c1098b838bd99357032cc"
+  },
+  "coreMLTests": {
+    "executed": 22,
+    "failures": 0
+  },
+  "date": "2026-10-21",
+  "deviceV2": "built and installed; physical run deferred by user",
+  "fixtureRegeneration": "passed",
+  "protectedParity": "not-run: installed Xcode 27.1 / Swift 6.4 differ from pinned Xcode 26.6 / Swift 6.3.3",
+  "pythonTests": {
+    "executed": 22,
+    "failures": 0
+  },
+  "schemaVersion": 1,
+  "semanticStudy": "not-run: no qualified narrative candidate or independently annotated dataset",
+  "simulatorSoftwareSelfTest": "passed; Apple/hardware explicitly excluded",
+  "sourceSHA256": "17f508bf9285083702adef5b0dfbcb3d444c4772b7f93b63c0d1307dc121fd7a",
+  "swiftTests": {
+    "executed": 324,
+    "failures": 0,
+    "skipped": 14
+  }
+}

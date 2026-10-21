@@ -155,37 +155,3 @@ final class QualiaClientIntegrationTests: XCTestCase {
         throw XCTSkip("Lemma testing requires NaturalLanguage framework - tested separately")
     }
 }
-
-// MARK: - Lemma Matching Tests (Lightweight, no model required)
-
-final class QualiaClientLemmaTests: XCTestCase {
-
-    var client: QualiaClient!
-
-    override func setUpWithError() throws {
-        // Create a minimal vocab for testing
-        let vocabContent = """
-            [PAD]
-            [UNK]
-            [CLS]
-            [SEP]
-            """
-
-        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(
-            "minimal_vocab.txt")
-        try vocabContent.write(to: tempURL, atomically: true, encoding: .utf8)
-
-        // Create a dummy model URL (tests won't use it)
-        _ = FileManager.default.temporaryDirectory.appendingPathComponent(
-            "dummy.mlmodel")
-
-        // This will fail to create the client, so we skip these tests for now
-        // In a real scenario, we'd refactor QualiaClient to allow testing without model
-        throw XCTSkip("Lemma tests require refactoring QualiaClient to work without model")
-    }
-
-    func testTextContainsConcept() throws {
-        // Test that "running" matches "run" via lemmatization
-        // This would work if we could create client without model
-    }
-}

@@ -1,0 +1,38 @@
+name: Protected model parity
+
+# Provisioning is manual: see Documentation/TestingAndEvaluation.md.
+# Never run untrusted pull-request code on a runner holding licensed assets.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  official-model:
+    if: github.ref == 'refs/heads/main'
+    environment: qualia-model-parity
+    runs-on: [self-hosted, macOS, qualia-protected]
+    timeout-minutes: 45
+    env:
+      QUALIAKIT_TEST_MODEL_PATH: ${{ vars.QUALIAKIT_TEST_MODEL_PATH }}
+      QUALIAKIT_TEST_VOCAB_PATH: ${{ vars.QUALIAKIT_TEST_VOCAB_PATH }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Require locally provisioned licensed assets
+        shell: bash
+        run: |
+          if [[ -z "$QUALIAKIT_TEST_MODEL_PATH" || -z "$QUALIAKIT_TEST_VOCAB_PATH" ]]; then
+            echo "::error::Protected parity unavailable: model/vocabulary configuration is missing."
+            exit 2
+          fi
+          if [[ ! -d "$QUALIAKIT_TEST_MODEL_PATH" || ! -f "$QUALIAKIT_TEST_VOCAB_PATH" ]]; then
+            echo "::error::Protected parity unavailable: model/vocabulary assets are missing."
+            exit 2
+          fi
+      - name: Verify pinned toolchain, checksums, raw and transformed parity
+        run: python3.14 Tools/ModelContract/reference_inference.py --verify
+      - name: Run protected Swift tokenizer and production adapter parity
+        run: swift test --filter CurrentModelContractTests

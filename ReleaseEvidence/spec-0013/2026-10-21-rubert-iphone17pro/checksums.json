@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "files": {
+    "README.md": "e7dee41ed4f148126fb3a7341c2f42bff79e4f0b2f30f62250c560ca4d1aad8a",
+    "final-build.json": "3908c3cff9e736231cfb7c7e578243187792087cb01dd1a3f810d283185c238a",
+    "full-build.json": "e8bc834cebf9c648647ffc72e1326515e0e7f8cd3e67d63628079649754a2133",
+    "full-run.json": "e60e688ab99e194e4ac67ef0571c07e08ecae62b9ded4f7e5189c0255f2e60c5",
+    "full-summary.json": "a93feda1fcdd2074a8b35ada0a0bfcd8f1398394a6e01930053b79e3573ba53f",
+    "interrupted-pilot.json": "f9c150c0f6b56b28d76bbced2cb621006216c818103ae76ccc34c84e093beb7d",
+    "quick-run.json": "ef36ddd815271ab0481e0b7fbb2853d5b3969a0b6b1106935f2f1fe506751598",
+    "quick-summary.json": "5cf1f8f3797a81ab6ee193ed72ed847973290bb8d930cc081f7b7762ec77adbe"
+  }
+}

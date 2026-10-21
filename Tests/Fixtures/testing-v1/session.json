@@ -1,0 +1,85 @@
+{
+  "expectedCommands": [
+    {
+      "at": 0,
+      "duration": 0.6666666666666666,
+      "events": [
+        [
+          0,
+          0.4,
+          0.2
+        ],
+        [
+          0.16666666666666666,
+          0.2800000011920929,
+          0.2
+        ]
+      ],
+      "kind": "start",
+      "playbackDuration": 12
+    },
+    {
+      "at": 1,
+      "duration": 0.5423728813559322,
+      "events": [
+        [
+          0,
+          0.5718749761581421,
+          0.2
+        ],
+        [
+          0.13559322033898305,
+          0.40031248331069946,
+          0.2
+        ]
+      ],
+      "kind": "replace",
+      "playbackDuration": 11
+    },
+    {
+      "at": 1,
+      "duration": 0.12,
+      "events": [
+        [
+          0,
+          1,
+          0.85
+        ]
+      ],
+      "kind": "play",
+      "playbackDuration": null
+    },
+    {
+      "at": 1,
+      "kind": "stop"
+    }
+  ],
+  "expectedSceneSuspense": [
+    0.5,
+    0.75
+  ],
+  "inputs": [
+    {
+      "at": 0,
+      "id": "build",
+      "impact": null,
+      "suspense": 0.5,
+      "text": "Synthetic scene builds."
+    },
+    {
+      "at": 1,
+      "id": "impact",
+      "impact": 1,
+      "suspense": 1,
+      "text": "Synthetic impact arrives."
+    }
+  ],
+  "oracle": "hand-calculated binary-exact scene values 0.5 then 0.75",
+  "provenance": {
+    "removalPolicy": "remove in a new corpus version; retain Git audit",
+    "rights": "MIT",
+    "sanitization": "synthetic-no-personal-data",
+    "source": "repository-authored synthetic scenario"
+  },
+  "version": "testing-v1"
+}

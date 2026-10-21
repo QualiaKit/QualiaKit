@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "version": "session-lifecycle-v1",
+  "cases": [
+    {
+      "id": "stale-result-after-newest-or-reset",
+      "provenance": "Synthetic reproduction of ordering invariants already covered by SessionOrchestrationTests; exercised through the public ControlledAnalyzer in spec 0013.",
+      "rights": "Repository-authored, MIT",
+      "sanitization": "synthetic",
+      "removalPolicy": "Remove or supersede in a new corpus version; retain requirement and Git audit reference.",
+      "test": "TestingAndEvaluationTests.testControlledStaleAndResetCompletionsCannotChangeSession"
+    },
+    {
+      "id": "recording-stop-loses-owner",
+      "provenance": "Spec 0013 exact command test found RecordingHapticRenderer.stopEffects omitted owner metadata when recording stop; reproduced with synthetic build and impact inputs.",
+      "rights": "Repository-authored, MIT",
+      "sanitization": "synthetic",
+      "removalPolicy": "Remove or supersede in a new corpus version; retain requirement and Git audit reference.",
+      "test": "TestingAndEvaluationTests.testDeterministicEndToEndCommandsMatchVersionedStory"
+    }
+  ]
+}

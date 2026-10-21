@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3A3DE50A2EDCF608004B3BCA /* QualiaKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3A3DE5092EDCF608004B3BCA /* QualiaKit */; };
+		DA1300010000000000000001 /* QualiaCoreML in Frameworks */ = {isa = PBXBuildFile; productRef = DA1300010000000000000003 /* QualiaCoreML */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A3DE50A2EDCF608004B3BCA /* QualiaKit in Frameworks */,
+				DA1300010000000000000001 /* QualiaCoreML in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,6 +62,7 @@
 				3A3DE4F62EDCF5DC004B3BCA /* Sources */,
 				3A3DE4F72EDCF5DC004B3BCA /* Frameworks */,
 				3A3DE4F82EDCF5DC004B3BCA /* Resources */,
+                DA1300020000000000000001 /* Local Russian device assets */,
 			);
 			buildRules = (
 			);
@@ -71,6 +74,7 @@
 			name = QualiaExample;
 			packageProductDependencies = (
 				3A3DE5092EDCF608004B3BCA /* QualiaKit */,
+				DA1300010000000000000003 /* QualiaCoreML */,
 			);
 			productName = QualiaExample;
 			productReference = 3A3DE4FA2EDCF5DC004B3BCA /* QualiaExample.app */;
@@ -102,6 +106,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				3A3DE5082EDCF608004B3BCA /* XCLocalSwiftPackageReference "QualiaKit" */,
+				DA1300010000000000000002 /* XCLocalSwiftPackageReference "QualiaCoreML" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3A3DE4FB2EDCF5DC004B3BCA /* Products */;
@@ -122,6 +127,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+        DA1300020000000000000001 /* Local Russian device assets */ = {
+            isa = PBXShellScriptBuildPhase;
+            alwaysOutOfDate = 1;
+            buildActionMask = 2147483647;
+            files = ();
+            inputPaths = ();
+            outputPaths = ("$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/DeviceRussianAssets.bundle",);
+            name = "Local Russian device assets";
+            runOnlyForDeploymentPostprocessing = 0;
+            shellPath = /bin/sh;
+            shellScript = "set -eu\nDEST=\"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/DeviceRussianAssets.bundle\"\nif [ -d \"$DEST\" ]; then /bin/rm -rf \"$DEST\"; fi\ncase \" ${SWIFT_ACTIVE_COMPILATION_CONDITIONS:-} \" in *\" QUALIA_DEVICE_EVALUATION \"*) if [ -n \"${QUALIA_RUSSIAN_ASSETS:-}\" ]; then /usr/bin/ditto \"$QUALIA_RUSSIAN_ASSETS\" \"$DEST\"; fi ;; esac\n";
+        };
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3A3DE4F62EDCF5DC004B3BCA /* Sources */ = {
@@ -350,6 +370,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../..";
 		};
+		DA1300010000000000000002 /* XCLocalSwiftPackageReference "QualiaCoreML" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../Packages/QualiaCoreML";
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -357,6 +381,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3A3DE5082EDCF608004B3BCA /* XCLocalSwiftPackageReference "QualiaKit" */;
 			productName = QualiaKit;
+		};
+		DA1300010000000000000003 /* QualiaCoreML */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA1300010000000000000002 /* XCLocalSwiftPackageReference "QualiaCoreML" */;
+			productName = QualiaCoreML;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

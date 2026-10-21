@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "identity": {
+    "model": "device-scripted-fixture-not-a-model/1; AppleSentimentAnalyzer/1 (valence timing only)",
+    "policy": "1.0.0-beta.3",
+    "runtime": "qualia-runtime-v2",
+    "build": "56d8c27ee29ec41ac4b5a4f9fa065a3049a74f76a3165d3256a387ab4af66f1d"
+  },
+  "device": "iPhone 17 Pro (iPhone18,1)",
+  "os": "iOS 26.6 (23G71)",
+  "physicalDevice": true,
+  "testedAt": "2026-10-21",
+  "reviewer": "Device holder via direct task feedback; automated checks by DeviceEvaluation harness",
+  "status": "pending",
+  "checklist": {
+    "start": "failed",
+    "update": "passed",
+    "independentAccent": "passed",
+    "stop": "passed",
+    "reset": "passed",
+    "background": "passed",
+    "disable": "passed",
+    "continuousDisabled": "passed",
+    "maximumDuration": "passed",
+    "intensity": "failed",
+    "reduceMotion": "pending",
+    "comfort": "pending"
+  },
+  "notes": "Partial physical evidence. Renderer start succeeded, but the device holder could not distinguish the calm heartbeat at 50% test intensity. Later stages were reported normal. Real background stop/no replay was reported by the holder; see human-device-snapshot.json for telemetry. Reset/disable/continuousDisabled/deadline checks use real renderer calls and player state. System Reduce Motion and overall comfort are not separately verified. Synthetic haptic signals; no semantic claim. See README.md and human-observations.json."
+}

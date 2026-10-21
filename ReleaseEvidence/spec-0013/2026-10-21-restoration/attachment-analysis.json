@@ -1,0 +1,19 @@
+{
+  "status": "incomplete",
+  "reportSHA256": "18717a906fa5966c865c29027120587376370a79225b2c3dbbbdb326b0f1537e",
+  "runID": "8B76AC85-B639-41F0-81E4-5BCEF8F76048",
+  "recordedPassedTechnicalChecks": 11,
+  "baselineRepeats": 3,
+  "publicCoreMLPresent": true,
+  "blockers": [
+    "Automatic run interrupted",
+    "Renderer trace absent; old app restoration overwrote persisted commands",
+    "Sustained result absent",
+    "No tactile ratings, background confirmation or Reduce Motion check"
+  ],
+  "notes": [
+    "Report has no inactive-scene metadata; process termination reason cannot be determined from this file",
+    "This report contains Apple/public arithmetic Core ML measurements, not RuBERT measurements",
+    "Raw user attachment retained byte-for-byte; missing commands cannot be reconstructed"
+  ]
+}

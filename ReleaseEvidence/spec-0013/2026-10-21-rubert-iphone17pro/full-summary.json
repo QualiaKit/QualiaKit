@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "status": "verified-measurements",
+  "errors": [],
+  "runID": "4A02451A-4F00-48D9-8A34-2713FAA2A425",
+  "modes": [
+    {
+      "computeUnits": "cpuOnly",
+      "cases": 35,
+      "sameArgmax": 35,
+      "maximumLogitDifference": 0.037850379943847656,
+      "maximumProbabilityDifference": 0.014597284236519625,
+      "initializationMilliseconds": 587.478,
+      "latencyMilliseconds": {
+        "ru-1-total": {
+          "p50": 9.021166,
+          "p95": 9.118084,
+          "maximum": 9.16225
+        },
+        "ru-8-total": {
+          "p50": 9.20875,
+          "p95": 9.294542,
+          "maximum": 9.359125
+        },
+        "ru-40-total": {
+          "p50": 9.977709,
+          "p95": 10.117792,
+          "maximum": 10.1635
+        }
+      },
+      "physicalFootprintMiB": 45.501060485839844
+    },
+    {
+      "computeUnits": "all",
+      "cases": 35,
+      "sameArgmax": 35,
+      "maximumLogitDifference": 0.016710996627807617,
+      "maximumProbabilityDifference": 0.005684260859994628,
+      "initializationMilliseconds": 3268.6495,
+      "latencyMilliseconds": {
+        "ru-1-total": {
+          "p50": 4.346458,
+          "p95": 4.613625,
+          "maximum": 5.008791
+        },
+        "ru-8-total": {
+          "p50": 4.768584,
+          "p95": 4.867459,
+          "maximum": 4.939458
+        },
+        "ru-40-total": {
+          "p50": 5.495,
+          "p95": 5.717584,
+          "maximum": 5.726958
+        }
+      },
+      "physicalFootprintMiB": 275.8761978149414
+    }
+  ],
+  "sustained": {
+    "seconds": 300.019579208,
+    "analyses": 2867,
+    "p95Milliseconds": 14.361125,
+    "peakSampledFootprintMiB": 275.8761978149414,
+    "thermalStates": [
+      0
+    ],
+    "processCPUSeconds": 13.695344
+  },
+  "limits": [
+    "Raw differences and argmax agreement are diagnostic results, not a calibrated universal tolerance.",
+    "Labels are empirical hypotheses, not author-confirmed.",
+    "These probes are not independent semantic accuracy data.",
+    "Core ML all selects its own backend; no claim that ANE alone executed the model.",
+    "Process CPU/memory/thermal are not isolated model energy or watts."
+  ]
+}

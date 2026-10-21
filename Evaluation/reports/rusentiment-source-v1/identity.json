@@ -1,0 +1,1447 @@
+{
+  "schemaVersion": 1,
+  "source": "sismetanin/rubert-ru-sentiment-rusentiment",
+  "sourceRevision": "f3d755e39a6af467a4e90b9a1c486ea1d2aa3852",
+  "safetensorsRevision": "4f372c1e9b1ae936109ff94eceab8479e0b3fbfb",
+  "safetensorsSHA256": "c6183eff4f5697f82470e0ae338a5e6f28dc1f0220757bc08b42ce8a7776b228",
+  "sourceFiles": {
+    "config.json": "dbb94d1448e8e8ab4c9b572f3c387168d4f27b2456b6eae55412fbb578a0f6fb",
+    "tokenizer_config.json": "e8238f2ba4a031a8eee702af2cc8df31be4826500f342ddc0e06f2cccc440d01",
+    "special_tokens_map.json": "303df45a03609e4ead04bc3dc1536d0ab19b5358db685b6f3da123d05ec200e3",
+    "vocab.txt": "78106a3d3ae8600d1ba573b967b9bb731d2c2282957cbc6e26ab20935c3da02b"
+  },
+  "coreMLComponents": {
+    "Data/com.apple.CoreML/model.mlmodel": "f7ac2156e756a2aacd1cca8cc3f3aded5e7b143147270ea0aea374747a609a42",
+    "Data/com.apple.CoreML/weights/weight.bin": "26c028484b4df267933afbfa3ef9ca421dc7450d48bd02c720146bd4444da2f2",
+    "Manifest.json": "a655c85265418a3c567fc48869e4bab5271b2340e33b7b67bdc395f3874bb302"
+  },
+  "weights": [
+    {
+      "source": "bert.embeddings.word_embeddings.weight",
+      "coreML": "model_bert_embeddings_word_embeddings_weight_to_fp16",
+      "elements": 91812096,
+      "fp16SHA256": "fa0afd2b98b346bcc2d9786afc30dc85cf74d2aa93b71bc0ece482b8c954c2fd",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.embeddings.token_type_embeddings.weight",
+      "coreML": "model_bert_embeddings_token_type_embeddings_weight_to_fp16",
+      "elements": 1536,
+      "fp16SHA256": "e2a73a3062edd679673300f1dae69494fad7217c5c883892e43c17f7736c02f4",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.embeddings.position_embeddings.weight",
+      "coreML": "position_embeddings_1_to_fp16",
+      "elements": 98304,
+      "fp16SHA256": "9bec907f9179340dd22a8a9d9d4b9c47ffd63d0c282d97fae1ad6bc65561e06d",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.embeddings.LayerNorm.weight",
+      "coreML": "model_bert_embeddings_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "aceebdaff862ea33c9fc802ab3dcd3211bd2385e95fc2092a7ba8f8197f2e007",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.embeddings.LayerNorm.bias",
+      "coreML": "model_bert_embeddings_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "7e4da28dc495f5afd0a4ac6bab7241c46cc2c1c22d9e9dccb4e8d0e963a97a4f",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.0.attention.self.query.weight",
+      "coreML": "model_bert_encoder_layer_0_attention_self_query_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "96168f5253b04028e143b3399b6d069f453dc0d04340c201954705dcb891f531",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.0.attention.self.query.bias",
+      "coreML": "model_bert_encoder_layer_0_attention_self_query_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "7e41dbefa759d465bcdcc6a0e60068f11e420224276f490e08cfbbd996765cd1",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.0.attention.self.key.weight",
+      "coreML": "model_bert_encoder_layer_0_attention_self_key_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "340d49fb6f2e6d39848a87ce490ad050ab50a79a8dd75f85c7a379b80fbf947d",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.0.attention.self.key.bias",
+      "coreML": "model_bert_encoder_layer_0_attention_self_key_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "b22431fc2b005bf5aac6c4ff8fd8e6b19ffba3c2f93e66c08f2bb1453edf8dbc",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.0.attention.self.value.weight",
+      "coreML": "model_bert_encoder_layer_0_attention_self_value_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "c31273f2f1b5774b03c2502d7cd93ba8b00f7d73e636509875c74a19398aa290",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.0.attention.self.value.bias",
+      "coreML": "model_bert_encoder_layer_0_attention_self_value_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "783b8f618d1ba62178487e0b7afcca98d2b3563b6a56d1b0d50ee349a2e42ac6",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.0.attention.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_0_attention_output_dense_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "1231ed1cd4f1d115026ab28b9412365a23b8419ed0c926276e80b344ded74baa",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.0.attention.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_0_attention_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "35cd599da8b36f166240bbce72bf0ce5b83ce80dec9765b4aabdb9fb82e53bd6",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.0.attention.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_0_attention_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "a89e0e53747af5d88049f1cac356b45ecaf1c79ec07bbd92a50923fe1dcc052d",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.0.attention.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_0_attention_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "b8b6943e31310897592dbf763053b6ee4190eb6744ed0ccdaab7c5186deac974",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.0.intermediate.dense.weight",
+      "coreML": "model_bert_encoder_layer_0_intermediate_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "e8a346760e534ca38fed8bbebb98aef4f6ab68c4a4ac069b6b380774be05db6d",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.0.intermediate.dense.bias",
+      "coreML": "model_bert_encoder_layer_0_intermediate_dense_bias_to_fp16",
+      "elements": 3072,
+      "fp16SHA256": "79c00f8d7665762d47dafcbd52f90e9f2f382a0e194ddc785d0e1776c0f23b35",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.0.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_0_output_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "67dbe1fa0a7b6cf612e8f323d981cdcf985ea1c5cca9fe0e3d5150f418e09755",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.0.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_0_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "485c4ef7e65f068fe1e3d63176deb506c3955ccd18caaf2053a53d8fcd4ae8c6",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.0.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_0_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "e4cc5c10f208bf899fb316207291b9aa8ad42ee6cf3efc9506d02cdc0cd7c73c",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.0.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_0_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "363c95b69f482d6c592c7cb187f80489b0dcaedd05252e22103972eeda15c774",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.1.attention.self.query.weight",
+      "coreML": "model_bert_encoder_layer_1_attention_self_query_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "d57ee1c74e724452800fa39d6c865f82477f5ec131cf858e6da600c006509a50",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.1.attention.self.query.bias",
+      "coreML": "model_bert_encoder_layer_1_attention_self_query_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "90d46de84c6d07af1bc44ad0a8bd5f284c53652356c410b65848ed3c9f0c84ee",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.1.attention.self.key.weight",
+      "coreML": "model_bert_encoder_layer_1_attention_self_key_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "595545eaa2a2b49f4bc21b4874b988cd63bed1be936ccbdaeb1cd22c743bd5db",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.1.attention.self.key.bias",
+      "coreML": "model_bert_encoder_layer_1_attention_self_key_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "f63df58732b20e22e47a60ed67ebe261c0d6087f98826c2895cda65481be846b",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.1.attention.self.value.weight",
+      "coreML": "model_bert_encoder_layer_1_attention_self_value_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "1101df2fed5d431d2f28decdbf4384cfb991e9fa4089c5860af9055b7e0c8caa",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.1.attention.self.value.bias",
+      "coreML": "model_bert_encoder_layer_1_attention_self_value_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "f6e23be2cd0bc7ec13631ab72f0418cfec36cabf90530c37d7689742f0e707db",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.1.attention.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_1_attention_output_dense_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "7c21a591dcbc50a8f14274d7895edac5fd2b4a01b53ab9f03c8dec2c95a902bd",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.1.attention.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_1_attention_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "7ae3591fd8f3ba6e77f10e0b30e87e8dcd172f669533bf9d48f033792ff0419b",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.1.attention.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_1_attention_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "1661934bf07a426245dd57f8faccdd7c3c5063cec8b0502a71beca4d27bf0359",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.1.attention.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_1_attention_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "4c71fd16c990fb3dfbcd6dbc47d78c901123ed63780eca6b3975cc9b6edbb229",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.1.intermediate.dense.weight",
+      "coreML": "model_bert_encoder_layer_1_intermediate_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "2062935d2b60b4ac1638bf9120e20d869d4eac32b96405ed395dbbef3d9cb8f8",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.1.intermediate.dense.bias",
+      "coreML": "model_bert_encoder_layer_1_intermediate_dense_bias_to_fp16",
+      "elements": 3072,
+      "fp16SHA256": "abbffaae6278122711dd0944fb096fd9f26242b8720b380288b06fe770e35e97",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.1.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_1_output_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "d18c58721084188a520af6c70eba18acec4ee79da1eaf17f4622a554d0efe06e",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.1.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_1_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "b8ae80489c5fd6f1c59370e635e726f8e8a15f1946559b4a4d8060873165c301",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.1.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_1_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "f2db5a66d7c5c7dea1e3d9ad6a3981c6ba9fb86754ef59b4a254e06a9e4a45d3",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.1.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_1_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "7935a1c57f6a99dce1efa697e1f6506be9227069bc509f97c130a28d526b8adb",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.2.attention.self.query.weight",
+      "coreML": "model_bert_encoder_layer_2_attention_self_query_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "ae7fb8d39cb329f2faf3d02a0605afdec0a1e38b478cae5381b4dccff617c1a6",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.2.attention.self.query.bias",
+      "coreML": "model_bert_encoder_layer_2_attention_self_query_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "0dc3e22e0eab2233f7a629e3df26e823571d09295a0c424747a5bc0f3784addc",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.2.attention.self.key.weight",
+      "coreML": "model_bert_encoder_layer_2_attention_self_key_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "2cb4caace9fca3d1799a66c176bf7aa1b6343487f05c94369199955bd594a976",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.2.attention.self.key.bias",
+      "coreML": "model_bert_encoder_layer_2_attention_self_key_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "eb8c1569276833632f1f3ae5d76e8094e9e8a9e3e4dfc9e5b0d1877faaa36161",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.2.attention.self.value.weight",
+      "coreML": "model_bert_encoder_layer_2_attention_self_value_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "909e19f50540ccc3e26770fb67ef1b21bd10c8ed99975827bbd7324cab7aefbb",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.2.attention.self.value.bias",
+      "coreML": "model_bert_encoder_layer_2_attention_self_value_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "f522c33eb8f7559f5928b34ec55e4dce6b1768b4ca98397c30427c6d802440c1",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.2.attention.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_2_attention_output_dense_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "036f85d040016edc49feda5d23a97b42f2a632c0e9ed051134c3f3cedc9f48e9",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.2.attention.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_2_attention_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "6d6329d9463f53669c3b3ab13581046daee49684f78106944225ebcbeba2e5c9",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.2.attention.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_2_attention_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "1e30542101a5ff1e51b5b138a86b48376bf9e77de6c353396519c3c2b5884cb4",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.2.attention.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_2_attention_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "ec06a74d223ca17ba2ca9bc8e2162003477cb5fc784a0c0090028e89d389715d",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.2.intermediate.dense.weight",
+      "coreML": "model_bert_encoder_layer_2_intermediate_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "5da33a97c6dc9121f5d5142788be8b28b44518c1620530afcecfc91b0feda825",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.2.intermediate.dense.bias",
+      "coreML": "model_bert_encoder_layer_2_intermediate_dense_bias_to_fp16",
+      "elements": 3072,
+      "fp16SHA256": "1d8e0fc2210f4bb2057d15e1770a406961099c0a38b9e9a5c067a7a818561b42",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.2.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_2_output_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "cd12a6f6217e3b25e8ae8d6af11cafd3c0bcf62b643e689c532d72f3c1c34a42",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.2.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_2_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "57df0d6983feb580257270c6cc2a90c9edb7bf2d05f04b8d0fa8ff0e83ac5b8b",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.2.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_2_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "8530f46d5cd0f2d319cf93899ab9a81a40efe52c86f43d0a07760992a67f5503",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.2.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_2_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "0bbf9660dc3e77980de09cf44bcf25fceb2bdb787053c3b1cde5ff662c49e720",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.3.attention.self.query.weight",
+      "coreML": "model_bert_encoder_layer_3_attention_self_query_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "8ef74202cb066b137df2c0c36f48da269b5a3182288551450716ab63ce21918d",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.3.attention.self.query.bias",
+      "coreML": "model_bert_encoder_layer_3_attention_self_query_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "395a56cdc45939e23ff14a2801195968efaeb1484de8b2aad94b6a2747695133",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.3.attention.self.key.weight",
+      "coreML": "model_bert_encoder_layer_3_attention_self_key_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "3b0014cf0e5a7f29dc987ca3d4d245f8ecf984880ab117f8684346f1e36dd9f7",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.3.attention.self.key.bias",
+      "coreML": "model_bert_encoder_layer_3_attention_self_key_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "9f16102f9da493c017f4fbed6382c70012518900488c4053101768e2161c0b91",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.3.attention.self.value.weight",
+      "coreML": "model_bert_encoder_layer_3_attention_self_value_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "0d4080111bc02d2415b1ce4fb81e652ec272db527bc19dcd87570ee72a5ad974",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.3.attention.self.value.bias",
+      "coreML": "model_bert_encoder_layer_3_attention_self_value_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "70ded8e0489c1a816be9e2d72cb259e2d751684d21a5ab825910ec3746d51da1",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.3.attention.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_3_attention_output_dense_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "95f53fb57872934f8d54b0209263d1fc17f871409fd1de5b14e5e7e779af3d4d",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.3.attention.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_3_attention_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "495551b48a2c32cdc7cd10ad9c366459e612d5cd3102f6cd593dc85bc05dc716",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.3.attention.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_3_attention_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "1bf974265913534031cf9288f712e8614f1b1023d2e72ff4d6d5ae221df569d9",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.3.attention.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_3_attention_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "aa5a96e5a77f066cc7f67fcd243cde8cc0409b98207f7f450aa6956d59ce9ae3",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.3.intermediate.dense.weight",
+      "coreML": "model_bert_encoder_layer_3_intermediate_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "a0db5f849860e33ad3d1afbbc554239e3ece4c11fb76b9c4469d1e5209b93383",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.3.intermediate.dense.bias",
+      "coreML": "model_bert_encoder_layer_3_intermediate_dense_bias_to_fp16",
+      "elements": 3072,
+      "fp16SHA256": "a3900e77cc9bda7e5b1f39abbdd336078438b3befaffddd38d313b42243d6e46",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.3.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_3_output_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "9775d1d670d0e1c6b937839f77a0db8aa3920eca57c660396b7255bfc4ca5ff0",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.3.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_3_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "2ed4597de39ce421a3e436effdda9709d6dc375654f9c11a47888b8c45c23f30",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.3.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_3_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "9bcf8c84f4218c4eb6e54cb04052640266c51c01fb58650979c30812a8a83783",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.3.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_3_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "4934721d20ff85e8ddd3ab7a4ca1cae3053292949567d6b311b8e754f577dae5",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.4.attention.self.query.weight",
+      "coreML": "model_bert_encoder_layer_4_attention_self_query_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "2d84538f903e5879fb68b0c72fd6edd2534991317f76ffada5722bfb6afdbf1f",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.4.attention.self.query.bias",
+      "coreML": "model_bert_encoder_layer_4_attention_self_query_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "959daf790f47402eaa63fa9d131b763219eda910d4e39b88f948a7a12596b3a9",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.4.attention.self.key.weight",
+      "coreML": "model_bert_encoder_layer_4_attention_self_key_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "a2f9a4250734d10d86fffe4f7ca646d703a2b4d9bcf3746df507827101f71170",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.4.attention.self.key.bias",
+      "coreML": "model_bert_encoder_layer_4_attention_self_key_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "09d030e4b7d071c28d97a4bf76a48d69db4ddcebf06a55cf807afd15c5bbc05a",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.4.attention.self.value.weight",
+      "coreML": "model_bert_encoder_layer_4_attention_self_value_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "03cc8a7ad1055da51ae026fe424089f6153680683b2c826acd87827f13a526a2",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.4.attention.self.value.bias",
+      "coreML": "model_bert_encoder_layer_4_attention_self_value_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "68740f249715dd2d2f863b84fb763f668b701ba8e64de860805e837b45125d0b",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.4.attention.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_4_attention_output_dense_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "cfadd9679a86525c9bb69cf26675b9e9af78fd9be3ae09b1d9d7cfbd70eaaeb4",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.4.attention.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_4_attention_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "bc1bc3cd1e25ac3e44feb8e72a6673bd08adccc8881a616f4c25c3c8b1a13bc8",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.4.attention.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_4_attention_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "73e471e87d999ad712f8e4beff4ff0a997482a0df0ab8b4484288fe34173fed4",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.4.attention.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_4_attention_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "ce383060bc1925da8f71b8c9d0f9538b34e91046ecf5430e3a658fcc864b5f55",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.4.intermediate.dense.weight",
+      "coreML": "model_bert_encoder_layer_4_intermediate_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "a04e0827cacb33463ecea84cc60f959bdd9c900cd4670190027a07c89992fdcc",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.4.intermediate.dense.bias",
+      "coreML": "model_bert_encoder_layer_4_intermediate_dense_bias_to_fp16",
+      "elements": 3072,
+      "fp16SHA256": "c26933ab3ec565d8af7f14f9ffb051bb71d2b0fb7937c8c0572d1eeb6da74b12",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.4.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_4_output_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "4070d54fdc8a986590b986586b90be1909053839eb882a370edfc55436afbcb4",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.4.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_4_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "a0c641b5eaaaf6c9fb15da964699c309e23b36935930778a2b5bbeff85a9392b",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.4.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_4_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "a44c55988f7fd265dbfa97353b89526aa9e52949570827d8d3502fd033476b7d",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.4.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_4_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "e773e664286630d8408b080a95cae0f1d6209f33668212c75033e7173dd9aff4",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.5.attention.self.query.weight",
+      "coreML": "model_bert_encoder_layer_5_attention_self_query_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "35fd9e5600da6782525b4e7cf3e09185e3ccb4e7e01c205b5f3a8e87e5275a5c",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.5.attention.self.query.bias",
+      "coreML": "model_bert_encoder_layer_5_attention_self_query_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "c4221f8c74d8e79c52a524960dfb73d7d48419ce0438f46db78554d612e078d5",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.5.attention.self.key.weight",
+      "coreML": "model_bert_encoder_layer_5_attention_self_key_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "d5384a1f878daac80fb0c1022f8ca509f915fdd47ea79052cca515391e5f9882",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.5.attention.self.key.bias",
+      "coreML": "model_bert_encoder_layer_5_attention_self_key_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "e1561c68d1001f899be5139233ffa9c91a5121493269483010b0e5e410e2b075",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.5.attention.self.value.weight",
+      "coreML": "model_bert_encoder_layer_5_attention_self_value_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "3e8222048719d7e1fe0e6aaa0815311f081683a5e9bcb8c0d08ccc365cb5890a",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.5.attention.self.value.bias",
+      "coreML": "model_bert_encoder_layer_5_attention_self_value_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "e75f106c911aaaf6e7c34d66d5b69fdfc13261de9e61a6c63af9a61564650513",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.5.attention.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_5_attention_output_dense_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "7cf724c6fc678960f13fc2548610a9098b21ac47203073faed47b5ecdfd3bbdd",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.5.attention.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_5_attention_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "de5afbf25bbb57d1d5bac841c0c3e99f942ce29c887a97a710b8cc887c25b672",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.5.attention.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_5_attention_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "2151344773d577ade5939ecbcd03110849589f00e14aca1872481e8a4fc03e28",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.5.attention.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_5_attention_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "b5e160418a57fa1e8179290687e586777614af0dcf58b48891c4d187eaf4074e",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.5.intermediate.dense.weight",
+      "coreML": "model_bert_encoder_layer_5_intermediate_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "c4236057a4e000f003a11b013960700c31a5127c4c4a3f9a6408ee7ecf14dafa",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.5.intermediate.dense.bias",
+      "coreML": "model_bert_encoder_layer_5_intermediate_dense_bias_to_fp16",
+      "elements": 3072,
+      "fp16SHA256": "f7438b8b3ea5f271826c6a5e26568eee83ae763636f96dac9012827453b606c7",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.5.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_5_output_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "c7196ee40e79c73e8bc4ddd445298f3e73e43ad82c5ee81deaf56576b571f504",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.5.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_5_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "847d95b90e76d9da47de9191a5c0aec6d46f0b5e4b4f336af06e7d44cf798536",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.5.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_5_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "367f26e2e9fa19ce18106a2f57cd577abf6f245d01b4fbc51b05ce85b940c61d",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.5.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_5_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "799ca663cd77a95d10a6556385479034e56a4836a915f00f1a2864977d0af710",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.6.attention.self.query.weight",
+      "coreML": "model_bert_encoder_layer_6_attention_self_query_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "587e9966606159f46c65f420131898709caa86373413d9bef09f3fbe345f4bd6",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.6.attention.self.query.bias",
+      "coreML": "model_bert_encoder_layer_6_attention_self_query_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "758c9c9534fbcce1bc3f012ef594bb936030bcef04f5e193e500337113c6ab76",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.6.attention.self.key.weight",
+      "coreML": "model_bert_encoder_layer_6_attention_self_key_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "fcd3006e54d6e6809125a67f2444d68b6b9b183f8e9101b9202a1960239c0292",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.6.attention.self.key.bias",
+      "coreML": "model_bert_encoder_layer_6_attention_self_key_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "fc81aaa2361d759dd49ba4c814b3ce666ad4721f650c47f1d61bb6d73dbfa7e8",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.6.attention.self.value.weight",
+      "coreML": "model_bert_encoder_layer_6_attention_self_value_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "a58f9e94abb113428005fdc532ec06a1cab00447382b84a05d5426f53a766890",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.6.attention.self.value.bias",
+      "coreML": "model_bert_encoder_layer_6_attention_self_value_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "51778dcf58002206cb70bdf7e257d4213cf2ad055ae6355b1e8db8a1af68e70a",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.6.attention.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_6_attention_output_dense_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "d6d95c1dd6cc84ae063f56f524d40eebd6c963dea3c09cd35d4607cdc465c050",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.6.attention.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_6_attention_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "db960554d2a41513dd31d14d7ba98964b28c180ece3b5475a52e9a9e859202b9",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.6.attention.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_6_attention_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "3b5fa05ef062b87f10ef0f75eabf50dd96feeeed8e07699969bbab94313f7bd0",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.6.attention.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_6_attention_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "24aae403dd319372fee950bb2d3c283c3ff8606bfa65f645231553d6f21b56a4",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.6.intermediate.dense.weight",
+      "coreML": "model_bert_encoder_layer_6_intermediate_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "19841bad4f7e136eb3d58ab65812b23462cfef4fd7fb7358fd6fd4198c9b6219",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.6.intermediate.dense.bias",
+      "coreML": "model_bert_encoder_layer_6_intermediate_dense_bias_to_fp16",
+      "elements": 3072,
+      "fp16SHA256": "77cbf0e8bd45bdd00049934ced592a61207756bb076db04141b53a9605a8112f",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.6.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_6_output_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "0790570848efa5d2358565568d9146f543688a0d2dbbfb4b08e067bd9af825a7",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.6.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_6_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "62777389a8ede41494049f7c3454b18ef2d8266236e7a35f50eca00f067f78b6",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.6.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_6_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "3bf0b1968803398cb47beef6e9a9bf942d856850f4bd68da5b421b3f36421126",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.6.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_6_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "e79dc11d9b4d226ae5e85aa96479fa16a691282c37e134fa3bb8f2f779b039e9",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.7.attention.self.query.weight",
+      "coreML": "model_bert_encoder_layer_7_attention_self_query_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "b1d917d0f5898b46938ded33ba3b965919f839bd4e883033f61d8947589cab94",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.7.attention.self.query.bias",
+      "coreML": "model_bert_encoder_layer_7_attention_self_query_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "7590c4d72295684b67effb640bd0d77c6c178656c8e20b46b07080928823e40b",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.7.attention.self.key.weight",
+      "coreML": "model_bert_encoder_layer_7_attention_self_key_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "5b14fec10454c9f555f8cee5731980e6e5e599dd1445c3eecb24d484655ae039",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.7.attention.self.key.bias",
+      "coreML": "model_bert_encoder_layer_7_attention_self_key_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "c1f3e48f91a5d208c97367a153df241135a322b947944ecedd2ff48f29d670c6",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.7.attention.self.value.weight",
+      "coreML": "model_bert_encoder_layer_7_attention_self_value_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "e22e96da95a212e2983aa91a73c4362addc3b131d247d1628f305484e6e41791",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.7.attention.self.value.bias",
+      "coreML": "model_bert_encoder_layer_7_attention_self_value_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "47ad681aac15eb4dda4aa0f844c22b8aa9d28695641ee22c85b80a6177649aa0",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.7.attention.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_7_attention_output_dense_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "7e533c8a55a800c322ab76bbcb1b36b0ae270d31abbb1ce4590a74bd3b4bcb8e",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.7.attention.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_7_attention_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "33b07aee8d3f43d5903e2bdf480eecfb68420f9218580a44696ddf948428fc25",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.7.attention.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_7_attention_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "2eb8c35523d2df789b719234b3224556e021025e2ce7db5e8c5eee4ca19993e1",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.7.attention.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_7_attention_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "d234c82906b920c3217578b97cb897467ef2829e96c7b8a0e7dc22c253349400",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.7.intermediate.dense.weight",
+      "coreML": "model_bert_encoder_layer_7_intermediate_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "fcc4cc4a3308aef67984df36d288c06a3ffceb1e8883c9ef754e5ce43e2fb0c6",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.7.intermediate.dense.bias",
+      "coreML": "model_bert_encoder_layer_7_intermediate_dense_bias_to_fp16",
+      "elements": 3072,
+      "fp16SHA256": "09c8508f9a00de67251b024ac3f0a551830ac5e5eba46c2421385916ffc4c5f2",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.7.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_7_output_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "67e9487d5c20cd12b382213cfd0804ed7eeb9317a3424f6e14d310626aa34789",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.7.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_7_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "91fbe962fccc11aeddaebafc86b7abd69e086d74932a56745bc6af3fb46e8e47",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.7.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_7_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "b2727fa5426ad3a7546aa2851e28fdd77c798e2f0eace88d3390a9fbef23963e",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.7.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_7_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "7210caf6a750abe8ad18c5eba59f3fe70e413b828f987415850aef32891d1203",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.8.attention.self.query.weight",
+      "coreML": "model_bert_encoder_layer_8_attention_self_query_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "a2e9074d552306623e79625175637ba1cf9a23bf925dcc4f9609090dd6c6a341",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.8.attention.self.query.bias",
+      "coreML": "model_bert_encoder_layer_8_attention_self_query_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "0d80122caa5d8883a112a128ac169ba3b54923011584cc1cb0cee983afe99b64",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.8.attention.self.key.weight",
+      "coreML": "model_bert_encoder_layer_8_attention_self_key_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "5ba41d2b077b756d66005e763e20fa87de98dc81b6a6cc946081dae250dc4a9a",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.8.attention.self.key.bias",
+      "coreML": "model_bert_encoder_layer_8_attention_self_key_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "2ea3a60aad1bd53512043511c3f4fb88cec824e89b8ed100b78db8ae28556783",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.8.attention.self.value.weight",
+      "coreML": "model_bert_encoder_layer_8_attention_self_value_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "87b0250ad367e6cee4cb8ad37d7ebff736a2282d35879a9d0d1bd32b1520188a",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.8.attention.self.value.bias",
+      "coreML": "model_bert_encoder_layer_8_attention_self_value_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "305536f7d3d02684e39dc537ad4977f9a9ae3ecf9f12e7d7df31e2a46124fbb6",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.8.attention.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_8_attention_output_dense_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "465105fc6baa0f6fb4a9128402801329c0150fdd19b3cd9af9dc3605d2ab534c",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.8.attention.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_8_attention_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "91d2359ba435b016d78bbc7a57e09cbb26370e7b41da0233affa3e08adf410d3",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.8.attention.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_8_attention_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "d3e72b6aebb625e31766b6629f855e1192b66ef49bec10dac6bd84e5ec5df0ca",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.8.attention.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_8_attention_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "18ead83b6922fa1e2366b87aa730b1f8314a437e29e82d610f4708c2cdf55510",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.8.intermediate.dense.weight",
+      "coreML": "model_bert_encoder_layer_8_intermediate_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "79885febec3f768e511d1ff5fa00335f702b912974ddfe26a8b1afd6995adc35",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.8.intermediate.dense.bias",
+      "coreML": "model_bert_encoder_layer_8_intermediate_dense_bias_to_fp16",
+      "elements": 3072,
+      "fp16SHA256": "dfae7445d38d0a2ec4e4a51fc30d039c75343fe4e78f932970524d3ac442d9e8",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.8.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_8_output_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "e742c7f1fdaf9ca48ddd67740de20109d2ce2ee772bba00b1d02bcffc52e683f",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.8.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_8_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "510899956e15c50491f0d0e65da3af2782bfe53bd5102433c53652a216c984c7",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.8.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_8_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "1e85650644a4208769427a5ead8101034f3b0db2cdce41475457d36379e3daba",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.8.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_8_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "2fd8337ef0a01c65f6beed87b56440b5ea6dd6dc12febf950fce64fd0e08f409",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.9.attention.self.query.weight",
+      "coreML": "model_bert_encoder_layer_9_attention_self_query_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "831bb4c8c3e7433a8b3968c23c1a1942912e8eab88badd3288bf5f8e8e6d38ff",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.9.attention.self.query.bias",
+      "coreML": "model_bert_encoder_layer_9_attention_self_query_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "abdc21a4536d72a627c66ebb66f4463543873db8a01e14e0565d52a6654782c4",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.9.attention.self.key.weight",
+      "coreML": "model_bert_encoder_layer_9_attention_self_key_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "e043f160ed2a2063b163a936fd76dfe61ecd899acd1791c2a3a0bf327b14cba1",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.9.attention.self.key.bias",
+      "coreML": "model_bert_encoder_layer_9_attention_self_key_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "eb9f4776bd20640ea62637723fc65826153a090b965ed6fb15604ef681db0e69",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.9.attention.self.value.weight",
+      "coreML": "model_bert_encoder_layer_9_attention_self_value_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "ca0bf18a5e04268da6ec32f5426dce5e9eb45e4fa0033961ab0eac4cb0788d8b",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.9.attention.self.value.bias",
+      "coreML": "model_bert_encoder_layer_9_attention_self_value_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "861f7c6b71e249facd88f197aaa31bc7b2ebe6c2c2684280c54a01caf34734aa",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.9.attention.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_9_attention_output_dense_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "3ffde5e313659e7313103ee3d19b1b489fcddf1095f99e2e2783e8cb7f194e41",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.9.attention.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_9_attention_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "a4586be395e24ab99d88c60be319aefec41a94e1516c86ffa67483405f4881ce",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.9.attention.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_9_attention_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "94f7602e142fa30570e804742c41272d3f077dc9684a4abbfb010d16f5548ce6",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.9.attention.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_9_attention_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "5229047c2443f992127ba4891d2beda9c4084d7f24551f54ecfda9f7477f80f4",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.9.intermediate.dense.weight",
+      "coreML": "model_bert_encoder_layer_9_intermediate_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "28c8bbe493e415d1ac2eaf51660db3a0ae9e2bc3a2a72065dab3874aacf98d90",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.9.intermediate.dense.bias",
+      "coreML": "model_bert_encoder_layer_9_intermediate_dense_bias_to_fp16",
+      "elements": 3072,
+      "fp16SHA256": "3b275f9fd6d2e9ebac69e89066935c3b330e00ccc0a0164b2712ad58a7705d49",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.9.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_9_output_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "78281c40877827dc75d92e5c03aca5073cbe9059685c02d41d1a3722373216f1",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.9.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_9_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "9b00d78b6b117afce15b090b31b5587319efbca86074258ca55eb3107accc17f",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.9.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_9_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "048dba851214883a1ab48f05d5859a6b400dd56b4dab0e95b005420191c8dc00",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.9.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_9_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "63d502b25ac57e712f4040e4d23b5fa3f28e6260ec1d03248cfbc8e21b7286c7",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.10.attention.self.query.weight",
+      "coreML": "model_bert_encoder_layer_10_attention_self_query_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "a47e8265431468ee5dd409dd4c405fc141e63b6ee315d1f1b9e4206021ab8c5b",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.10.attention.self.query.bias",
+      "coreML": "model_bert_encoder_layer_10_attention_self_query_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "4d9f1f790de9734862f0f815c7f6b7d5c011bfdc48f2b403e495e6e0444796de",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.10.attention.self.key.weight",
+      "coreML": "model_bert_encoder_layer_10_attention_self_key_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "88f561891dbf03dfb0af97f28ea6c3ee6cba3eb3a0309e6f08f5ed1efa27b546",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.10.attention.self.key.bias",
+      "coreML": "model_bert_encoder_layer_10_attention_self_key_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "d238cdf0aca98f83d5f8d68e8e82b3a7aaaadcfae7aa2d0083c8344dea239afd",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.10.attention.self.value.weight",
+      "coreML": "model_bert_encoder_layer_10_attention_self_value_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "5ef0ee24c4b9211572ba4c666da02624ead5e35b4838a5e8106b51b1ad16e5f5",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.10.attention.self.value.bias",
+      "coreML": "model_bert_encoder_layer_10_attention_self_value_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "9465ea76bc7926ed62456dfcdd47b815ff0f18a938afd1fd0e7cb6800c880e6e",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.10.attention.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_10_attention_output_dense_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "5057f7cb3e02432f48586e259c28fc56573b0c4c37edf83d59be953a09db1703",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.10.attention.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_10_attention_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "0ca0c6f7ccb36776ebdf3271b602d78d5c8569be3308fdb61aeee0121e4127a3",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.10.attention.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_10_attention_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "802642a45b557282c996fcb0996736dee718cc0e251437187ba69649d98810f6",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.10.attention.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_10_attention_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "118a3c8048891b6934031fb29c5acdc36fef72582dbccfec4a07fb04fb231797",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.10.intermediate.dense.weight",
+      "coreML": "model_bert_encoder_layer_10_intermediate_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "8740a1ee1ab836f5c9fb1dda7d09aca8ebfcf16c6fdc296c62d3972e630ed02d",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.10.intermediate.dense.bias",
+      "coreML": "model_bert_encoder_layer_10_intermediate_dense_bias_to_fp16",
+      "elements": 3072,
+      "fp16SHA256": "a54fd1a498c398578f91db3e6558d1ab011a628fed88e60f3a013120cfbb5e08",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.10.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_10_output_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "f0225c8b91b20ace42dfcf246e7ad20798e1f4ccceca3f3062a6a74562856986",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.10.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_10_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "c3c1aae53d061ce3bc0941e168b82cbd59f51c5bd3263081f400f7b9079f6c02",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.10.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_10_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "624b4abc775598cb107f1df1b3b62f0c911a7afa34f60ee09571075d82410467",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.10.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_10_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "9795f97b35c706975729c7ceef5fd84dc3223b5cadee7766b0bd3639d37b4985",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.11.attention.self.query.weight",
+      "coreML": "model_bert_encoder_layer_11_attention_self_query_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "e55cc6fd022d1c40aa9750e7ab0cd3e5ba9cee0e9e3bc013b9c16d66057c1433",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.11.attention.self.query.bias",
+      "coreML": "model_bert_encoder_layer_11_attention_self_query_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "b4fd87e07b3eb4f07942b59d352a9fca76939be6a75df763f244fb5776978413",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.11.attention.self.key.weight",
+      "coreML": "model_bert_encoder_layer_11_attention_self_key_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "6970b1c83a375f0cdaa5d079bff6fce480ca20bf247cc52461e751bec15c2239",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.11.attention.self.key.bias",
+      "coreML": "model_bert_encoder_layer_11_attention_self_key_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "08678c82ffb6ae51af7577b9236432adfb3f986ff7ec959fc4bacf210013f5df",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.11.attention.self.value.weight",
+      "coreML": "model_bert_encoder_layer_11_attention_self_value_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "87bfd399065ce0a4fe7d3bac1eeb3009cae559c9721d8e6af2431e98c39dcc67",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.11.attention.self.value.bias",
+      "coreML": "model_bert_encoder_layer_11_attention_self_value_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "918c63e303c7886f503400c589a04afcb166f0ca914e391f320fee577e77c3cb",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.11.attention.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_11_attention_output_dense_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "c4268f93b06e56d023940461a2237b1fecb7abec48049bccde20933eab36c662",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.11.attention.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_11_attention_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "f7a5e74474f6e05643c17d6e28f7c93e97cccddf9972eba9da0a9f3384153fa3",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.11.attention.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_11_attention_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "80f7c2710058f7275d3c5c3cf702c71d98d8060b51f0fa783882a8d6c0f1df9e",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.11.attention.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_11_attention_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "843241b42252c1455a0fed94f6f9f8235672a68097a14448e5d26a49786bfb56",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.11.intermediate.dense.weight",
+      "coreML": "model_bert_encoder_layer_11_intermediate_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "84800173ee794f6108bfd3d749dda9ea0a224d0d7e2f5ae4dd683df3b8fc805b",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.11.intermediate.dense.bias",
+      "coreML": "model_bert_encoder_layer_11_intermediate_dense_bias_to_fp16",
+      "elements": 3072,
+      "fp16SHA256": "d649a0ff0269d4272e0178f0eaed49c383e6f78f954d797431a2fdc2f5084f5c",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.11.output.dense.weight",
+      "coreML": "model_bert_encoder_layer_11_output_dense_weight_to_fp16",
+      "elements": 2359296,
+      "fp16SHA256": "81c76fa7acde16afc5eff227950849b7e5cf17adcc4da9963ba4d3f18a711dd0",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.11.output.dense.bias",
+      "coreML": "model_bert_encoder_layer_11_output_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "ea35a9e9686710b4876fed3563e43b9b19c188b7effcaf6278fa38a8b8ad9e64",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.11.output.LayerNorm.weight",
+      "coreML": "model_bert_encoder_layer_11_output_LayerNorm_weight_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "e351b0d894261a012f7ff83ced6492b30889c77565e99e29c256d9512c647091",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.encoder.layer.11.output.LayerNorm.bias",
+      "coreML": "model_bert_encoder_layer_11_output_LayerNorm_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "cff9799a61a7e6516001f979c4595c5bb863c303173471fa966d89cdda1f3022",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.pooler.dense.weight",
+      "coreML": "model_bert_pooler_dense_weight_to_fp16",
+      "elements": 589824,
+      "fp16SHA256": "b631c3161837e3d6927517c40ba569c54b1368d094069d0d9f0af7993fbbecbd",
+      "exactMatch": true
+    },
+    {
+      "source": "bert.pooler.dense.bias",
+      "coreML": "model_bert_pooler_dense_bias_to_fp16",
+      "elements": 768,
+      "fp16SHA256": "841ac669213977bb316a75b9ca3d2c7c0a6532f2d58f54302773f1f926e75070",
+      "exactMatch": true
+    },
+    {
+      "source": "classifier.weight",
+      "coreML": "model_classifier_weight_to_fp16",
+      "elements": 3840,
+      "fp16SHA256": "fd7662f04bb48bbab34d266faf810f972038a12e689c1a8f6a5933b9685b562d",
+      "exactMatch": true
+    },
+    {
+      "source": "classifier.bias",
+      "coreML": "model_classifier_bias_to_fp16",
+      "elements": 5,
+      "fp16SHA256": "176346878ccd14439a3be53701da35eba6808954d69b35abc484ebb82ec936cf",
+      "exactMatch": true
+    }
+  ],
+  "exactlyMatchedParameterTensors": 201,
+  "matchedElements": 177562373,
+  "positionEmbeddingNote": "Only positions 0...127 are retained in this fixed-128 export; all retained values match after float16 rounding",
+  "unusedSourceBuffer": [
+    "bert.embeddings.position_ids"
+  ],
+  "outputKind": "logits",
+  "outputGraph": [
+    "classifier linear",
+    "cast float16 to float32",
+    "classify in unchanged LABEL_0...4 order"
+  ],
+  "vocabularyByteIdentical": true,
+  "environment": {
+    "python": "3.11.14",
+    "torch": "2.9.1",
+    "transformers": "4.57.1",
+    "coremltools": "9.0",
+    "numpy": "2.2.6"
+  }
+}

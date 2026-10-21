@@ -1,0 +1,163 @@
+{
+  "baselineRuns": [
+    "DB95A5CF-53D1-416F-8F2E-CE461E22891A",
+    "7001B5A5-9788-4926-8213-042FCF325AFD",
+    "D8F58BCC-65B1-45E4-876A-2E2E8F2DCB71"
+  ],
+  "checksums": {
+    "build.json": "3da2377b237c6416fdcd3e32eb3b0586a3f6f941917f16bb914573c51f87d8ff",
+    "human-device-snapshot.json": "928f91d4a3213db21aa88ce6e171873b22ffaef2c42c09151a4735e0cc78f7a0",
+    "human-observations.json": "7c96675b763028bb6456541f66bdf4082c8a84158f7051afb4f903bd5616ac65",
+    "interrupted-pilot.json": "c42a3aa5abdff42961907fbea86e9d9824a01b2899872bb485975696242174f2",
+    "physical-checklist.json": "215c1ee2f8394473e4590969846184122a9171d9fdf33d2ce9d9970472b6d476",
+    "run-01.json": "064900ea0e5a8aeffdae9a52c5afb80a0f577d4e995ca4bed3a1ffd630090b04",
+    "run-02.json": "9a9308f8fd35197260778d876b73f72a2776d723e5f8ff9019a52ffd29caada9",
+    "run-03.json": "81eb4a9236f95e3027e0e8188da218ae7c059603a0ebf651aa337fabf7e50f0e"
+  },
+  "dispatch": {
+    "play": {
+      "maximumMilliseconds": 1.35925,
+      "p50Milliseconds": 0.8778334999999999,
+      "p95Milliseconds": 1.35925,
+      "sampleCount": 6
+    },
+    "replace": {
+      "maximumMilliseconds": 2.34975,
+      "p50Milliseconds": 2.181708,
+      "p95Milliseconds": 2.34975,
+      "sampleCount": 3
+    },
+    "start": {
+      "maximumMilliseconds": 1.088667,
+      "p50Milliseconds": 0.5701875,
+      "p95Milliseconds": 1.088667,
+      "sampleCount": 12
+    },
+    "stop-owned": {
+      "maximumMilliseconds": 0.278666,
+      "p50Milliseconds": 0.005375,
+      "p95Milliseconds": 0.2775,
+      "sampleCount": 27
+    }
+  },
+  "elapsedSeconds": [
+    0.8252741250000001,
+    0.8419354170000001,
+    0.82740275
+  ],
+  "firstAppleAnalysisMilliseconds": [
+    39.33,
+    40.086541,
+    38.662334
+  ],
+  "humanAssessment": {
+    "backgroundStopsAndDoesNotReplay": "passed",
+    "calmHeartbeatDistinguishable": "failed",
+    "laterStages": "reported-normal"
+  },
+  "lifetimePeakPhysicalFootprintBytes": [
+    17761488,
+    17614008,
+    17679544
+  ],
+  "metrics": [
+    {
+      "maximumMillisecondsByRun": [
+        1.4485,
+        2.291458,
+        1.412917
+      ],
+      "name": "apple-analysis-49-utf8-bytes",
+      "p50MillisecondsByRun": [
+        1.093583,
+        1.125333,
+        1.08675
+      ],
+      "p95MillisecondsByRun": [
+        1.150958,
+        1.251917,
+        1.156334
+      ],
+      "samplesPerRun": 200
+    },
+    {
+      "maximumMillisecondsByRun": [
+        1.285916,
+        1.192042,
+        1.224917
+      ],
+      "name": "apple-analysis-488-utf8-bytes",
+      "p50MillisecondsByRun": [
+        1.099709,
+        1.114334,
+        1.106292
+      ],
+      "p95MillisecondsByRun": [
+        1.154125,
+        1.166791,
+        1.144959
+      ],
+      "samplesPerRun": 200
+    },
+    {
+      "maximumMillisecondsByRun": [
+        1.163042,
+        1.208125,
+        1.241166
+      ],
+      "name": "apple-analysis-1952-utf8-bytes",
+      "p50MillisecondsByRun": [
+        1.1195,
+        1.137333,
+        1.137542
+      ],
+      "p95MillisecondsByRun": [
+        1.145209,
+        1.159083,
+        1.159667
+      ],
+      "samplesPerRun": 200
+    },
+    {
+      "maximumMillisecondsByRun": [
+        0.090542,
+        0.110375,
+        0.090375
+      ],
+      "name": "scene-and-narrative-policy-no-renderer",
+      "p50MillisecondsByRun": [
+        0.042333,
+        0.04225,
+        0.0425
+      ],
+      "p95MillisecondsByRun": [
+        0.063208,
+        0.063167,
+        0.0635
+      ],
+      "samplesPerRun": 1000
+    }
+  ],
+  "physicalFootprintBytes": [
+    17515728,
+    17351864,
+    17450168
+  ],
+  "processCPUSeconds": [
+    0.8428,
+    0.858102,
+    0.842736
+  ],
+  "releaseStatus": "incomplete",
+  "schemaVersion": 1,
+  "thermalStateAfter": [
+    0,
+    0,
+    0
+  ],
+  "thermalStateBefore": [
+    0,
+    0,
+    0
+  ]
+}

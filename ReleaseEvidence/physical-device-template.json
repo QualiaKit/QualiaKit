@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "identity": {"model": "", "policy": "", "runtime": "", "build": ""},
+  "device": "",
+  "os": "",
+  "physicalDevice": null,
+  "testedAt": "",
+  "reviewer": "",
+  "status": "pending",
+  "checklist": {
+    "start": "pending",
+    "update": "pending",
+    "independentAccent": "pending",
+    "stop": "pending",
+    "reset": "pending",
+    "background": "pending",
+    "disable": "pending",
+    "continuousDisabled": "pending",
+    "maximumDuration": "pending",
+    "intensity": "pending",
+    "reduceMotion": "pending",
+    "comfort": "pending"
+  },
+  "notes": ""
+}

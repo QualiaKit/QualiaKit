@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-21",
+  "status": "accepted-with-recorded-exceptions",
+  "scope": "Current iPhone 17 Pro device-test iteration",
+  "source": "Explicit user decision in this task",
+  "userStatement": "ну.. давай считать что все окей",
+  "runID": "30ECE646-3524-4E4C-87F4-9418AE02FCBB",
+  "reportSHA256": "e54f45e42c8688df19c3a763a3bc638558243552abfc4949c067ca5fe90a1d95",
+  "acceptedExceptions": [
+    "No preferred profile selected",
+    "System Reduce Motion result not recorded",
+    "General sustained stage omitted in quick run"
+  ],
+  "furtherDeviceRunsRequiredForThisAcceptance": false,
+  "rawEvidenceUnchanged": true,
+  "scopeExclusions": [
+    "Narrative semantic qualification",
+    "Claim that omitted measurements passed",
+    "Broader device or population validation"
+  ]
+}

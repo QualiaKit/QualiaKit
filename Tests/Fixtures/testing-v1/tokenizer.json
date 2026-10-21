@@ -1,0 +1,348 @@
+{
+  "cases": [
+    {
+      "id": "empty",
+      "ids": [
+        2,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "mask": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "text": "",
+      "tokens": [
+        "[CLS]",
+        "[SEP]",
+        "[PAD]",
+        "[PAD]",
+        "[PAD]",
+        "[PAD]",
+        "[PAD]",
+        "[PAD]"
+      ]
+    },
+    {
+      "id": "ascii-case",
+      "ids": [
+        2,
+        4,
+        5,
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "text": "QUIET storm",
+      "tokens": [
+        "[CLS]",
+        "quiet",
+        "storm",
+        "[SEP]",
+        "[PAD]",
+        "[PAD]",
+        "[PAD]",
+        "[PAD]"
+      ]
+    },
+    {
+      "id": "wordpiece",
+      "ids": [
+        2,
+        6,
+        7,
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "text": "rises",
+      "tokens": [
+        "[CLS]",
+        "rise",
+        "##s",
+        "[SEP]",
+        "[PAD]",
+        "[PAD]",
+        "[PAD]",
+        "[PAD]"
+      ]
+    },
+    {
+      "id": "punctuation",
+      "ids": [
+        2,
+        4,
+        5,
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "text": "quiet—storm…",
+      "tokens": [
+        "[CLS]",
+        "quiet",
+        "storm",
+        "[SEP]",
+        "[PAD]",
+        "[PAD]",
+        "[PAD]",
+        "[PAD]"
+      ]
+    },
+    {
+      "id": "unknown-whole-word",
+      "ids": [
+        2,
+        1,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "mask": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "text": "rising",
+      "tokens": [
+        "[CLS]",
+        "[UNK]",
+        "[SEP]",
+        "[PAD]",
+        "[PAD]",
+        "[PAD]",
+        "[PAD]",
+        "[PAD]"
+      ]
+    },
+    {
+      "id": "cyrillic",
+      "ids": [
+        2,
+        8,
+        9,
+        10,
+        3,
+        0,
+        0,
+        0
+      ],
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "text": "ЁЖ не тень",
+      "tokens": [
+        "[CLS]",
+        "ёж",
+        "не",
+        "тень",
+        "[SEP]",
+        "[PAD]",
+        "[PAD]",
+        "[PAD]"
+      ]
+    },
+    {
+      "id": "yo-is-not-e",
+      "ids": [
+        2,
+        1,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "mask": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "text": "еж",
+      "tokens": [
+        "[CLS]",
+        "[UNK]",
+        "[SEP]",
+        "[PAD]",
+        "[PAD]",
+        "[PAD]",
+        "[PAD]",
+        "[PAD]"
+      ]
+    },
+    {
+      "id": "emoji-whitespace",
+      "ids": [
+        2,
+        11,
+        4,
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "text": "\t🙂\nquiet",
+      "tokens": [
+        "[CLS]",
+        "🙂",
+        "quiet",
+        "[SEP]",
+        "[PAD]",
+        "[PAD]",
+        "[PAD]",
+        "[PAD]"
+      ]
+    },
+    {
+      "id": "boundary",
+      "ids": [
+        2,
+        4,
+        5,
+        4,
+        5,
+        4,
+        5,
+        3
+      ],
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "text": "quiet storm quiet storm quiet storm",
+      "tokens": [
+        "[CLS]",
+        "quiet",
+        "storm",
+        "quiet",
+        "storm",
+        "quiet",
+        "storm",
+        "[SEP]"
+      ]
+    },
+    {
+      "id": "truncation",
+      "ids": [
+        2,
+        4,
+        5,
+        4,
+        5,
+        4,
+        5,
+        3
+      ],
+      "mask": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "text": "quiet storm quiet storm quiet storm rises",
+      "tokens": [
+        "[CLS]",
+        "quiet",
+        "storm",
+        "quiet",
+        "storm",
+        "quiet",
+        "storm",
+        "[SEP]"
+      ]
+    }
+  ],
+  "oracle": "reviewed literal token vectors, independent of Swift and protected assets",
+  "profile": "legacy-bert-public-vocabulary",
+  "sequenceLength": 8,
+  "version": "testing-v1"
+}

@@ -18,7 +18,18 @@ final class CoreMLRuntimeTests: XCTestCase {
     }
 
     func directory(_ name: String = "exclusive-logits-v2") -> URL {
-        Bundle.module.bundleURL.appendingPathComponent("Resources/CoreML/" + name)
+        (Bundle.module.resourceURL ?? Bundle.module.bundleURL).appendingPathComponent(resourceSubdirectory(name))
+    }
+
+    func resourceSubdirectory(_ name: String = "exclusive-logits-v2") -> String {
+        // SwiftPM's flat bundle and Xcode's Contents/Resources bundle resolve
+        // the copied Resources directory at different depths.
+        let root = Bundle.module.resourceURL ?? Bundle.module.bundleURL
+        let direct = "CoreML/" + name
+        if FileManager.default.fileExists(atPath: root.appendingPathComponent(direct + "/manifest.json").path) {
+            return direct
+        }
+        return "Resources/" + direct
     }
 
     func contract(_ name: String = "exclusive-logits-v2") throws -> ValidatedContract {
@@ -269,7 +280,7 @@ final class CoreMLRuntimeTests: XCTestCase {
     }
 
     func testBundledSourceAndLanguageContextContract() async throws {
-        let source = try BundledQualiaModelSource(bundle: .module, subdirectory: "CoreML/exclusive-logits-v2")
+        let source = try BundledQualiaModelSource(bundle: .module, subdirectory: resourceSubdirectory())
         let analyzer = try await CoreMLQualiaAnalyzer(source: source)
         let requests = [
             try QualiaInput(id: .init(rawValue: "undetermined"), text: "quiet"),
