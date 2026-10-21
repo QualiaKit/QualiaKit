@@ -8,7 +8,7 @@ import re
 import shutil
 import subprocess
 import tempfile
-from urllib.parse import unquote,urlparse
+from urllib.parse import unquote
 
 ROOT=Path(__file__).resolve().parents[2]
 GUIDES=ROOT/'docs'
@@ -117,16 +117,43 @@ def abstract(symbol):
     if kind in ['swift.property','swift.type.property']:return f'Exposes `{name}` from `{parent}`; the declaration specifies its value type and mutability.'
     return f'The `{name}` public contract for this layer; use the declared members and the lifecycle, capability and failure rules below.'
 
+GRAPH_ROOT=ROOT/'.build/developer-documentation/symbolgraphs'
+
+def export_graphs():
+    # SwiftPM's dump-symbol-graph may include unbuilt synthesized test runners,
+    # and its output directory differs between toolchains. Build only the public
+    # targets in a dedicated scratch tree, then extract each module explicitly.
+    sdk=subprocess.check_output(['xcrun','--sdk','macosx','--show-sdk-path'],text=True).strip()
+    target_info=json.loads(subprocess.check_output(['swift','-print-target-info'],text=True))
+    target=target_info['target']['unversionedTriple']+'13.0'
+    for package,group,modules in [(ROOT,'core',['QualiaKit','QualiaTesting']),
+                                  (ROOT/'Packages/QualiaCoreML','coreml',['QualiaCoreML'])]:
+        scratch=ROOT/'.build/developer-documentation'/group
+        build=['swift','build','--package-path',str(package),'--scratch-path',str(scratch)]
+        for module in modules:
+            call(build+['--target',module])
+        binary=Path(subprocess.check_output(build+['--show-bin-path'],cwd=ROOT,text=True).strip())
+        for module in modules:
+            output=GRAPH_ROOT/module
+            if output.exists():shutil.rmtree(output)
+            output.mkdir(parents=True)
+            # Native SwiftPM uses Modules/; Swift Build places modules beside
+            # products. Extension blocks let DocC retain our SwiftUI methods.
+            call(['xcrun','swift-symbolgraph-extract','-module-name',module,
+                  '-target',target,'-sdk',sdk,'-I',str(binary/'Modules'),'-I',str(binary),
+                  '-module-cache-path',str(scratch/'ModuleCache'),
+                  '-minimum-access-level','public','-skip-synthesized-members',
+                  '-emit-extension-block-symbols','-output-dir',str(output)])
+
 def build(output,skip_export=False):
     sync_catalog()
-    if not skip_export:
-        call(['swift','package','dump-symbol-graph','--minimum-access-level','public','--skip-synthesized-members'])
-        call(['swift','package','--package-path','Packages/QualiaCoreML','dump-symbol-graph','--minimum-access-level','public','--skip-synthesized-members'])
+    if not skip_export:export_graphs()
     output.mkdir(parents=True,exist_ok=True)
     audit={'format':1,'modules':{},'scope':'QualiaKit, QualiaTesting and QualiaCoreML; compiler-generated conformances and legacy products excluded'}
     with tempfile.TemporaryDirectory(prefix='qualia-docc-',dir=output) as temp:
         temp=Path(temp)
-        for module,base in [('QualiaKit',ROOT/'.build/out/symbolgraph'),('QualiaTesting',ROOT/'.build/out/symbolgraph'),('QualiaCoreML',ROOT/'Packages/QualiaCoreML/.build/out/symbolgraph')]:
+        for module in ['QualiaKit','QualiaTesting','QualiaCoreML']:
+            base=GRAPH_ROOT/module
             graphs=temp/module/'graphs';graphs.mkdir(parents=True)
             symbols={}
             for path in sorted(base.glob(module+'*.symbols.json')):
