@@ -124,6 +124,13 @@ def record(base, reference, name, revision):
     for field in DETAILS.get(name, ("runURL", "toolchain", "command")):
         require(field in details and details[field] is not None and details[field] != "" and details[field] is not False,
                 f"Missing {name}.{field}")
+        if field not in ("unresolvedRisks", "failures"):
+            require(details[field] not in ([], {}), f"Empty {name}.{field}")
+    affirmations = {"privacy": ("noHiddenTelemetry", "securityChannelVerified"),
+                    "author-pilot": ("singlePhysicalRenderer", "consentedFeedback"),
+                    "api-freeze": ("repeatedDXIssuesResolved",)}
+    for field in affirmations.get(name, ()):
+        require(details[field] is True, f"Affirmative review required: {name}.{field}")
     if name in CHECKS:
         require(details.get("conclusion") == "success", "Failed critical CI job: " + name)
         require(re.fullmatch(r"https://github.com/QualiaKit/QualiaKit/actions/runs/[0-9]+(?:/job/[0-9]+)?",
@@ -158,7 +165,7 @@ def validate(candidate_path, root=ROOT):
     require(set(candidate) == {"schemaVersion", "version", "stage", "sourceRevision", "sourceTree", "inventory",
                                "identities", "records", "pilots", "criticalDXIssues", "waivers", "narrative",
                                "apiBaseline", "apiCurrent", "apiDiff"}, "Invalid candidate fields")
-    require(candidate["schemaVersion"] == 1, "Unsupported candidate schema")
+    require(type(candidate["schemaVersion"]) is int and candidate["schemaVersion"] == 1, "Unsupported candidate schema")
     version, stage = candidate["version"], candidate["stage"]
     require(stage in ("beta", "stable"), "Unknown release stage")
     require(re.fullmatch(r"0\.[1-9][0-9]*\.[0-9]+-beta\.[1-9][0-9]*" if stage == "beta" else r"[1-9][0-9]*\.[0-9]+\.[0-9]+", version), "Invalid release version")
@@ -175,6 +182,10 @@ def validate(candidate_path, root=ROOT):
     base = candidate_path.parent
     before = read_json(referenced(base, candidate["apiBaseline"]))
     current = read_json(referenced(base, candidate["apiCurrent"]))
+    for snapshot in (before, current):
+        require(snapshot.get("schemaVersion") == 1 and all(
+            snapshot.get("modules", {}).get(module, {}).get("symbols")
+            for module in ("QualiaKit", "QualiaTesting", "QualiaCoreML")), "Incomplete compiler API inventory")
     actual_diff = difference(before, current)
     require(current["sourceSHA256"] == source_hash(root), "Stale compiler API inventory")
     require(read_json(referenced(base, candidate["apiDiff"])) == actual_diff, "API diff does not match inventories")
@@ -187,6 +198,7 @@ def validate(candidate_path, root=ROOT):
     require(required <= candidate["records"].keys(), "Missing release evidence: " + ", ".join(sorted(required - candidate["records"].keys())))
     records = {name: record(base, ref, name, revision) for name, ref in candidate["records"].items()}
     review = records["api-review"]["details"]
+    require(re.fullmatch(r"[0-9a-f]{40}", review["baselineRevision"]), "Missing reviewed API baseline revision")
     referenced(base, review["migrationNotes"])
     require(review["decision"] in ("compatible", "breaking-approved"), "API review not approved")
     if actual_diff["potentiallyBreaking"]:

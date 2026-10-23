@@ -39,7 +39,7 @@ class ReleaseGateTests(unittest.TestCase):
         self.git("-c", "user.name=Release Test", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "Synthetic fixture")
         self.candidate = prepare("0.1.0-beta.1", "beta", self.root)
         current = {"schemaVersion": 1, "sourceSHA256": source_hash(self.root),
-                   "modules": {m: {"symbols": {}, "relationships": []} for m in MODULES}}
+                   "modules": {m: {"symbols": {"synthetic": {"declaration": "func fixture()"}}, "relationships": []} for m in MODULES}}
         self.candidate["apiBaseline"] = self.write("api-baseline.json", current)
         self.candidate["apiCurrent"] = self.write("api-current.json", current)
         self.candidate["apiDiff"] = self.write("api-diff.json", difference(current, current))
@@ -70,7 +70,13 @@ class ReleaseGateTests(unittest.TestCase):
         if name == "HG-0015-005":
             details["exampleRevision"] = self.candidate["sourceRevision"]
         if name == "api-review":
-            details.update(decision="compatible", migrationNotes=self.migration)
+            details.update(decision="compatible", migrationNotes=self.migration, baselineRevision=self.candidate["sourceRevision"])
+        if name == "privacy":
+            details.update(noHiddenTelemetry=True, securityChannelVerified=True)
+        if name == "author-pilot":
+            details.update(singlePhysicalRenderer=True, consentedFeedback=True)
+        if name == "api-freeze":
+            details.update(repeatedDXIssuesResolved=True)
         return self.write(f"records/{name}{suffix}.json", {
             "name": name, "status": "passed", "sourceRevision": self.candidate["sourceRevision"],
             "reviewer": "synthetic test producer", "details": details, "artifacts": [self.raw]})
