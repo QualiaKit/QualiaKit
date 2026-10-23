@@ -96,6 +96,7 @@ The walkthrough prints a bounded redacted decision report; it emits no vibration
 - [Privacy and diagnostics](docs/PrivacyAndDataFlow.md) · [Accessibility](docs/Accessibility.md)
 - [Performance](docs/Performance.md) · [Pre-1.0 migration](docs/MigrationBefore1_0.md)
 - [Public API reference and DocC](docs/APIReference.md) · [Contributing](CONTRIBUTING.md)
+- [Release status and version policy](docs/release/README.md) · [Support](SUPPORT.md) · [Security](SECURITY.md)
 
 The optional `QualiaCoreML` product lives in `Packages/QualiaCoreML`; see its setup
 guide. The older `Qualia` and `QualiaBert` products are legacy APIs. The device

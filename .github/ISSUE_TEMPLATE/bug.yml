@@ -1,0 +1,26 @@
+name: Runtime or integration issue
+description: Report a reproducible problem using synthetic data
+body:
+  - type: markdown
+    attributes:
+      value: 'For vulnerabilities use SECURITY.md. Do not attach private text, model weights, credentials or session dumps.'
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options: [Runtime bug, Model quality, Policy or tactile experience, Unsupported environment, Integration question]
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Commit/version, product, Xcode/Swift, device/OS
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Synthetic reproduction, expected and observed behavior
+      description: Include model/policy versions and lifecycle steps when relevant. Review diagnostics before sharing.
+    validations:
+      required: true

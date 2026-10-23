@@ -1,0 +1,25 @@
+name: Consented pilot integration
+description: Offer an independent integration or public pilot feedback
+body:
+  - type: markdown
+    attributes:
+      value: 'Share only information you agree to publish here. No raw user text, private app data or unsolicited participant identities.'
+  - type: textarea
+    id: scope
+    attributes:
+      label: Team alias, app/domain and independence from the author app
+    validations:
+      required: true
+  - type: textarea
+    id: build
+    attributes:
+      label: Source/model/policy/effect versions and integration proof
+      description: Include first-effect time, setup issues and public or consented references.
+    validations:
+      required: true
+  - type: textarea
+    id: feedback
+    attributes:
+      label: API feedback, unresolved DX issues and publication/retention consent scope
+    validations:
+      required: true
