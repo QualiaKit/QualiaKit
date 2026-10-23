@@ -1,0 +1,84 @@
+name: Release checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_call:
+    inputs:
+      source_ref:
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-checks-${{ github.event_name }}-${{ github.ref }}-${{ inputs.source_ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' || github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/') }}
+
+jobs:
+  release-contracts:
+    name: Release contracts and current public consumer
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_ref || github.sha }}
+      - run: sudo xcode-select -s /Applications/Xcode_26.6.app/Contents/Developer
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Lint release sources, governance, privacy and links
+        run: ./scripts/release-check
+      - name: Release rejection and privacy boundary tests
+        run: swift test --filter ReleaseAndAdoptionTests
+      - name: Package resolution and public consumers
+        run: |
+          swift package resolve
+          swift package --package-path Packages/QualiaCoreML resolve
+          swift test --package-path Examples/DeveloperExperience
+      - name: Current toolchain build, strict concurrency and coverage
+        run: |
+          swift build
+          swift build --target QualiaTesting -Xswiftc -strict-concurrency=complete -Xswiftc -warnings-as-errors
+          swift test --enable-code-coverage
+          coverage_file=$(swift test --show-codecov-path)
+          python3 Tools/Release/coverage.py "$coverage_file" "$RUNNER_TEMP/coverage.json"
+      - name: Core ML fixture parity
+        run: swift test --package-path Packages/QualiaCoreML
+      - name: Compiler API inventory and diff
+        run: python3 Tools/Release/api.py --output "$RUNNER_TEMP/api"
+      - name: Build DocC against the same public API
+        run: python3 Tools/DeveloperExperience/build_docs.py --skip-export --output "$RUNNER_TEMP/docs"
+      - name: Build flagship example
+        run: >-
+          xcodebuild build -project Examples/QualiaExample/QualiaExample.xcodeproj
+          -scheme QualiaExample -configuration Release -destination 'generic/platform=iOS Simulator'
+          CODE_SIGNING_ALLOWED=NO
+      - name: Archive documentation preserving DocC routes
+        run: tar -czf "$RUNNER_TEMP/release-docc.tar.gz" -C "$RUNNER_TEMP/docs" .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-public-checks
+          path: |
+            ${{ runner.temp }}/api
+            ${{ runner.temp }}/coverage.json
+            ${{ runner.temp }}/release-docc.tar.gz
+          if-no-files-found: error
+  minimum-toolchain:
+    name: Release minimum toolchain
+    runs-on: macos-14
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_ref || github.sha }}
+      - run: sudo xcode-select -s /Applications/Xcode_15.2.app/Contents/Developer
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: swift build
+      - run: swift test
+      - run: swift test --package-path Examples/DeveloperExperience

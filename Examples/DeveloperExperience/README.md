@@ -26,3 +26,13 @@ The consumer test uses a fake clock and independent literal descriptors. A passi
 software test does not imply model accuracy or tactile comfort. Read the root
 [Getting Started](../../docs/GettingStarted.md) for setup and lifecycle, and
 [privacy guidance](../../docs/PrivacyAndDataFlow.md) before handling app text.
+
+## Pilot integration
+
+`PilotComparison` runs the candidate through an internally constructed recording
+renderer while the primary session alone owns physical playback. The host
+serializes accepted inputs and lifecycle calls. `PilotFeedback` creates only
+explicitly consented, closed-schema judgments with fingerprinted installation
+metadata; it has no text fields or transport. `PilotTests` verifies single primary
+playback, no replay after suspension and the exported privacy boundary.
+See the [pilot protocol](../../docs/release/Pilots.md) before a real app trial.
