@@ -9,8 +9,9 @@ objective; external developer timing has not yet been collected.
 
 Use Swift 5.9+, iOS 16+ or macOS 13+. Add the repository URL through Xcode's
 Package Dependencies and select the QualiaKit product. For a local checkout,
-add the root package directory. Pin a reviewed revision; `main` is not a stable
-release promise. For the checked-in app, open
+add the root package directory. For integration testing, select exact version
+`0.1.0-dev.1`; add `QualiaCoreML` as well when using a BERT/Core ML model. This
+development tag and `main` are not stable release promises. For the checked-in app, open
 `Examples/QualiaExample/QualiaExample.xcodeproj` in Xcode 26.6+, select a team and
 run on a physical iPhone. No model weights are downloaded by the demo.
 

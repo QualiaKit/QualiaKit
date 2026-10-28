@@ -1,0 +1,2 @@
+coremltools==8.3.0
+numpy==2.2.6

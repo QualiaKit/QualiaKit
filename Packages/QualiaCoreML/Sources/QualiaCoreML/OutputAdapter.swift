@@ -7,9 +7,20 @@ enum RuntimeOutputAdapter {
         let labels = contract.manifest.outputs.labels.map(\.name)
         guard Set(raw.keys) == Set(labels) else { throw CoreMLRuntimeError.unexpectedLabels }
         let values = labels.compactMap { raw[$0] }
+        let probabilities = try probabilities(values, classification: contract.execution.classification,
+                                              transform: contract.execution.transform)
+        var result: [QualiaSignal: QualiaScore] = [:]
+        for (label, value) in zip(labels, probabilities) {
+            guard let signal = contract.mapping[label] else { throw CoreMLRuntimeError.invalidSemanticMapping }
+            result[signal] = try QualiaScore(value: Float(value), confidence: nil)
+        }
+        return result
+    }
+
+    static func probabilities(_ values: [Double], classification: String, transform: String) throws -> [Double] {
         guard values.allSatisfy(\.isFinite) else { throw CoreMLRuntimeError.invalidNumericOutput }
         let probabilities: [Double]
-        switch contract.execution.transform {
+        switch transform {
         case "softmax":
             guard let maximum = values.max() else { throw CoreMLRuntimeError.invalidNumericOutput }
             let exponents = values.map { exp($0 - maximum) }
@@ -26,16 +37,11 @@ enum RuntimeOutputAdapter {
             throw CoreMLRuntimeError.invalidNumericOutput
         }
         // This tolerance only validates a probability distribution; values are never renormalized.
-        if contract.execution.classification == "exclusive",
+        if classification == "exclusive",
            abs(probabilities.reduce(0, +) - 1) > 0.00001 {
             throw CoreMLRuntimeError.invalidNumericOutput
         }
-        var result: [QualiaSignal: QualiaScore] = [:]
-        for (label, value) in zip(labels, probabilities) {
-            guard let signal = contract.mapping[label] else { throw CoreMLRuntimeError.invalidSemanticMapping }
-            result[signal] = try QualiaScore(value: Float(value), confidence: nil)
-        }
-        return result
+        return probabilities
     }
 
     static func extract(_ output: any MLFeatureProvider, contract: ValidatedContract) throws -> [String: Double] {
@@ -54,7 +60,7 @@ enum RuntimeOutputAdapter {
 }
 
 enum RuntimeModelValidation {
-    private static func isFixed(_ constraint: MLMultiArrayShapeConstraint, shape: [Int]) -> Bool {
+    static func isFixed(_ constraint: MLMultiArrayShapeConstraint, shape: [Int]) -> Bool {
         switch constraint.type {
         case .unspecified: return true
         case .enumerated:

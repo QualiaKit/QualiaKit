@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "kind": "qualia-bert-sequence-classification",
+  "identifier": "fixture.cased-single",
+  "version": "1",
+  "languages": [
+    "en"
+  ],
+  "model": {
+    "path": "model.mlmodel",
+    "format": "mlmodel",
+    "sha256": "ecc1190f2ad182d3b39b88cdeb99c898525093fecc919241c2dab9bc1bef63f6"
+  },
+  "tokenizer": {
+    "type": "bert-wordpiece-v1",
+    "vocabulary": "vocab.txt",
+    "vocabularySha256": "396b64f61d8949e638952f6fa2402c72dea47ff55fd9a3c88a37749c6a14492d",
+    "vocabularyLineCount": 31,
+    "lowercase": false,
+    "stripAccents": false,
+    "cleanText": true,
+    "tokenizeChineseCharacters": true,
+    "unicodeNormalization": "bert",
+    "maximumWordCharacters": 100,
+    "continuingSubwordPrefix": "##",
+    "specialTokens": {
+      "pad": {
+        "token": "[PAD]",
+        "id": 0
+      },
+      "unk": {
+        "token": "[UNK]",
+        "id": 1
+      },
+      "cls": {
+        "token": "[CLS]",
+        "id": 2
+      },
+      "sep": {
+        "token": "[SEP]",
+        "id": 3
+      },
+      "mask": {
+        "token": "[MASK]",
+        "id": 4
+      }
+    }
+  },
+  "sequence": {
+    "maximumLength": 12,
+    "template": "singleText",
+    "contextSeparator": "\n",
+    "padding": "right",
+    "overflow": "reject"
+  },
+  "inputs": {
+    "pieces": {
+      "role": "tokenIDs",
+      "shape": [
+        12
+      ],
+      "dataType": "Float32"
+    },
+    "offsets": {
+      "role": "positionIDs",
+      "shape": [
+        12
+      ],
+      "dataType": "Float32"
+    }
+  },
+  "output": {
+    "feature": "class_values",
+    "shape": [
+      2
+    ],
+    "dataType": "Float32",
+    "classification": "exclusive",
+    "transform": "softmax",
+    "labels": [
+      {
+        "name": "raw_0",
+        "signal": "fixture.cased-single.0"
+      },
+      {
+        "name": "raw_1",
+        "signal": "fixture.cased-single.1"
+      }
+    ]
+  }
+}

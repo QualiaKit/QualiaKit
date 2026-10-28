@@ -1,6 +1,6 @@
 # Manifest-driven Core ML runtime: stage 1 of spec 0004
 
-`Packages/QualiaCoreML` is an opt-in local Swift package depending only on the `QualiaKit` domain. Its local fixture path runs actual Core ML inference and returns `QualiaObservation`. It does not replace `QualiaBert` or migrate the current Russian model.
+`QualiaCoreML` is an opt-in product of the root package depending only on the `QualiaKit` domain. The nested `Packages/QualiaCoreML` package remains for existing local consumers. Its local fixture path runs actual Core ML inference and returns `QualiaObservation`. It does not replace `QualiaBert` or migrate the current Russian model.
 
 ```swift
 import QualiaKit
@@ -20,7 +20,7 @@ let observation = try await analyzer.analyze(input)
 
 `installedContractDirectory` contains `manifest.json`, the declared vocabulary and model. `BundledQualiaModelSource(bundle:subdirectory:)` resolves the same contract relative to `bundle.resourceURL`. Official sources perform no network requests. Caller-provided sources must resolve local URLs; remote URLs and escaping relative asset paths are rejected.
 
-For this preview, add the checked-out `Packages/QualiaCoreML` directory as a local package dependency and select its `QualiaCoreML` product. It depends on the root QualiaKit package via `../..`. The root package manifest is unchanged; the new product is not yet exported by the repository's root package URL.
+For integration, add the root repository URL with exact version `0.1.0-dev.1` and select `QualiaCoreML` alongside `QualiaKit`. Local consumers may use the root checkout or the legacy nested package, but not both layouts together.
 
 ## Decisions (2026-09-12)
 
@@ -80,7 +80,18 @@ For `.mlmodel`, SHA-256 identifies the source file bytes and must agree with `mo
 
 ### Q-0004-007 — Preserve the audited root build contract
 
-Spec 0001's checksum closure includes the **whole root `Package.swift`** and the original CI workflow. Therefore adding even an unrelated root target invalidates that audit evidence. Stage 1 lives in `Packages/QualiaCoreML`, with its own manifest/test target and additive CI workflow. It consumes only public `QualiaKit` domain interfaces. The root package, original tests/workflow and all current-model evidence remain byte-identical. Publishing a root-exported product or changing the audited build contract needs an explicit evidence-maintenance decision in a later stage; no audit checks are disabled or rewritten here.
+The original stage kept the root manifest unchanged because the model audit
+pins its complete bytes. The root export in `0.1.0-dev.1` is an explicit build
+contract update. The prior checksums and verification record are preserved in
+`Models/current/history/before-root-coreml-export`; the current source checksum inventory is refreshed for the new package. The
+protected-model verification was rerun on Xcode 27.1 and remains blocked by a
+numerical difference from the frozen golden outputs. The historical passing
+record is not a passing record for this new source. Golden model outputs,
+calibration, model identity and vocabulary remain unchanged. The verifier accepts
+two exact toolchain tuples listed in its lock, rather than silently accepting an
+arbitrary compiler. The exact result is recorded in `Models/current/root-export-verification.json`.
+No tolerance or golden output was relaxed. This development snapshot does not
+qualify a public beta or the semantic quality of a new model.
 
 ## Evidence and remaining work
 

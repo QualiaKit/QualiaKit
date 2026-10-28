@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "kind": "qualia-bert-sequence-classification",
+  "identifier": "fixture.uncased-pair",
+  "version": "1",
+  "languages": [
+    "en"
+  ],
+  "model": {
+    "path": "model.mlmodel",
+    "format": "mlmodel",
+    "sha256": "fa44e0f708ad261bd5a211762835227bc2d68352867309d3957f2fbbf235da28"
+  },
+  "tokenizer": {
+    "type": "bert-wordpiece-v1",
+    "vocabulary": "vocab.txt",
+    "vocabularySha256": "396b64f61d8949e638952f6fa2402c72dea47ff55fd9a3c88a37749c6a14492d",
+    "vocabularyLineCount": 31,
+    "lowercase": true,
+    "stripAccents": true,
+    "cleanText": true,
+    "tokenizeChineseCharacters": true,
+    "unicodeNormalization": "bert",
+    "maximumWordCharacters": 100,
+    "continuingSubwordPrefix": "##",
+    "specialTokens": {
+      "pad": {
+        "token": "[PAD]",
+        "id": 0
+      },
+      "unk": {
+        "token": "[UNK]",
+        "id": 1
+      },
+      "cls": {
+        "token": "[CLS]",
+        "id": 2
+      },
+      "sep": {
+        "token": "[SEP]",
+        "id": 3
+      },
+      "mask": {
+        "token": "[MASK]",
+        "id": 4
+      }
+    }
+  },
+  "sequence": {
+    "maximumLength": 16,
+    "template": "contextThenText",
+    "contextSeparator": "\n",
+    "padding": "right",
+    "overflow": "reject"
+  },
+  "inputs": {
+    "input_ids": {
+      "role": "tokenIDs",
+      "shape": [
+        1,
+        16
+      ],
+      "dataType": "Int32"
+    },
+    "attention_mask": {
+      "role": "attentionMask",
+      "shape": [
+        1,
+        16
+      ],
+      "dataType": "Int32"
+    },
+    "token_type_ids": {
+      "role": "tokenTypeIDs",
+      "shape": [
+        1,
+        16
+      ],
+      "dataType": "Int32"
+    }
+  },
+  "output": {
+    "feature": "logits",
+    "shape": [
+      1,
+      3
+    ],
+    "dataType": "Float32",
+    "classification": "independent",
+    "transform": "sigmoid",
+    "labels": [
+      {
+        "name": "raw_0",
+        "signal": "fixture.uncased-pair.0"
+      },
+      {
+        "name": "raw_1",
+        "signal": "fixture.uncased-pair.1"
+      },
+      {
+        "name": "raw_2",
+        "signal": "fixture.uncased-pair.2"
+      }
+    ]
+  }
+}

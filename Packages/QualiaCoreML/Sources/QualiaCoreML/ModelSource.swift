@@ -20,7 +20,8 @@ public struct QualiaResolvedModel: Sendable {
     }
 }
 
-/// Resolves `.mlmodel` or locally pinned `.mlmodelc` assets relative to a manifest.
+/// Resolves local assets relative to a manifest. The selected analyzer validates
+/// the supported model formats and execution contract.
 public struct FileQualiaModelSource: QualiaModelSource {
     private let resolved: QualiaResolvedModel
 

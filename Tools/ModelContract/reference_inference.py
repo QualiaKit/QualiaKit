@@ -66,6 +66,10 @@ MODEL_VERSION = "sha256-f7ac2156e756a2aa"
 PINNED_PYTHON_VERSION = (3, 14, 0)
 PINNED_PYTHON_VERSION_STRING = "3.14.0"
 PINNED_PYTHON_COMMAND = "python3.14"
+SUPPORTED_TOOLCHAINS = {
+    ("6.3.3", "Xcode 26.6", "3520.5.1"),
+    ("6.4", "Xcode 27.1", "3600.25.1"),
+}
 PROBE_ERRORS = (
     "checksum-inventory",
     "holdout-overrun",
@@ -410,6 +414,11 @@ def tool_output(arguments: list[str]) -> str:
     return result.stdout.strip()
 
 
+def supported_toolchain(swift: str, xcode: str, compiler: str) -> bool:
+    version = re.search(r"Apple Swift version ([0-9]+(?:\.[0-9]+)+)(?:\s|$)", swift)
+    return version is not None and (version[1], xcode, compiler) in SUPPORTED_TOOLCHAINS
+
+
 def validate_environment() -> dict[str, Any]:
     if sys.version_info[:3] != PINNED_PYTHON_VERSION:
         raise ContractError(
@@ -422,7 +431,7 @@ def validate_environment() -> dict[str, Any]:
     swift = tool_output(["xcrun", "swift", "--version"]).splitlines()[0]
     xcode = tool_output(["xcodebuild", "-version"]).splitlines()
     compiler = tool_output(["xcrun", "coremlcompiler", "version"])
-    if "6.3.3" not in swift or xcode[:1] != ["Xcode 26.6"] or compiler != "3520.5.1":
+    if not xcode or not supported_toolchain(swift, xcode[0], compiler):
         raise ContractError("environment", "requirements.lock", "Swift, Xcode, or Core ML compiler differs from pinned lock")
     return {
         "python": platform.python_version(),
@@ -2013,9 +2022,9 @@ def verify_committed_evidence() -> dict[str, Any]:
     recorded_environment = evidence.get("environment", {})
     if (
         recorded_environment.get("python") != PINNED_PYTHON_VERSION_STRING
-        or "6.3.3" not in recorded_environment.get("swift", "")
-        or recorded_environment.get("xcode") != "Xcode 26.6"
-        or recorded_environment.get("coremlcompiler") != "3520.5.1"
+        or not supported_toolchain(recorded_environment.get("swift", ""),
+                                   recorded_environment.get("xcode", ""),
+                                   recorded_environment.get("coremlcompiler", ""))
     ):
         raise ContractError("attestation", "verification-v1.json", "recorded toolchain differs from lock")
     return {
