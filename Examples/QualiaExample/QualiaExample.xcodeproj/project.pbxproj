@@ -109,7 +109,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				3A3DE5082EDCF608004B3BCA /* XCLocalSwiftPackageReference "QualiaKit" */,
-				DA1300010000000000000002 /* XCLocalSwiftPackageReference "QualiaCoreML" */,
 				DA1400010000000000000002 /* XCLocalSwiftPackageReference "DeveloperExperience" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -374,10 +373,6 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../..";
 		};
-		DA1300010000000000000002 /* XCLocalSwiftPackageReference "QualiaCoreML" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = "../../Packages/QualiaCoreML";
-		};
 		DA1400010000000000000002 /* XCLocalSwiftPackageReference "DeveloperExperience" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../DeveloperExperience";
@@ -392,7 +387,7 @@
 		};
 		DA1300010000000000000003 /* QualiaCoreML */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = DA1300010000000000000002 /* XCLocalSwiftPackageReference "QualiaCoreML" */;
+			package = 3A3DE5082EDCF608004B3BCA /* XCLocalSwiftPackageReference "QualiaKit" */;
 			productName = QualiaCoreML;
 		};
 		DA1400010000000000000003 /* QualiaExamples */ = {

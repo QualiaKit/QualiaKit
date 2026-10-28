@@ -22,6 +22,13 @@ Apple sentiment and the recovered Russian sentiment model do not establish
 suspense, threat or narrative understanding. There is no bundled production
 narrative model.
 
+Applications can keep their model weights private and supply an analyzer through
+`QualiaAnalyzing`. Model assets belong to the application and are distributed
+separately from the library. The optional `QualiaCoreML` package includes a reusable
+`BertQualiaAnalyzer` for compatible BERT classifiers; replacing a model requires
+assets and configuration, not another app-specific analyzer. See
+[using local models](docs/UsingCoreMLModels.md).
+
 ## Run the demo
 
 Open `Examples/QualiaExample/QualiaExample.xcodeproj`, select your signing team,
@@ -98,8 +105,9 @@ The walkthrough prints a bounded redacted decision report; it emits no vibration
 - [Public API reference and DocC](docs/APIReference.md) · [Contributing](CONTRIBUTING.md)
 - [Release status and version policy](docs/release/README.md) · [Support](SUPPORT.md) · [Security](SECURITY.md)
 
-The optional `QualiaCoreML` product lives in `Packages/QualiaCoreML`; see its setup
-guide. The older `Qualia` and `QualiaBert` products are legacy APIs. The device
+The optional `QualiaCoreML` product is exported by the root package. For integration
+testing, select exact version `0.1.0-dev.1` and both `QualiaKit` and `QualiaCoreML`;
+see the setup guide. The older `Qualia` and `QualiaBert` products are legacy APIs. The device
 lab is an opt-in evaluation build, documented [separately](Documentation/DeviceEvaluation.md).
 
 Diagnostics are off by default. Core has no networking or analytics transport;

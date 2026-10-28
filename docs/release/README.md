@@ -5,6 +5,22 @@ The release infrastructure is implemented independently of release approval.
 The October 21 iPhone acceptance remains valid for its recorded iteration and
 exceptions. It does not approve a future release or fill omitted measurements.
 
+## Development integration tag
+
+At the owner's request, `0.1.0-dev.1` pins the source for application integration.
+Select **Exact Version** in Xcode and the `QualiaKit` and optional `QualiaCoreML`
+products from the same repository URL. This is an immutable development snapshot,
+not an approved beta/stable release or a claim of narrative-model qualification.
+The old higher-numbered tags remain legacy; do not use a broad version range.
+No private model, vocabulary, training corpus or evaluation report is published.
+
+The beta/stable evidence requirements below remain unchanged. This development
+tag does not satisfy, waive or mark any pending physical, pilot or human gate as
+passed. It has no qualified-release bundle. Applications can use the tagged code
+for integration and testing while completing those independent checks.
+
+## Qualified releases
+
 The proposed first new-runtime version is **0.1.0-beta.1**, still an owner decision.
 “2.0” in architecture/diagnostics identifies the runtime generation. Existing tags
 up to `3.0.0` identify the legacy products and must not be moved or deleted.

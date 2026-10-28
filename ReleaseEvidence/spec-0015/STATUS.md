@@ -1,7 +1,9 @@
 # Spec 0015 evidence status
 
 This directory tracks release infrastructure, **not release approval**. No beta
-version or tag has been created. The proposed `0.1.0-beta.1` remains unapproved.
+version has been approved. Development integration tag `0.1.0-dev.1` is a source
+snapshot requested by the owner, not a qualified release. The proposed
+`0.1.0-beta.1` remains unapproved; the pending gates below are unchanged.
 
 | Evidence | State |
 | --- | --- |

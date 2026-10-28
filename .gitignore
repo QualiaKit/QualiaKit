@@ -71,6 +71,15 @@ fastlane/test_output
 RuBSentimentModel.mlpackage/
 LocalArtifacts/
 
+# App-owned narrative research stays local, outside the public library release.
+# Preserve the existing experiment layout without publishing data or reports.
+/Tools/Narrative/
+/Evaluation/narrative/
+/Evaluation/reports/bert-tiny-*/
+/Evaluation/reports/narrative-*/
+/outputs/bert-tiny-*/
+/.github/workflows/narrative-research.yml
+
 # Local Python evaluation caches.
 __pycache__/
 *.pyc

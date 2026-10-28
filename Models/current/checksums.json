@@ -6,7 +6,7 @@
     "Models/current/MODEL_CARD.md": "c15be731d2cd545ee557270b34baa68fef841cdad4370c02eead99755e16c92e",
     "Models/current/manifest.json": "43f507fd7a27c177bdd38da736aaa6826b3bcce25f905f8cb55815e87e435656",
     "Models/current/manifest.schema.json": "d155c7ec622758500496665340b55997bcb69174e2723bd68b2a8dc877f20a25",
-    "Package.swift": "20d5e4c4e54a9cb26d484b4b36a87ea14e86c97a6534f8af9e5440c391282896",
+    "Package.swift": "340a6c2a301e32b4ea19249b5f0e2f4d008795a7d364574ff5a0c471e6dd92ea",
     "Sources/QualiaBert/BertModelWrapper.swift": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
     "Sources/QualiaBert/BertProvider.swift": "25681f7ecbebd6ee5d0cb1534fc05fa6ef63663f475fbc838dbd8bf7b06cc8f8",
     "Sources/QualiaBert/BertTokenizer.swift": "6f443dd4c360a9a00cc6347bfd22b630b61f18899b4a2409e3453e6f205c9314",
@@ -19,8 +19,8 @@
     "Tests/Golden/current/current-russian-fixture-v1/verification-v1.json": "a8c58cef435574635d99089a6f8681c4be94d46a690355a229936ade2a50d7a0",
     "Tests/QualiaKitTests/CurrentModelContractTests.swift": "4f9ff71d0a4cd6ac210260ce6c55d31e658431747b24ba5b33c760d1add4fbde",
     "Tools/ModelContract/coreml_inference.swift": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
-    "Tools/ModelContract/reference_inference.py": "7b6926ad29c779f8d12a33df3da2ed2952ba3cd68fdc20dfabfcc5d5dd304737",
-    "Tools/ModelContract/requirements.lock": "0f25a48615cfa9507984e98d996ba79b0d4fbf5b9f5b7dd3aa801b1a5d523ee1"
+    "Tools/ModelContract/reference_inference.py": "950d16342b383d097b6930b678add76b308b422a258e2edf826e493de2de4a71",
+    "Tools/ModelContract/requirements.lock": "0568b6ef1a117ae9851c49122e0e864a7f63bb6b7518e86e6543138f23f462c7"
   },
   "schemaVersion": 1
 }

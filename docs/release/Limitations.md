@@ -16,11 +16,19 @@
   examples and the author's app are not independent external adoption.
 - Haptics depend on hardware, system settings, accessibility preferences and the
   user. A simulator, recording renderer or GIF cannot prove sensation or comfort.
-- The Core ML adapter is a nested local package. Its local dependency layout must
-  be preserved; it is not independently resolvable as a root-URL product.
+- `QualiaCoreML` is exported by the root package in development tag `0.1.0-dev.1`.
+  The legacy nested layout remains supported; do not combine both in one app.
 - Diagnostics and pilot feedback have no upload transport. Hosts remain responsible
   for consent, retention, deletion and privacy review of their own integrations.
 
 Model cost numbers are published only with model/device/OS/build identity and raw
 artifacts. See [performance](../Performance.md) for historical observations; no
 universal latency, memory, battery or quality guarantee is made.
+
+For `0.1.0-dev.1`, the protected legacy RuBERT reference check on Xcode 27.1
+exceeded the frozen tolerance for `edge-empty.currentSwiftTransform.value`: absolute
+difference `0.000013231067961332575`, allowed `0.0`. This is recorded as a failed
+check, not corrected by widening tolerance. The old committed passing attestation
+describes the earlier source; the current source cannot satisfy the qualified
+release gate until model verification is resolved. See the
+[recorded result](../../Models/current/root-export-verification.json).

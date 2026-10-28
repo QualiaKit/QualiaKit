@@ -5,6 +5,8 @@ python-dependencies==standard-library-only
 swift==6.3.3
 xcode==26.6
 coremlcompiler==3520.5.1
+# Additional exact toolchain for the refreshed root-package build attestation.
+compatible-toolchain==swift-6.4,xcode-27.1,coremlcompiler-3600.25.1
 coreml-compute-units==cpuOnly
 coreml-production-parity-compute-units==default
 network-access==disabled
