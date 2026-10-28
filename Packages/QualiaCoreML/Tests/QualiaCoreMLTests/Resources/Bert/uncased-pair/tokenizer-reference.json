@@ -1,0 +1,6 @@
+{
+  "generator": "Hugging Face BertTokenizerFast",
+  "transformers": "4.57.1",
+  "tokenizers": "0.22.2",
+  "model": "synthetic arithmetic; no trained weights"
+}

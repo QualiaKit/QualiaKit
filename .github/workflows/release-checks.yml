@@ -32,6 +32,8 @@ jobs:
           python-version: '3.11'
       - name: Lint release sources, governance, privacy and links
         run: ./scripts/release-check
+      - name: Verify exact supported model-audit toolchains
+        run: python3 -m unittest discover -s Tools/ModelContract -p 'test_*.py'
       - name: Release rejection and privacy boundary tests
         run: swift test --filter ReleaseAndAdoptionTests
       - name: Package resolution and public consumers

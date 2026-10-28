@@ -2,6 +2,23 @@
 
 ## Unreleased
 
+No additional changes recorded.
+
+## 0.1.0-dev.1 — 2026-10-28
+
+Development snapshot for application integration, not a qualified beta or stable
+release. Use an exact version requirement because higher legacy tags exist.
+
+- Export `QualiaCoreML` from the root repository package, alongside `QualiaKit`,
+  so applications can resolve both products from one tagged dependency.
+- Add a reusable `BertQualiaAnalyzer` for compatible Core ML BERT sequence
+  classifiers, with external tokenizer assets, context and label mappings.
+- Keep private models and research outside Git; public fixtures contain only
+  synthetic arithmetic. Model quality and physical iPhone 11 cost remain unqualified.
+- Update public examples to use the root product. Preserve the previous legacy
+  model build attestation and record the Xcode 27.1 verification failure without
+  changing golden outputs or calibration; full release parity remains pending.
+
 ### New runtime preview
 
 - Stateful `QualiaKit`, public `QualiaTesting` doubles, and the separate local
@@ -14,10 +31,10 @@
 
 ### Migration and release status
 
-This is **unreleased**, not a new stable version. “Runtime 2.0” is an architecture
+This is a **development snapshot**, not a new stable version. “Runtime 2.0” is an architecture
 name. Existing repository tags `1.0.0` through `3.0.0` belong to the older API and
 remain immutable. The proposed new-runtime version is `0.1.0-beta.1`, pending
-owner approval and all beta gates. Pin a reviewed commit now; do not use a broad
+owner approval and all beta gates. Pin `0.1.0-dev.1` exactly; do not use a broad
 version range that can resolve to an old tag. See [version policy](docs/release/README.md).
 
 The old `Qualia`/`QualiaBert` products remain available, but their call sites are

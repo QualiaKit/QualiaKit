@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "status": "blocked",
+  "scope": "Protected legacy RuBERT parity after root-package export; not the new BERT adapter",
+  "date": "2026-10-28",
+  "historicalSourceRevision": "90b1b1b1158504e9593ffc5622e2bfe18e5a6032",
+  "currentPackageSHA256": "340a6c2a301e32b4ea19249b5f0e2f4d008795a7d364574ff5a0c471e6dd92ea",
+  "currentVerifierSHA256": "950d16342b383d097b6930b678add76b308b422a258e2edf826e493de2de4a71",
+  "command": "python3 Tools/ModelContract/reference_inference.py --record-verification-evidence",
+  "environment": {
+    "python": "3.14.0",
+    "pythonImplementation": "CPython",
+    "swift": "swift-driver version: 1.168.6 Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)",
+    "xcode": "Xcode 27.1",
+    "xcodeBuild": "27A9275",
+    "coremlcompiler": "3600.25.1",
+    "os": "27.0.1",
+    "architecture": "arm64",
+    "backend": "CoreML",
+    "computeUnits": "cpuOnly",
+    "seedPolicy": "not exposed by Core ML prediction API",
+    "networkDependencies": []
+  },
+  "exitCode": 2,
+  "failure": {
+    "case": "edge-empty",
+    "field": "currentSwiftTransform.value",
+    "absoluteDelta": 1.3231067961332575e-05,
+    "allowedTolerance": 0.0
+  },
+  "goldenOutputsChanged": false,
+  "tolerancesChanged": false,
+  "historicalPassingAttestationAppliesToNewSource": false,
+  "publicBetaOrStableApproved": false,
+  "privateAssetsPublished": false,
+  "logSHA256": "a3c65e1bd7e5c0551fd27d45d0e5399608c33bf713af548b78a3540fbe5c7c8a"
+}

@@ -19,6 +19,10 @@ let package = Package(
             name: "QualiaTesting",
             targets: ["QualiaTesting"]
         ),
+        .library(
+            name: "QualiaCoreML",
+            targets: ["QualiaCoreML"]
+        ),
         // Qualia (Core): Lightweight, zero-dependency sentiment analysis with NLTagger
         .library(
             name: "Qualia",
@@ -42,6 +46,11 @@ let package = Package(
             dependencies: ["QualiaKit"],
             path: "Sources/QualiaTesting"
         ),
+        .target(
+            name: "QualiaCoreML",
+            dependencies: ["QualiaKit"],
+            path: "Packages/QualiaCoreML/Sources/QualiaCoreML"
+        ),
         // Core target with haptics, NLTagger, and SwiftUI integration
         .target(
             name: "Qualia",
@@ -57,6 +66,12 @@ let package = Package(
         .testTarget(
             name: "QualiaKitTests",
             dependencies: ["QualiaKit", "QualiaTesting", "Qualia", "QualiaBert"],
+            resources: [.copy("Resources")]
+        ),
+        .testTarget(
+            name: "QualiaCoreMLTests",
+            dependencies: ["QualiaCoreML", "QualiaKit"],
+            path: "Packages/QualiaCoreML/Tests/QualiaCoreMLTests",
             resources: [.copy("Resources")]
         ),
     ]

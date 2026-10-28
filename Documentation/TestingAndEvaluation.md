@@ -47,7 +47,8 @@ requested event; the CI job timeout is only a deadlock backstop, not test timing
 Fixtures must not contain private production text.
 
 Tests live in `Tests/QualiaKitTests/Evaluation` inside the existing test target.
-This preserves the root package manifest's checksum in the frozen model audit.
+The later root Core ML export refreshes the build attestation while preserving
+the historical record and golden model fixtures.
 The legacy tests that only reimplemented softmax, asserted output range, or
 always skipped without exercising code were removed. Independent public-model
 and protected committed-golden parity remain the correctness evidence.

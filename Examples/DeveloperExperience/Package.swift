@@ -6,13 +6,12 @@ let package = Package(
     platforms: [.iOS(.v16), .macOS(.v13)],
     products: [.library(name: "QualiaExamples", targets: ["QualiaExamples"]),
                .executable(name: "qualia-walkthrough", targets: ["Walkthrough"])],
-    dependencies: [.package(name: "QualiaKit", path: "../.."),
-                   .package(name: "QualiaCoreML", path: "../../Packages/QualiaCoreML")],
+    dependencies: [.package(name: "QualiaKit", path: "../..")],
     targets: [
         .target(name: "QualiaExamples", dependencies: [
             .product(name: "QualiaKit", package: "QualiaKit"),
             .product(name: "QualiaTesting", package: "QualiaKit"),
-            .product(name: "QualiaCoreML", package: "QualiaCoreML")]),
+            .product(name: "QualiaCoreML", package: "QualiaKit")]),
         .executableTarget(name: "Walkthrough", dependencies: ["QualiaExamples", .product(name: "QualiaKit", package: "QualiaKit")]),
         .testTarget(name: "ConsumerTests", dependencies: ["QualiaExamples", .product(name: "QualiaKit", package: "QualiaKit"), .product(name: "QualiaTesting", package: "QualiaKit")]),
     ]
