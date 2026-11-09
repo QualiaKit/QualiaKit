@@ -132,7 +132,7 @@ final class TestingAndEvaluationTests: XCTestCase {
     // AC-0013-003 is also covered by individual mutation tests in Python.
     func testNarrativeCapabilityEvidenceGateAndFixtureRegeneration() throws {
         try runPython(["Tools/TestingFixtures/generate.py"])
-        try runPython(["-m", "unittest", "discover", "-s", "Evaluation/tests", "-v"], minimumTests: 22)
+        try runPython(["-m", "unittest", "discover", "-s", "Tools/Evaluation/tests", "-v"], minimumTests: 22)
     }
 
     private func runPython(_ arguments: [String], minimumTests: Int? = nil) throws {

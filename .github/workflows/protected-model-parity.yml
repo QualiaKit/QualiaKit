@@ -1,6 +1,6 @@
 name: Protected model parity
 
-# Provisioning is manual: see Documentation/TestingAndEvaluation.md.
+# Provision licensed model and vocabulary paths in the protected environment.
 # Never run untrusted pull-request code on a runner holding licensed assets.
 on:
   workflow_dispatch:

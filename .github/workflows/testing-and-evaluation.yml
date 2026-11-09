@@ -25,7 +25,7 @@ jobs:
       - name: Verify immutable independently authored fixtures
         run: python3 Tools/TestingFixtures/generate.py
       - name: Validate regression provenance
-        run: python3 Evaluation/scripts/evidence.py regression Tests/Fixtures/Regression/session-lifecycle-v1.json
+        run: python3 Tools/Evaluation/scripts/evidence.py regression Tests/Fixtures/Regression/session-lifecycle-v1.json
       - name: Test clocks and controlled analyzers
         run: swift test --filter TestingPrimitivesTests
       - name: Run specification acceptance criteria and evidence rejection tests

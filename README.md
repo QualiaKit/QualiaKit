@@ -107,8 +107,7 @@ The walkthrough prints a bounded redacted decision report; it emits no vibration
 
 The optional `QualiaCoreML` product is exported by the root package. For integration
 testing, select exact version `0.1.0-dev.1` and both `QualiaKit` and `QualiaCoreML`;
-see the setup guide. The older `Qualia` and `QualiaBert` products are legacy APIs. The device
-lab is an opt-in evaluation build, documented [separately](Documentation/DeviceEvaluation.md).
+see the setup guide. The older `Qualia` and `QualiaBert` products are legacy APIs.
 
 Diagnostics are off by default. Core has no networking or analytics transport;
 host analyzers and sinks have their own privacy boundaries. Do not use QualiaKit

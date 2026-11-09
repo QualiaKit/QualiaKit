@@ -12,7 +12,7 @@ vocabularies, validation texts and label mappings outside the public repository
 or in an ignored local directory. This public tool contains no application model
 names, weights, vocabulary or training data.
 
-[BERT runtime contract](../../Documentation/BertRuntime.md) covers all options,
+[BERT runtime contract](../../docs/reference/BertRuntime.md) covers all options,
 supported formats and integration. This does not train, convert or qualify a
 model's semantic quality.
 

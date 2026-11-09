@@ -1,9 +1,17 @@
 # Release tools
 
 Python 3.9+ standard library; no network access or publication in the validators.
-See [the protocol](../../docs/release/Evidence.md) for preparing evidence in a
-separate branch and [the status](../../ReleaseEvidence/spec-0015/STATUS.md) for
-what remains pending. Test fixtures in `test_release.py` are synthetic only.
+See [release status](../../docs/release/README.md) for the integration version.
+Test fixtures in `test_release.py` are synthetic only. Historical reports and
+owner protocols are archived in `QualiaKit-SDD/library-internals`; they are not
+inputs to library builds or tests.
+
+Run `./scripts/release-check` for repository checks. Prepare a pending record with
+`python3 Tools/Release/release.py --prepare /path/to/evidence/candidate.json`, then
+validate supplied evidence with `./scripts/release-check --candidate /path/to/evidence/candidate.json`.
+The validators still require every exact-source release gate and human record;
+moving historical reports does not satisfy or waive them. Keep new evidence
+outside the library's source branch.
 
 `api-baseline.json` is a generated development baseline of the public source at
 `9c516cc8e316f9355bd8899b1f9682268fdd7e47` (merged spec 0014), extracted using the

@@ -15,10 +15,9 @@
 | Core ML execution contract | Independently versioned [runtime schema](../../Models/Runtime/execution.schema.json) | Contract validation is not model quality qualification |
 | LivingStory fixture | `example.scripted-story`, version 1 | Authored observations; no inference or semantic accuracy claim |
 
-The old audit manifest preserves what was known at its capture date. Later source
-identity recovery is recorded in [evaluation status](../../Evaluation/cards/current-status.md)
-and the historical device reports; do not rewrite the audit to erase that chronology.
-Model-card/license review is mandatory for any newly distributed asset.
+The old audit manifest preserves what was known at its capture date. Historical
+research records are maintained separately from the library. Model-card/license
+review is mandatory for any newly distributed asset.
 
 Release candidates record the full Git revision/tree, SHA-256 of every tracked
 file, model package/vocabulary identities and each policy/configuration source

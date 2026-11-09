@@ -19,7 +19,12 @@ and tabs in its Python/docs. Run strict concurrency for changed public targets.
 The CI minimum and current toolchains must pass. Add meaningful regression tests,
 update compiled examples and DocC, and explain limitations. API changes require
 the compiler inventory/diff and a human review; do not replace a baseline to hide
-a breaking change. See the [release workflow](docs/release/Evidence.md).
+a breaking change. See the [release tools](Tools/Release/README.md).
+
+User guides have one source in `docs/`; the documentation builder generates DocC
+catalogs and archives on demand. `Tools/` contains the checks used by CI. Historical
+research, device reports and owner protocols are kept in the author's
+`QualiaKit-SDD/library-internals` archive; builds and tests do not depend on it.
 
 An analyzer contribution needs declared language/signal/context capabilities,
 cancellation/error behavior and public consumer tests. Model contributions also

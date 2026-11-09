@@ -75,8 +75,9 @@ LocalArtifacts/
 # Preserve the existing experiment layout without publishing data or reports.
 /Tools/Narrative/
 /Evaluation/narrative/
-/Evaluation/reports/bert-tiny-*/
-/Evaluation/reports/narrative-*/
+# Author reports belong in the separate QualiaKit-SDD archive.
+/Evaluation/reports/
+/ReleaseEvidence/
 /outputs/bert-tiny-*/
 /.github/workflows/narrative-research.yml
 
