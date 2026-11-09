@@ -31,5 +31,6 @@ examples. DocC archives and the machine-readable audit are build artifacts.
 - Diagnostics and redaction: [PrivacyAndDataFlow](PrivacyAndDataFlow.md)
 - Public test tools: [TestingYourIntegration](TestingYourIntegration.md)
 
-The packaged QualiaKit DocC catalog contains these conceptual guides. The build
-adds all three modules' symbol reference pages into their respective archives.
+The guides in `docs/` are the only maintained copies. The builder generates a
+temporary DocC catalog for each module and adds its symbol reference pages to the
+output archive. Generated catalogs and archives are not stored in the package.

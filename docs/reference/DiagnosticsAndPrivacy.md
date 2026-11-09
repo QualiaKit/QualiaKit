@@ -175,7 +175,7 @@ provides enable/continuous/intensity/duration controls, and uses on-device
 The published synthetic Core ML **test fixtures** include SHA-256, generated
 provenance and MIT license metadata. They are not evaluated language models.
 The current Russian model has unresolved provenance/license and remains blocked
-for redistribution; see [its model card](../Models/current/MODEL_CARD.md).
+for redistribution; see [its model card](../../Models/current/MODEL_CARD.md).
 No asset downloads or new model redistribution are introduced here.
 
 The sample includes `PrivacyInfo.xcprivacy` declaring no tracking/collection.

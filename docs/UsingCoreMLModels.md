@@ -93,7 +93,7 @@ The tiny public Core ML fixture validates runtime arithmetic, not language quali
 
 Record model origin, license and redistribution rights separately from the code's
 MIT license. Do not commit private weights or vocabulary. Consult the existing
-[manifest contract](https://github.com/QualiaKit/QualiaKit/blob/main/Documentation/CoreMLRuntime.md)
+[manifest contract](https://github.com/QualiaKit/QualiaKit/blob/main/docs/reference/CoreMLRuntime.md)
 and [model card](https://github.com/QualiaKit/QualiaKit/blob/main/Models/current/MODEL_CARD.md).
 [Privacy](PrivacyAndDataFlow.md) covers text and asset boundaries;
 [Performance](Performance.md) explains which measurements are comparable.

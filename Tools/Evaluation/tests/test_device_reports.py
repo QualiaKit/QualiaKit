@@ -4,7 +4,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
-ROOT=Path(__file__).resolve().parents[2]
+ROOT=Path(__file__).resolve().parents[3]
 sys.path.insert(0,str(ROOT/'Tools/DeviceEvaluation'))
 from summarize import summarize, BENCHMARKS, COREML, CHECKS
 

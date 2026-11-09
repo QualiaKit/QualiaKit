@@ -30,7 +30,7 @@ This stage implements the new runtime, schema extension, public synthetic models
 
 ### Q-0004-002 — Compatible v1 extension and readiness
 
-The base document remains [model-contract-v1](../Models/current/manifest.schema.json). Its field meanings are preserved: notably `outputs.kind` remains a status/value/evidence object, and `outputs.classLabel` is a **type**, not a feature name. An optional top-level `runtime` object adds the [execution profile](../Models/Runtime/execution.schema.json). Existing audit documents without it remain valid schema v1 documents.
+The base document remains [model-contract-v1](../../Models/current/manifest.schema.json). Its field meanings are preserved: notably `outputs.kind` remains a status/value/evidence object, and `outputs.classLabel` is a **type**, not a feature name. An optional top-level `runtime` object adds the [execution profile](../../Models/Runtime/execution.schema.json). Existing audit documents without it remain valid schema v1 documents.
 
 The fixture verifier checks the full base JSON Schema, cross-field evidence consistency, then the extension schema. Swift exposes a **read-only decoding projection**, not a lossy manifest writer or general JSON Schema interpreter. Initialization separately checks the executable subset, verified task/tokenizer/output/mapping/provenance, an open consistent gate, assets and `MLModelDescription`. Unknown execution evidence or a missing execution extension fails before compilation; no assumptions are imported from the legacy wrapper. Extra documentation fields may be ignored. New required execution behavior needs a new execution profile version; incompatible changes to existing field structure/meaning need a new schema version.
 
@@ -95,7 +95,7 @@ qualify a public beta or the semantic quality of a new model.
 
 ## Evidence and remaining work
 
-The [fixture model card](../Tools/CoreMLFixtures/MODEL_CARD.md) explains provenance and limitations. Normal CI runs `CoreMLRuntimeTests` without protected assets or skips, checks fixture schemas/identities/references, builds `QualiaCoreML` with strict concurrency and builds its iOS Simulator scheme.
+The [fixture model card](../../Tools/CoreMLFixtures/MODEL_CARD.md) explains provenance and limitations. Normal CI runs `CoreMLRuntimeTests` without protected assets or skips, checks fixture schemas/identities/references, builds `QualiaCoreML` with strict concurrency and builds its iOS Simulator scheme.
 
 ```sh
 swift build --package-path Packages/QualiaCoreML

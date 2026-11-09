@@ -4,7 +4,7 @@ import QualiaKit
 
 /// A reusable BERT WordPiece sequence-classification adapter. Applications supply
 /// a local manifest, vocabulary and Core ML model; no app-specific Swift adapter
-/// or bundled weights are required. See Documentation/BertRuntime.md.
+/// or bundled weights are required. See docs/reference/BertRuntime.md.
 public struct BertQualiaAnalyzer: QualiaAnalyzing {
     public let capabilities: QualiaAnalyzerCapabilities
     public let identity: QualiaAnalyzerIdentity

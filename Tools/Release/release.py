@@ -43,7 +43,7 @@ DETAILS = {
 DOCS = (
     "CHANGELOG.md", "SECURITY.md", "SUPPORT.md", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md", "GOVERNANCE.md",
     "LICENSE", "docs/release/README.md", "docs/release/Compatibility.md", "docs/release/Limitations.md",
-    "docs/release/Checklist.md", "docs/release/Pilots.md", "docs/release/Evidence.md", "docs/PrivacyAndDataFlow.md",
+    "docs/PrivacyAndDataFlow.md",
 )
 
 

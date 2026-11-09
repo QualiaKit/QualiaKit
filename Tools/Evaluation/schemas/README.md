@@ -46,7 +46,7 @@ Changing the protocol invalidates all report bindings. Report data:
 Keep raw measurements, dataset rights, methodology, reviewer decisions and split
 freeze timestamps beside the reviewed reports. The v1 validator admits reports;
 it does not compute metrics, train a model, or verify claimed study chronology.
-The [study tools](../../Documentation/SemanticEvaluation.md) now calculate these
+The [study tools](../scripts/study.py) now calculate these
 metrics from raw inputs and reserve an evaluation attempt; their outputs remain
 unreviewed. Protocol and dataset changes require a new study/version. Do not repeatedly
 evaluate the same held-out set while tuning thresholds.
@@ -61,8 +61,8 @@ must be curated and sanitized before entry; automatic ingestion is prohibited.
 
 ## Physical record
 
-See `ReleaseEvidence/physical-device-template.json`. Copy under
-`ReleaseEvidence/<release-version>/`, fill exact candidate identities, device,
+The author archive contains `ReleaseEvidence/physical-device-template.json`.
+Keep completed records outside the library source tree; fill exact candidate identities, device,
 OS, ISO calendar date, reviewer and notes, and mark each tested checklist item
 `passed`. `physicalDevice` must be `true` and `status` must be `passed`. The empty
 template intentionally fails validation. Each release needs its agreed device

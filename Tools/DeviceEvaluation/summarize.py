@@ -8,7 +8,7 @@ from pathlib import Path
 import sys
 
 ROOT=Path(__file__).resolve().parents[2]
-sys.path.insert(0,str(ROOT/'Evaluation/scripts'))
+sys.path.insert(0,str(ROOT/'Tools/Evaluation/scripts'))
 from evidence import load, number, require, sha
 
 CHECKS={'hardware-support','start','replace-and-independent-impact','reset-stops-ambient',

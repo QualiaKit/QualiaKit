@@ -12,7 +12,6 @@ from urllib.parse import unquote
 
 ROOT=Path(__file__).resolve().parents[2]
 GUIDES=ROOT/'docs'
-CATALOG=ROOT/'Sources/QualiaKit/Documentation.docc'
 TYPE_CONTRACTS=json.loads((Path(__file__).parent/'reference_contracts.json').read_text())
 # Contracts apply to every entry in a layer, including inherited/synthesized API
 # detail pages. Never count these as hand-written source documentation.
@@ -43,14 +42,14 @@ def source_guides():
         result[path.name]=text
     return result
 
-def sync_catalog(write=False):
+def write_catalog(catalog,module):
     guides=source_guides()
-    landing='# ``QualiaKit``\n\nOn-device semantic observations, temporal state, policies and owned haptic playback.\n\n## Topics\n\n### Integration guides\n\n'+''.join(f'- <doc:{Path(name).stem}>\n' for name in guides)
-    files={**guides,'QualiaKit.md':landing}
+    description='On-device semantic observations, temporal state, policies and owned haptic playback.' if module=='QualiaKit' else CONTRACTS[module][2]
+    landing=f'# ``{module}``\n\n{description}\n\n## Topics\n\n### Integration guides\n\n'+''.join(f'- <doc:{Path(name).stem}>\n' for name in guides)
+    files={**guides,module+'.md':landing}
+    catalog.mkdir(parents=True)
     for name,text in files.items():
-        path=CATALOG/name
-        if write: path.parent.mkdir(parents=True,exist_ok=True);path.write_text(text)
-        elif not path.exists() or path.read_text()!=text:raise ValueError(f'DocC guide drift: {path}; run build_docs.py --sync')
+        (catalog/name).write_text(text)
 
 def layer(symbol,module,by_path):
     if module!='QualiaKit':return module
@@ -126,27 +125,25 @@ def export_graphs():
     sdk=subprocess.check_output(['xcrun','--sdk','macosx','--show-sdk-path'],text=True).strip()
     target_info=json.loads(subprocess.check_output(['swift','-print-target-info'],text=True))
     target=target_info['target']['unversionedTriple']+'13.0'
-    for package,group,modules in [(ROOT,'core',['QualiaKit','QualiaTesting']),
-                                  (ROOT/'Packages/QualiaCoreML','coreml',['QualiaCoreML'])]:
-        scratch=ROOT/'.build/developer-documentation'/group
-        build=['swift','build','--package-path',str(package),'--scratch-path',str(scratch)]
-        for module in modules:
-            call(build+['--target',module])
-        binary=Path(subprocess.check_output(build+['--show-bin-path'],cwd=ROOT,text=True).strip())
-        for module in modules:
-            output=GRAPH_ROOT/module
-            if output.exists():shutil.rmtree(output)
-            output.mkdir(parents=True)
-            # Native SwiftPM uses Modules/; Swift Build places modules beside
-            # products. Extension blocks let DocC retain our SwiftUI methods.
-            call(['xcrun','swift-symbolgraph-extract','-module-name',module,
-                  '-target',target,'-sdk',sdk,'-I',str(binary/'Modules'),'-I',str(binary),
-                  '-module-cache-path',str(scratch/'ModuleCache'),
-                  '-minimum-access-level','public','-skip-synthesized-members',
-                  '-emit-extension-block-symbols','-output-dir',str(output)])
+    scratch=ROOT/'.build/developer-documentation/core'
+    build=['swift','build','--package-path',str(ROOT),'--scratch-path',str(scratch)]
+    modules=['QualiaKit','QualiaTesting','QualiaCoreML']
+    for module in modules:
+        call(build+['--target',module])
+    binary=Path(subprocess.check_output(build+['--show-bin-path'],cwd=ROOT,text=True).strip())
+    for module in modules:
+        output=GRAPH_ROOT/module
+        if output.exists():shutil.rmtree(output)
+        output.mkdir(parents=True)
+        # Native SwiftPM uses Modules/; Swift Build places modules beside
+        # products. Extension blocks let DocC retain our SwiftUI methods.
+        call(['xcrun','swift-symbolgraph-extract','-module-name',module,
+              '-target',target,'-sdk',sdk,'-I',str(binary/'Modules'),'-I',str(binary),
+              '-module-cache-path',str(scratch/'ModuleCache'),
+              '-minimum-access-level','public','-skip-synthesized-members',
+              '-emit-extension-block-symbols','-output-dir',str(output)])
 
 def build(output,skip_export=False):
-    sync_catalog()
     if not skip_export:export_graphs()
     output.mkdir(parents=True,exist_ok=True)
     audit={'format':1,'modules':{},'scope':'QualiaKit, QualiaTesting and QualiaCoreML; compiler-generated conformances and legacy products excluded'}
@@ -162,10 +159,7 @@ def build(output,skip_export=False):
                 for s in json.loads(path.read_text())['symbols']:
                     if s.get('accessLevel')=='public' and s['kind']['identifier']!='swift.extension':symbols[s['identifier']['precise']]=s
             if not symbols:raise ValueError('Missing public symbols for '+module)
-            catalog=temp/module/(module+'.docc');shutil.copytree(CATALOG,catalog)
-            if module!='QualiaKit':
-                (catalog/'QualiaKit.md').unlink()
-                (catalog/(module+'.md')).write_text(f'# ``{module}``\n\n{CONTRACTS[module][2]}\n\n## Topics\n\n### Guides\n\n'+''.join(f'- <doc:{Path(p).stem}>\n' for p in source_guides()))
+            catalog=temp/module/(module+'.docc');write_catalog(catalog,module)
             archive=output/(module+'.doccarchive')
             common=['xcrun','docc','convert',str(catalog),'--additional-symbol-graph-dir',str(graphs),'--output-dir',str(archive),'--fallback-bundle-identifier','org.qualiakit.'+module.lower(),'--warnings-as-errors','--emit-digest']
             call(common)
@@ -194,7 +188,5 @@ def build(output,skip_export=False):
     print(json.dumps(audit,sort_keys=True))
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path);p.add_argument('--sync',action='store_true');p.add_argument('--skip-export',action='store_true');args=p.parse_args()
-    if args.sync:sync_catalog(write=True)
-    elif args.output:build(args.output.resolve(),args.skip_export)
-    else:sync_catalog()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path,required=True);p.add_argument('--skip-export',action='store_true');args=p.parse_args()
+    build(args.output.resolve(),args.skip_export)

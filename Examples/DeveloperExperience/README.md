@@ -35,4 +35,4 @@ serializes accepted inputs and lifecycle calls. `PilotFeedback` creates only
 explicitly consented, closed-schema judgments with fingerprinted installation
 metadata; it has no text fields or transport. `PilotTests` verifies single primary
 playback, no replay after suspension and the exported privacy boundary.
-See the [pilot protocol](../../docs/release/Pilots.md) before a real app trial.
+Review [privacy guidance](../../docs/PrivacyAndDataFlow.md) before a real app trial.
