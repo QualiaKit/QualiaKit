@@ -17,7 +17,9 @@
 - Haptics depend on hardware, system settings, accessibility preferences and the
   user. A simulator, recording renderer or GIF cannot prove sensation or comfort.
 - `QualiaCoreML` is exported by the root package in development tag `0.1.0-dev.1`.
-  The legacy nested layout remains supported; do not combine both in one app.
+  The legacy nested layout remains available for command-line SwiftPM. Xcode
+  applications must migrate to the root package because Xcode 16.4 cannot resolve
+  duplicate product names in the nested layout; imports and model assets stay the same.
 - Diagnostics and pilot feedback have no upload transport. Hosts remain responsible
   for consent, retention, deletion and privacy review of their own integrations.
 

@@ -3,7 +3,7 @@
 | Surface | Build contract | Claim/evidence boundary |
 | --- | --- | --- |
 | QualiaKit / QualiaTesting | Swift tools 5.9 manifest, iOS 16+, macOS 13+; CI Xcode 16.4 and 26.6 | macOS supports analysis/testing; do not promise iPhone haptics there |
-| QualiaCoreML | Optional root-package product; same minimum | Exact development tag `0.1.0-dev.1`; nested local package retained for compatibility. Follow the [installation guide](../UsingCoreMLModels.md) |
+| QualiaCoreML | Optional root-package product; same minimum | Exact development tag `0.1.0-dev.1`; nested local package retained for command-line SwiftPM. Xcode apps use the root package. Follow the [installation guide](../UsingCoreMLModels.md) |
 | QualiaExample app | Xcode 26.6+ | SentimentPreview and scripted LivingStory build; physical flagship gate is per candidate |
 | Physical history | iPhone 17 Pro / iOS 26.6, October 21, 2026 | Historical device iteration; not a general device/OS matrix |
 | Legacy Qualia / QualiaBert | Retained source products and immutable old tags | Frozen current-model audit; new runtime is a different integration contract |
