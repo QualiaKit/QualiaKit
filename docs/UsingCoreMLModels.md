@@ -12,6 +12,19 @@ the root and keep the same products and `import QualiaCoreML` statements.
 This development tag supports integration testing. It is not a qualified beta
 or stable release; see [release status](release/README.md).
 
+## Try the included example model
+
+Clone the repository and run the QualiaKitBert tab in the iPhone example. Its
+preview requires the source revision containing this example; `0.1.0-dev.1`
+predates both the bundled model and the explicit zero-confidence heartbeat mode.
+Use that same reviewed source revision for your application's library dependency.
+The resources live in `Examples/DeveloperExperience/Sources/QualiaExamples/Resources/QualiaKitBert/`.
+Copy that complete directory into your application resources, preserving its
+folder structure and license notices, then use `BundledQualiaModelSource` and
+`BertQualiaAnalyzer`. The root package products remain model-free. See the
+[model card](../Models/QualiaKitBert/MODEL_CARD.md) for its experimental status,
+English-only input, token limit and demo configuration.
+
 ## App-owned models
 
 Using QualiaKit does not require publishing a model. An application can own its
@@ -88,7 +101,8 @@ capabilities and hardware. The function is compile-tested without a private mode
 a real narrative setup additionally requires reviewed model assets. The example
 uses no retained generic history; increase it only when the analyzer accepts context.
 
-No production narrative model is distributed here. The recovered RuBERT model is
+The included QualiaKitBert example is experimental; no production-qualified
+narrative model is distributed here. The recovered RuBERT model is
 Russian sentiment with an empirical label interpretation; it is not qualified as
 a suspense/threat analyzer and is not a drop-in asset for this narrative factory.
 The tiny public Core ML fixture validates runtime arithmetic, not language quality.

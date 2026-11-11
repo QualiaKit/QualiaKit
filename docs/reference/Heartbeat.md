@@ -176,3 +176,12 @@ Stop on user request and respect disabled/continuous-disabled controls.
 No physical-device result is claimed by this PR. Recognition, comfort, energy,
 and replacement continuity must be approved at the release gate before promoting
 these candidates to release defaults.
+
+## Uncalibrated analyzers
+
+`HeartbeatPolicyConfiguration.minimumSignalConfidence` defaults to `0.70` and
+requires separately supplied confidence. Setting it to `0` explicitly disables
+that check. Current positive evidence from the driving signal is still required;
+state-only evidence cannot start playback. This opt-in is used by the experimental
+QualiaKitBert example, whose sigmoid scores are not confidence. Hardware,
+preferences, deadline, cooldown and owned lifecycle checks still apply.

@@ -8,6 +8,10 @@ In Xcode, add `https://github.com/QualiaKit/QualiaKit.git`, choose **Exact Versi
 `0.1.0-dev.1`, and select `QualiaKit` and optionally `QualiaCoreML` from that package.
 Use a reviewed commit when testing changes newer than that snapshot.
 
+The QualiaKitBert experimental model/demo is available in the source preview,
+not in tag `0.1.0-dev.1`. Its `v10-preview.1` is a model identity, not a Swift
+package release version. Use the same source revision for the example and runtime.
+
 Older higher-numbered tags, up to `3.0.0`, belong to the legacy `Qualia` and
 `QualiaBert` products. Avoid a broad version range when integrating the new runtime.
 “2.0” in architecture and diagnostics names the runtime generation, not an

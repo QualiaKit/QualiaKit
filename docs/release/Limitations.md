@@ -2,6 +2,11 @@
 
 - The new runtime has no approved public beta/stable release. Source pinning is
   available for integration work; public contracts may change with migration notes.
+- QualiaKitBert v10-preview.1 is included only in the example package as an
+  experimental English narrative model, not a qualified production model. It
+  accepts 128 tokens including context, uses uncalibrated scores, and lacks
+  independent human-reviewed accuracy and comfort evidence. See its
+  [model card](../../Models/QualiaKitBert/MODEL_CARD.md).
 - There is no qualified production narrative model. Apple sentiment and recovered
   RuBERT sentiment do not establish suspense, threat or a person's emotional state.
 - Current private model and vocabulary redistribution remain blocked by rights

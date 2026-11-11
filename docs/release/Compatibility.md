@@ -20,6 +20,7 @@ iOS 16 and macOS 13.
 | Current local RuBERT audit | `rub-sentiment-coreml-local-audit`, manifest schema 1; asset version/checksums in [immutable manifest](../../Models/current/manifest.json) | Russian sentiment; private weights/vocabulary; no redistribution grant |
 | Core ML execution contract | Independently versioned [runtime schema](../../Models/Runtime/execution.schema.json) | Contract validation is not model quality qualification |
 | LivingStory fixture | `example.scripted-story`, version 1 | Authored observations; no inference or semantic accuracy claim |
+| QualiaKitBert example | `qualiakit.bert`, `v10-preview.1`; source checkout newer than `0.1.0-dev.1` | English experimental model, 128 tokens including context; [model card](../../Models/QualiaKitBert/MODEL_CARD.md) |
 
 The old audit manifest preserves what was known at its capture date. Historical
 research records are maintained separately from the library. Model-card/license

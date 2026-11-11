@@ -98,6 +98,17 @@ final class HeartbeatEffectTests: XCTestCase {
         }
     }
 
+    func testExplicitZeroConfidenceGateAcceptsUncalibratedButStillRequiresFreshEvidence() throws {
+        let configured = HorrorNarrativePolicy(configuration: try .init(heartbeat: .init(minimumSignalConfidence: 0)))
+        let start = configured.plan(for: try transition(0.99, evidence: [.suspense: .init(value: 0.99)]), context: context(at: .zero))
+        XCTAssertEqual(start.hapticCommands.count, 1)
+        XCTAssertEqual(start.rationale?.facts.first { $0.key == "confidence-gate" }?.value, "disabled")
+        for evidence: [QualiaSignal: QualiaScore] in [[:], [.suspense: try .init(value: 0)]] {
+            let result = configured.plan(for: try transition(0.99, evidence: evidence), context: context(at: .zero))
+            XCTAssertTrue(result.hapticCommands.isEmpty)
+        }
+    }
+
     func testSignificantUpdateIsThrottledAndDoesNotRenewDeadline() throws {
         let start = try plan(0.91)
         XCTAssertTrue(try plan(0.6, at: .milliseconds(499), state: start.nextState).hapticCommands.isEmpty)

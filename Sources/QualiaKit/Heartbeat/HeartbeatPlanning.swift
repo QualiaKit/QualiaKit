@@ -111,9 +111,16 @@ private struct HeartbeatPlanner {
             return finish("missing-heartbeat-evidence")
         }
         facts.append(policy.fact("driving-evidence", evidence.value))
-        guard let confidence = evidence.confidence else { return finish("missing-heartbeat-confidence") }
-        facts.append(policy.fact("driving-confidence", confidence))
-        guard evidence.value > 0, confidence >= config.minimumSignalConfidence else {
+        if config.minimumSignalConfidence > 0 {
+            guard let confidence = evidence.confidence else { return finish("missing-heartbeat-confidence") }
+            facts.append(policy.fact("driving-confidence", confidence))
+            guard confidence >= config.minimumSignalConfidence else {
+                return finish("insufficient-heartbeat-confidence")
+            }
+        } else {
+            facts.append(policy.fact("confidence-gate", "disabled"))
+        }
+        guard evidence.value > 0 else {
             return finish("insufficient-heartbeat-confidence")
         }
         heartbeat.phase = .running

@@ -36,3 +36,30 @@ explicitly consented, closed-schema judgments with fingerprinted installation
 metadata; it has no text fields or transport. `PilotTests` verifies single primary
 playback, no replay after suspension and the exported privacy boundary.
 Review [privacy guidance](../../docs/PrivacyAndDataFlow.md) before a real app trial.
+
+## QualiaKitBert
+
+The example package alone bundles QualiaKitBert v10-preview.1, its vocabulary,
+manifest and license notices. Root QualiaKit/QualiaCoreML products remain
+model-free. `QualiaKitBert.analyzer()` uses the public BERT adapter and
+`QualiaKitBert.configuration()` uses the normal session and narrative policy.
+The demo explicitly sets the confidence gate to zero because the model does not
+provide calibrated confidence. Scores are never relabeled as confidence.
+
+Open the iPhone example's first tab, select a scene and tap **Analyze and feel**.
+Use your own English text, optionally continue from two previous accepted
+fragments, or **Stop**. The session rejects more than 128 model
+tokens including context; it does not truncate or switch to keyword rules.
+
+Run the six fixed, assistant-labeled diagnostic probes and local timings:
+
+```sh
+swift run --package-path Examples/DeveloperExperience qualia-walkthrough --bert
+```
+
+This prints JSON and does not vibrate. The iPhone Debug build also accepts the
+explicit launch argument `--qualiakit-bert-check`: it uses the same fixed probes,
+briefly plays a bounded heartbeat when supported, checks suspend/resume and quiet
+input, and writes `Documents/qualiakit-bert-device.json`. Normal demo input is
+never saved by that check. These diagnostics are not independent accuracy,
+comfort or battery evidence. See the [model card](../../Models/QualiaKitBert/MODEL_CARD.md).
