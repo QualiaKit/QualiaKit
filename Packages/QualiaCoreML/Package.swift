@@ -5,7 +5,8 @@ import PackageDescription
 let package = Package(
     name: "QualiaCoreML",
     platforms: [.iOS(.v16), .macOS(.v13)],
-    products: [.library(name: "QualiaCoreML", targets: ["QualiaCoreMLCompatibility"])],
+    // An explicit static product also avoids Xcode's duplicate automatic-product GUID.
+    products: [.library(name: "QualiaCoreML", type: .static, targets: ["QualiaCoreMLCompatibility"])],
     dependencies: [.package(name: "QualiaKit", path: "../..")],
     targets: [
         .target(
