@@ -35,8 +35,7 @@ jobs:
       - name: Test all Core ML inference, lifecycle and diagnostics suites without protected assets
         run: swift test --package-path Packages/QualiaCoreML
 
-      - name: Build runtime for iOS Simulator
-        working-directory: Packages/QualiaCoreML
+      - name: Build root-package runtime for iOS Simulator
         run: |
           xcodebuild build \
             -scheme QualiaCoreML \

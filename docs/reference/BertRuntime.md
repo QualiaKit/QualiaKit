@@ -5,7 +5,8 @@
 implement a different analyzer for each model, and do not publish their weights
 with QualiaKit. The optional product is exported by the root package; integration tag
 `0.1.0-dev.1` can be selected by exact version in Xcode/SwiftPM. The nested local
-package remains for existing consumers; use one dependency layout at a time.
+package remains for command-line SwiftPM consumers. Xcode applications use the
+root package; see [migration instructions](../UsingCoreMLModels.md).
 
 ## Supported contract
 

@@ -1,6 +1,6 @@
 # Manifest-driven Core ML runtime: stage 1 of spec 0004
 
-`QualiaCoreML` is an opt-in product of the root package depending only on the `QualiaKit` domain. The nested `Packages/QualiaCoreML` package remains for existing local consumers. Its local fixture path runs actual Core ML inference and returns `QualiaObservation`. It does not replace `QualiaBert` or migrate the current Russian model.
+`QualiaCoreML` is an opt-in product of the root package depending only on the `QualiaKit` domain. The nested `Packages/QualiaCoreML` package remains for SwiftPM command-line consumers. Its local fixture path runs actual Core ML inference and returns `QualiaObservation`. It does not replace `QualiaBert` or migrate the current Russian model.
 
 ```swift
 import QualiaKit
@@ -20,7 +20,7 @@ let observation = try await analyzer.analyze(input)
 
 `installedContractDirectory` contains `manifest.json`, the declared vocabulary and model. `BundledQualiaModelSource(bundle:subdirectory:)` resolves the same contract relative to `bundle.resourceURL`. Official sources perform no network requests. Caller-provided sources must resolve local URLs; remote URLs and escaping relative asset paths are rejected.
 
-For integration, add the root repository URL with exact version `0.1.0-dev.1` and select `QualiaCoreML` alongside `QualiaKit`. Local consumers may use the root checkout or the legacy nested package, but not both layouts together.
+For integration, add the root repository URL with exact version `0.1.0-dev.1` and select `QualiaCoreML` alongside `QualiaKit`. Xcode applications must use the root checkout. The legacy nested package is retained for command-line SwiftPM; Xcode 16.4 cannot resolve its duplicate product names. See the [migration instructions](../UsingCoreMLModels.md).
 
 ## Decisions (2026-09-12)
 
@@ -95,7 +95,7 @@ qualify a public beta or the semantic quality of a new model.
 
 ## Evidence and remaining work
 
-The [fixture model card](../../Tools/CoreMLFixtures/MODEL_CARD.md) explains provenance and limitations. Normal CI runs `CoreMLRuntimeTests` without protected assets or skips, checks fixture schemas/identities/references, builds `QualiaCoreML` with strict concurrency and builds its iOS Simulator scheme.
+The [fixture model card](../../Tools/CoreMLFixtures/MODEL_CARD.md) explains provenance and limitations. Normal CI runs `CoreMLRuntimeTests` without protected assets or skips, checks fixture schemas/identities/references, builds the legacy SwiftPM entry point with strict concurrency and builds the root package's iOS Simulator scheme.
 
 ```sh
 swift build --package-path Packages/QualiaCoreML

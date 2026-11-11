@@ -4,8 +4,10 @@ QualiaCoreML is an optional product of the root QualiaKit package. Add
 `https://github.com/QualiaKit/QualiaKit.git` in Xcode, choose **Exact Version**
 `0.1.0-dev.1`, and select both `QualiaKit` and `QualiaCoreML` for the application.
 For local development, add the repository root once. The legacy nested package
-at `Packages/QualiaCoreML` remains available for existing local consumers; do not
-add both layouts to the same application.
+at `Packages/QualiaCoreML` remains available for SwiftPM command-line consumers.
+Xcode applications must use the root package: Xcode 16.4 cannot resolve the
+duplicate product names in the nested layout. Replace the nested dependency with
+the root and keep the same products and `import QualiaCoreML` statements.
 
 This development tag supports integration testing. It is not a qualified beta
 or stable release; see [release status](release/README.md).
