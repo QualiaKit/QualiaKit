@@ -2,7 +2,7 @@
   "algorithm": "SHA-256",
   "excludesSelf": "Models/current/checksums.json",
   "files": {
-    ".github/workflows/ci.yml": "7b54468c3d88b79974080b4a2f4b710fe6c423d2f009fcd664b687de5d5e8f14",
+    ".github/workflows/ci.yml": "f72f7bb98cf4e76fa1910c6c8a778bdd39247c96b33c46e69f39aa24efcf48df",
     "Models/current/MODEL_CARD.md": "c15be731d2cd545ee557270b34baa68fef841cdad4370c02eead99755e16c92e",
     "Models/current/manifest.json": "43f507fd7a27c177bdd38da736aaa6826b3bcce25f905f8cb55815e87e435656",
     "Models/current/manifest.schema.json": "d155c7ec622758500496665340b55997bcb69174e2723bd68b2a8dc877f20a25",
