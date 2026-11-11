@@ -2,7 +2,12 @@
 
 ## Unreleased
 
-No additional changes recorded.
+- Bundle the optional experimental QualiaKitBert v10-preview.1 model with the
+  developer examples and add an English text-to-heartbeat iPhone demo.
+- Document model provenance, licenses, token limits and reproducible diagnostics.
+- Explicitly setting `minimumSignalConfidence` to zero now permits heartbeat
+  startup without a confidence field. Positive thresholds retain their existing
+  behavior; fresh positive evidence and all playback bounds remain required.
 
 ## 0.1.0-dev.1 — 2026-10-28
 

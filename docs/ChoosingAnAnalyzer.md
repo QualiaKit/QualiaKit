@@ -6,15 +6,18 @@ against them. Declaration alone is not independent model-quality evidence.
 
 | Analyzer | Languages and outputs | Context | Intended use |
 | --- | --- | --- | --- |
+| QualiaKitBert (example resources via BertQualiaAnalyzer) | English, 11 narrative signals; uncalibrated scores | Context + current text, 128 tokens total | Experimental on-device narrative demo; [model card](../Models/QualiaKitBert/MODEL_CARD.md) |
 | AppleSentimentAnalyzer | English valence, no confidence or narrative signals | One paragraph; no history | Lightweight sentiment preview |
 | FixtureAnalyzer | Explicitly authored observations indexed by input ID | As declared by the fixture | Tests and clearly labelled scripted demos |
 | CoreMLQualiaAnalyzer | Manifest-defined evaluated adapter contract | Manifest-defined | Licensed local model integration |
 | Host implementation | Explicit stable capabilities | Explicitly declared | Authored annotations or independently evaluated custom inference |
 
-The strict HorrorNarrativePolicy needs suspense, threat and an accent signal
-(impact or shock), plus continuous haptic support. Keep its confidence policy
-consistent with the analyzer's actual confidence semantics. Do not rename raw
-sentiment labels into narrative signals to pass installation checks.
+The strict HorrorNarrativePolicy requires suspense and continuous haptic
+support. Threat can also drive tension; impact/shock enable optional accents. Keep its confidence policy
+consistent with the analyzer's actual confidence semantics. A positive `minimumSignalConfidence` requires separate confidence evidence.
+Setting it to `0` explicitly disables that gate, as in the experimental
+QualiaKitBert demo; never put sigmoid scores into the confidence field.
+Do not rename raw sentiment labels into narrative signals to pass installation checks.
 
 ## A custom analyzer
 

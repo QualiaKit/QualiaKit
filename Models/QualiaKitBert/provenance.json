@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "labels": [
+    "threat",
+    "suspense",
+    "violence",
+    "fear",
+    "anger",
+    "joy",
+    "tenderness",
+    "sadness",
+    "mystery",
+    "relief",
+    "surprise"
+  ],
+  "maxLength": 128,
+  "decisionThreshold": 0.5,
+  "scoreMeaning": "Uncalibrated sigmoid scores; synthetic development training; no abstention.",
+  "sha256": {
+    "model.safetensors": "c94609529cc0e039c6362d38253b87363cbf7c92a7f7c72c6de7232691ba90f5",
+    "tokenizer_config.json": "e711904cac23112776b678356ccf702cf934babaa01125f698ac43bf9ad38e73",
+    "special_tokens_map.json": "5d5b662e421ea9fac075174bb0688ee0d9431699900b90662acd44b2a350503a",
+    "config.json": "c51f5641c5deadf286eb1de13b69ee1505efadf45685baef9d8ad665a7870424",
+    "tokenizer.json": "d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66",
+    "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3"
+  },
+  "base": {
+    "repository": "prajjwal1/bert-tiny",
+    "revision": "6f75de8b60a9f8a2fdf7b69cbd86d9e64bcb3837",
+    "files": [
+      "config.json",
+      "vocab.txt",
+      "pytorch_model.bin",
+      "README.md"
+    ],
+    "weightsSHA256": "dab2c2bddcfb48ea430ef63fd76d46d67d704487844d967256a50dd7d7fd0a66",
+    "upstreamDeclaredLicense": "mit",
+    "sha256": {
+      "config.json": "cf3179684f7c360dd6185962d480e7d426ceb8fe49f5db7b64bdc15dba0b8798",
+      "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3",
+      "pytorch_model.bin": "dab2c2bddcfb48ea430ef63fd76d46d67d704487844d967256a50dd7d7fd0a66",
+      "README.md": "55ce99eb2a82b118fe74158365804de22c6909b723135d85dec7f4d9e8518c38"
+    },
+    "fetchedAt": "2026-10-26T07:09:21.715781+00:00"
+  },
+  "parentWeightsSHA256": "1ec0fc037a4f352c1c660a69d16e92f3127c196e66bb31d892def3b4a75d6d6f",
+  "preparedDatasetSHA256": "b4ca23d748d46a76a8c3f3bd08eec898afdb9ca01afac042a7761ed8fd80f05d",
+  "selectedEpoch": 15,
+  "publicName": "QualiaKitBert",
+  "publicVersion": "v10-preview.1",
+  "modifications": "Fine-tuned BERT-tiny with an eleven-label classification head; exported to Core ML with mixed precision; public resource and runtime identity renamed. Trained weights unchanged from the selected v10 candidate.",
+  "runtimeFiles": {
+    ".DS_Store": "e2ba15a9a6fa60aa3fbe275dd1cfe3c7d27f3a4c04d3fa917ab4483bfae3c453",
+    "LICENSE": "d592902b740ccef26c707e2664d39a9206d0c2276ab8dcdeade484fa7bddfc76",
+    "LICENSE-APACHE-2.0": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "NOTICE": "dc163eee10bed8c7a2f90ccdec31f46241bb4dcfb9bc9aa22b6dcad4b08f3fd1",
+    "manifest.json": "23a8cdd48de11520a26e147309f5495ab2e4c02543e9e44fa1d5cb7250bd114a",
+    "model.mlpackage/Data/com.apple.CoreML/model.mlmodel": "15ba09753f099c8111e3dda909c367d526ad0316bc7cb6238e8882f10630db85",
+    "model.mlpackage/Data/com.apple.CoreML/weights/weight.bin": "5a31269b5e1d65c97d4a1cdad8667ec3ce06e9c1ab58d31e0932a43c35f87e3f",
+    "model.mlpackage/Manifest.json": "e154b0ecbc3c4b2b37b0905a2a87d36f6b8db4060df4f4b835564df80c870ac6",
+    "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3"
+  },
+  "runtimeResourceBytes": 9824364
+}

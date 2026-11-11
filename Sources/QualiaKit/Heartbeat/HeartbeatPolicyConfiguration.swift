@@ -4,6 +4,8 @@ public struct HeartbeatPolicyConfiguration: Hashable, Sendable {
     public static let version = "heartbeat-candidate-v1"
     public let startThreshold: Float
     public let stopThreshold: Float
+    /// Zero explicitly disables confidence gating for uncalibrated analyzers.
+    /// Positive values require a separately supplied confidence, never a score substitute.
     public let minimumSignalConfidence: Float
     public let minimumUpdateInterval: Duration
     public let maximumDuration: Duration

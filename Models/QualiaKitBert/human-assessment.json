@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-11",
+  "reviewer": "project owner; one device holder",
+  "deviceModel": "iPhone18,1",
+  "os": "Version 26.6 (Build 23G71)",
+  "model": "qualiakit.bert",
+  "version": "v10-preview.1",
+  "manifestSHA256": "23a8cdd48de11520a26e147309f5495ab2e4c02543e9e44fa1d5cb7250bd114a",
+  "sourceFingerprintSHA256": "f6f5dc74a963784f32e38b53145a637be6217f42fc6c991eb6035540cd88881b",
+  "procedure": "Normal example: Suspense, Analyze and feel, then the top-right Stop button.",
+  "response": "Да, ощущается, комфортно, Stop останавливает",
+  "rhythmFelt": true,
+  "comfortable": true,
+  "manualStopWorked": true,
+  "scope": "One holder and one physical iPhone. No independent semantic labels, broader comfort study, system Reduce Motion, actual background transition or battery assessment."
+}

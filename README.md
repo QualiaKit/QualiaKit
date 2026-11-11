@@ -7,24 +7,29 @@ they do not measure a person's feelings or mental state.
 
 ![QualiaKit demo](qualia-demo.gif)
 
-A recording of the demo. Physical sensation depends on the device and the holder;
+A recording of the demo. This historical recording is not a QualiaKitBert quality demonstration.
+Physical sensation depends on the device and the holder;
 a GIF or simulator cannot establish haptic quality.
 
 ## Choose your first path
 
 | Path | What it does | What you need |
 | --- | --- | --- |
+| **QualiaKitBert, experimental** | Your English scene → real on-device model → bounded heartbeat | Clone this repository and run the example on a compatible iPhone; model included |
 | **SentimentPreview** | A short pulse from English positive/negative valence | `QualiaKit`, Apple's built-in analyzer, a compatible iPhone; no model download |
 | **LivingStory, scripted** | Start a heartbeat, update it, play an accent, then stop | The example app or public consumer package; fixed authored observations, no text inference |
 | **Narrative integration** | Run the same pipeline using actual narrative predictions | A compatible evaluated analyzer; optional Core ML adapter and separately licensed assets |
 
 Apple sentiment and the recovered Russian sentiment model do not establish
-suspense, threat or narrative understanding. There is no bundled production
-narrative model.
+suspense, threat or narrative understanding. QualiaKitBert is an experimental
+narrative model bundled with the examples;
+it is not qualified for production. See its [model card](Models/QualiaKitBert/MODEL_CARD.md).
 
 Applications can keep their model weights private and supply an analyzer through
-`QualiaAnalyzing`. Model assets belong to the application and are distributed
-separately from the library. The optional `QualiaCoreML` package includes a reusable
+`QualiaAnalyzing`. Applications own their model resources. The optional
+[QualiaKitBert example resources](Models/QualiaKitBert/MODEL_CARD.md) provide a
+ready starting point; the root library products do not bundle them. The optional
+`QualiaCoreML` package includes a reusable
 `BertQualiaAnalyzer` for compatible BERT classifiers; replacing a model requires
 assets and configuration, not another app-specific analyzer. See
 [using local models](docs/UsingCoreMLModels.md).
@@ -32,9 +37,16 @@ assets and configuration, not another app-specific analyzer. See
 ## Run the demo
 
 Open `Examples/QualiaExample/QualiaExample.xcodeproj`, select your signing team,
-and run on a compatible iPhone. Choose **SentimentPreview** for English valence,
-or **LivingStory** for the scripted heartbeat. Accept the first fragment, wait
-about a second, accept the next, then press Reset. Backgrounding suspends playback;
+and run on a compatible iPhone. **QualiaKitBert** opens first: choose Quiet or
+Suspense, then tap **Analyze and feel**, or write your own short English scene.
+Enable **Continue story with previous scenes** to retain up to two prior fragments.
+**Stop** ends playback and clears context. Each effect lasts at
+most six seconds; Reduce Motion disables continuous effects. The model and its
+vocabulary are included, with no model download, account or API key.
+
+**SentimentPreview** provides English valence; **LivingStory** demonstrates a
+scripted heartbeat. For LivingStory, accept a fragment, wait about a second,
+accept the next, then press Reset. Backgrounding suspends playback;
 returning does not replay an effect. The simulator shows state but cannot validate
 sensation. This Xcode project requires Xcode 26.6 or newer.
 
@@ -114,4 +126,5 @@ Diagnostics are off by default. Core has no networking or analytics transport;
 host analyzers and sinks have their own privacy boundaries. Do not use QualiaKit
 for medical diagnosis, mental-state inference, people scoring or decisions about
 people. Code is [MIT](LICENSE); this grants no rights to external models or data.
+The example model has its own [license and notices](Examples/DeveloperExperience/Sources/QualiaExamples/Resources/QualiaKitBert/NOTICE).
 The [current Russian model](Models/current/MODEL_CARD.md) is not redistributed.

@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-11",
+  "toolchain": "Xcode 27.2 (27B52)",
+  "configuration": "Debug",
+  "computeUnits": "cpuOnly (CoreMLAnalyzerConfiguration default)",
+  "sourceFingerprintSHA256": "f6f5dc74a963784f32e38b53145a637be6217f42fc6c991eb6035540cd88881b",
+  "sourceFingerprintDefinition": "SHA256 of sorted relative path + NUL + file SHA256 + newline for Swift sources under Sources/QualiaKit, Packages/QualiaCoreML/Sources/QualiaCoreML, Examples/DeveloperExperience/Sources, Examples/QualiaExample/QualiaExample; plus root/example Package.swift and example project.pbxproj.",
+  "appExecutableSHA256": "6ae11b848a8733bd606a12ecad5e350c7544d3d82db2753d53e21957e6eb7c83",
+  "appExecutableName": "QualiaExample.debug.dylib",
+  "reportSHA256": "c59479aeab67975905d78286264f789060d47caafa7f15510cde8dafe7341f05",
+  "scope": "Single physical iPhone 17 Pro run; snapshots are whole-process memory, not peak or model-only memory. Subsequent holder feedback is in human-assessment.json. Actual background transition, system Reduce Motion and battery not assessed."
+}
