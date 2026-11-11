@@ -7,7 +7,8 @@ objective; external developer timing has not yet been collected.
 
 ## Installation and first response
 
-Use Swift 5.9+, iOS 16+ or macOS 13+. Add the repository URL through Xcode's
+Use Xcode 16.4+ with iOS 16+ or macOS 13+ deployment targets. See the
+[toolchain compatibility notes](release/Compatibility.md). Add the repository URL through Xcode's
 Package Dependencies and select the QualiaKit product. For a local checkout,
 add the root package directory. For integration testing, select exact version
 `0.1.0-dev.1`; add `QualiaCoreML` as well when using a BERT/Core ML model. This

@@ -40,7 +40,8 @@ sensation. This Xcode project requires Xcode 26.6 or newer.
 
 ## Integrate through public API
 
-The Swift packages support Swift 5.9+, iOS 16+ and macOS 13+. In Xcode, add
+The Swift packages target iOS 16+ and macOS 13+; CI checks Xcode 16.4 and 26.6.
+See [toolchain compatibility](docs/release/Compatibility.md). In Xcode, add
 `https://github.com/QualiaKit/QualiaKit.git` and select the **QualiaKit** product.
 The 2.0 API is under development; pin a reviewed commit for your app.
 

@@ -1,17 +1,20 @@
 // swift-tools-version: 5.9
 import PackageDescription
 
-// Stage 1 is additive: the root manifest is part of the immutable 0001 audit.
+// Preserve the local package entry point while compiling the root module only once.
 let package = Package(
     name: "QualiaCoreML",
     platforms: [.iOS(.v16), .macOS(.v13)],
-    products: [.library(name: "QualiaCoreML", targets: ["QualiaCoreML"])],
+    products: [.library(name: "QualiaCoreML", targets: ["QualiaCoreMLCompatibility"])],
     dependencies: [.package(name: "QualiaKit", path: "../..")],
     targets: [
-        .target(name: "QualiaCoreML", dependencies: [.product(name: "QualiaKit", package: "QualiaKit")]),
+        .target(
+            name: "QualiaCoreMLCompatibility",
+            dependencies: [.product(name: "QualiaCoreML", package: "QualiaKit")]
+        ),
         .testTarget(
             name: "QualiaCoreMLTests",
-            dependencies: ["QualiaCoreML", .product(name: "QualiaKit", package: "QualiaKit")],
+            dependencies: ["QualiaCoreMLCompatibility", .product(name: "QualiaKit", package: "QualiaKit")],
             resources: [.copy("Resources")]
         ),
     ]

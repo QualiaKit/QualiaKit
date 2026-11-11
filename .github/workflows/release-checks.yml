@@ -71,13 +71,13 @@ jobs:
           if-no-files-found: error
   minimum-toolchain:
     name: Release minimum toolchain
-    runs-on: macos-14
+    runs-on: macos-15
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.source_ref || github.sha }}
-      - run: sudo xcode-select -s /Applications/Xcode_15.2.app/Contents/Developer
+      - run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
