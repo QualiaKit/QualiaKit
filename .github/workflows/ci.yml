@@ -6,132 +6,55 @@ on:
   pull_request:
     branches: [main, develop]
 
+permissions:
+  contents: read
+
 jobs:
-  build:
-    name: Build
-    runs-on: macos-15
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Select Xcode version
-        run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
-
-      - name: Show Swift version
-        run: swift --version
-
-      - name: Build for macOS
-        run: swift build -c release
-
-      - name: Build QualiaKit with strict concurrency
-        run: |
-          swift build \
-            --target QualiaKit \
-            -Xswiftc -strict-concurrency=complete \
-            -Xswiftc -warnings-as-errors
-
-      - name: Build for iOS Simulator
-        run: |
-          xcodebuild build \
-            -scheme Qualia \
-            -destination 'generic/platform=iOS Simulator' \
-            -skipPackagePluginValidation \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
-
   test:
-    name: Test
-    runs-on: macos-15
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Select Xcode version
-        run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
-
-      - name: Run tests
-        run: swift test --enable-code-coverage
-
-      - name: Generate coverage report
-        run: |
-          xcrun llvm-cov export \
-            .build/debug/QualiaKitPackageTests.xctest/Contents/MacOS/QualiaKitPackageTests \
-            -instr-profile .build/debug/codecov/default.profdata \
-            -format="lcov" > coverage.lcov || true
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          file: ./coverage.lcov
-          fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
-
-  model-contract:
-    name: Model contract evidence
-    runs-on: macos-26
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install pinned Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.14.0"
-
-      - name: Select pinned Xcode
-        run: sudo xcode-select -s /Applications/Xcode_26.6.app/Contents/Developer
-
-      - name: Show pinned toolchain
-        run: |
-          python3 --version
-          swift --version
-          xcodebuild -version
-          xcrun coremlcompiler version
-
-      - name: Run asset-free schema and comparator tests
-        run: |
-          python3 Tools/ModelContract/reference_inference.py --schema-self-test
-          python3 Tools/ModelContract/reference_inference.py --comparator-self-test
-
-      - name: Run asset-free Swift contract tests
-        run: swift test --filter CurrentModelContractTests
-
-      - name: Verify checksum-bound protected-run evidence
-        run: python3 Tools/ModelContract/reference_inference.py --verify-committed-evidence
-
-  matrix-build:
-    name: Build on ${{ matrix.platform }}
-    runs-on: macos-15
+    name: Build and test (Xcode ${{ matrix.xcode }})
     strategy:
+      fail-fast: false
       matrix:
         include:
-          - platform: "iOS Simulator"
-            destination: "generic/platform=iOS Simulator"
-            scheme: Qualia
-          - platform: "iOS Simulator (QualiaBert)"
-            destination: "generic/platform=iOS Simulator"
-            scheme: QualiaBert
-          - platform: "iOS Simulator (QualiaKit)"
-            destination: "generic/platform=iOS Simulator"
-            scheme: QualiaKit
-
+          - runner: macos-15
+            xcode: '16.4'
+          - runner: macos-26
+            xcode: '26.6'
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Select Xcode version
-        run: sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
-
-      - name: Build ${{ matrix.scheme }} on ${{ matrix.platform }}
+      - uses: actions/checkout@v4
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify test fixtures
         run: |
-          xcodebuild build \
-            -scheme ${{ matrix.scheme }} \
-            -destination '${{ matrix.destination }}' \
-            -skipPackagePluginValidation \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+          python3 Tests/CoreMLFixtures/verify.py
+          python3 Tests/TestingFixtures/generate.py
+          python3 Tests/ModelContract/reference_inference.py --schema-self-test
+          python3 Tests/ModelContract/reference_inference.py --comparator-self-test
+          python3 -m unittest discover -s Tests/ModelContract -p 'test_*.py'
+      - name: Build library products with strict concurrency
+        run: |
+          swift build -c release
+          for target in QualiaKit QualiaTesting QualiaCoreML; do
+            swift build --target "$target" -Xswiftc -strict-concurrency=complete -Xswiftc -warnings-as-errors
+          done
+      - name: Test library and example model
+        run: swift test --enable-code-coverage
+      - name: Test public consumers and compatibility package
+        run: |
+          swift test --package-path Tests/Consumer
+          swift test --package-path Packages/QualiaCoreML
+      - name: Build library products for iOS
+        run: |
+          for scheme in QualiaKit QualiaCoreML Qualia QualiaBert; do
+            xcodebuild build -scheme "$scheme" -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO
+          done
+      - name: Build minimal example
+        run: >-
+          xcodebuild build -project Examples/QualiaExample/QualiaExample.xcodeproj
+          -scheme QualiaExample -configuration Release -destination 'generic/platform=iOS Simulator'
+          CODE_SIGNING_ALLOWED=NO

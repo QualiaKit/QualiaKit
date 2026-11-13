@@ -33,6 +33,6 @@ jobs:
             exit 2
           fi
       - name: Verify pinned toolchain, checksums, raw and transformed parity
-        run: python3.14 Tools/ModelContract/reference_inference.py --verify
+        run: python3.14 Tests/ModelContract/reference_inference.py --verify
       - name: Run protected Swift tokenizer and production adapter parity
         run: swift test --filter CurrentModelContractTests

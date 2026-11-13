@@ -19,6 +19,6 @@ licensed binary or credentials. Redacted diagnostics are opt-in and should still
 be inspected before sharing.
 
 Supported source-build and physical evidence scopes are separate in the
-[compatibility matrix](docs/release/Compatibility.md). We do not promise haptics
+[installation and example requirements](README.md#install). We do not promise haptics
 on every Apple platform or support for arbitrary opaque models. Public API is
 still evolving; pin a reviewed revision and read migration notes before updating.

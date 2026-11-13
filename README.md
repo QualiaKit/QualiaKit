@@ -1,130 +1,105 @@
 # QualiaKit
 
-An on-device runtime that turns text observations into stateful haptic reactions.
-Bring an analyzer, choose a reaction policy, and let a session own ordering,
-context and playback. Signals describe content and intended reader experience;
-they do not measure a person's feelings or mental state.
+Turn text into on-device haptic reactions in Swift. A session connects an
+analyzer to a reaction policy and owns playback, ordering and context.
 
-![QualiaKit demo](qualia-demo.gif)
+## Install
 
-A recording of the demo. This historical recording is not a QualiaKitBert quality demonstration.
-Physical sensation depends on the device and the holder;
-a GIF or simulator cannot establish haptic quality.
-
-## Choose your first path
-
-| Path | What it does | What you need |
-| --- | --- | --- |
-| **QualiaKitBert, experimental** | Your English scene → real on-device model → bounded heartbeat | Clone this repository and run the example on a compatible iPhone; model included |
-| **SentimentPreview** | A short pulse from English positive/negative valence | `QualiaKit`, Apple's built-in analyzer, a compatible iPhone; no model download |
-| **LivingStory, scripted** | Start a heartbeat, update it, play an accent, then stop | The example app or public consumer package; fixed authored observations, no text inference |
-| **Narrative integration** | Run the same pipeline using actual narrative predictions | A compatible evaluated analyzer; optional Core ML adapter and separately licensed assets |
-
-Apple sentiment and the recovered Russian sentiment model do not establish
-suspense, threat or narrative understanding. QualiaKitBert is an experimental
-narrative model bundled with the examples;
-it is not qualified for production. See its [model card](Models/QualiaKitBert/MODEL_CARD.md).
-
-Applications can keep their model weights private and supply an analyzer through
-`QualiaAnalyzing`. Applications own their model resources. The optional
-[QualiaKitBert example resources](Models/QualiaKitBert/MODEL_CARD.md) provide a
-ready starting point; the root library products do not bundle them. The optional
-`QualiaCoreML` package includes a reusable
-`BertQualiaAnalyzer` for compatible BERT classifiers; replacing a model requires
-assets and configuration, not another app-specific analyzer. See
-[using local models](docs/UsingCoreMLModels.md).
-
-## Run the demo
-
-Open `Examples/QualiaExample/QualiaExample.xcodeproj`, select your signing team,
-and run on a compatible iPhone. **QualiaKitBert** opens first: choose Quiet or
-Suspense, then tap **Analyze and feel**, or write your own short English scene.
-Enable **Continue story with previous scenes** to retain up to two prior fragments.
-**Stop** ends playback and clears context. Each effect lasts at
-most six seconds; Reduce Motion disables continuous effects. The model and its
-vocabulary are included, with no model download, account or API key.
-
-**SentimentPreview** provides English valence; **LivingStory** demonstrates a
-scripted heartbeat. For LivingStory, accept a fragment, wait about a second,
-accept the next, then press Reset. Backgrounding suspends playback;
-returning does not replay an effect. The simulator shows state but cannot validate
-sensation. This Xcode project requires Xcode 26.6 or newer.
-
-## Integrate through public API
-
-The Swift packages target iOS 16+ and macOS 13+; CI checks Xcode 16.4 and 26.6.
-See [toolchain compatibility](docs/release/Compatibility.md). In Xcode, add
+Requires iOS 16+ or macOS 13+, with Swift 5.9+. In Xcode, add
 `https://github.com/QualiaKit/QualiaKit.git` and select the **QualiaKit** product.
-The 2.0 API is under development; pin a reviewed commit for your app.
+The session API is under development: pin a reviewed commit. Existing tags
+`1.0.0` through `3.0.0` use the legacy API; a broad version range can select them.
 
-<!-- snippet: Examples/DeveloperExperience/Sources/QualiaExamples/SentimentPreview.swift#sentiment-preview -->
+## First integration
+
+Create a session once in your screen model, then process text from a button:
+
 ```swift
+import Foundation
 import QualiaKit
 
 @MainActor
-public func makeSentimentPreview() async throws -> QualiaSession {
+func makeSession() async throws -> QualiaSession {
     let renderer = CoreHapticRenderer()
     guard renderer.capabilities.supportsHaptics else {
         throw QualiaError.hapticsUnavailable
     }
     return try await QualiaSession.sentimentPreview(
-        analyzer: AppleSentimentAnalyzer(), renderer: renderer,
+        analyzer: AppleSentimentAnalyzer(),
+        renderer: renderer,
         language: .init(policy: .requireExplicit, minimumConfidence: 0.75),
         context: .init(maximumFragments: 0, maximumCharacters: 4_000)
     )
 }
 
-public func previewFirstFragment(in session: QualiaSession) async throws -> QualiaResponse {
+func analyze(_ text: String, in session: QualiaSession) async throws -> QualiaResponse {
     let response = try await session.process(QualiaInput(
-        id: .init(rawValue: "first-fragment"),
-        text: "This is a wonderful, joyful day!", language: .init(rawValue: "en")
+        id: .init(rawValue: UUID().uuidString),
+        text: text,
+        language: .init(rawValue: "en")
     ))
     if let failure = response.execution.failure { throw failure }
     return response
 }
 ```
 
-Create the session once in a long-lived screen model. Call `previewFirstFragment`
-from an explicit user action, inspect its response, and retain the session for
-later fragments with unique IDs. Call `suspend()` when inactive, `resume()` on
-return, and `reset()` when leaving the scene. Handle thrown setup/input errors;
-a renderer failure is also present in `response.execution.failure`. The
-[complete guide](docs/GettingStarted.md) covers lifecycle, unsupported hardware
-and an analysis-only alternative. Near-neutral valence intentionally produces
-no pulse; the preview supports one English paragraph without historical context.
+This uses Apple's built-in analyzer for **one English paragraph**. Positive or
+negative valence produces a short pulse; near-neutral text may produce none.
+It needs no model download. It does not detect suspense or a person's emotions.
 
-## Test without hardware
+Retain the session across button taps and give each input a unique ID. Await
+`suspend()` when the screen becomes inactive, `resume()` when it becomes active,
+and `reset()` when leaving or starting over. Serialize these lifecycle calls,
+handle cleanup errors before accepting more input, and do not rely on `deinit`.
+Resuming never replays a previous effect.
 
-The external consumer package uses public products only and verifies exact
-ordered descriptors, including start, replacement, accent and owned stop:
+## Run the example
 
-```sh
-swift test --package-path Examples/DeveloperExperience
-swift run --package-path Examples/DeveloperExperience qualia-walkthrough
-```
+Open [QualiaExample.xcodeproj](Examples/QualiaExample/QualiaExample.xcodeproj),
+select your signing team and run on a compatible iPhone. Xcode 16.4+ can open the
+project. There is one screen: enter English text, tap **Analyze and feel**, and
+read the result. **Reset** clears the session and retries setup after an error.
+The simulator can build the app but cannot demonstrate physical haptics.
 
-`QualiaTesting` provides `FixtureAnalyzer`, `ControlledAnalyzer`,
-`RecordingHapticRenderer`, `TestQualiaClock` and `QualiaSessionHarness`.
-The walkthrough prints a bounded redacted decision report; it emits no vibration.
+The complete integration is in three files:
 
-## Guides
+- [QualiaExampleApp.swift](Examples/QualiaExample/QualiaExample/QualiaExampleApp.swift) starts the app.
+- [ContentView.swift](Examples/QualiaExample/QualiaExample/ContentView.swift) contains the screen.
+- [SentimentModel.swift](Examples/QualiaExample/QualiaExample/SentimentModel.swift) creates the session, processes text and handles lifecycle.
 
-- [Getting started](docs/GettingStarted.md) · [Architecture](docs/Architecture.md)
-- [Choose an analyzer](docs/ChoosingAnAnalyzer.md) · [Use Core ML](docs/UsingCoreMLModels.md)
-- [Custom policies](docs/CreatingReactionPolicies.md) · [Haptic patterns](docs/BuildingHapticPatterns.md)
-- [Sessions, context and SwiftUI](docs/SessionsAndContext.md) · [Integration testing](docs/TestingYourIntegration.md)
-- [Privacy and diagnostics](docs/PrivacyAndDataFlow.md) · [Accessibility](docs/Accessibility.md)
-- [Performance](docs/Performance.md) · [Pre-1.0 migration](docs/MigrationBefore1_0.md)
-- [Public API reference and DocC](docs/APIReference.md) · [Contributing](CONTRIBUTING.md)
-- [Release status and version policy](docs/release/README.md) · [Support](SUPPORT.md) · [Security](SECURITY.md)
+## Other integrations
 
-The optional `QualiaCoreML` product is exported by the root package. For integration
-testing, select exact version `0.1.0-dev.1` and both `QualiaKit` and `QualiaCoreML`;
-see the setup guide. The older `Qualia` and `QualiaBert` products are legacy APIs.
+| Product | Use |
+| --- | --- |
+| `QualiaKit` | Sessions, Apple sentiment, custom analyzers and haptic policies |
+| `QualiaCoreML` | App-owned Core ML and BERT models; see the [model integration guide](Packages/QualiaCoreML/README.md) |
+| `QualiaTesting` | Recording renderers, fixture analyzers and a controllable clock for tests without hardware |
+| `Qualia`, `QualiaBert` | Legacy API, retained for existing applications |
 
-Diagnostics are off by default. Core has no networking or analytics transport;
-host analyzers and sinks have their own privacy boundaries. Do not use QualiaKit
-for medical diagnosis, mental-state inference, people scoring or decisions about
-people. Code is [MIT](LICENSE); this grants no rights to external models or data.
-The example model has its own [license and notices](Examples/DeveloperExperience/Sources/QualiaExamples/Resources/QualiaKitBert/NOTICE).
-The [current Russian model](Models/current/MODEL_CARD.md) is not redistributed.
+Implement `QualiaAnalyzing` for another analyzer and pass it to
+`QualiaSession.configured(analyzer:renderer:configuration:)`. A reaction policy
+must match the analyzer's declared signals. For analysis without vibration, use
+`NoReactionPolicy` and `NoOpHapticRenderer` through that factory.
+
+SwiftUI also provides `qualiaReaction` for accepted events and `qualiaLiveReaction`
+for debounced drafts. Keep draft preview in a separate session so it does not
+advance the accepted story. Public API documentation lives with the source.
+
+When migrating from `Qualia` or `QualiaBert`, replace client calls with a retained
+`QualiaSession` and explicit inputs/lifecycle handling. The two APIs are not
+source-compatible; legacy model output semantics remain unchanged.
+
+## Privacy and accessibility
+
+The built-in analyzer runs on device. The core library has no networking or
+analytics transport; custom analyzers and diagnostic sinks are controlled by
+the host app. Diagnostics are off by default. Do not log user text or distribute
+private model assets. Signals describe content, not a person's mental state.
+
+Haptic support depends on hardware. Surface unavailable-hardware and playback
+errors, provide visible results, and respect the user's haptic preferences. If
+using continuous effects, disable them for Reduce Motion and bound their duration.
+
+Code is [MIT](LICENSE). Model and dataset rights are separate; no trained model
+is bundled. See [Contributing](CONTRIBUTING.md), [Support](SUPPORT.md) and
+[Security](SECURITY.md).

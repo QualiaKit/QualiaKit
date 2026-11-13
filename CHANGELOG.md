@@ -2,9 +2,12 @@
 
 ## Unreleased
 
-- Bundle the optional experimental QualiaKitBert v10-preview.1 model with the
-  developer examples and add an English text-to-heartbeat iPhone demo.
-- Document model provenance, licenses, token limits and reproducible diagnostics.
+- Replace the multi-tab demo with one minimal SwiftUI sentiment integration.
+- Consolidate integration guidance in README and the Core ML package guide.
+- Move fixture tools and public consumer checks beside tests; remove research,
+  device-lab, documentation-generation and release-evidence tooling from the library.
+- Retire the experimental bundled BERT demo; preserve its assets and notices in
+  the author's archive and repository history. Library APIs remain available.
 - Explicitly setting `minimumSignalConfidence` to zero now permits heartbeat
   startup without a confidence field. Positive thresholds retain their existing
   behavior; fresh positive evidence and all playback bounds remain required.
@@ -40,11 +43,11 @@ This is a **development snapshot**, not a new stable version. “Runtime 2.0” 
 name. Existing repository tags `1.0.0` through `3.0.0` belong to the older API and
 remain immutable. The proposed new-runtime version is `0.1.0-beta.1`, pending
 owner approval and all beta gates. Pin `0.1.0-dev.1` exactly; do not use a broad
-version range that can resolve to an old tag. See [version policy](docs/release/README.md).
+version range that can resolve to an old tag. See [installation guidance](README.md#install).
 
 The old `Qualia`/`QualiaBert` products remain available, but their call sites are
 not source-compatible with the session API. Follow the
-[migration guide](docs/MigrationBefore1_0.md): create one retained session, submit
+[migration guidance](README.md#other-integrations): create one retained session, submit
 accepted fragments with unique IDs, explicit language and bounded context, handle
 typed failures, and await suspend/reset at lifecycle boundaries. Legacy model
 transforms and golden fixtures remain frozen. No production narrative model is

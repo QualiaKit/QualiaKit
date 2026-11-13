@@ -76,7 +76,7 @@ final class CurrentModelContractTests: XCTestCase {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
         process.arguments = [
-            "python3", url("Tools/ModelContract/reference_inference.py").path,
+            "python3", url("Tests/ModelContract/reference_inference.py").path,
         ] + arguments
         process.currentDirectoryURL = repositoryRoot
         process.environment = ProcessInfo.processInfo.environment
@@ -497,10 +497,6 @@ final class CurrentModelContractTests: XCTestCase {
         ] {
             XCTAssertTrue(card.localizedCaseInsensitiveContains(requiredMismatch), requiredMismatch)
         }
-        let benchmark = try String(contentsOf: url("Benchmarks/Models/current-baseline.md"), encoding: .utf8)
-        XCTAssertTrue(benchmark.contains("pending consolidated release gate HG-0015-002"))
-        XCTAssertTrue(benchmark.localizedCaseInsensitiveContains("do not log source text"))
-
         let gateFields = ["labelSemantics", "outputKind", "tokenizerTrainingParity", "provenance"]
         for unresolvedField in gateFields {
             var conditions = Dictionary(uniqueKeysWithValues: gateFields.map { ($0, "resolved") })
@@ -519,7 +515,7 @@ final class CurrentModelContractTests: XCTestCase {
     func testVerifierRejectsInvalidInputsWithoutLeakingText() throws {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-        process.arguments = ["python3", url("Tools/ModelContract/reference_inference.py").path, "--verify"]
+        process.arguments = ["python3", url("Tests/ModelContract/reference_inference.py").path, "--verify"]
         var environment = ProcessInfo.processInfo.environment
         environment.removeValue(forKey: "QUALIAKIT_TEST_MODEL_PATH")
         environment.removeValue(forKey: "QUALIAKIT_TEST_VOCAB_PATH")
@@ -545,7 +541,7 @@ final class CurrentModelContractTests: XCTestCase {
             let mutation = Process()
             mutation.executableURL = URL(fileURLWithPath: "/usr/bin/env")
             mutation.arguments = [
-                "python3", url("Tools/ModelContract/reference_inference.py").path,
+                "python3", url("Tests/ModelContract/reference_inference.py").path,
                 "--probe-error", probe, "--model-path", modelPath, "--vocab-path", vocabPath,
             ]
             mutation.environment = ProcessInfo.processInfo.environment
@@ -564,7 +560,7 @@ final class CurrentModelContractTests: XCTestCase {
     }
 
     func testPinnedEnvironmentAndFreshProcessCalibrationEvidence() throws {
-        let lock = try String(contentsOf: url("Tools/ModelContract/requirements.lock"), encoding: .utf8)
+        let lock = try String(contentsOf: url("Tests/ModelContract/requirements.lock"), encoding: .utf8)
         for pin in ["python==3.14.0", "python-dependencies==standard-library-only", "swift==6.3.3",
                     "xcode==26.6", "coremlcompiler==3520.5.1", "coreml-compute-units==cpuOnly",
                     "coreml-production-parity-compute-units==default",

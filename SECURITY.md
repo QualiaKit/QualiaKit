@@ -22,5 +22,5 @@ each tag and the private channel verified in release evidence.
 Trust boundaries include host analyzers/sinks, model installation, tensor/manifest
 validation, lifecycle cleanup and private feedback. Core performs no network
 transport. A model declaring on-device execution is not a sandbox. Code's MIT
-license grants no model or dataset rights. See [privacy](docs/PrivacyAndDataFlow.md)
+license grants no model or dataset rights. See [privacy](README.md#privacy-and-accessibility)
 and [contribution requirements](CONTRIBUTING.md).

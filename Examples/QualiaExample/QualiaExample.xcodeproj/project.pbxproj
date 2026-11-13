@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		3A3DE50A2EDCF608004B3BCA /* QualiaKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3A3DE5092EDCF608004B3BCA /* QualiaKit */; };
-		DA1300010000000000000001 /* QualiaCoreML in Frameworks */ = {isa = PBXBuildFile; productRef = DA1300010000000000000003 /* QualiaCoreML */; };
-		DA1400010000000000000001 /* QualiaExamples in Frameworks */ = {isa = PBXBuildFile; productRef = DA1400010000000000000003 /* QualiaExamples */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,8 +28,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A3DE50A2EDCF608004B3BCA /* QualiaKit in Frameworks */,
-				DA1300010000000000000001 /* QualiaCoreML in Frameworks */,
-				DA1400010000000000000001 /* QualiaExamples in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,7 +60,6 @@
 				3A3DE4F62EDCF5DC004B3BCA /* Sources */,
 				3A3DE4F72EDCF5DC004B3BCA /* Frameworks */,
 				3A3DE4F82EDCF5DC004B3BCA /* Resources */,
-                DA1300020000000000000001 /* Local Russian device assets */,
 			);
 			buildRules = (
 			);
@@ -76,8 +71,6 @@
 			name = QualiaExample;
 			packageProductDependencies = (
 				3A3DE5092EDCF608004B3BCA /* QualiaKit */,
-				DA1300010000000000000003 /* QualiaCoreML */,
-				DA1400010000000000000003 /* QualiaExamples */,
 			);
 			productName = QualiaExample;
 			productReference = 3A3DE4FA2EDCF5DC004B3BCA /* QualiaExample.app */;
@@ -109,7 +102,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				3A3DE5082EDCF608004B3BCA /* XCLocalSwiftPackageReference "QualiaKit" */,
-				DA1400010000000000000002 /* XCLocalSwiftPackageReference "DeveloperExperience" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3A3DE4FB2EDCF5DC004B3BCA /* Products */;
@@ -131,20 +123,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-        DA1300020000000000000001 /* Local Russian device assets */ = {
-            isa = PBXShellScriptBuildPhase;
-            alwaysOutOfDate = 1;
-            buildActionMask = 2147483647;
-            files = ();
-            inputPaths = ();
-            outputPaths = ("$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/DeviceRussianAssets.bundle",);
-            name = "Local Russian device assets";
-            runOnlyForDeploymentPostprocessing = 0;
-            shellPath = /bin/sh;
-            shellScript = "set -eu\nDEST=\"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/DeviceRussianAssets.bundle\"\nif [ -d \"$DEST\" ]; then /bin/rm -rf \"$DEST\"; fi\ncase \" ${SWIFT_ACTIVE_COMPILATION_CONDITIONS:-} \" in *\" QUALIA_DEVICE_EVALUATION \"*) if [ -n \"${QUALIA_RUSSIAN_ASSETS:-}\" ]; then /usr/bin/ditto \"$QUALIA_RUSSIAN_ASSETS\" \"$DEST\"; fi ;; esac\n";
-        };
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3A3DE4F62EDCF5DC004B3BCA /* Sources */ = {
@@ -195,7 +173,6 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = HC44J5WW8U;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -219,6 +196,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -259,7 +237,6 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = HC44J5WW8U;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -276,6 +253,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -288,7 +266,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = HC44J5WW8U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -304,10 +281,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = test.QualiaExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -320,7 +294,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = HC44J5WW8U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -336,10 +309,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = test.QualiaExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -373,10 +343,6 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../..";
 		};
-		DA1400010000000000000002 /* XCLocalSwiftPackageReference "DeveloperExperience" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = "../DeveloperExperience";
-		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -384,16 +350,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3A3DE5082EDCF608004B3BCA /* XCLocalSwiftPackageReference "QualiaKit" */;
 			productName = QualiaKit;
-		};
-		DA1300010000000000000003 /* QualiaCoreML */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3A3DE5082EDCF608004B3BCA /* XCLocalSwiftPackageReference "QualiaKit" */;
-			productName = QualiaCoreML;
-		};
-		DA1400010000000000000003 /* QualiaExamples */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = DA1400010000000000000002 /* XCLocalSwiftPackageReference "DeveloperExperience" */;
-			productName = QualiaExamples;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

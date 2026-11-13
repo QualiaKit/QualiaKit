@@ -2,11 +2,11 @@
   "algorithm": "SHA-256",
   "excludesSelf": "Models/current/checksums.json",
   "files": {
-    ".github/workflows/ci.yml": "f72f7bb98cf4e76fa1910c6c8a778bdd39247c96b33c46e69f39aa24efcf48df",
-    "Models/current/MODEL_CARD.md": "c15be731d2cd545ee557270b34baa68fef841cdad4370c02eead99755e16c92e",
+    ".github/workflows/ci.yml": "bc7b127aa03c83a388d517c1f75aa186dd3bf24b499111ee8e599ca128f0b104",
+    "Models/current/MODEL_CARD.md": "3da9f578b28ccf74a3a9c4eb1a518490506c9b28158c84ade46d12a402dd2060",
     "Models/current/manifest.json": "43f507fd7a27c177bdd38da736aaa6826b3bcce25f905f8cb55815e87e435656",
     "Models/current/manifest.schema.json": "d155c7ec622758500496665340b55997bcb69174e2723bd68b2a8dc877f20a25",
-    "Package.swift": "340a6c2a301e32b4ea19249b5f0e2f4d008795a7d364574ff5a0c471e6dd92ea",
+    "Package.swift": "94757b19ee4981f11bacdbceb7e29257455610fd6fe52cc0b3ca8d6e9359d169",
     "Sources/QualiaBert/BertModelWrapper.swift": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
     "Sources/QualiaBert/BertProvider.swift": "25681f7ecbebd6ee5d0cb1534fc05fa6ef63663f475fbc838dbd8bf7b06cc8f8",
     "Sources/QualiaBert/BertTokenizer.swift": "6f443dd4c360a9a00cc6347bfd22b630b61f18899b4a2409e3453e6f205c9314",
@@ -17,10 +17,10 @@
     "Tests/Golden/current/current-russian-fixture-v1/manifest.json": "43f507fd7a27c177bdd38da736aaa6826b3bcce25f905f8cb55815e87e435656",
     "Tests/Golden/current/current-russian-fixture-v1/run-report-v1.json": "edf3d89b4d7747be6b5be0217b96ce2c6c3dbd717ce8bcb092b23b8d2fc795aa",
     "Tests/Golden/current/current-russian-fixture-v1/verification-v1.json": "a8c58cef435574635d99089a6f8681c4be94d46a690355a229936ade2a50d7a0",
-    "Tests/QualiaKitTests/CurrentModelContractTests.swift": "4f9ff71d0a4cd6ac210260ce6c55d31e658431747b24ba5b33c760d1add4fbde",
-    "Tools/ModelContract/coreml_inference.swift": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
-    "Tools/ModelContract/reference_inference.py": "950d16342b383d097b6930b678add76b308b422a258e2edf826e493de2de4a71",
-    "Tools/ModelContract/requirements.lock": "0568b6ef1a117ae9851c49122e0e864a7f63bb6b7518e86e6543138f23f462c7"
+    "Tests/ModelContract/coreml_inference.swift": "c69f2a2271cbee6f4a8bee927c673f8f7ee3c409bc9b3625972ff76a2c300023",
+    "Tests/ModelContract/reference_inference.py": "81e4a6a60cf09423f71a01b923836f05b4fa1f463da9ba0744eaca68f11692c5",
+    "Tests/ModelContract/requirements.lock": "0568b6ef1a117ae9851c49122e0e864a7f63bb6b7518e86e6543138f23f462c7",
+    "Tests/QualiaKitTests/CurrentModelContractTests.swift": "6ef73ca2d66424402c0227be58ab9fd459ca55b3be7dfe4b8b8f49c984652c56"
   },
   "schemaVersion": 1
 }

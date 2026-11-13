@@ -63,6 +63,17 @@ let package = Package(
             path: "Sources/QualiaBert"
         ),
         // Tests
+        .target(
+            name: "QualiaExampleSupport",
+            dependencies: ["QualiaKit"],
+            path: "Examples/QualiaExample/QualiaExample",
+            exclude: ["ContentView.swift", "QualiaExampleApp.swift", "Assets.xcassets", "PrivacyInfo.xcprivacy"],
+            sources: ["SentimentModel.swift"]
+        ),
+        .testTarget(
+            name: "QualiaExampleTests",
+            dependencies: ["QualiaExampleSupport", "QualiaKit", "QualiaTesting"]
+        ),
         .testTarget(
             name: "QualiaKitTests",
             dependencies: ["QualiaKit", "QualiaTesting", "Qualia", "QualiaBert"],

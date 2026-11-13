@@ -45,7 +45,7 @@ public struct CoreMLRuntimeEvent: Sendable {
 }
 
 /// A local, manifest-selected text classifier. The first execution profile is documented in
-/// `docs/reference/CoreMLRuntime.md`; unsupported contracts fail at initialization.
+/// `Packages/QualiaCoreML/README.md`; unsupported contracts fail at initialization.
 public struct CoreMLQualiaAnalyzer: QualiaAnalyzing {
     public var diagnosticIdentity: QualiaDiagnosticIdentity? {
         .init(identifier: identity.identifier, version: identity.version)

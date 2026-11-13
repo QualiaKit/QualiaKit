@@ -129,34 +129,6 @@ final class TestingAndEvaluationTests: XCTestCase {
         }
     }
 
-    // AC-0013-003 is also covered by individual mutation tests in Python.
-    func testNarrativeCapabilityEvidenceGateAndFixtureRegeneration() throws {
-        try runPython(["Tools/TestingFixtures/generate.py"])
-        try runPython(["-m", "unittest", "discover", "-s", "Tools/Evaluation/tests", "-v"], minimumTests: 22)
-    }
-
-    private func runPython(_ arguments: [String], minimumTests: Int? = nil) throws {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-        process.arguments = ["python3"] + arguments
-        process.currentDirectoryURL = root
-        let pipe = Pipe()
-        process.standardOutput = pipe
-        process.standardError = pipe
-        try process.run()
-        let output = pipe.fileHandleForReading.readDataToEndOfFile()
-        process.waitUntilExit()
-        let text = String(decoding: output, as: UTF8.self)
-        XCTAssertEqual(process.terminationStatus, 0, text)
-        if let minimumTests {
-            let pattern = try NSRegularExpression(pattern: "Ran ([0-9]+) tests?")
-            let match = try XCTUnwrap(pattern.firstMatch(in: text, range: NSRange(text.startIndex..., in: text)), text)
-            let range = try XCTUnwrap(Range(match.range(at: 1), in: text))
-            XCTAssertGreaterThanOrEqual(try XCTUnwrap(Int(text[range])), minimumTests,
-                                        "Evidence checks must not silently disappear: \(text)")
-        }
-    }
-
     private func input(_ id: String) throws -> QualiaInput {
         try .init(id: .init(rawValue: id), text: "Synthetic \(id)", language: .init(rawValue: "en"))
     }

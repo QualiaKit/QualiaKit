@@ -71,19 +71,12 @@ fastlane/test_output
 RuBSentimentModel.mlpackage/
 LocalArtifacts/
 
-# App-owned narrative research stays local, outside the public library release.
-# Preserve the existing experiment layout without publishing data or reports.
-/Tools/Narrative/
-/Evaluation/narrative/
-# Author reports belong in the separate QualiaKit-SDD archive.
-/Evaluation/reports/
-/ReleaseEvidence/
-/outputs/bert-tiny-*/
-/.github/workflows/narrative-research.yml
-
-# Local Python evaluation caches.
+# Local Python caches.
 __pycache__/
 *.pyc
 
-# Generated per-build device harness identity (embedded by the runner).
-Examples/QualiaExample/QualiaExample/DeviceEvaluationAssets.bundle/build-identity.json
+# Existing private research outputs remain local.
+/Evaluation/narrative/
+/Evaluation/reports/
+/ReleaseEvidence/
+/outputs/bert-tiny-*/
