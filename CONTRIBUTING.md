@@ -4,7 +4,7 @@ Branch from `main` and keep changes focused. For public API, model mapping or
 policy changes, explain the intended behavior before implementation. Follow the
 [code of conduct](CODE_OF_CONDUCT.md) and [governance](GOVERNANCE.md).
 
-Run the library and example-model tests, then the independent public consumer:
+Run the library tests, then the independent public consumer:
 
 ```sh
 swift build
@@ -20,13 +20,14 @@ xcodebuild build -project Examples/QualiaExample/QualiaExample.xcodeproj \
 ```
 
 CI runs on Xcode 16.4 and 26.6. Keep strict concurrency checks passing. Tests for
-the actual example screen model run with a recording renderer, without a device.
+the ready-made feedback component run with a recording renderer, without a device.
 The `Tests/Consumer` package checks public imports without `@testable` access.
 See [test fixtures](Tests/README.md) for generators and protected model checks.
 
 Add regression tests for behavior changes and update README or source comments
 when the API changes. Preserve meaningful error handling, cancellation, owned
 playback cleanup and accessibility. Use synthetic text in tests and bug reports.
+Keep the README SwiftUI screen in sync with `Tests/Consumer/Tests/ConsumerTests/SentimentPreview.swift`.
 
 Golden outputs, tolerances and model assets require a separate reviewed change;
 do not regenerate them merely to make a test pass. A model contribution needs

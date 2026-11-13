@@ -10,7 +10,7 @@ let package = Package(
         .macOS(.v13),
     ],
     products: [
-        // QualiaKit 2.0: Model-agnostic domain and runtime contracts
+        // Text feedback and advanced model-agnostic sessions
         .library(
             name: "QualiaKit",
             targets: ["QualiaKit"]
@@ -35,7 +35,7 @@ let package = Package(
         ),
     ],
     targets: [
-        // QualiaKit 2.0 domain, analyzer, and injected haptic runtime.
+        // Domain, analyzer, and injected haptic runtime.
         // It has no Core ML or external package dependencies.
         .target(
             name: "QualiaKit",
@@ -63,17 +63,6 @@ let package = Package(
             path: "Sources/QualiaBert"
         ),
         // Tests
-        .target(
-            name: "QualiaExampleSupport",
-            dependencies: ["QualiaKit"],
-            path: "Examples/QualiaExample/QualiaExample",
-            exclude: ["ContentView.swift", "QualiaExampleApp.swift", "Assets.xcassets", "PrivacyInfo.xcprivacy"],
-            sources: ["SentimentModel.swift"]
-        ),
-        .testTarget(
-            name: "QualiaExampleTests",
-            dependencies: ["QualiaExampleSupport", "QualiaKit", "QualiaTesting"]
-        ),
         .testTarget(
             name: "QualiaKitTests",
             dependencies: ["QualiaKit", "QualiaTesting", "Qualia", "QualiaBert"],

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Add `SentimentFeedback` and `.sentimentFeedback(_:)`: English sentiment,
+  optional pulses, automatic SwiftUI lifecycle and one observable error channel.
+- Keep analysis available without haptic hardware or when feedback is disabled.
+  Each paragraph is independent; changing preferences cancels pending playback.
+- Reduce the example to its screen and app entry point; compile the README's
+  complete quick start in the public consumer package. Restore the original GIF.
 - Replace the multi-tab demo with one minimal SwiftUI sentiment integration.
 - Consolidate integration guidance in README and the Core ML package guide.
 - Move fixture tools and public consumer checks beside tests; remove research,

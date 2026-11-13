@@ -1,25 +1,31 @@
-// snippet:start sentiment-preview
+import SwiftUI
 import QualiaKit
 
 @MainActor
-public func makeSentimentPreview() async throws -> QualiaSession {
-    let renderer = CoreHapticRenderer()
-    guard renderer.capabilities.supportsHaptics else {
-        throw QualiaError.hapticsUnavailable
-    }
-    return try await QualiaSession.sentimentPreview(
-        analyzer: AppleSentimentAnalyzer(), renderer: renderer,
-        language: .init(policy: .requireExplicit, minimumConfidence: 0.75),
-        context: .init(maximumFragments: 0, maximumCharacters: 4_000)
-    )
-}
+struct FeedbackView: View {
+    @StateObject private var feedback = SentimentFeedback()
+    @State private var text = "This is a wonderful, joyful day!"
 
-public func previewFirstFragment(in session: QualiaSession) async throws -> QualiaResponse {
-    let response = try await session.process(QualiaInput(
-        id: .init(rawValue: "first-fragment"),
-        text: "This is a wonderful, joyful day!", language: .init(rawValue: "en")
-    ))
-    if let failure = response.execution.failure { throw failure }
-    return response
+    var body: some View {
+        Form {
+            TextField("One English paragraph", text: $text, axis: .vertical)
+            Button("Analyze and feel") {
+                Task { await feedback.analyze(text) }
+            }
+            .disabled(!feedback.isReady || feedback.isProcessing)
+
+            if let score = feedback.score {
+                Text("Sentiment: \(Int((score * 100).rounded()))/100")
+                Text(feedback.playedHaptic ? "Pulse played." : "No pulse.")
+            }
+            if let error = feedback.error {
+                Text("Could not finish: \(String(describing: error))")
+                Button("Retry setup") { feedback.reset() }
+            }
+            if !feedback.supportsHaptics {
+                Text("Analysis works here. Feel the pulse on a compatible iPhone.")
+            }
+        }
+        .sentimentFeedback(feedback)
+    }
 }
-// snippet:end sentiment-preview

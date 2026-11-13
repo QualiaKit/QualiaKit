@@ -1,105 +1,163 @@
 # QualiaKit
 
-Turn text into on-device haptic reactions in Swift. A session connects an
-analyzer to a reaction policy and owns playback, ordering and context.
+Add text-driven haptic feedback to a Swift app. Start with on-device English
+sentiment: pass a paragraph, get a score and feel a short pulse. No server,
+API key or model download.
+
+![QualiaKit demo](qualia-demo.gif)
+
+*Recording of an earlier demo. The current minimal example is shown below.*
 
 ## Install
 
-Requires iOS 16+ or macOS 13+, with Swift 5.9+. In Xcode, add
-`https://github.com/QualiaKit/QualiaKit.git` and select the **QualiaKit** product.
-The session API is under development: pin a reviewed commit. Existing tags
-`1.0.0` through `3.0.0` use the legacy API; a broad version range can select them.
+Requires **iOS 16+ or macOS 13+**, Swift 5.9+.
 
-## First integration
+In Xcode, choose **File → Add Package Dependencies**, enter
+`https://github.com/QualiaKit/QualiaKit.git`, select **Branch → main**, and add the
+**QualiaKit** product to your app target.
 
-Create a session once in your screen model, then process text from a button:
+The API below is currently on `main`, not in a tagged release. Tags `1.0.0`–`3.0.0`
+contain the legacy API. For a reproducible app build, pin the tested revision
+before shipping; do not select an old version expecting this example to compile.
+
+## First reaction
+
+Paste this complete screen into a SwiftUI app and open `FeedbackView()`:
 
 ```swift
-import Foundation
+import SwiftUI
 import QualiaKit
 
 @MainActor
-func makeSession() async throws -> QualiaSession {
-    let renderer = CoreHapticRenderer()
-    guard renderer.capabilities.supportsHaptics else {
-        throw QualiaError.hapticsUnavailable
-    }
-    return try await QualiaSession.sentimentPreview(
-        analyzer: AppleSentimentAnalyzer(),
-        renderer: renderer,
-        language: .init(policy: .requireExplicit, minimumConfidence: 0.75),
-        context: .init(maximumFragments: 0, maximumCharacters: 4_000)
-    )
-}
+struct FeedbackView: View {
+    @StateObject private var feedback = SentimentFeedback()
+    @State private var text = "This is a wonderful, joyful day!"
 
-func analyze(_ text: String, in session: QualiaSession) async throws -> QualiaResponse {
-    let response = try await session.process(QualiaInput(
-        id: .init(rawValue: UUID().uuidString),
-        text: text,
-        language: .init(rawValue: "en")
-    ))
-    if let failure = response.execution.failure { throw failure }
-    return response
+    var body: some View {
+        Form {
+            TextField("One English paragraph", text: $text, axis: .vertical)
+            Button("Analyze and feel") {
+                Task { await feedback.analyze(text) }
+            }
+            .disabled(!feedback.isReady || feedback.isProcessing)
+
+            if let score = feedback.score {
+                Text("Sentiment: \(Int((score * 100).rounded()))/100")
+                Text(feedback.playedHaptic ? "Pulse played." : "No pulse.")
+            }
+            if let error = feedback.error {
+                Text("Could not finish: \(String(describing: error))")
+                Button("Retry setup") { feedback.reset() }
+            }
+            if !feedback.supportsHaptics {
+                Text("Analysis works here. Feel the pulse on a compatible iPhone.")
+            }
+        }
+        .sentimentFeedback(feedback)
+    }
 }
 ```
 
-This uses Apple's built-in analyzer for **one English paragraph**. Positive or
-negative valence produces a short pulse; near-neutral text may produce none.
-It needs no model download. It does not detect suspense or a person's emotions.
+`SentimentFeedback` chooses the analyzer, creates input IDs and manages its
+session. `.sentimentFeedback(feedback)` handles screen visibility and app
+activity: pending work is cancelled when leaving, playback stops, and returning
+never replays old text. Keep one feedback instance per screen and attach the
+modifier once to the screen's outer view.
 
-Retain the session across button taps and give each input a unique ID. Await
-`suspend()` when the screen becomes inactive, `resume()` when it becomes active,
-and `reset()` when leaving or starting over. Serialize these lifecycle calls,
-handle cleanup errors before accepting more input, and do not rely on `deinit`.
-Resuming never replays a previous effect.
+The score runs from **0 (negative)** to **100 (positive)** in this example.
+The underlying `score` is 0…1. A positive paragraph produces a sharper pulse;
+a negative paragraph produces a softer one. Near-neutral text produces no pulse.
+Each paragraph is independent, including when submitted immediately after another.
+The score describes the text's sentiment, not the reader's feelings or confidence
+in a prediction.
 
 ## Run the example
 
 Open [QualiaExample.xcodeproj](Examples/QualiaExample/QualiaExample.xcodeproj),
-select your signing team and run on a compatible iPhone. Xcode 16.4+ can open the
-project. There is one screen: enter English text, tap **Analyze and feel**, and
-read the result. **Reset** clears the session and retries setup after an error.
-The simulator can build the app but cannot demonstrate physical haptics.
+select your signing team for a device build, and run. The example requires
+Xcode 16.4+. A simulator or Mac can show analysis results; physical feedback
+requires a compatible iPhone.
 
-The complete integration is in three files:
+The app contains just [the screen](Examples/QualiaExample/QualiaExample/ContentView.swift)
+and [the app entry point](Examples/QualiaExample/QualiaExample/QualiaExampleApp.swift).
+Try positive, negative and neutral text, then toggle haptics off: analysis still
+works. **Reset** clears the result and retries failed setup or playback.
 
-- [QualiaExampleApp.swift](Examples/QualiaExample/QualiaExample/QualiaExampleApp.swift) starts the app.
-- [ContentView.swift](Examples/QualiaExample/QualiaExample/ContentView.swift) contains the screen.
-- [SentimentModel.swift](Examples/QualiaExample/QualiaExample/SentimentModel.swift) creates the session, processes text and handles lifecycle.
+## Common tasks
 
-## Other integrations
-
-| Product | Use |
+| Task | API |
 | --- | --- |
-| `QualiaKit` | Sessions, Apple sentiment, custom analyzers and haptic policies |
-| `QualiaCoreML` | App-owned Core ML and BERT models; see the [model integration guide](Packages/QualiaCoreML/README.md) |
-| `QualiaTesting` | Recording renderers, fixture analyzers and a controllable clock for tests without hardware |
-| `Qualia`, `QualiaBert` | Legacy API, retained for existing applications |
+| Analyze and optionally play a pulse | `await feedback.analyze(text)` |
+| Read the latest score | `feedback.score` (0…1, or `nil`) |
+| Check whether a pulse played | `feedback.playedHaptic` |
+| Show a failure | `feedback.error`, including playback and cleanup errors |
+| Bind an app preference | `Toggle("Haptics", isOn: $feedback.hapticsEnabled)` |
+| Start without vibration | `SentimentFeedback(hapticsEnabled: false)` |
+| Clear the result and retry setup | `feedback.reset()` |
+| Integrate UIKit | Retain `SentimentFeedback`; call `setActive(true)` only while visible and the app is active, and `setActive(false)` otherwise |
 
-Implement `QualiaAnalyzing` for another analyzer and pass it to
-`QualiaSession.configured(analyzer:renderer:configuration:)`. A reaction policy
-must match the analyzer's declared signals. For analysis without vibration, use
-`NoReactionPolicy` and `NoOpHapticRenderer` through that factory.
+Changing the haptic preference stops pending playback and clears the previous
+result. Unsupported hardware uses analysis only, reported by `supportsHaptics`.
+An actual playback failure is exposed as an error; it is not reported as success.
+New analysis replaces pending analysis. Cancelling the calling task also cancels
+its work; a completed pulse cannot be undone.
 
-SwiftUI also provides `qualiaReaction` for accepted events and `qualiaLiveReaction`
-for debounced drafts. Keep draft preview in a separate session so it does not
-advance the accepted story. Public API documentation lives with the source.
+### Supported input and errors
 
-When migrating from `Qualia` or `QualiaBert`, replace client calls with a retained
-`QualiaSession` and explicit inputs/lifecycle handling. The two APIs are not
-source-compatible; legacy model output semantics remain unchanged.
+The built-in path supports **one English paragraph, up to 4,000 characters**.
+It does not translate text, detect narrative suspense or infer a person's emotions.
 
-## Privacy and accessibility
+| Error | Action |
+| --- | --- |
+| `emptyInput` | Supply nonblank text |
+| `unsupportedInputStructure` | Submit one paragraph at a time |
+| `currentTextExceedsContextBounds` | Shorten the paragraph to at most 4,000 characters |
+| Setup, playback or cleanup failure | Display the error; call `reset()` to retry before accepting more input |
 
-The built-in analyzer runs on device. The core library has no networking or
-analytics transport; custom analyzers and diagnostic sinks are controlled by
-the host app. Diagnostics are off by default. Do not log user text or distribute
-private model assets. Signals describe content, not a person's mental state.
+No network requests or analytics are used by the built-in path. Provide a visible
+result alongside vibration, and connect `hapticsEnabled` to the user's preference.
 
-Haptic support depends on hardware. Surface unavailable-hardware and playback
-errors, provide visible results, and respect the user's haptic preferences. If
-using continuous effects, disable them for Reduce Motion and bound their duration.
+## Custom models and reactions
 
-Code is [MIT](LICENSE). Model and dataset rights are separate; no trained model
-is bundled. See [Contributing](CONTRIBUTING.md), [Support](SUPPORT.md) and
-[Security](SECURITY.md).
+Use the ready-made feedback above for independent English paragraphs. Use
+`QualiaSession` when your app needs another analyzer, retained story context,
+custom haptic rules or narrative effects. These APIs remain available; moving to
+the simpler component is optional.
+
+| Product | Purpose |
+| --- | --- |
+| **QualiaKit** | `SentimentFeedback`, SwiftUI integration and advanced sessions |
+| `QualiaCoreML` | Your own Core ML or BERT model; [integration guide](Packages/QualiaCoreML/README.md) |
+| `QualiaTesting` | Synthetic analyzers, recording renderers and a controllable clock |
+| `Qualia`, `QualiaBert` | Compatibility with existing legacy applications |
+
+Implement `QualiaAnalyzing`, then construct
+`QualiaSession.configured(analyzer:renderer:configuration:)`. Choose a policy
+that matches the analyzer's advertised signals. The named `sentimentPreview`
+and `horrorNarrative` factories validate this compatibility. A narrative policy
+needs a narrative-capable analyzer; the built-in sentiment analyzer cannot supply
+suspense or threat predictions. No trained narrative model is bundled.
+
+For an advanced session, retain it across inputs, give accepted fragments unique
+IDs, and await `suspend()` / `resume()` at visibility boundaries and `reset()` when
+starting over. Serialize these calls and handle cleanup errors. Inspect both
+thrown errors and `response.execution.failure`. The ready-made `SentimentFeedback`
+component handles these details for its own session.
+
+The advanced SwiftUI modifiers `qualiaReaction` (accepted events) and
+`qualiaLiveReaction` (debounced drafts) take an explicit session. Use a separate
+session for drafts so preview does not advance an accepted story. See the
+[public consumer examples](Tests/Consumer/Tests/ConsumerTests) for custom analyzers,
+policies and scripted narrative integration; scripts are not trained text models.
+
+When migrating from `Qualia` or `QualiaBert`, use `SentimentFeedback` for the
+built-in English path, or configure a session for your own analyzer. The APIs
+are not source-compatible. Existing legacy model mappings remain unchanged.
+
+Custom analyzers and diagnostic sinks belong to the host app's privacy boundary.
+Diagnostics are off by default. Continuous effects must respect Reduce Motion
+and have a bounded duration. Model and dataset rights are separate from the
+[MIT code license](LICENSE).
+
+[Contributing](CONTRIBUTING.md) · [Tests](Tests/README.md) ·
+[Support](SUPPORT.md) · [Security](SECURITY.md)

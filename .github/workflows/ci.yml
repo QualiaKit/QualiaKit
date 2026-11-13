@@ -42,7 +42,7 @@ jobs:
           for target in QualiaKit QualiaTesting QualiaCoreML; do
             swift build --target "$target" -Xswiftc -strict-concurrency=complete -Xswiftc -warnings-as-errors
           done
-      - name: Test library and example model
+      - name: Test library and ready-made feedback
         run: swift test --enable-code-coverage
       - name: Test public consumers and compatibility package
         run: |

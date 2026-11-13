@@ -1,10 +1,10 @@
 import SwiftUI
+import QualiaKit
 
 @MainActor
 struct ContentView: View {
-    @StateObject private var model = SentimentModel()
+    @StateObject private var feedback = SentimentFeedback()
     @State private var text = "This is a wonderful, joyful day!"
-    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         NavigationStack {
@@ -13,23 +13,32 @@ struct ContentView: View {
                     TextField("Enter one paragraph", text: $text, axis: .vertical)
                         .lineLimit(3...8)
                     Button("Analyze and feel") {
-                        Task { await model.analyze(text) }
+                        Task { await feedback.analyze(text) }
                     }
-                    .disabled(!model.isReady || model.isProcessing || text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    .disabled(!feedback.isReady || feedback.isProcessing || text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
                 Section("Result") {
-                    Text(model.status)
-                    Button("Reset") { model.setActive(scenePhase == .active, reset: true) }
+                    if let error = feedback.error {
+                        Text("Could not finish: \(String(describing: error)). Tap Reset to retry.")
+                    } else if let score = feedback.score {
+                        Text("Sentiment: \(Int((score * 100).rounded()))/100")
+                        Text(feedback.playedHaptic ? "Pulse played." : "No pulse for this text.")
+                    } else {
+                        Text(feedback.isReady ? "Enter one English paragraph." : "Preparing…")
+                    }
+                    Button("Reset") { feedback.reset() }
                 }
                 Section {
-                    Text("Apple's on-device sentiment analyzer produces a short pulse for positive or negative English text. Scores run from 0 (negative) to 100 (positive). Neutral text may produce no pulse. A compatible iPhone is required.")
+                    Toggle("Haptic feedback", isOn: $feedback.hapticsEnabled)
+                        .disabled(!feedback.supportsHaptics)
+                    Text(feedback.supportsHaptics
+                         ? "Scores run from 0 (negative) to 100 (positive). Neutral text may produce no pulse. Analysis stays on device."
+                         : "This device can analyze text but cannot play haptics. Try a compatible iPhone to feel the result.")
                         .font(.footnote)
                 }
             }
             .navigationTitle("QualiaKit")
         }
-        .onAppear { model.setActive(scenePhase == .active) }
-        .onChange(of: scenePhase) { phase in model.setActive(phase == .active) }
-        .onDisappear { model.setActive(false, reset: true) }
+        .sentimentFeedback(feedback)
     }
 }

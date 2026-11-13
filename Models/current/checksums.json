@@ -2,11 +2,11 @@
   "algorithm": "SHA-256",
   "excludesSelf": "Models/current/checksums.json",
   "files": {
-    ".github/workflows/ci.yml": "bc7b127aa03c83a388d517c1f75aa186dd3bf24b499111ee8e599ca128f0b104",
+    ".github/workflows/ci.yml": "2c3e817e4c1940311b6a51fe43cf8879043167afd15038a537e20f9820abeaa1",
     "Models/current/MODEL_CARD.md": "3da9f578b28ccf74a3a9c4eb1a518490506c9b28158c84ade46d12a402dd2060",
     "Models/current/manifest.json": "43f507fd7a27c177bdd38da736aaa6826b3bcce25f905f8cb55815e87e435656",
     "Models/current/manifest.schema.json": "d155c7ec622758500496665340b55997bcb69174e2723bd68b2a8dc877f20a25",
-    "Package.swift": "94757b19ee4981f11bacdbceb7e29257455610fd6fe52cc0b3ca8d6e9359d169",
+    "Package.swift": "83d36606488147cb64edac30473624820cfb356cec740a966f5f6889a815435a",
     "Sources/QualiaBert/BertModelWrapper.swift": "1fa8370ddde860b9831b2c08afae013458004692f0f980ab96b5a131b4eb653f",
     "Sources/QualiaBert/BertProvider.swift": "25681f7ecbebd6ee5d0cb1534fc05fa6ef63663f475fbc838dbd8bf7b06cc8f8",
     "Sources/QualiaBert/BertTokenizer.swift": "6f443dd4c360a9a00cc6347bfd22b630b61f18899b4a2409e3453e6f205c9314",

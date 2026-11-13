@@ -1,9 +1,10 @@
 # Tests
 
-`swift test` runs library, Core ML and example-screen-model tests. The example
-support target is internal to this repository and is not a library product.
+`swift test` runs library and Core ML tests, including the ready-made feedback
+component's cancellation, cleanup, retry and preference behavior.
 `swift test --package-path Tests/Consumer` checks integration through public
 products from an independent Swift package.
+Its `SentimentPreview.swift` compiles the complete SwiftUI screen from README.
 
 The small Python directories support checked-in test fixtures:
 

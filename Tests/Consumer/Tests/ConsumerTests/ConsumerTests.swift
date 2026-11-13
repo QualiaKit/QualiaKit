@@ -38,6 +38,19 @@ final class LivingStoryIntegrationTests: XCTestCase {
 
 @MainActor
 final class DeveloperExperienceTests: XCTestCase {
+    func testReadyMadeFeedbackWorksThroughPublicAPIWithoutHardware() async throws {
+        let feedback = SentimentFeedback(hapticsEnabled: false)
+        await feedback.setActive(true).value
+        XCTAssertTrue(feedback.isReady)
+        await feedback.analyze("This is a wonderful, joyful day!")
+        XCTAssertNil(feedback.error)
+        let score = try XCTUnwrap(feedback.score)
+        XCTAssertTrue((0...1).contains(score))
+        XCTAssertFalse(feedback.playedHaptic)
+        await feedback.setActive(false).value
+        XCTAssertFalse(feedback.isReady)
+    }
+
     func testCustomAnalyzerAndPolicyUsePublicContracts() async throws {
         let marked = try QualiaInputID(rawValue: "marked")
         let analyzer = try AnnotatedSceneAnalyzer(annotations: [marked: .init(value: 1, confidence: 1)])
