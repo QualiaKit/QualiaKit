@@ -8,21 +8,82 @@ API key or model download.
 
 *Recording of an earlier demo. The current minimal example is shown below.*
 
-## Install
+## ⭐ Quick Start
 
-Requires **iOS 16+ or macOS 13+**, Swift 5.9+.
+Let's give a paragraph a haptic response.
 
-In Xcode, choose **File → Add Package Dependencies**, enter
-`https://github.com/QualiaKit/QualiaKit.git`, select **Branch → main**, and add the
-**QualiaKit** product to your app target.
+### Install
 
-The API below is currently on `main`, not in a tagged release. Tags `1.0.0`–`3.0.0`
-contain the legacy API. For a reproducible app build, pin the tested revision
-before shipping; do not select an old version expecting this example to compile.
+In Xcode, choose **File → Add Package Dependencies** and paste:
 
-## First reaction
+```text
+https://github.com/QualiaKit/QualiaKit.git
+```
 
-Paste this complete screen into a SwiftUI app and open `FeedbackView()`:
+Select **Branch → main** and add the **QualiaKit** product. Requires
+**iOS 16+ or macOS 13+**, Swift 5.9+.
+
+Use `main` for this Quick Start: tags `1.0.0`–`3.0.0` use the legacy API.
+Pin a tested revision before shipping your app.
+
+### Create feedback
+
+Import QualiaKit and keep one feedback object in your `@MainActor` SwiftUI view:
+
+```swift
+import QualiaKit
+
+@StateObject private var feedback = SentimentFeedback()
+```
+
+### Analyze and feel
+
+Add a button to the view's `body` and attach `.sentimentFeedback(feedback)` to
+its outer container:
+
+```swift
+VStack {
+    Button("Analyze and feel") {
+        Task {
+            await feedback.analyze("This is a wonderful, joyful day!")
+        }
+    }
+    .disabled(!feedback.isReady || feedback.isProcessing)
+}
+.sentimentFeedback(feedback)
+```
+
+Tap the button. QualiaKit analyzes the paragraph on device and plays a short
+pulse on a compatible iPhone. The modifier handles setup, cancellation and
+stopping playback when you leave the screen. Returning never replays old text.
+
+### Show the result
+
+Add these views inside the same `VStack` to display the score and any error:
+
+```swift
+if let score = feedback.score {
+    Text("Sentiment: \(Int((score * 100).rounded()))/100")
+}
+if let error = feedback.error {
+    Text("Could not finish: \(String(describing: error))")
+    Button("Retry setup") { feedback.reset() }
+}
+```
+
+The displayed score runs from **0 (negative)** to **100 (positive)**. Positive
+text produces a sharper pulse, negative text a softer one; near-neutral text
+produces no pulse. On a simulator or Mac, you still get the score without vibration.
+
+Start with **one English paragraph, up to 4,000 characters**. Each paragraph is
+independent. The score describes the text's sentiment, not the reader's feelings
+or confidence in a prediction.
+
+<details>
+<summary><strong>Copy a complete SwiftUI screen</strong></summary>
+
+Paste this into your app and open `FeedbackView()`. It includes editable text,
+a visible result, error handling and a message for devices without haptics.
 
 ```swift
 import SwiftUI
@@ -58,18 +119,13 @@ struct FeedbackView: View {
 }
 ```
 
-`SentimentFeedback` chooses the analyzer, creates input IDs and manages its
-session. `.sentimentFeedback(feedback)` handles screen visibility and app
-activity: pending work is cancelled when leaving, playback stops, and returning
-never replays old text. Keep one feedback instance per screen and attach the
-modifier once to the screen's outer view.
+Keep one feedback instance per screen and attach the modifier once to the
+screen's outer view. No analyzer, renderer or input IDs to configure.
 
-The score runs from **0 (negative)** to **100 (positive)** in this example.
-The underlying `score` is 0…1. A positive paragraph produces a sharper pulse;
-a negative paragraph produces a softer one. Near-neutral text produces no pulse.
-Each paragraph is independent, including when submitted immediately after another.
-The score describes the text's sentiment, not the reader's feelings or confidence
-in a prediction.
+</details>
+
+Want to try it without creating a screen? [Run the example](#run-the-example).
+To disable vibration or connect an app preference, see [common tasks](#common-tasks).
 
 ## Run the example
 
