@@ -1,50 +1,51 @@
-QualiaKit
+# QualiaKit
 
-Haptic feedback that responds to text.
+**Haptic feedback that responds to text.**
 
 QualiaKit connects text analysis to haptic playback in Swift. Start with on-device
 English sentiment, or bring your own analyzer and reaction rules.
 
-Installation · Quick start · Example app · Advanced integration
+[Installation](#installation) · [Quick start](#quick-start) · [Example app](#run-the-example-app) · [Advanced integration](#advanced-integration)
 
+![QualiaKit visual demo](qualia-demo.gif)
 
+*Visual demo from an earlier version of QualiaKit. The quick start below uses the current sentiment API.*
 
-Visual demo from an earlier version of QualiaKit. The quick start below uses the current sentiment API.
+## Why QualiaKit?
 
-Why QualiaKit?
-
-A complete text-to-feedback flow. Submit a paragraph, read its sentiment score,
-and play a short pulse on a compatible iPhone.
-
-Less lifecycle code. The SwiftUI integration handles setup, cancellation,
-and stopping playback when the screen is no longer active.
-
-Local analysis to start. The built-in analyzer uses Apple Natural Language.
-No server, API key, or model download is needed.
+- **A complete text-to-feedback flow.** Submit a paragraph, read its sentiment score,
+  and play a short pulse on a compatible iPhone.
+- **Less lifecycle code.** The SwiftUI integration handles setup, cancellation,
+  and stopping playback when the screen is no longer active.
+- **Local analysis to start.** The built-in analyzer uses Apple Natural Language.
+  No server, API key, or model download is needed.
 
 Use it to prototype tactile feedback in reading and writing interfaces. For
 custom reactions or story context, use the session API described below.
 
 <a name="install"></a>
 
-Installation
+## Installation
 
-Add QualiaKit with Swift Package Manager. Requires Swift 5.9+ and
-iOS 16+ or macOS 13+.
+Add QualiaKit with **Swift Package Manager**. Requires **Swift 5.9+** and
+**iOS 16+ or macOS 13+**.
 
-In Xcode, choose File → Add Package Dependencies and paste:
+In Xcode, choose **File → Add Package Dependencies** and paste:
 
+```text
 https://github.com/QualiaKit/QualiaKit.git
+```
 
-Select Branch → main and add the QualiaKit product.
+Select **Branch → main** and add the **QualiaKit** product.
 
-Development API: this example uses main. Existing version tags
-1.0.0–3.0.0 contain the legacy API. Pin a tested revision before shipping.
+> **Development API:** this example uses `main`. Existing version tags
+> `1.0.0`–`3.0.0` contain the legacy API. Pin a tested revision before shipping.
 
-Quick start
+## Quick start
 
-Add this screen to your app and open FeedbackView():
+Add this screen to your app and open `FeedbackView()`:
 
+```swift
 import SwiftUI
 import QualiaKit
 
@@ -76,9 +77,10 @@ struct FeedbackView: View {
         .sentimentFeedback(feedback)
     }
 }
+```
 
-Use one English paragraph, up to 4,000 characters. The displayed score runs
-from 0 (negative) to 100 (positive). Positive text produces a sharper pulse,
+Use one English paragraph, up to **4,000 characters**. The displayed score runs
+from **0 (negative)** to **100 (positive)**. Positive text produces a sharper pulse,
 negative text a softer one; near-neutral text produces no pulse. Each paragraph
 is analyzed independently.
 
@@ -87,11 +89,11 @@ haptics switched off, the same screen still shows the result.
 
 <a name="run-the-example"></a>
 
-Run the example app
+## Run the example app
 
 Clone the repository and open
-QualiaExample.xcodeproj
-in Xcode 16.4+. Select your signing team and run on a compatible iPhone to feel
+[QualiaExample.xcodeproj](Examples/QualiaExample/QualiaExample.xcodeproj)
+in **Xcode 16.4+**. Select your signing team and run on a compatible iPhone to feel
 the feedback. The simulator and Mac can show analysis results without vibration.
 
 Try a positive paragraph, a negative one, and a neutral one. The example also
@@ -100,28 +102,26 @@ includes a haptics switch so you can compare the experience.
 <a name="other-integrations"></a>
 <a name="custom-models-and-reactions"></a>
 
-Advanced integration
+## Advanced integration
 
-SentimentFeedback is the built-in starting point. Use QualiaSession when you
+`SentimentFeedback` is the built-in starting point. Use `QualiaSession` when you
 need your own analyzer, retained context, or custom haptic rules.
 
 <details>
 <summary><strong>Custom models and narrative effects</strong></summary>
 
-Implement QualiaAnalyzing and connect it to a renderer with
-QualiaSession.configured(analyzer:renderer:configuration:). Choose a reaction
+Implement `QualiaAnalyzing` and connect it to a renderer with
+`QualiaSession.configured(analyzer:renderer:configuration:)`. Choose a reaction
 policy that matches the signals your analyzer provides.
 
-Core ML / BERT: use QualiaCoreML with your own compatible model and assets.
-See the integration guide.
-
-Narrative effects: supply an analyzer that provides the required narrative
-signals. The built-in sentiment analyzer does not detect suspense or threat,
-and no trained narrative model is bundled.
-
-Tests: use QualiaTesting for synthetic analyzers, recording renderers, and
-a controllable clock. See the
-consumer examples.
+- **Core ML / BERT:** use `QualiaCoreML` with your own compatible model and assets.
+  See the [integration guide](Packages/QualiaCoreML/README.md).
+- **Narrative effects:** supply an analyzer that provides the required narrative
+  signals. The built-in sentiment analyzer does not detect suspense or threat,
+  and no trained narrative model is bundled.
+- **Tests:** use `QualiaTesting` for synthetic analyzers, recording renderers, and
+  a controllable clock. See the
+  [consumer examples](Tests/Consumer/Tests/ConsumerTests).
 
 The MIT license covers this repository's code; external models and datasets have
 separate licenses.
@@ -131,21 +131,21 @@ separate licenses.
 <details>
 <summary><strong>Lifecycle and error handling</strong></summary>
 
-Keep one SentimentFeedback instance per screen and attach its modifier once to
+Keep one `SentimentFeedback` instance per screen and attach its modifier once to
 the outer view. New analysis replaces pending work. Leaving the screen stops
 playback; returning does not replay earlier text.
 
-Observe feedback.error for setup, analysis, playback, and cleanup failures.
-Call feedback.reset() to clear the result and retry setup. To let users disable
-vibration, bind a switch with Toggle("Haptics", isOn: $feedback.hapticsEnabled).
-Changing hapticsEnabled cancels pending playback and clears the previous result.
+Observe `feedback.error` for setup, analysis, playback, and cleanup failures.
+Call `feedback.reset()` to clear the result and retry setup. To let users disable
+vibration, bind a switch with `Toggle("Haptics", isOn: $feedback.hapticsEnabled)`.
+Changing `hapticsEnabled` cancels pending playback and clears the previous result.
 
-For UIKit, retain the feedback object and call setActive(true) only while the
-screen is visible and the app is active; call setActive(false) otherwise.
+For UIKit, retain the feedback object and call `setActive(true)` only while the
+screen is visible and the app is active; call `setActive(false)` otherwise.
 
 For custom sessions, retain the session across inputs, use unique input IDs,
-serialize lifecycle calls, and await suspend(), resume(), and reset().
-Handle both thrown errors and response.execution.failure. Use separate sessions
+serialize lifecycle calls, and await `suspend()`, `resume()`, and `reset()`.
+Handle both thrown errors and `response.execution.failure`. Use separate sessions
 for draft text and accepted story text.
 
 </details>
@@ -157,13 +157,13 @@ The built-in path accepts one nonblank English paragraph of at most 4,000
 characters. It does not translate text or infer the reader's emotional state.
 Shorten overlong input and submit multiple paragraphs separately.
 
-Qualia and QualiaBert remain available for existing applications. Their APIs
-are not source-compatible with QualiaKit. Use SentimentFeedback for the
+`Qualia` and `QualiaBert` remain available for existing applications. Their APIs
+are not source-compatible with `QualiaKit`. Use `SentimentFeedback` for the
 built-in English path, or configure a session for your own analyzer.
 
 </details>
 
-Privacy and accessibility
+### Privacy and accessibility
 
 No network requests or analytics are used by the built-in path. Custom analyzers
 and diagnostic sinks have their own data-handling behavior.
@@ -171,11 +171,11 @@ and diagnostic sinks have their own data-handling behavior.
 Show a visible result alongside haptics and let users disable vibration.
 Continuous effects must respect Reduce Motion and have a bounded duration.
 
-Project
+## Project
 
-Changelog ·
-Contributing ·
-Tests ·
-Support ·
-Security ·
-MIT license
+[Changelog](CHANGELOG.md) ·
+[Contributing](CONTRIBUTING.md) ·
+[Tests](Tests/README.md) ·
+[Support](SUPPORT.md) ·
+[Security](SECURITY.md) ·
+[MIT license](LICENSE)
